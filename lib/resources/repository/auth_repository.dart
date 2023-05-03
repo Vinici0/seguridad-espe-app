@@ -1,4 +1,4 @@
-import 'package:flutter_maps_adv/services/auth_service.dart';
+import 'package:flutter_maps_adv/resources/services/auth_service.dart';
 
 class ApiUserRepository {
   final AuthService _authService = AuthService();

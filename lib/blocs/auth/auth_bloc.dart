@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_maps_adv/models/usuario.dart';
-import 'package:flutter_maps_adv/repository/auth_repository.dart';
+import 'package:flutter_maps_adv/resources/repository/auth_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

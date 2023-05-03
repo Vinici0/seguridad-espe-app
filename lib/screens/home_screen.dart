@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
-import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/helpers/navegacion.dart';
-import 'package:flutter_maps_adv/screens/codigo_sreen.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_map_screen.dart';
-import 'package:flutter_maps_adv/screens/map_screen.dart';
-import 'package:flutter_maps_adv/screens/salas_screen.dart';
+import 'package:flutter_maps_adv/screens/grupos_screen.dart';
 import 'package:flutter_maps_adv/widgets/custom_bottom_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -67,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                     ))),
-                    SalesScreen(),
+                    GruposScreen(),
                     Text("Page 4"),
                     Center(
                         child: Column(

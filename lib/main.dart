@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/prueba/prueba_bloc.dart';
+import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/codigo_sreen.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_maps_adv/screens/login_screen.dart';
 import 'package:flutter_maps_adv/screens/prueba/prueba.dart';
 import 'package:flutter_maps_adv/screens/prueba/prueba2.dart';
 import 'package:flutter_maps_adv/screens/register_screen%20copy.dart';
-import 'package:flutter_maps_adv/screens/salas_screen.dart';
+import 'package:flutter_maps_adv/screens/grupos_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 
 void main() {
@@ -49,7 +50,8 @@ class MyApp extends StatelessWidget {
           PruebaScreen.routemap: (_) => PruebaScreen(),
           PruebaScreen2.routemap: (_) => PruebaScreen2(),
           RegisterScreen.registerroute: (_) => RegisterScreen(),
-          SalesScreen.salesroute: (_) => SalesScreen(),
+          GruposScreen.salesroute: (_) => GruposScreen(),
+          ChatSalesScreen.chatsalesroute: (_) => ChatSalesScreen(),
         });
   }
 }

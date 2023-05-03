@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class SalesScreen extends StatefulWidget {
+class GruposScreen extends StatefulWidget {
   static final String salesroute = 'sales';
-  const SalesScreen({Key? key}) : super(key: key);
+  const GruposScreen({Key? key}) : super(key: key);
 
   @override
-  State<SalesScreen> createState() => _SalesScreenState();
+  State<GruposScreen> createState() => _GruposScreenState();
 }
 
-class _SalesScreenState extends State<SalesScreen> {
+class _GruposScreenState extends State<GruposScreen> {
   // final salaService = new SalasServices();
-  // List<Sala> salas = [];
+  List<Sala> salas = [
+    Sala(uid: '1', nombre: 'Grupo 1'),
+    Sala(uid: '2', nombre: 'Grupo 2'),
+    Sala(uid: '3', nombre: 'Grupo 3'),
+    Sala(uid: '4', nombre: 'Grupo 4'),
+  ];
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -24,28 +32,32 @@ class _SalesScreenState extends State<SalesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Grupos',
-              style: TextStyle(color: Colors.black87, fontSize: 20)),
-          backgroundColor: Colors.white,
-          //icono de tres puntos para crear grupo a la derecha
-          actions: [
-            IconButton(
-                onPressed: () {
-                  // Navigator.pushNamed(context, CodigoGrupoScreen.codigoGruporoute);
-                },
-                icon: Icon(Icons.more_vert, color: Colors.black87))
-          ],
-          elevation: 1,
-        ),
-        body: Column(
+      appBar: AppBar(
+        title: Text('Grupos',
+            style: TextStyle(color: Colors.black87, fontSize: 20)),
+        backgroundColor: Colors.white,
+        //icono de tres puntos para crear grupo a la derecha
+        actions: [
+          IconButton(
+              onPressed: () {
+                // Navigator.pushNamed(context, CodigoGrupoScreen.codigoGruporoute);
+              },
+              icon: Icon(Icons.more_vert, color: Colors.black87))
+        ],
+        elevation: 1,
+      ),
+      body: SmartRefresher(
+        controller: _refreshController,
+        child: Column(
           children: [
             _CretaGroup(),
             Expanded(
               child: _listSalesGroup(context),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   ListView _listSalesGroup(BuildContext context) {
