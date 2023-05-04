@@ -2,19 +2,23 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_maps_adv/widgets/chat_message.dart';
 
-class ChatSalesScreen extends StatefulWidget {
+class ChatScreen extends StatefulWidget {
   static const String chatsalesroute = 'chatsales';
-  const ChatSalesScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChatSalesScreen> createState() => _ChatSalesScreenState();
+  _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatSalesScreenState extends State<ChatSalesScreen> {
-  final _focusNode = new FocusNode();
-  bool _estaEscribiendo = false;
+//TickerProviderStateMixin - Es para la animacion del boton de enviar
+class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final _textController = new TextEditingController();
+  final _focusNode = new FocusNode();
+
+  List<ChatMessage> _messages = [];
+
+  bool _estaEscribiendo = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +28,12 @@ class _ChatSalesScreenState extends State<ChatSalesScreen> {
         title: Column(
           children: <Widget>[
             CircleAvatar(
-              child: Text('Mel', style: TextStyle(fontSize: 12)),
+              child: Text('Te', style: TextStyle(fontSize: 12)),
               backgroundColor: Colors.blue[100],
               maxRadius: 14,
             ),
             SizedBox(height: 3),
-            Text('Melanine',
+            Text('Melissa Flores',
                 style: TextStyle(color: Colors.black87, fontSize: 12))
           ],
         ),
@@ -37,23 +41,26 @@ class _ChatSalesScreenState extends State<ChatSalesScreen> {
         elevation: 1,
       ),
       body: Container(
-          child: Column(
-        children: [
-          Flexible(
-            child: ListView.builder(
+        child: Column(
+          children: <Widget>[
+            Flexible(
+                child: ListView.builder(
               physics: BouncingScrollPhysics(),
-              itemCount: 20,
-              itemBuilder: (_, i) {},
+              itemCount: _messages.length,
+              itemBuilder: (_, i) => _messages[i],
               reverse: true,
-            ),
-          ),
-          Divider(height: 1),
-          Container(
-            color: Colors.white,
-            child: _inputChat(),
-          )
-        ],
-      )),
+            )),
+
+            Divider(height: 1),
+
+            // TODO: Caja de texto
+            Container(
+              color: Colors.white,
+              child: _inputChat(),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -113,11 +120,33 @@ class _ChatSalesScreenState extends State<ChatSalesScreen> {
   _handleSubmit(String texto) {
     if (texto.length == 0) return;
 
+    print(texto);
     _textController.clear();
     _focusNode.requestFocus();
+
+    final newMessage = ChatMessage(
+      uid: '123',
+      texto: texto,
+      animationController: AnimationController(
+          vsync: this, duration: Duration(milliseconds: 200)),
+    );
+    _messages.insert(0, newMessage);
+    newMessage.animationController.forward();
 
     setState(() {
       _estaEscribiendo = false;
     });
+  }
+
+  @override
+  void dispose() {
+    //TODO: Off del socket
+
+    for (ChatMessage message in _messages) {
+      //Para evitar fugas de memoria en la animacion del boton de enviar mensaje
+      message.animationController.dispose();
+    }
+
+    super.dispose();
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_maps_adv/global/environment.dart';
-import 'package:flutter_maps_adv/services/auth_service.dart';
+import 'package:flutter_maps_adv/resources/services/auth_service.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 

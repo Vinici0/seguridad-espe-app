@@ -80,7 +80,7 @@ class _GruposScreenState extends State<GruposScreen> {
             backgroundColor: Color.fromRGBO(232, 155, 218, 1),
           ),
           onTap: () {
-            Navigator.pushNamed(context, ChatSalesScreen.chatsalesroute);
+            Navigator.pushNamed(context, ChatScreen.chatsalesroute);
           },
         );
       },
@@ -95,7 +95,7 @@ class _GruposScreenState extends State<GruposScreen> {
           backgroundColor: Colors.blue[100],
         ),
         onTap: () {
-          Navigator.pushNamed(context, ChatSalesScreen.chatsalesroute);
+          Navigator.pushNamed(context, ChatScreen.chatsalesroute);
         });
   }
 

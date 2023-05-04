@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           PruebaScreen2.routemap: (_) => PruebaScreen2(),
           RegisterScreen.registerroute: (_) => RegisterScreen(),
           GruposScreen.salesroute: (_) => GruposScreen(),
-          ChatSalesScreen.chatsalesroute: (_) => ChatSalesScreen(),
+          ChatScreen.chatsalesroute: (_) => ChatScreen(),
         });
   }
 }

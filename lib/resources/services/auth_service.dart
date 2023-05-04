@@ -45,10 +45,10 @@ class AuthService {
       final loginResponse = loginResponseFromJson(resp.body);
       this.usuario = loginResponse.usuario;
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('nombre', this.usuario!.nombre);
-      await prefs.setString('email', this.usuario!.email);
-      await prefs.setString('uid', this.usuario!.uid);
       await prefs.setBool('online', this.usuario!.online);
+      await prefs.setString('email', this.usuario!.email);
+      await prefs.setString('nombre', this.usuario!.nombre);
+      await prefs.setString('uid', this.usuario!.uid);
       print(this.usuario);
 
       await this._guardarToken(loginResponse.token);
