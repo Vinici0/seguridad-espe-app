@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
 
@@ -25,7 +26,7 @@ class LoadingLoginScreen extends StatelessWidget {
 
   Future checkLoginState(BuildContext context) async {
     final authService = BlocProvider.of<AuthBloc>(context);
-    // final socketService = Provider.of<SocketService>(context, listen: false);
+    final socketService = BlocProvider.of<SocketService>(context);
 
     final isLoggedIn = await authService.apiAuthRepository.isLoggedIn();
 
@@ -34,7 +35,7 @@ class LoadingLoginScreen extends StatelessWidget {
       // TODO: conectar al socket server
       // Navigator.pushReplacementNamed(context, 'usuarios');
       // ignore: use_build_context_synchronously
-      // socketService.connect();
+      socketService.connect();
 
       authService.add(AuthInitEvent());
 

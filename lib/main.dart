@@ -2,23 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/prueba/prueba_bloc.dart';
+import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
+import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/codigo_sreen.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
-import 'package:flutter_maps_adv/screens/prueba/prueba.dart';
-import 'package:flutter_maps_adv/screens/prueba/prueba2.dart';
-import 'package:flutter_maps_adv/screens/register_screen%20copy.dart';
 import 'package:flutter_maps_adv/screens/grupos_screen.dart';
+import 'package:flutter_maps_adv/screens/register_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 
 void main() {
   runApp(MultiBlocProvider(providers: [
     //Dependencias que van en cascada
     //PruebaBloc
-    BlocProvider(create: (context) => PruebaBloc()),
+    BlocProvider<SocketService>(create: (context) => SocketService()),
     BlocProvider(create: (context) => AuthBloc()),
     BlocProvider(create: (context) => GpsBloc()),
     BlocProvider(create: (context) => LocaltionBloc()),
@@ -26,7 +25,8 @@ void main() {
     BlocProvider(
         create: (context) =>
             MapBloc(locationBloc: BlocProvider.of<LocaltionBloc>(context))),
-
+    BlocProvider<ChatProvider>(
+        create: (BuildContext context) => ChatProvider()),
     //AuthBloc
   ], child: const MyApp()));
 }
@@ -47,8 +47,6 @@ class MyApp extends StatelessWidget {
           LoadingMapScreen.loadingroute: (_) => LoadingMapScreen(),
           LoginScreen.loginroute: (_) => LoginScreen(),
           MapScreen.routemap: (_) => MapScreen(),
-          PruebaScreen.routemap: (_) => PruebaScreen(),
-          PruebaScreen2.routemap: (_) => PruebaScreen2(),
           RegisterScreen.registerroute: (_) => RegisterScreen(),
           GruposScreen.salesroute: (_) => GruposScreen(),
           ChatScreen.chatsalesroute: (_) => ChatScreen(),

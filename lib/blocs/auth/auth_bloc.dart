@@ -21,8 +21,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<AuthLoginEvent>((event, emit) async {
-      add(AuthInitEvent());
+      // add(AuthInitEvent());
       final login = await apiAuthRepository.login(event.email, event.password);
+      print('login: $login');
       if (login) {
         emit(state.copyWith(usuario: apiAuthRepository.usuario));
       } else {

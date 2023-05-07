@@ -92,6 +92,7 @@ class __FromState extends State<_From> {
 
             if (await authBloc.apiAuthRepository
                 .login(emailController.text, passwordController.text)) {
+              socketService.connect();
               Navigator.pushReplacementNamed(context, HomeScreen.homeroute);
             } else {
               mostrarAlerta(context, "Login incorrecto",

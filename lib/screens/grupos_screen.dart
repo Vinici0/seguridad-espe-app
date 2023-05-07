@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
+import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
+import 'package:flutter_maps_adv/screens/codigo_sreen.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class GruposScreen extends StatefulWidget {
@@ -12,15 +15,10 @@ class GruposScreen extends StatefulWidget {
 }
 
 class _GruposScreenState extends State<GruposScreen> {
-  // final salaService = new SalasServices();
-  List<Sala> salas = [
-    Sala(uid: '1', nombre: 'Grupo 1'),
-    Sala(uid: '2', nombre: 'Grupo 2'),
-    Sala(uid: '3', nombre: 'Grupo 3'),
-    Sala(uid: '4', nombre: 'Grupo 4'),
-  ];
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  // final salaService = new SalasServices();
+  List<Sala> salas = [];
 
   @override
   void initState() {
@@ -32,58 +30,28 @@ class _GruposScreenState extends State<GruposScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Grupos',
-            style: TextStyle(color: Colors.black87, fontSize: 20)),
-        backgroundColor: Colors.white,
-        //icono de tres puntos para crear grupo a la derecha
-        actions: [
-          IconButton(
-              onPressed: () {
-                // Navigator.pushNamed(context, CodigoGrupoScreen.codigoGruporoute);
-              },
-              icon: Icon(Icons.more_vert, color: Colors.black87))
-        ],
-        elevation: 1,
-      ),
-      body: SmartRefresher(
-        controller: _refreshController,
-        child: Column(
+        appBar: AppBar(
+          title: Text('Grupos',
+              style: TextStyle(color: Colors.black87, fontSize: 20)),
+          backgroundColor: Colors.white,
+          elevation: 1,
+        ),
+        body: Column(
           children: [
             _CretaGroup(),
             Expanded(
               child: _listSalesGroup(context),
             ),
           ],
-        ),
-      ),
-    );
+        ));
   }
 
   ListView _listSalesGroup(BuildContext context) {
+    print(salas.length);
     return ListView.builder(
-      physics: BouncingScrollPhysics(),
-      itemCount: 5,
-      itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          title: Column(
-              //pegado a la izquierda
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Grupo $index', style: TextStyle(fontSize: 16)),
-                //cantidad de miembros
-                Text('3 miembros',
-                    style: TextStyle(fontSize: 12, color: Colors.grey)),
-              ]),
-          leading: CircleAvatar(
-            child: Text('G$index', style: TextStyle(color: Colors.white)),
-            backgroundColor: Color.fromRGBO(232, 155, 218, 1),
-          ),
-          onTap: () {
-            Navigator.pushNamed(context, ChatScreen.chatsalesroute);
-          },
-        );
-      },
+      physics: const BouncingScrollPhysics(),
+      itemCount: salas.length,
+      itemBuilder: (_, i) => _salaListTile(salas[i]),
     );
   }
 
@@ -95,14 +63,18 @@ class _GruposScreenState extends State<GruposScreen> {
           backgroundColor: Colors.blue[100],
         ),
         onTap: () {
+          final salaService = BlocProvider.of<ChatProvider>(context);
+          //navegacion a screen ingreso nombre grupo CodigoGrupoScreen
+          salaService.salaSeleccionada = sala;
           Navigator.pushNamed(context, ChatScreen.chatsalesroute);
         });
   }
 
   _cargarSalas() async {
-    // salas = await salaService.getSales();
+    final salasService = BlocProvider.of<ChatProvider>(context);
+    salas.addAll(await salasService.getSalesAll());
     setState(() {});
-    // _refreshController.refreshCompleted();
+    _refreshController.refreshCompleted();
   }
 }
 
@@ -120,7 +92,7 @@ class _CretaGroup extends StatelessWidget {
           GestureDetector(
             onTap: () {
               //navegacion a screen ingreso nombre grupo CodigoGrupoScreen
-              // Navigator.pushNamed(context, CodigoGrupoScreen.codigoGruporoute);
+              Navigator.pushNamed(context, CodigoGrupoScreen.codigoGruporoute);
             },
             child: Row(
               children: [
@@ -128,16 +100,16 @@ class _CretaGroup extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 255, 255, 255),
+                    color: Colors.blue[100],
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  child: const Icon(Icons.add, color: Colors.indigo),
+                  child: const Icon(Icons.add, color: Colors.blue),
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'Crear nuevo grupo',
+                  'Crear grupo',
                   style: TextStyle(
-                      color: Colors.indigo, fontWeight: FontWeight.bold),
+                      color: Colors.blue, fontWeight: FontWeight.bold),
                 )
               ],
             ),

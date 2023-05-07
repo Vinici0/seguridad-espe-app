@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/navegacion.dart';
+import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_map_screen.dart';
 import 'package:flutter_maps_adv/screens/grupos_screen.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final counterBlocUser = BlocProvider.of<AuthBloc>(context);
     // counterBlocUser.add(AuthInitEvent());
+
     return Scaffold(
       body: Stack(
         children: [

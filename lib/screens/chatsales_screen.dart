@@ -2,6 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
+import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
+import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -20,6 +25,60 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   bool _estaEscribiendo = false;
 
+  /*
+    TODO: Cominicacion con el socket - de aqui para hacer la tesis
+    TODO: Paso 2 - Ir al _handleSubmit y enviar el mensaje al socket
+  */
+  SocketService socketService = SocketService();
+  AuthBloc authService = AuthBloc();
+  ChatProvider chatProvider = ChatProvider();
+
+  @override
+  void initState() {
+    //TODO: Jamas ubicar el listen en true
+    this.chatProvider = BlocProvider.of<ChatProvider>(context);
+    this.socketService = BlocProvider.of<SocketService>(context);
+    this.authService = BlocProvider.of<AuthBloc>(context);
+
+    socketService.socket.emit('join-room', {
+      'codigo': chatProvider.salaSeleccionada.uid,
+    });
+
+    socketService.socket.on('mensaje-grupal', _escucharMensaje);
+
+    _caragrHistorial(chatProvider.salaSeleccionada.uid);
+
+    super.initState();
+  }
+
+  void _caragrHistorial(String uid) async {
+    List<dynamic> chat = await chatProvider.getChatSala(uid);
+    final history = chat.map((m) => ChatMessage(
+        texto: m.mensaje,
+        uid: m.usuario,
+        nombre: m.nombre,
+        animationController: new AnimationController(
+            vsync: this, duration: Duration(milliseconds: 0))
+          ..forward()));
+    setState(() {
+      _messages.insertAll(0, history);
+    });
+  }
+
+  void _escucharMensaje(dynamic payload) {
+    ChatMessage message = ChatMessage(
+      nombre: payload['nombre'],
+      texto: payload['mensaje'],
+      uid: payload['de'],
+      animationController: AnimationController(
+          vsync: this, duration: Duration(milliseconds: 300)),
+    );
+    setState(() {
+      _messages.insert(0, message);
+    });
+    message.animationController.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,12 +87,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         title: Column(
           children: <Widget>[
             CircleAvatar(
-              child: Text('Te', style: TextStyle(fontSize: 12)),
+              child: Text(chatProvider.salaSeleccionada.nombre.substring(0, 2),
+                  style: TextStyle(fontSize: 12)),
               backgroundColor: Colors.blue[100],
               maxRadius: 14,
             ),
             SizedBox(height: 3),
-            Text('Melissa Flores',
+            Text(chatProvider.salaSeleccionada.nombre,
                 style: TextStyle(color: Colors.black87, fontSize: 12))
           ],
         ),
@@ -125,8 +185,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     _focusNode.requestFocus();
 
     final newMessage = ChatMessage(
-      uid: '123',
+      uid: authService.state.usuario!.uid,
       texto: texto,
+      nombre: authService.state.usuario!.nombre,
       animationController: AnimationController(
           vsync: this, duration: Duration(milliseconds: 200)),
     );
@@ -136,6 +197,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     setState(() {
       _estaEscribiendo = false;
     });
+
+    this.socketService.socket.emit('mensaje-grupal', {
+      'de': this.authService.state.usuario!.uid,
+      //TODO: Paso 3 - Enviar el mensaje al socket con el uid de la sala seleccionada para que el socket lo envie a todos los usuarios de la sala
+      'para': this.chatProvider.salaSeleccionada.uid,
+      'nombre': this.authService.state.usuario!.nombre,
+      'mensaje': texto
+    });
   }
 
   @override
@@ -144,6 +213,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
     for (ChatMessage message in _messages) {
       //Para evitar fugas de memoria en la animacion del boton de enviar mensaje
+      //Una vwz que se cierra se limpia la animacion del boton de enviar mensaje para evitar fugas de memoria
       message.animationController.dispose();
     }
 
