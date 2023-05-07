@@ -4,6 +4,7 @@ import 'package:flutter_maps_adv/models/sales_response.dart';
 import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/codigo_sreen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class GruposScreen extends StatefulWidget {
@@ -32,9 +33,68 @@ class _GruposScreenState extends State<GruposScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Grupos',
-              style: TextStyle(color: Colors.black87, fontSize: 20)),
-          backgroundColor: Colors.white,
+              style: TextStyle(color: Colors.white, fontSize: 20)),
+          // backgroundColor: Colors.white,
           elevation: 1,
+          actions: [
+            IconButton(
+              icon: Icon(
+                //boton de los tres puntos
+                Icons.more_vert,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 120.0,
+                      decoration: BoxDecoration(
+                        // color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: Icon(
+                                Icons.add,
+                                color: Colors.black,
+                              ),
+                              title: Text('Crear un nuevo grupo'),
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context,
+                                    CodigoGrupoScreen.codigoGruporoute);
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(
+                                Icons.group,
+                                color: Colors.black,
+                              ),
+                              title: Text('Unir a un grupo'),
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context,
+                                    CodigoGrupoScreen.codigoGruporoute);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            )
+          ],
         ),
         body: Column(
           children: [
@@ -100,16 +160,16 @@ class _CretaGroup extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: Colors.blue[100],
+                    color: Color(0xfff833AB4).withOpacity(0.2),
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  child: const Icon(Icons.add, color: Colors.blue),
+                  child: const Icon(Icons.add, color: Color(0xfff833AB4)),
                 ),
                 const SizedBox(width: 10),
                 Text(
                   'Crear grupo',
                   style: TextStyle(
-                      color: Colors.blue, fontWeight: FontWeight.bold),
+                      color: Color(0xfff833AB4), fontWeight: FontWeight.bold),
                 )
               ],
             ),

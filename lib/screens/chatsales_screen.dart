@@ -83,7 +83,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         title: Column(
           children: <Widget>[
             CircleAvatar(
@@ -94,11 +94,22 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             ),
             SizedBox(height: 3),
             Text(chatProvider.salaSeleccionada.nombre,
-                style: TextStyle(color: Colors.black87, fontSize: 12))
+                style: TextStyle(color: Colors.white, fontSize: 12))
           ],
         ),
         centerTitle: true,
         elevation: 1,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              // do something
+            },
+          )
+        ],
       ),
       body: Container(
         child: Column(

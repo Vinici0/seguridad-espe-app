@@ -9,7 +9,7 @@ class CodigoGrupoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Crear Grupo',
-            style: TextStyle(color: Colors.white, fontSize: 20)),
+            style: TextStyle(color: Color(0xfff833AB4), fontSize: 20)),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -28,10 +28,28 @@ class CodigoGrupoScreen extends StatelessWidget {
               SizedBox(height: 10),
               Container(
                 height: 40,
-                child: const TextField(
+                child: TextField(
+                  cursorColor: Colors.black,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Nombre',
+                    disabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xfff833AB4)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xfff833AB4)),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xfff833AB4)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xfff833AB4)),
+                    ),
+                    hintText: 'Nombre del grupo',
+                    //color del texto plomo suave - #999
+                    labelStyle: TextStyle(color: Color(0x99999999)),
+                    hintStyle: TextStyle(color: Color(0x99999999)),
+                    //color del de palpitacion del texto
+                    focusColor: Color(0xfff833AB4),
+                    contentPadding: EdgeInsets.all(10),
                   ),
                 ),
               ),
@@ -40,12 +58,12 @@ class CodigoGrupoScreen extends StatelessWidget {
               MaterialButton(
                 //todo el ancho del contenedor
                 minWidth: double.infinity,
-                color: Colors.blue,
+                color: Color(0xffF3F3F3),
                 onPressed: () {
                   print('crear grupo');
                 },
                 child: Text('Crear Grupo',
-                    style: TextStyle(color: Colors.white, fontSize: 14)),
+                    style: TextStyle(color: Color(0xfff833AB4), fontSize: 14)),
               ),
             ],
           ),
