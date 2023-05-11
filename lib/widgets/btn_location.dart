@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/ui/custom_snackbar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BtnCurrentLocation extends StatelessWidget {
   const BtnCurrentLocation({Key? key}) : super(key: key);
@@ -18,7 +19,8 @@ class BtnCurrentLocation extends StatelessWidget {
         backgroundColor: Colors.white,
         maxRadius: 25,
         child: IconButton(
-            icon: const Icon(Icons.my_location_outlined, color: Colors.black),
+            icon:
+                const Icon(FontAwesomeIcons.locationArrow, color: Colors.black),
             onPressed: () {
               //ultima ubicacion conocida del usuario
               final userLocation = locationBloc.state.lastKnownLocation;

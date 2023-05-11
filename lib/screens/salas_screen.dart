@@ -5,30 +5,12 @@ import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/codigo_add_sreen.dart';
 import 'package:flutter_maps_adv/screens/codigo_create_sreen.dart';
+import 'package:flutter_maps_adv/screens/grupos_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class GruposScreen extends StatefulWidget {
-  static const String salesroute = 'sales';
-  const GruposScreen({Key? key}) : super(key: key);
-
-  @override
-  State<GruposScreen> createState() => _GruposScreenState();
-}
-
-class _GruposScreenState extends State<GruposScreen> {
-  RefreshController _refreshController = RefreshController(
-      initialRefresh:
-          false); //Sirve para refrescar la pantalla cuando se crea un grupo
-  // final salaService = new SalasServices();
-  List<Sala> salas = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    this._cargarSalas();
-    super.initState();
-  }
+class SalasScreen extends StatelessWidget {
+  static const String salasroute = 'salas';
+  const SalasScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +25,7 @@ class _GruposScreenState extends State<GruposScreen> {
         ),
         body: Column(
           children: [
-            _CretaGroup(),
+            // _CretaGroup(),
             Expanded(
               child: _listSalesGroup(context),
             ),
@@ -52,16 +34,23 @@ class _GruposScreenState extends State<GruposScreen> {
   }
 
   ListView _listSalesGroup(BuildContext context) {
+    final salasService = BlocProvider.of<SalasProvider>(context);
+    final salas = salasService.salas;
     print(salas.length);
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
       itemCount: salas.length,
-      itemBuilder: (_, i) => _salaListTile(salas[i]),
+      itemBuilder: (_, i) => SalaListTitle(sala: salas[i]),
     );
   }
+}
 
-  ListTile _salaListTile(Sala sala) {
-    print(sala.color);
+class SalaListTitle extends StatelessWidget {
+  final Sala sala;
+  const SalaListTitle({super.key, required this.sala});
+
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
       title: Text(sala.nombre),
       leading: Container(
@@ -97,13 +86,6 @@ class _GruposScreenState extends State<GruposScreen> {
         Navigator.pushNamed(context, ChatScreen.chatsalesroute);
       },
     );
-  }
-
-  _cargarSalas() async {
-    final salasService = BlocProvider.of<SalasProvider>(context);
-    salas.addAll(await salasService.getSalesAll());
-    setState(() {});
-    _refreshController.refreshCompleted();
   }
 }
 
@@ -173,55 +155,6 @@ class IconModal extends StatelessWidget {
           },
         );
       },
-    );
-  }
-}
-
-class _CretaGroup extends StatelessWidget {
-  const _CretaGroup({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(
-                    context, CodigoCreateGrupoScreen.codigoGruporoute);
-              },
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 6.0),
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: Color(0xFF6165FA).withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: const Icon(Icons.add, color: Color(0xFF6165FA)),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    'Crear grupo',
-                    style: TextStyle(
-                        color: Color(0xFF6165FA),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

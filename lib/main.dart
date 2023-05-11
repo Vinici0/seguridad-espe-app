@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
+import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
+import 'package:flutter_maps_adv/screens/alertas_screen.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
-import 'package:flutter_maps_adv/screens/codigo_sreen.dart';
+import 'package:flutter_maps_adv/screens/codigo_add_sreen.dart';
+import 'package:flutter_maps_adv/screens/codigo_create_sreen.dart';
+import 'package:flutter_maps_adv/screens/detallesala_screen.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
 import 'package:flutter_maps_adv/screens/grupos_screen.dart';
 import 'package:flutter_maps_adv/screens/register_screen.dart';
+import 'package:flutter_maps_adv/screens/salas_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_maps_adv/widgets/modal_add_group.dart';
 
@@ -26,8 +30,8 @@ void main() {
     BlocProvider(
         create: (context) =>
             MapBloc(locationBloc: BlocProvider.of<LocaltionBloc>(context))),
-    BlocProvider<ChatProvider>(
-        create: (BuildContext context) => ChatProvider()),
+    BlocProvider<SalasProvider>(
+        create: (BuildContext context) => SalasProvider()),
     //AuthBloc
   ], child: const MyApp()));
 }
@@ -37,13 +41,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color myPurpleColor = Color(0xfff833AB4);
+    final Color myPurpleColor = Color(0xFF6165FA);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MapApp',
       initialRoute: LoadingLoginScreen.loadingroute,
       routes: {
-        CodigoGrupoScreen.codigoGruporoute: (_) => CodigoGrupoScreen(),
+        CodigoCreateGrupoScreen.codigoGruporoute: (_) =>
+            CodigoCreateGrupoScreen(),
         HomeScreen.homeroute: (_) => HomeScreen(),
         LoadingLoginScreen.loadingroute: (_) => LoadingLoginScreen(),
         LoadingMapScreen.loadingroute: (_) => LoadingMapScreen(),
@@ -53,18 +58,22 @@ class MyApp extends StatelessWidget {
         GruposScreen.salesroute: (_) => GruposScreen(),
         ChatScreen.chatsalesroute: (_) => ChatScreen(),
         ModalBottomSheet.modalBottomSheetRoute: (_) => ModalBottomSheet(),
+        CodigoAddGrupoScreen.codigoAddGruporoute: (_) => CodigoAddGrupoScreen(),
+        DetalleSalaScreen.detalleSalaroute: (_) => DetalleSalaScreen(),
+        SalasScreen.salasroute: (_) => SalasScreen(),
+        AlartasScreen.routeName: (_) => AlartasScreen(),
       },
       theme: ThemeData.light().copyWith(
         primaryColor: myPurpleColor,
         // focusColor:  myPurpleColor,
         appBarTheme: AppBarTheme(
-          color: myPurpleColor,
+          color: Colors.white,
           elevation: 0,
           centerTitle: true,
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(color: Colors.black),
           textTheme: TextTheme(
             headline6: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),

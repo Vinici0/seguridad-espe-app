@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
-import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
-import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
+import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
+import 'package:flutter_maps_adv/screens/detallesala_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -31,12 +31,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   */
   SocketService socketService = SocketService();
   AuthBloc authService = AuthBloc();
-  ChatProvider chatProvider = ChatProvider();
+  SalasProvider chatProvider = SalasProvider();
 
   @override
   void initState() {
     //TODO: Jamas ubicar el listen en true
-    this.chatProvider = BlocProvider.of<ChatProvider>(context);
+    this.chatProvider = BlocProvider.of<SalasProvider>(context);
     this.socketService = BlocProvider.of<SocketService>(context);
     this.authService = BlocProvider.of<AuthBloc>(context);
 
@@ -84,29 +84,55 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.white,
-        title: Column(
-          children: <Widget>[
-            CircleAvatar(
-              child: Text(chatProvider.salaSeleccionada.nombre.substring(0, 2),
-                  style: TextStyle(fontSize: 12)),
-              backgroundColor: Colors.blue[100],
-              maxRadius: 14,
+        centerTitle: false,
+        title: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(int.parse(
+                        '0xFF${chatProvider.salaSeleccionada.color.substring(0, 2)}DDBB${chatProvider.salaSeleccionada.color.substring(4)}')),
+                    Color(int.parse(
+                        '0xFF${chatProvider.salaSeleccionada.color}')),
+                    Color.fromARGB(255, 230, 116, 226),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              child: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: Text(
+                  chatProvider.salaSeleccionada.nombre
+                      .substring(0, 2)
+                      .toUpperCase(),
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
-            SizedBox(height: 3),
+            //Separa de manera horizontal
+            SizedBox(
+              width: 10,
+            ),
             Text(chatProvider.salaSeleccionada.nombre,
-                style: TextStyle(color: Colors.white, fontSize: 12))
+                style: TextStyle(color: Colors.black, fontSize: 18)),
           ],
         ),
-        centerTitle: true,
+
         elevation: 1,
         actions: [
           IconButton(
             icon: Icon(
               Icons.settings,
-              color: Colors.white,
+              color: Colors.black,
             ),
             onPressed: () {
-              // do something
+              Navigator.pushNamed(context, DetalleSalaScreen.detalleSalaroute);
             },
           )
         ],
@@ -171,7 +197,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 : Container(
                     margin: EdgeInsets.symmetric(horizontal: 4.0),
                     child: IconTheme(
-                      data: IconThemeData(color: Colors.blue[400]),
+                      //0xFF6165FA
+                      data: IconThemeData(color: Color(0xFF6165FA)),
                       child: IconButton(
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,

@@ -37,10 +37,14 @@ class Sala {
   Sala({
     required this.nombre,
     required this.uid,
+    required this.color,
+    required this.codigo,
   });
 
   String nombre;
   String uid;
+  String color;
+  String codigo;
 
   factory Sala.fromJson(String str) => Sala.fromMap(json.decode(str));
 
@@ -49,10 +53,14 @@ class Sala {
   factory Sala.fromMap(Map<String, dynamic> json) => Sala(
         nombre: json["nombre"],
         uid: json["uid"],
+        color: json["color"],
+        codigo: json["codigo"],
       );
 
   Map<String, dynamic> toMap() => {
         "nombre": nombre,
         "uid": uid,
+        "color": color,
+        "codigo": codigo,
       };
 }

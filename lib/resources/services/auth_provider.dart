@@ -35,34 +35,28 @@ class AuthService {
     this.autenticando = true;
 
     final data = {'email': email, 'password': password};
+    print(data);
 
-    try {
-      final uri = Uri.parse('${Environment.apiUrl}/login');
-      final resp = await http.post(uri,
-          body: jsonEncode(data),
-          headers: {'Content-Type': 'application/json'});
+    final uri = Uri.parse('${Environment.apiUrl}/login');
 
-      this.autenticando = false;
+    final resp = await http.post(uri,
+        body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
 
-      if (resp.statusCode == 200) {
-        final loginResponse = loginResponseFromJson(resp.body);
-        this.usuario = loginResponse.usuario;
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('online', this.usuario!.online);
-        await prefs.setString('email', this.usuario!.email);
-        await prefs.setString('nombre', this.usuario!.nombre);
-        await prefs.setString('uid', this.usuario!.uid);
+    this.autenticando = false;
 
-        await this._guardarToken(loginResponse.token);
+    if (resp.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(resp.body);
+      this.usuario = loginResponse.usuario;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('online', this.usuario!.online);
+      await prefs.setString('email', this.usuario!.email);
+      await prefs.setString('nombre', this.usuario!.nombre);
+      await prefs.setString('uid', this.usuario!.uid);
 
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      // Manejo de excepciones
-      this.autenticando = false;
-      print('Error durante la autenticación: $e');
+      await this._guardarToken(loginResponse.token);
+
+      return true;
+    } else {
       return false;
     }
   }

@@ -13,7 +13,7 @@ class SocketService
     with ChangeNotifier
     implements StateStreamableSource<ServerStatus> {
   ServerStatus _serverStatus = ServerStatus.Connecting;
-  late IO.Socket _socket;
+  IO.Socket _socket = IO.io(Environment.socketUrl);
 
   ServerStatus get serverStatus => this._serverStatus;
 

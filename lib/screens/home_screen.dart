@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/navegacion.dart';
-import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_map_screen.dart';
 import 'package:flutter_maps_adv/screens/grupos_screen.dart';
+import 'package:flutter_maps_adv/screens/salas_screen.dart';
 import 'package:flutter_maps_adv/widgets/custom_bottom_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   index: counterBloc.index,
                   children: [
                     //if counterBloc
-                    Center(child: Text("Home")),
-                    // const LoadingMapScreen(),
+                    // Center(child: Text("Home")),
+                    const LoadingMapScreen(),
 
                     Center(
                         child: ElevatedButton(onPressed: () {
@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ))),
                     GruposScreen(),
+                    // SalasScreen(),
                     Text("Page 4"),
                     Center(
                         child: Column(

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/screens/loading_map_screen.dart';
 import 'package:flutter_maps_adv/views/map_view.dart';
 import 'package:flutter_maps_adv/widgets/btn_follow_user.dart';
+import 'package:flutter_maps_adv/widgets/btn_report.dart';
 import 'package:flutter_maps_adv/widgets/btn_toggle_user_route.dart';
 import 'package:flutter_maps_adv/widgets/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -67,7 +67,7 @@ class _MapScreenState extends State<MapScreen> {
                     },
                   ),
                   Positioned(
-                    bottom: 16.0,
+                    bottom: 80.0,
                     right: 16.0,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -78,6 +78,7 @@ class _MapScreenState extends State<MapScreen> {
                       ],
                     ),
                   ),
+                  BtnReport(),
                 ],
               ),
             );

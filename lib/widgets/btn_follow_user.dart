@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BtnFollowUser extends StatelessWidget {
   const BtnFollowUser({Key? key}) : super(key: key);
@@ -19,8 +20,8 @@ class BtnFollowUser extends StatelessWidget {
             return IconButton(
                 icon: Icon(
                     state.isFollowUser
-                        ? Icons.directions_run_rounded
-                        : Icons.hail_rounded,
+                        ? FontAwesomeIcons.solidCompass
+                        : FontAwesomeIcons.compass,
                     color: Colors.black),
                 onPressed: () {
                   print("Boton presionado");

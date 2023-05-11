@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:provider/provider.dart';
 
 class ChatMessage extends StatelessWidget {
@@ -21,6 +22,8 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = BlocProvider.of<AuthBloc>(context);
+    final socketService = SocketService();
+    socketService.connect();
     return FadeTransition(
       opacity: animationController,
       child: SizeTransition(
@@ -49,7 +52,7 @@ class ChatMessage extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
           decoration: BoxDecoration(
-              color: Color(0xff4D9EF6),
+              color: Color(0xFF6165FA),
               borderRadius: BorderRadius.circular(20)),
         ));
   }

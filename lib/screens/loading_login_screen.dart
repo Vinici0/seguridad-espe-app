@@ -35,9 +35,9 @@ class LoadingLoginScreen extends StatelessWidget {
       // TODO: conectar al socket server
       // Navigator.pushReplacementNamed(context, 'usuarios');
       // ignore: use_build_context_synchronously
-      socketService.connect();
 
       authService.add(AuthInitEvent());
+      socketService.connect();
 
       Navigator.pushReplacement(
           context,
