@@ -22,7 +22,7 @@ void main() {
   runApp(MultiBlocProvider(providers: [
     //Dependencias que van en cascada
     //PruebaBloc
-    BlocProvider<SocketService>(create: (context) => SocketService()),
+    BlocProvider(create: (context) => SocketService()),
     BlocProvider(create: (context) => AuthBloc()),
     BlocProvider(create: (context) => GpsBloc()),
     BlocProvider(create: (context) => LocaltionBloc()),

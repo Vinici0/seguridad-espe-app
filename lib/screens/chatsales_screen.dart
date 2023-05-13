@@ -36,9 +36,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     //TODO: Jamas ubicar el listen en true
-    this.chatProvider = BlocProvider.of<SalasProvider>(context);
-    this.socketService = BlocProvider.of<SocketService>(context);
-    this.authService = BlocProvider.of<AuthBloc>(context);
+    this.chatProvider = BlocProvider.of<SalasProvider>(context, listen: false);
+    this.socketService = BlocProvider.of<SocketService>(context, listen: false);
+    this.authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
     socketService.socket.emit('join-room', {
       'codigo': chatProvider.salaSeleccionada.uid,
@@ -234,14 +234,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
     setState(() {
       _estaEscribiendo = false;
-    });
 
-    this.socketService.socket.emit('mensaje-grupal', {
-      'de': this.authService.state.usuario!.uid,
-      //TODO: Paso 3 - Enviar el mensaje al socket con el uid de la sala seleccionada para que el socket lo envie a todos los usuarios de la sala
-      'para': this.chatProvider.salaSeleccionada.uid,
-      'nombre': this.authService.state.usuario!.nombre,
-      'mensaje': texto
+      this.socketService.socket.emit('mensaje-grupal', {
+        'de': this.authService.state.usuario!.uid,
+        //TODO: Paso 3 - Enviar el mensaje al socket con el uid de la sala seleccionada para que el socket lo envie a todos los usuarios de la sala
+        'para': this.chatProvider.salaSeleccionada.uid,
+        'nombre': this.authService.state.usuario!.nombre,
+        'mensaje': texto
+      });
     });
   }
 
@@ -254,6 +254,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       //Una vwz que se cierra se limpia la animacion del boton de enviar mensaje para evitar fugas de memoria
       message.animationController.dispose();
     }
+    this.socketService.socket.off(
+        'mensaje-grupal'); //Sirve para dejar de escuchar un evento en particular
 
     super.dispose();
   }

@@ -25,8 +25,9 @@ class LoadingLoginScreen extends StatelessWidget {
   }
 
   Future checkLoginState(BuildContext context) async {
-    final authService = BlocProvider.of<AuthBloc>(context);
-    final socketService = BlocProvider.of<SocketService>(context);
+    final authService = BlocProvider.of<AuthBloc>(context, listen: false);
+    final socketService =
+        BlocProvider.of<SocketService>(context, listen: false);
 
     final isLoggedIn = await authService.apiAuthRepository.isLoggedIn();
 

@@ -22,8 +22,8 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = BlocProvider.of<AuthBloc>(context);
-    final socketService = SocketService();
-    socketService.connect();
+    // final socketService = SocketService();
+    // socketService.connect();
     return FadeTransition(
       opacity: animationController,
       child: SizeTransition(

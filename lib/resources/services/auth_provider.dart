@@ -22,6 +22,7 @@ class AuthService {
   }
 
   // Getters del token de forma estática
+// Getters del token de forma estática
   static Future<String?> getToken() async {
     // Obtener la instancia de SharedPreferences
     final _storage = new FlutterSecureStorage();
