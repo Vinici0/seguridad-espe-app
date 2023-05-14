@@ -33,8 +33,9 @@ class CustomBottomNavigation extends StatelessWidget {
                 label: 'Grupos',
               ),
               BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.bell),
-                label: 'Notificaciones',
+                //R
+                icon: Icon(FontAwesomeIcons.locationDot),
+                label: 'Icono de mapa',
               ),
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.bars),

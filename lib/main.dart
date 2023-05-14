@@ -4,15 +4,18 @@ import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
-import 'package:flutter_maps_adv/screens/alertas_screen.dart';
+import 'package:flutter_maps_adv/screens/alerts_screen.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
-import 'package:flutter_maps_adv/screens/codigo_add_sreen.dart';
-import 'package:flutter_maps_adv/screens/codigo_create_sreen.dart';
+import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
+import 'package:flutter_maps_adv/screens/code_create_sreen.dart';
+import 'package:flutter_maps_adv/screens/config_screen.dart';
 import 'package:flutter_maps_adv/screens/detallesala_screen.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
-import 'package:flutter_maps_adv/screens/grupos_screen.dart';
+import 'package:flutter_maps_adv/screens/group_screen.dart';
+import 'package:flutter_maps_adv/screens/news_detalle.dart';
+import 'package:flutter_maps_adv/screens/news_screen.dart';
 import 'package:flutter_maps_adv/screens/register_screen.dart';
 import 'package:flutter_maps_adv/screens/salas_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
@@ -62,6 +65,9 @@ class MyApp extends StatelessWidget {
         DetalleSalaScreen.detalleSalaroute: (_) => DetalleSalaScreen(),
         SalasScreen.salasroute: (_) => SalasScreen(),
         AlartasScreen.routeName: (_) => AlartasScreen(),
+        NewsScreen.newsroute: (_) => NewsScreen(),
+        ConfigScreen.configroute: (_) => ConfigScreen(),
+        DetalleScreen.detalleroute: (_) => DetalleScreen(),
       },
       theme: ThemeData.light().copyWith(
         primaryColor: myPurpleColor,

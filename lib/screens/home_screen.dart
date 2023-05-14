@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/navegacion.dart';
+import 'package:flutter_maps_adv/screens/config_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_map_screen.dart';
-import 'package:flutter_maps_adv/screens/grupos_screen.dart';
+import 'package:flutter_maps_adv/screens/group_screen.dart';
+import 'package:flutter_maps_adv/screens/news_screen.dart';
 import 'package:flutter_maps_adv/screens/salas_screen.dart';
 import 'package:flutter_maps_adv/widgets/custom_bottom_navigation.dart';
 
@@ -37,42 +39,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     //if counterBloc
                     // Center(child: Text("Home")),
                     const LoadingMapScreen(),
+                    NewsScreen(),
 
-                    Center(
-                        child: ElevatedButton(onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          PageRouteBuilder(
-                              pageBuilder: (_, __, ___) => LoadingMapScreen(),
-                              transitionDuration: Duration(
-                                  milliseconds: 0))); //TODO: cambiar a loading
-                    }, child: BlocBuilder<AuthBloc, AuthState>(
-                      builder: (context, state) {
-                        //Boton cerrar sesion de
-                        return MaterialButton(
-                          child: Text('Cerrar sesion ${state.usuario?.nombre}'),
-                          onPressed: () {
-                            BlocProvider.of<AuthBloc>(context)
-                                .add(AuthLogoutEvent());
-                            Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                    pageBuilder: (_, __, ___) =>
-                                        LoadingLoginScreen(),
-                                    transitionDuration: Duration(
-                                        milliseconds:
-                                            0))); //TODO: cambiar a loading
-                          },
-                        );
-                      },
-                    ))),
                     GruposScreen(),
                     // SalasScreen(),
                     Text("Page 4"),
                     Center(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [Text('Perfil')])),
+                            children: [ConfigScreen()])),
                   ],
                 );
               })

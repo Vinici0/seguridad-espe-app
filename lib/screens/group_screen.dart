@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
 import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
-import 'package:flutter_maps_adv/screens/codigo_add_sreen.dart';
-import 'package:flutter_maps_adv/screens/codigo_create_sreen.dart';
+import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
+import 'package:flutter_maps_adv/screens/code_create_sreen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 

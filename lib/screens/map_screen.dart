@@ -71,10 +71,10 @@ class _MapScreenState extends State<MapScreen> {
                     right: 16.0,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                      children: const [
+                        BtnFollowUser(),
                         BtnToggleUserRoute(),
                         BtnCurrentLocation(),
-                        BtnFollowUser(),
                       ],
                     ),
                   ),
