@@ -33,34 +33,34 @@ class SalesResponse {
       };
 }
 
+Sala salaFromMap(String str) => Sala.fromMap(json.decode(str));
+
+String salaToMap(Sala data) => json.encode(data.toMap());
+
 class Sala {
+  String nombre;
+  String codigo;
+  String color;
+  String uid;
+
   Sala({
     required this.nombre,
-    required this.uid,
-    required this.color,
     required this.codigo,
+    required this.color,
+    required this.uid,
   });
-
-  String nombre;
-  String uid;
-  String color;
-  String codigo;
-
-  factory Sala.fromJson(String str) => Sala.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
 
   factory Sala.fromMap(Map<String, dynamic> json) => Sala(
         nombre: json["nombre"],
-        uid: json["uid"],
-        color: json["color"],
         codigo: json["codigo"],
+        color: json["color"],
+        uid: json["uid"],
       );
 
   Map<String, dynamic> toMap() => {
         "nombre": nombre,
-        "uid": uid,
-        "color": color,
         "codigo": codigo,
+        "color": color,
+        "uid": uid,
       };
 }

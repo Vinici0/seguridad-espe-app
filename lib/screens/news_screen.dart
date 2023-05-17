@@ -63,7 +63,8 @@ class _NewsScreenState extends State<NewsScreen> {
                   // color: Colors.yellow,
                   child: const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.warning),
+                    //icono de perro
+                    child: Icon(Icons.pets),
                   ),
                 ),
               ),
@@ -86,7 +87,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 children: [
                                   //hora
                                   Text(
-                                    'Titulo de la noticia',
+                                    'Mascota perdida',
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold),
@@ -103,7 +104,7 @@ class _NewsScreenState extends State<NewsScreen> {
                               ),
                               //descripcion
                               Text(
-                                'Descripcion de la noticia',
+                                'Por favor, ayude a encontrar a mi perro, se perdió en la calle 12 con 34. Llevo dias que no lo encuentro, por favor, si lo ve, llame al 123456789',
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.normal),
@@ -127,8 +128,8 @@ class _NewsScreenState extends State<NewsScreen> {
                           //padin a la derecha
                           padding: const EdgeInsets.only(right: 10),
                           //Image 'assets/no-image.png'
-                          child: SvgPicture.asset(
-                            'assets/accidente.svg',
+                          child: Image.asset(
+                            'assets/perroPerdido.jpg',
                             fit: BoxFit.cover,
                           ),
                         ),

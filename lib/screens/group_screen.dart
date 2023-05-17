@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
-import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
+import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
 import 'package:flutter_maps_adv/screens/code_create_sreen.dart';
@@ -92,7 +92,7 @@ class _GruposScreenState extends State<GruposScreen> {
         ),
       ),
       onTap: () {
-        final salaService = BlocProvider.of<SalasProvider>(context);
+        final salaService = BlocProvider.of<ChatProvider>(context);
         salaService.salaSeleccionada = sala;
         Navigator.pushNamed(context, ChatScreen.chatsalesroute);
       },
@@ -100,8 +100,8 @@ class _GruposScreenState extends State<GruposScreen> {
   }
 
   _cargarSalas() async {
-    final salasService = BlocProvider.of<SalasProvider>(context);
-    salas.addAll(await salasService.getSalesAll());
+    final salasService = BlocProvider.of<ChatProvider>(context);
+    // salas.addAll(await salasService.getSalesAll());
     setState(() {});
     _refreshController.refreshCompleted();
   }

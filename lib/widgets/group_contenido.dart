@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
+import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
+import 'package:flutter_maps_adv/screens/salas_screen.dart';
 
 class GroupContenido extends StatelessWidget {
   final String textoTitulo;
@@ -18,7 +19,7 @@ class GroupContenido extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController nomController = TextEditingController();
-    final chatProvider = BlocProvider.of<SalasProvider>(context, listen: false);
+    final chatProvider = BlocProvider.of<ChatProvider>(context, listen: false);
     return Column(
       children: [
         Container(
@@ -72,11 +73,15 @@ class GroupContenido extends StatelessWidget {
           //todo el ancho del contenedor
           minWidth: double.infinity,
           color: Color(0xffF3F3F3),
-          onPressed: () {
-            if (nomController.text.isNotEmpty) {
-              chatProvider.createSala(nomController.text);
-              Navigator.pop(context);
+          onPressed: () async {
+            if (textoButton == 'Crear Grupo') {
+              await chatProvider.createSala(nomController.text);
+              // Navigator.pushNamed(context, SalasScreen.salasroute);
+            } else {
+              await chatProvider.unirSala(nomController.text);
+              // Navigator.pushNamed(context, SalasScreen.salasroute);
             }
+            Navigator.pop(context);
           },
           child: Text(textoButton,
               style: TextStyle(color: Color(0xFF6165FA), fontSize: 14)),

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
-import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
+import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
 import 'package:flutter_maps_adv/screens/code_create_sreen.dart';
-import 'package:flutter_maps_adv/screens/group_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SalasScreen extends StatelessWidget {
@@ -15,39 +14,52 @@ class SalasScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: const Text('Grupos',
-              style: TextStyle(color: Colors.black, fontSize: 20)),
-          // backgroundColor: Colors.white,
-          elevation: 1,
-          actions: [IconModal()],
-        ),
-        body: Column(
-          children: [
-            // _CretaGroup(),
-            Expanded(
-              child: _listSalesGroup(context),
-            ),
-          ],
-        ));
+      appBar: AppBar(
+        centerTitle: false,
+        title: const Text('Grupos',
+            style: TextStyle(color: Colors.black, fontSize: 20)),
+        elevation: 1,
+        actions: [IconModal()],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: _listSalesGroup(context),
+          ),
+        ],
+      ),
+    );
   }
 
-  ListView _listSalesGroup(BuildContext context) {
-    final salasService = BlocProvider.of<SalasProvider>(context);
-    final salas = salasService.salas;
-    print(salas.length);
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: salas.length,
-      itemBuilder: (_, i) => SalaListTitle(sala: salas[i]),
+  Widget _listSalesGroup(BuildContext context) {
+    final salasService = BlocProvider.of<ChatProvider>(context);
+
+    return StreamBuilder<List<Sala>>(
+      stream: salasService.salasStream,
+      builder: (_, snapshot) {
+        if (snapshot.hasData) {
+          final salas = snapshot.data!;
+
+          return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: salas.length,
+            itemBuilder: (_, i) => SalaListTitle(sala: salas[i]),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error al cargar las salas: ${snapshot.error}'),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 }
 
 class SalaListTitle extends StatelessWidget {
   final Sala sala;
-  const SalaListTitle({super.key, required this.sala});
+  const SalaListTitle({Key? key, required this.sala}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +73,6 @@ class SalaListTitle extends StatelessWidget {
                   '0xFF${sala.color.substring(0, 2)}DDBB${sala.color.substring(4)}')),
               Color(int.parse('0xFF${sala.color}')),
               Color.fromARGB(255, 230, 116, 226),
-
-              //0xFF6165FA
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -81,7 +91,7 @@ class SalaListTitle extends StatelessWidget {
         ),
       ),
       onTap: () {
-        final salaService = BlocProvider.of<SalasProvider>(context);
+        final salaService = BlocProvider.of<ChatProvider>(context);
         salaService.salaSeleccionada = sala;
         Navigator.pushNamed(context, ChatScreen.chatsalesroute);
       },

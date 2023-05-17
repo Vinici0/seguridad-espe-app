@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
+
+import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
+import 'package:flutter_maps_adv/screens/alert_screen.dart';
 import 'package:flutter_maps_adv/screens/alerts_screen.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
@@ -29,12 +31,12 @@ void main() {
     BlocProvider(create: (context) => AuthBloc()),
     BlocProvider(create: (context) => GpsBloc()),
     BlocProvider(create: (context) => LocaltionBloc()),
+    // BlocProvider(create: (context) => SalaBloc()),
     //Se le envia la instancia del bloc de localizacion
     BlocProvider(
         create: (context) =>
             MapBloc(locationBloc: BlocProvider.of<LocaltionBloc>(context))),
-    BlocProvider<SalasProvider>(
-        create: (BuildContext context) => SalasProvider()),
+    BlocProvider<ChatProvider>(create: (context) => ChatProvider()),
     //AuthBloc
   ], child: const MyApp()));
 }
@@ -68,6 +70,7 @@ class MyApp extends StatelessWidget {
         NewsScreen.newsroute: (_) => NewsScreen(),
         ConfigScreen.configroute: (_) => ConfigScreen(),
         DetalleScreen.detalleroute: (_) => DetalleScreen(),
+        AlertScreen.routeName: (_) => AlertScreen(),
       },
       theme: ThemeData.light().copyWith(
         primaryColor: myPurpleColor,

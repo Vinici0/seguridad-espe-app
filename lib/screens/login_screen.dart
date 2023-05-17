@@ -4,6 +4,7 @@ import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/mostrar_alerta.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
+import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/widgets/boton_login.dart';
 import 'package:flutter_maps_adv/widgets/custom_input.dart';
 import 'package:flutter_maps_adv/widgets/labels_login.dart';
@@ -90,10 +91,11 @@ class __FromState extends State<_From> {
                 email: emailController.text,
                 password: passwordController.text));
 
+            // socketService.connect();
             if (await authBloc.apiAuthRepository
                 .login(emailController.text, passwordController.text)) {
-              socketService.connect();
-              Navigator.pushReplacementNamed(context, HomeScreen.homeroute);
+              Navigator.pushReplacementNamed(
+                  context, LoadingLoginScreen.loadingroute);
             } else {
               mostrarAlerta(context, "Login incorrecto",
                   "Revise sus credenciales nuevamente");

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_maps_adv/models/reporte.dart';
 import 'package:flutter_maps_adv/widgets/page_title.dart';
-import 'package:flutter_maps_adv/widgets/table_alertas.dart';
+import 'package:flutter_maps_adv/widgets/table_alertas_comunidad.dart';
+import 'package:flutter_maps_adv/widgets/table_alertas_seguridad.dart';
 
 class AlartasScreen extends StatelessWidget {
   static const String routeName = 'alertas';
@@ -36,8 +37,8 @@ class AlartasScreen extends StatelessWidget {
             //color de fondo de la pantalla
 
             children: [
-              TableAlerts(),
-              TableAlerts(),
+              TableAlertsSeguridad(),
+              TableAlertsCompunidad(),
             ],
           ),
         ),

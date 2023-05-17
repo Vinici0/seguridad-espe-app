@@ -38,6 +38,7 @@ class LoadingLoginScreen extends StatelessWidget {
       // ignore: use_build_context_synchronously
 
       authService.add(AuthInitEvent());
+
       socketService.connect();
 
       Navigator.pushReplacement(

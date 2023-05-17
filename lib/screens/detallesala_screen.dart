@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
+import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 
 class DetalleSalaScreen extends StatelessWidget {
   static const String detalleSalaroute = 'detalleSala';
@@ -8,7 +8,7 @@ class DetalleSalaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chatProvider = BlocProvider.of<SalasProvider>(context);
+    final chatProvider = BlocProvider.of<ChatProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,

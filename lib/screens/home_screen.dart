@@ -41,8 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     const LoadingMapScreen(),
                     NewsScreen(),
 
-                    GruposScreen(),
-                    // SalasScreen(),
+                    // GruposScreen(),
+                    SalasScreen(),
                     Text("Page 4"),
                     Center(
                         child: Column(

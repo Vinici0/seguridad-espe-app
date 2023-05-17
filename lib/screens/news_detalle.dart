@@ -18,7 +18,7 @@ class DetalleScreen extends StatelessWidget {
             child: AspectRatio(
               aspectRatio: 16 / 5,
               child: SvgPicture.asset(
-                'assets/accidente.svg',
+                'assets/alertas/accidente.svg',
                 fit: BoxFit.cover,
               ),
             ),

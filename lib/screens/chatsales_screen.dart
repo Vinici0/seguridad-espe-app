@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
-import 'package:flutter_maps_adv/resources/services/salas_provider.dart';
+import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/detallesala_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
@@ -31,12 +31,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   */
   SocketService socketService = SocketService();
   AuthBloc authService = AuthBloc();
-  SalasProvider chatProvider = SalasProvider();
+  ChatProvider chatProvider = ChatProvider();
 
   @override
   void initState() {
     //TODO: Jamas ubicar el listen en true
-    this.chatProvider = BlocProvider.of<SalasProvider>(context, listen: false);
+    this.chatProvider = BlocProvider.of<ChatProvider>(context, listen: false);
     this.socketService = BlocProvider.of<SocketService>(context, listen: false);
     this.authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
