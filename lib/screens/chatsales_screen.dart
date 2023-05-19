@@ -53,6 +53,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   void _caragrHistorial(String uid) async {
     List<dynamic> chat = await chatProvider.getChatSala(uid);
+
     final history = chat.map((m) => ChatMessage(
         texto: m.mensaje,
         uid: m.usuario,
@@ -162,11 +163,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   Widget _inputChat() {
+    //SafeArea: Sirve para que el teclado no tape el contenido de la pantalla
     return SafeArea(
         child: Container(
       margin: EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
-        children: <Widget>[
+        children: [
           Flexible(
               child: TextField(
             controller: _textController,

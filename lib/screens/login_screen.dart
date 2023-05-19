@@ -20,28 +20,26 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: SafeArea(
-          child: Container(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Container(
-                margin: const EdgeInsets.all(30),
-                height: MediaQuery.of(context).size.height * 0.9,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Logo(text: "Seguridad"),
-                      _From(),
-                      Labels(
-                          ruta: 'register',
-                          text: "¿No tienes cuenta?",
-                          text2: "Crea una"),
-                      SizedBox(height: 10),
-                      Text("Terminos y condiciones de uso",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: Color.fromRGBO(0, 0, 0, 0.782)))
-                    ]),
-              ),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Container(
+              margin: const EdgeInsets.all(30),
+              height: MediaQuery.of(context).size.height * 0.99,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Logo(text: "Seguridad"),
+                    _From(),
+                    Labels(
+                        ruta: 'register',
+                        text: "¿No tienes cuenta?",
+                        text2: "Crea una"),
+                    SizedBox(height: 10),
+                    Text("Terminos y condiciones de uso",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromRGBO(0, 0, 0, 0.782)))
+                  ]),
             ),
           ),
         ),

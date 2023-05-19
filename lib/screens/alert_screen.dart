@@ -12,6 +12,7 @@ class AlertScreen extends StatelessWidget {
       appBar: AppBar(
         //agrega un svg y el texto de la alerta
         iconTheme: IconThemeData(color: Colors.white),
+
         // centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,

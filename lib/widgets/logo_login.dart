@@ -7,16 +7,16 @@ class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 20, bottom: 20),
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
       child: Column(
         children: [
           const SizedBox(
-              width: 180,
+              width: 170,
               child: Image(image: AssetImage('assets/logoespe.png'))),
           Text(this.text,
               style: const TextStyle(
                   color: Colors.indigo,
-                  fontSize: 40,
+                  fontSize: 25,
                   fontWeight: FontWeight.bold)),
         ],
       ),

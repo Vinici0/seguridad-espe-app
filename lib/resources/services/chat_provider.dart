@@ -33,6 +33,7 @@ class ChatProvider extends StateStreamableSource<Object?> {
       'x-token': await AuthService.getToken() as String,
     });
     final mensajesResp = salasMensajeResponseFromMap(resp.body);
+    if (mensajesResp.mensajesSala.isEmpty) return [];
     return mensajesResp.mensajesSala;
   }
 

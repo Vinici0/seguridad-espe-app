@@ -9,8 +9,8 @@ class CustomBottomNavigation extends StatelessWidget {
         stream: counterBloc.counterStream,
         builder: (context, snapshot) {
           return BottomNavigationBar(
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
             selectedItemColor: Color(0xFF6165FA),
             type: BottomNavigationBarType.fixed,
             backgroundColor: const Color(0xFFF2F2F2),
@@ -22,7 +22,7 @@ class CustomBottomNavigation extends StatelessWidget {
             items: const [
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.mapLocationDot),
-                label: 'Geolocalización',
+                label: 'Mapa',
               ),
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.newspaper),
@@ -35,7 +35,7 @@ class CustomBottomNavigation extends StatelessWidget {
               BottomNavigationBarItem(
                 //R
                 icon: Icon(FontAwesomeIcons.locationDot),
-                label: 'Icono de mapa',
+                label: 'Lugares',
               ),
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.bars),

@@ -26,7 +26,7 @@ class AlartasScreen extends StatelessWidget {
                 text: ("SEGURIDAD"),
               ),
               Tab(
-                text: ("CIUDAD"),
+                text: ("COMUNIDAD"),
               ),
             ],
           ),

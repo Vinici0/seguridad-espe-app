@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
           color: Colors.white,
           elevation: 0,
           centerTitle: true,
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.white),
           textTheme: TextTheme(
             headline6: TextStyle(
               color: Colors.black,

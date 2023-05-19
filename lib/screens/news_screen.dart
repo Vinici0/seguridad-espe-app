@@ -2,6 +2,8 @@
 
 import 'dart:async';
 
+import 'package:flutter_maps_adv/models/comentarios.dart';
+import 'package:flutter_maps_adv/models/publicacion.dart';
 import 'package:flutter_maps_adv/screens/news_detalle.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -18,14 +20,6 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
-
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
   bool isLiked = false;
 
   void toggleLike() {
@@ -36,6 +30,187 @@ class _NewsScreenState extends State<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Publicacion> publicaciones = [
+      Publicacion(
+          titulo: 'Mascota perdida',
+          contenido:
+              'Por favor, ayude a encontrar a mi perro, se perdió en la calle 12 con 34. Llevo dias que no lo encuentro, por favor, si lo ve, llame al 123456789',
+          usuario: 'Juan Perez',
+          likes: 8,
+          ciudad: 'Bogotá',
+          sector: 'Chapinero',
+          latitud: -0.412703,
+          longitud: -79.309187,
+          img: [
+            'assets/perroPerdido.jpg',
+            'assets/perroPerdido.jpg',
+          ],
+          comentarios: [
+            Comentarios(
+              nombre: 'Juan Perez',
+              comentario: 'Que triste, espero que lo encuentres pronto1',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '1',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 7,
+            ),
+            Comentarios(
+              nombre: 'Pedro Ramirez',
+              comentario: 'Que triste, espero que lo encuentres pronto2',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '2',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 5,
+            ),
+            Comentarios(
+              nombre: 'Juan Perez',
+              comentario: 'Que triste, espero que lo encuentres pronto1',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '1',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 7,
+            ),
+            Comentarios(
+              nombre: 'Pedro Ramirez',
+              comentario: 'Que triste, espero que lo encuentres pronto2',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '2',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 5,
+            ),
+            Comentarios(
+              nombre: 'Juan Perez',
+              comentario: 'Que triste, espero que lo encuentres pronto3',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '3',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 0,
+            ),
+            Comentarios(
+              nombre: 'Pedro Ramirez',
+              comentario: 'Que triste, espero que lo encuentres pronto4',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '4',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 5,
+            ),
+            Comentarios(
+              nombre: 'Juan Perez',
+              comentario: 'Que triste, espero que lo encuentres pronto5',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '5',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 0,
+            ),
+          ],
+          fecha: '2023-04-13T08:35:11.826+00:00'),
+      Publicacion(
+          titulo: 'Mascota perdida',
+          contenido:
+              'Por favor, ayude a encontrar a mi perro, se perdió en la calle 12 con 34. Llevo dias que no lo encuentro, por favor, si lo ve, llame al 123456789',
+          usuario: 'Juan Perez',
+          likes: 8,
+          ciudad: 'Bogotá',
+          sector: 'Chapinero',
+          latitud: -0.412703,
+          longitud: -79.309187,
+          img: [
+            'assets/perroPerdido.jpg',
+            'assets/perroPerdido.jpg',
+          ],
+          comentarios: [
+            Comentarios(
+              nombre: 'Juan Perez',
+              comentario: 'Que triste, espero que lo encuentres pronto1',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '1',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 7,
+            ),
+            Comentarios(
+              nombre: 'Pedro Ramirez',
+              comentario: 'Que triste, espero que lo encuentres pronto2',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '2',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 0,
+            ),
+            Comentarios(
+              nombre: 'Juan Perez',
+              comentario: 'Que triste, espero que lo encuentres pronto3',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '3',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 0,
+            ),
+          ],
+          fecha: '2023-04-13T08:35:11.826+00:00'),
+      Publicacion(
+          titulo: 'Mascota perdida',
+          likes: 5,
+          ciudad: 'Bogotá',
+          sector: 'Chapinero',
+          latitud: -0.412703,
+          longitud: -79.309187,
+          contenido:
+              'Por favor, ayude a encontrar a mi perro, se perdió en la calle 12 con 34. Llevo dias que no lo encuentro, por favor, si lo ve, llame al 123456789',
+          usuario: 'Juan Perez',
+          comentarios: [
+            Comentarios(
+              nombre: 'Juan Perez',
+              comentario: 'Que triste, espero que lo encuentres pronto1',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '1',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 1,
+            ),
+            Comentarios(
+              nombre: 'Pedro Ramirez',
+              comentario:
+                  'Que triste, espero que lo encuentres pronto2 dsfsdf\n adadiaidnwianoinaoindaindaiowndnfuiafubauifb',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '2',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 7,
+            ),
+            Comentarios(
+              nombre: 'Juan Perez',
+              comentario: 'Que triste, espero que lo encuentres pronto3',
+              fecha: '2023-04-13T08:35:11.826+00:00',
+              hora: '12:00',
+              id: '3',
+              id_publicacion: '1',
+              id_usuario: '1',
+              likes: 0,
+            ),
+          ],
+          fecha: '2023-04-13T08:35:11.826+00:00'),
+    ];
+
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -47,157 +222,176 @@ class _NewsScreenState extends State<NewsScreen> {
         elevation: 1,
       ),
       body: ListView.builder(
-        itemCount: 3,
+        itemCount: publicaciones.length,
         itemBuilder: (context, i) => Card(
-          margin: const EdgeInsets.all(10.0),
-          elevation: 0,
-          // color: Colors.red,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
-              Container(
-                width: 50,
-                child: Container(
-                  // alinea que quede en la parte superior centrado
-                  alignment: Alignment.center,
-                  // color: Colors.yellow,
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    //icono de perro
-                    child: Icon(Icons.pets),
+              GestureDetector(
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: AssetImage('assets/perroPerdido.jpg'),
                   ),
+                  title: Text(publicaciones[i].titulo),
+                  subtitle: Text(publicaciones[i].usuario),
                 ),
+                onTap: () {
+                  Navigator.pushNamed(context, DetalleScreen.detalleroute,
+                      arguments: publicaciones[i]);
+                },
               ),
-              Expanded(
+              GestureDetector(
                 child: Container(
-                  // color: Colors.red,
-                  child: Column(
-                    children: [
-                      Container(
-                        // color: Colors.blue,
-                        // height: size.height * 0.08,
-                        //titulo, descripcion y que se ajuste al ancho
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(4.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  //hora
-                                  Text(
-                                    'Mascota perdida',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-
-                                  const Spacer(),
-                                  Text(
-                                    '12:00',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                ],
-                              ),
-                              //descripcion
-                              Text(
-                                'Por favor, ayude a encontrar a mi perro, se perdió en la calle 12 con 34. Llevo dias que no lo encuentro, por favor, si lo ve, llame al 123456789',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          ),
+                  padding: EdgeInsets.all(10),
+                  child: Text(publicaciones[i].contenido),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, DetalleScreen.detalleroute,
+                      arguments: publicaciones[i]);
+                },
+              ),
+              publicaciones[i].img != null
+                  ? GestureDetector(
+                      child: Container(
+                        width: double.infinity,
+                        height: 200,
+                        child: Image.asset(
+                          publicaciones[i].img![0],
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(
-                              context, DetalleScreen.detalleroute);
-                        },
-
-                        //Dentro de aqui
-                        child: Container(
-                          height: size.height *
-                              0.32, // Definimos una altura proporcional
-                          // color: Colors.green,
-                          width: double.infinity,
-                          //padin a la derecha
-                          padding: const EdgeInsets.only(right: 10),
-                          //Image 'assets/no-image.png'
-                          child: Image.asset(
-                            'assets/perroPerdido.jpg',
-                            fit: BoxFit.cover,
+                      onTap: () {
+                        Navigator.pushNamed(context, DetalleScreen.detalleroute,
+                            arguments: publicaciones[i]);
+                      },
+                    )
+                  : Container(),
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 30.0,
+                              height: 35.0,
+                              //Elimina el margen del IconButton
+                              margin: EdgeInsets.zero,
+                              child: IconButton(
+                                onPressed: toggleLike,
+                                icon: Icon(
+                                  isLiked
+                                      ? FontAwesomeIcons.solidHeart
+                                      : FontAwesomeIcons.heart,
+                                  color: isLiked ? Colors.red : Colors.grey,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              publicaciones[i].likes.toString(),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.zero,
+                          child: Text(
+                            'Me gusta',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600],
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                          height: 50,
-                          // color: Colors.green,
-                          child: Row(
-                            //agrega el icono de corazon y cantidad de likes y de comentarios y de compartir
+                      ],
+                    ),
+                    //comentario y cantidad de comentarios
+                    GestureDetector(
+                      child: Column(
+                        children: [
+                          Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: GestureDetector(
-                                  onTap: toggleLike,
-                                  child: Icon(
-                                      isLiked
-                                          ? FontAwesomeIcons.solidHeart
-                                          : FontAwesomeIcons.heart,
-                                      color: isLiked
-                                          ? Colors.red
-                                          : Colors.grey.shade400,
-                                      size: 12),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(left: 5.0, right: 25.0),
-                                child: Text(
-                                  '10',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 12),
-                                ),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 25.0),
-                                  child: Icon(
-                                    FontAwesomeIcons.comment,
-                                    color: Colors.grey,
-                                    size: 12,
-                                  )),
-                              Padding(
-                                padding: EdgeInsets.only(left: 5.0, right: 25),
-                                child: Text(
-                                  '10',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 12),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 25.0),
+                              Container(
+                                margin: EdgeInsets.zero,
+                                width: 30.0,
+                                height: 35.0,
                                 child: Icon(
-                                  FontAwesomeIcons.shareFromSquare,
+                                  FontAwesomeIcons.comment,
                                   color: Colors.grey,
-                                  size: 12,
+                                  size: 18,
                                 ),
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 5.0),
-                                child: Text(
-                                  'Compartir',
-                                  style: TextStyle(
-                                      color: Colors.grey, fontSize: 12),
+                              Text(
+                                '0',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[600],
                                 ),
                               ),
                             ],
-                          )),
-                    ],
-                  ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.zero,
+                            child: Text(
+                              'Comentarios',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, DetalleScreen.detalleroute,
+                            arguments: publicaciones[i]);
+                      },
+                    ),
+
+                    //compartir
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.zero,
+                              width: 30.0,
+                              height: 35.0,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  FontAwesomeIcons.share,
+                                  color: Colors.grey,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.zero,
+                          child: Text(
+                            'Compartir',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
