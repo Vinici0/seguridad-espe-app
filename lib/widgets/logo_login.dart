@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Logo extends StatelessWidget {
   final String text;
@@ -10,9 +11,12 @@ class Logo extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10, bottom: 10),
       child: Column(
         children: [
-          const SizedBox(
+          SizedBox(
               width: 170,
-              child: Image(image: AssetImage('assets/logoespe.png'))),
+              height: 170,
+              child: SvgPicture.asset(
+                'assets/logo.svg',
+              )),
           Text(this.text,
               style: const TextStyle(
                   color: Colors.indigo,

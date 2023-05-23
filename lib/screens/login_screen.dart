@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
-                    Logo(text: "Seguridad"),
+                    Logo(text: "Seguridad ESPE"),
                     _From(),
                     Labels(
                         ruta: 'register',

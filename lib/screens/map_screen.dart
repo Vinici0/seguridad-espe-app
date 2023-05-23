@@ -71,11 +71,62 @@ class _MapScreenState extends State<MapScreen> {
                     right: 16.0,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
+                      children: [
                         BtnFollowUser(),
                         BtnToggleUserRoute(),
                         BtnCurrentLocation(),
                       ],
+                    ),
+                  ),
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.05,
+                    right: 16.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: MaterialButton(
+                        onPressed: () {},
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color.fromRGBO(
+                                    219, 31, 31, 1), // Rojo transparente
+                                Color.fromRGBO(220, 34, 34,
+                                    0.893), // Rojo más transparente
+                              ],
+                            ),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromARGB(255, 255, 0, 0)
+                                    .withOpacity(0.5),
+                                spreadRadius: 9,
+                                blurRadius: 5,
+                                // offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(
+                                MediaQuery.of(context).size.width * 0.3 / 2),
+                            onTap: () {},
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.25,
+                              height: MediaQuery.of(context).size.width * 0.30,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'SOS',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.1,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   BtnReport(),

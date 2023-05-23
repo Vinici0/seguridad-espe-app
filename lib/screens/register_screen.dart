@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/mostrar_alerta.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
+import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/map_screen.dart';
 import 'package:flutter_maps_adv/widgets/boton_login.dart';
 import 'package:flutter_maps_adv/widgets/custom_input.dart';
@@ -31,7 +31,7 @@ class RegisterScreen extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      Logo(text: "Registro"),
+                      Logo(text: "REGISTRO"),
                       _From(),
                       Labels(
                           ruta: 'login',
@@ -110,7 +110,8 @@ class __FromState extends State<_From> {
 
                   if (loginOk == true) {
                     socketService.connect();
-                    Navigator.pushReplacementNamed(context, MapScreen.routemap);
+                    Navigator.pushReplacementNamed(
+                        context, LoadingLoginScreen.loadingroute);
                   } else {
                     //mostrar alerta
                     mostrarAlerta(context, 'Login incorrecto',

@@ -5,6 +5,7 @@ import 'package:flutter_maps_adv/helpers/navegacion.dart';
 import 'package:flutter_maps_adv/screens/config_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_map_screen.dart';
+import 'package:flutter_maps_adv/screens/lugares_screen.dart';
 import 'package:flutter_maps_adv/screens/news_screen.dart';
 import 'package:flutter_maps_adv/screens/salas_screen.dart';
 import 'package:flutter_maps_adv/widgets/custom_bottom_navigation.dart';
@@ -42,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     // GruposScreen(),
                     SalasScreen(),
-                    Text("Page 4"),
+                    LugaresScreen(),
                     Center(
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,

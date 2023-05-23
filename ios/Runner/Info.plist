@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Necesita acceso a la galeria</string>
+
+	<key>NSCameraUsageDescription</key>
+	<string>Necesita acceso a la camara</string>
+
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Necesita acceso al microfono</string>
+
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

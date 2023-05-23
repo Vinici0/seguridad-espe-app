@@ -9,11 +9,15 @@ class Usuario {
   String nombre;
   String email;
   String uid;
+  double? latitud;
+  double? longitud;
   Usuario({
     required this.online,
     required this.nombre,
     required this.email,
     required this.uid,
+    required this.latitud,
+    required this.longitud,
   });
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
@@ -21,6 +25,8 @@ class Usuario {
         nombre: json["nombre"],
         email: json["email"],
         uid: json["uid"],
+        latitud: json["latitud"],
+        longitud: json["longitud"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,6 +34,8 @@ class Usuario {
         "nombre": nombre,
         "email": email,
         "uid": uid,
+        "latitud": latitud,
+        "longitud": longitud,
       };
 
   //getters y setters

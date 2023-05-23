@@ -41,12 +41,15 @@ dependencies:
   pull_to_refresh: ^2.0.0
   google_maps_flutter: ^2.2.5
   socket_io_client: ^2.0.1
-  font_awesome_flutter: ^10.4.0
+  font_awesome_flutter: ^10.4.0 
   shared_preferences: ^2.1.0
   connectivity_plus: ^3.0.6
   flutter_svg: ^2.0.5
   card_swiper: ^2.0.4
   geocoding: ^2.1.0
+  intl: ^0.18.1
+  image_picker: ^0.8.7+5
+
   
 dev_dependencies:
   flutter_lints: ^2.0.0

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_maps_adv/models/reporte.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TableAlertsCompunidad extends StatelessWidget {
@@ -18,29 +19,69 @@ class TableAlertsCompunidad extends StatelessWidget {
       children: [
         TableRow(
           children: [
-            PhysicalModelCircleContainer(
-              icon: "problemas-alcantarillado.svg",
-              text: "Problemas de alcantarillado",
-              color: Color(int.parse(greenColor)),
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => {
+                Navigator.pushNamed(context, 'reporte',
+                    arguments: Reporte(
+                        tipo: "Problemas de agua",
+                        icon: "problemas-alcantarillado.svg",
+                        color: "00FF00"))
+              },
+              child: PhysicalModelCircleContainer(
+                icon: "problemas-alcantarillado.svg",
+                text: "Problemas de alcantarillado",
+                color: Color(int.parse(greenColor)),
+              ),
             ),
-            PhysicalModelCircleContainer(
-              icon: "problemas-de-basura.svg",
-              text: "Problemas de basura",
-              color: Color(int.parse(pinkColor)),
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => {
+                Navigator.pushNamed(context, 'reporte',
+                    arguments: Reporte(
+                        tipo: "Problemas de basura",
+                        icon: "problemas-de-basura.svg",
+                        color: "FFC0CB"))
+              },
+              child: PhysicalModelCircleContainer(
+                icon: "problemas-de-basura.svg",
+                text: "Problemas de basura",
+                color: Color(int.parse(pinkColor)),
+              ),
             ),
-            PhysicalModelCircleContainer(
-              icon: "problemas-de-energia.svg",
-              text: "Problemas de energia",
-              color: Color(int.parse(purpleColor)),
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => {
+                Navigator.pushNamed(context, 'reporte',
+                    arguments: Reporte(
+                        tipo: "Problemas de energia",
+                        icon: "problemas-de-energia.svg",
+                        color: "800080")),
+              },
+              child: PhysicalModelCircleContainer(
+                icon: "problemas-de-energia.svg",
+                text: "Problemas de energia",
+                color: Color(int.parse(purpleColor)),
+              ),
             ),
           ],
         ),
         TableRow(
           children: [
-            PhysicalModelCircleContainer(
-              icon: "problemas-de-telecomunicaciones.svg",
-              text: "Problemas de telecomunicaciones",
-              color: Color(int.parse(blueColor)),
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () => {
+                Navigator.pushNamed(context, 'reporte',
+                    arguments: Reporte(
+                        tipo: "Problemas de telecomunicaciones",
+                        icon: "problemas-de-telecomunicaciones.svg",
+                        color: "0000FF"))
+              },
+              child: PhysicalModelCircleContainer(
+                icon: "problemas-de-telecomunicaciones.svg",
+                text: "Problemas de telecomunicaciones",
+                color: Color(int.parse(blueColor)),
+              ),
             ),
             // No quiero ubicar más columnas en esta fila
             TableCell(

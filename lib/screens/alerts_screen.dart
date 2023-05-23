@@ -19,7 +19,7 @@ class AlartasScreen extends StatelessWidget {
           title: new Text("Reportar"),
           //color de la flcha de regreso blanco
           iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Color.fromARGB(255, 0, 73, 128),
+          backgroundColor: Color(0xFF111b21),
           bottom: TabBar(
             tabs: [
               Tab(
@@ -32,7 +32,7 @@ class AlartasScreen extends StatelessWidget {
           ),
         ),
         body: Container(
-          color: Color.fromARGB(255, 0, 73, 128),
+          color: Color(0xFF111b21),
           child: TabBarView(
             //color de fondo de la pantalla
 

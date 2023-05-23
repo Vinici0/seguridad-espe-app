@@ -4,6 +4,7 @@ import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 
 import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
+import 'package:flutter_maps_adv/resources/services/publicacion.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/alert_screen.dart';
 import 'package:flutter_maps_adv/screens/alerts_screen.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
 import 'package:flutter_maps_adv/screens/group_screen.dart';
+import 'package:flutter_maps_adv/screens/lugares_screen.dart';
 import 'package:flutter_maps_adv/screens/news_detalle.dart';
 import 'package:flutter_maps_adv/screens/news_screen.dart';
 import 'package:flutter_maps_adv/screens/register_screen.dart';
@@ -37,6 +39,7 @@ void main() {
         create: (context) =>
             MapBloc(locationBloc: BlocProvider.of<LocaltionBloc>(context))),
     BlocProvider<ChatProvider>(create: (context) => ChatProvider()),
+    BlocProvider<PublicacionService>(create: (context) => PublicacionService()),
     //AuthBloc
   ], child: const MyApp()));
 }
@@ -71,6 +74,7 @@ class MyApp extends StatelessWidget {
         ConfigScreen.configroute: (_) => ConfigScreen(),
         DetalleScreen.detalleroute: (_) => DetalleScreen(),
         AlertScreen.routeName: (_) => AlertScreen(),
+        LugaresScreen.salesroute: (_) => LugaresScreen(),
       },
       theme: ThemeData.light().copyWith(
         primaryColor: myPurpleColor,
