@@ -53,3 +53,12 @@ class SalaSelectEvent extends RoomEvent {
   @override
   List<Object> get props => [salaSeleccionada];
 }
+
+class ObtenerUsuariosSalaEvent extends RoomEvent {
+  final String idSala;
+
+  const ObtenerUsuariosSalaEvent(this.idSala);
+
+  @override
+  List<Object> get props => [idSala];
+}

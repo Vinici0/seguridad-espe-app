@@ -123,7 +123,7 @@ class _NewsScreenState extends State<NewsScreen> {
                       },
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 75, right: 5),
+                      padding: EdgeInsets.only(left: 62, right: 5),
                       child: Column(
                         children: [
                           GestureDetector(

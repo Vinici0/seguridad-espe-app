@@ -19,17 +19,21 @@ class CodigoCreateGrupoScreen extends StatelessWidget {
             //alinea a la izquierda
             style: TextStyle(color: Colors.black87, fontSize: 20)),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
-          //alineacion de los elementos a la izquierda
-          color: Colors.white,
-          child: GroupContenido(
-            textoHint: 'Nombre del grupo',
-            textoButton: 'Crear Grupo',
-            textoTitulo: 'Nombre',
-          ),
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
+              //alineacion de los elementos a la izquierda
+              color: Colors.white,
+              child: GroupContenido(
+                textoHint: 'Nombre del grupo',
+                textoButton: 'Crear Grupo',
+                textoTitulo: 'Nombre',
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

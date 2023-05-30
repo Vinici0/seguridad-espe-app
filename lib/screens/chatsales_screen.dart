@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:flutter_maps_adv/models/salas_mensaje_response.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
-import 'package:flutter_maps_adv/screens/detallesala_screen.dart';
+import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -22,6 +23,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final _focusNode = new FocusNode();
 
   List<ChatMessage> _messages = [];
+  // Variable para almacenar la fecha del último mensaje
+  DateTime? _lastMessageDate;
 
   bool _estaEscribiendo = false;
 
@@ -37,6 +40,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void initState() {
     chatProvider = BlocProvider.of<RoomBloc>(context);
     chatProvider.add(ChatInitEvent(chatProvider.state.salaSeleccionada.uid));
+    // chatProvider
+    //     .add(ObtenerUsuariosSalaEvent(chatProvider.state.salaSeleccionada.uid));
     socketService = BlocProvider.of<SocketService>(context, listen: false);
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
@@ -45,13 +50,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     });
 
     socketService.socket.on('mensaje-grupal', _escucharMensaje);
-
-    //que se ejecute despues de 5 milisegundos el _caragrHistorial
-    // Future.delayed(Duration(milliseconds: 500), () {
-    //   _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
-    // });
-
-    // _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
 
     super.initState();
   }
@@ -124,7 +122,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               ),
             ),
             //Separa de manera horizontal
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(chatProvider.state.salaSeleccionada.nombre,
@@ -134,7 +132,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         elevation: 0.5,
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.settings,
               color: Colors.black87,
             ),
@@ -147,6 +145,19 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       body: BlocListener<RoomBloc, RoomState>(
         listener: (context, state) {
           if (state.isLoading) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Cargando...'),
+                duration: Duration(milliseconds: 1500),
+              ),
+            );
+          } else if (state.isError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Error al cargar los mensajes'),
+                duration: Duration(milliseconds: 1500),
+              ),
+            );
           } else {
             _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
           }

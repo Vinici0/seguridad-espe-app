@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/salas_mensaje_response.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
+import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,6 +29,19 @@ class ChatProvider {
     });
     final salesResp = SalesResponse.fromJson(resp.body);
     return salesResp.salas;
+  }
+
+  //localhost:3000/api/salas/obtener-usuarios-sala/6475910feca9c72f60705ca3
+  Future<List<Usuario>> getUsuariosSala(String salaID) async {
+    final uri =
+        Uri.parse('${Environment.apiUrl}/salas/obtener-usuarios-sala/$salaID');
+    final resp = await http.get(uri, headers: {
+      'Content-Type': 'application/json',
+      'x-token': await AuthService.getToken() as String,
+    });
+    final decodedData = json.decode(resp.body);
+    final usuarios = decodedData['usuarios'];
+    return usuarios;
   }
 
   Future<Sala> createSala(String nombre) async {

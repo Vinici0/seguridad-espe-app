@@ -11,10 +11,12 @@ class Usuario {
   String uid;
   double? latitud;
   double? longitud;
+  List<Direccione> direcciones;
   Usuario({
     required this.online,
     required this.nombre,
     required this.email,
+    required this.direcciones,
     required this.uid,
     required this.latitud,
     required this.longitud,
@@ -24,6 +26,8 @@ class Usuario {
         online: json["online"],
         nombre: json["nombre"],
         email: json["email"],
+        direcciones: List<Direccione>.from(
+            json["direcciones"].map((x) => Direccione.fromJson(x))),
         uid: json["uid"],
         latitud: json["latitud"],
         longitud: json["longitud"],
@@ -33,6 +37,7 @@ class Usuario {
         "online": online,
         "nombre": nombre,
         "email": email,
+        "direcciones": List<dynamic>.from(direcciones.map((x) => x.toJson())),
         "uid": uid,
         "latitud": latitud,
         "longitud": longitud,
@@ -67,4 +72,28 @@ class Usuario {
   String toString() {
     return 'Usuario{online: $online, nombre: $nombre, email: $email, uid: $uid}';
   }
+}
+
+class Direccione {
+  String id;
+  double latitud;
+  double longitud;
+
+  Direccione({
+    required this.id,
+    required this.latitud,
+    required this.longitud,
+  });
+
+  factory Direccione.fromJson(Map<String, dynamic> json) => Direccione(
+        id: json["_id"],
+        latitud: json["latitud"]?.toDouble(),
+        longitud: json["longitud"]?.toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "latitud": latitud,
+        "longitud": longitud,
+      };
 }

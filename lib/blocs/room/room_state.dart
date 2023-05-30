@@ -1,33 +1,37 @@
 part of 'room_bloc.dart';
 
 class RoomState extends Equatable {
-  final List<Sala> salas;
-  final List<MensajesSala> mensajesSalas;
-  final Sala salaSeleccionada;
-  final bool isLoading;
   final bool isError;
+  final bool isLoading;
+  final List<MensajesSala> mensajesSalas;
+  final List<Sala> salas;
+  final List<Usuario> usuariosSala;
+  final Sala salaSeleccionada;
 
   const RoomState({
-    required this.salas,
-    required this.mensajesSalas,
-    required this.salaSeleccionada,
-    required this.isLoading,
     required this.isError,
+    required this.isLoading,
+    required this.mensajesSalas,
+    required this.salas,
+    required this.usuariosSala,
+    required this.salaSeleccionada,
   });
 
   RoomState copyWith({
-    List<Sala>? salas,
-    List<MensajesSala>? mensajesSalas,
-    Sala? salaSeleccionada,
-    bool? isLoading,
     bool? isError,
+    bool? isLoading,
+    List<MensajesSala>? mensajesSalas,
+    List<Sala>? salas,
+    List<Usuario>? usuariosSala,
+    Sala? salaSeleccionada,
   }) {
     return RoomState(
-      salas: salas ?? this.salas,
-      mensajesSalas: mensajesSalas ?? this.mensajesSalas,
-      salaSeleccionada: salaSeleccionada ?? this.salaSeleccionada,
-      isLoading: isLoading ?? this.isLoading,
       isError: isError ?? this.isError,
+      isLoading: isLoading ?? this.isLoading,
+      mensajesSalas: mensajesSalas ?? this.mensajesSalas,
+      salas: salas ?? this.salas,
+      usuariosSala: usuariosSala ?? this.usuariosSala,
+      salaSeleccionada: salaSeleccionada ?? this.salaSeleccionada,
     );
   }
 
@@ -38,5 +42,6 @@ class RoomState extends Equatable {
         salaSeleccionada,
         isLoading,
         isError,
+        usuariosSala,
       ];
 }

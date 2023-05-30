@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:flutter_maps_adv/screens/chatsales_miembros.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class DetalleSalaScreen extends StatelessWidget {
@@ -99,14 +100,34 @@ class DetalleSalaScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      child: Text(
-                        "Miembros de la sala",
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 14,
-                        ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        ///MienbrosChatScreen.mienbrosChatroute
+                        Navigator.pushNamed(
+                            context, MienbrosChatScreen.mienbrosChatroute);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: Text(
+                              "Miembros de la sala",
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          //un icon de flecha mas info
+                          Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Icon(Icons.arrow_forward_ios, size: 20)),
+                        ],
                       ),
                     ),
                     //codigo de sala
@@ -141,7 +162,7 @@ class DetalleSalaScreen extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                              icon: Icon(Icons.content_copy),
+                              icon: Icon(Icons.content_copy, size: 20),
                               onPressed: () {
                                 Clipboard.setData(ClipboardData(
                                     text: chatProvider

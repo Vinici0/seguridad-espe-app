@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_maps_adv/models/salas_mensaje_response.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
+import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 
 part 'room_event.dart';
@@ -15,14 +16,17 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       : super(RoomState(
             salas: [],
             mensajesSalas: [],
-            salaSeleccionada: Sala(nombre: '', codigo: '', color: '', uid: ''),
+            salaSeleccionada: Sala(
+                nombre: '', codigo: '', color: '', uid: '', propietario: ''),
             isLoading: false,
-            isError: false)) {
+            isError: false,
+            usuariosSala: [])) {
     on<SalasInitEvent>(salasInitEvent);
     on<ChatInitEvent>(chatInitEvent);
     on<SalaCreateEvent>(salaCreateEvent);
     on<SalaJoinEvent>(salaJoinEvent);
     on<SalaSelectEvent>(salaSelectEvent);
+    on<ObtenerUsuariosSalaEvent>(obtenerUsuariosSalaEvent);
   }
 
   FutureOr<void> salasInitEvent(
@@ -58,5 +62,12 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   FutureOr<void> salaSelectEvent(
       SalaSelectEvent event, Emitter<RoomState> emit) {
     emit(state.copyWith(salaSeleccionada: event.salaSeleccionada));
+  }
+
+  FutureOr<void> obtenerUsuariosSalaEvent(
+      ObtenerUsuariosSalaEvent event, Emitter<RoomState> emit) async {
+    emit(state.copyWith(isLoading: true));
+    final usuariosSala = await _chatProvider.getUsuariosSala(event.idSala);
+    emit(state.copyWith(usuariosSala: usuariosSala, isLoading: false));
   }
 }

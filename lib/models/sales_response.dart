@@ -42,12 +42,14 @@ class Sala {
   String codigo;
   String color;
   String uid;
+  String propietario;
 
   Sala({
     required this.nombre,
     required this.codigo,
     required this.color,
     required this.uid,
+    required this.propietario,
   });
 
   factory Sala.fromMap(Map<String, dynamic> json) => Sala(
@@ -55,6 +57,7 @@ class Sala {
         codigo: json["codigo"],
         color: json["color"],
         uid: json["uid"],
+        propietario: json["propietario"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -62,5 +65,6 @@ class Sala {
         "codigo": codigo,
         "color": color,
         "uid": uid,
+        "propietario": propietario,
       };
 }

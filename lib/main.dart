@@ -8,11 +8,12 @@ import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/alert_screen.dart';
 import 'package:flutter_maps_adv/screens/alerts_screen.dart';
+import 'package:flutter_maps_adv/screens/chatsales_miembros.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
 import 'package:flutter_maps_adv/screens/code_create_sreen.dart';
 import 'package:flutter_maps_adv/screens/config_screen.dart';
-import 'package:flutter_maps_adv/screens/detallesala_screen.dart';
+import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
         AlertScreen.routeName: (_) => const AlertScreen(),
         LugaresScreen.salesroute: (_) => const LugaresScreen(),
         MenuScreen.salesroute: (_) => const MenuScreen(),
+        MienbrosChatScreen.mienbrosChatroute: (_) => const MienbrosChatScreen(),
       },
       theme: ThemeData.light().copyWith(
         primaryColor: myPurpleColor,
