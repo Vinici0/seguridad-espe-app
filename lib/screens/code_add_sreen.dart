@@ -11,20 +11,26 @@ class CodigoAddGrupoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
+        //color de la flecha de regreso
+        iconTheme: IconThemeData(color: Colors.black87),
+        elevation: 0.5,
         title: Text('Unirse a un Grupo',
             //alinea a la izquierda
-            style: TextStyle(color: Colors.white, fontSize: 20)),
+            style: TextStyle(color: Colors.black87, fontSize: 20)),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
-          //alineacion de los elementos a la izquierda
-          child: GroupContenido(
-              textoHint: 'AAA-AAA',
-              textoButton: 'Unirme al Grupo',
-              textoTitulo: 'Código',
-              textoInfo:
-                  'Ingresa el código del grupo que te compartieron para unirte al grupo que fuiste invitado.'),
+      body: Container(
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
+            //alineacion de los elementos a la izquierda
+            child: GroupContenido(
+                textoHint: '000-000',
+                textoButton: 'Unirme al Grupo',
+                textoTitulo: 'Código',
+                textoInfo:
+                    'Ingresa el código del grupo que te compartieron para unirte al grupo que fuiste invitado.'),
+          ),
         ),
       ),
     );

@@ -49,6 +49,8 @@ dependencies:
   geocoding: ^2.1.0
   intl: ^0.18.1
   image_picker: ^0.8.7+5
+  timeago: ^3.4.0
+  fluttertoast: ^8.2.2
 
   
 dev_dependencies:
@@ -80,7 +82,8 @@ flutter:
   # fonts:
   #   - family: Schyler
   #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Roboto-Black.ttf
+        
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

@@ -31,64 +31,70 @@ class LugaresScreen extends StatelessWidget {
         title: const Text('Mis Direcciones',
             style: TextStyle(color: Colors.black, fontSize: 20)),
         // backgroundColor: Colors.white,
-        elevation: 1,
+        elevation: 0.5,
       ),
-      body: Center(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              child: SvgPicture.asset(
-                "assets/lugares1.svg",
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width * 0.5,
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Text(
-                "Agrega direcciones para mantenerte informado de lo que sucede alrededor de tus seres queridos y protegelos.",
-                style: TextStyle(
-                  color: Colors.black45,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 20),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'addlugares');
-                },
-                child: Text('Agregar Dirección'),
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF111b21),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+      body: Container(
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: SvgPicture.asset(
+                    "assets/lugares1.svg",
+                    fit: BoxFit.cover,
+                    width: MediaQuery.of(context).size.width * 0.5,
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
-              ),
-            ),
-            Container(
-              child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: lugares.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(lugares[index].ciudad),
-                    subtitle: Text(lugares[index].barrio),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      // Navigator.pushNamed(context, 'lugardetail',
-                      //     arguments: lugares[index]);
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Text(
+                    "Agrega direcciones para mantenerte informado de lo que sucede alrededor de tus seres queridos y protegelos.",
+                    style: TextStyle(
+                      color: Colors.black45,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'addlugares');
                     },
-                  );
-                },
-              ),
+                    child: Text('Agregar Dirección'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xFF111b21),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    ),
+                  ),
+                ),
+                Container(
+                  child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: lugares.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(lugares[index].ciudad),
+                        subtitle: Text(lugares[index].barrio),
+                        trailing: Icon(Icons.arrow_forward_ios),
+                        onTap: () {
+                          // Navigator.pushNamed(context, 'lugardetail',
+                          //     arguments: lugares[index]);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

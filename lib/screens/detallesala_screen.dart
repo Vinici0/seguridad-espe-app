@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
+import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DetalleSalaScreen extends StatelessWidget {
   static const String detalleSalaroute = 'detalleSala';
@@ -8,16 +10,158 @@ class DetalleSalaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chatProvider = BlocProvider.of<ChatProvider>(context);
+    final chatProvider = BlocProvider.of<RoomBloc>(context);
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black87),
         centerTitle: false,
+        elevation: 0.5,
         title: Text('Detalle',
             //alinea a la izquierda
             style: TextStyle(color: Colors.black, fontSize: 20)),
       ),
-      body: Center(
-        child: Text(chatProvider.salaSeleccionada.nombre),
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                margin: EdgeInsets.only(top: 20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(int.parse(
+                          '0xFF${chatProvider.state.salaSeleccionada.color.substring(0, 2)}DDBB${chatProvider.state.salaSeleccionada.color.substring(4)}')),
+                      Color(int.parse(
+                          '0xFF${chatProvider.state.salaSeleccionada.color}')),
+                      Color.fromARGB(255, 230, 116, 226),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(100.0),
+                ),
+                child: CircleAvatar(
+                  radius: size.width * 0.07,
+                  backgroundColor: Colors.transparent,
+                  child: Text(
+                    chatProvider.state.salaSeleccionada.nombre
+                        .substring(0, 2)
+                        .toUpperCase(),
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            //acerca de
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text(
+                        'Acerca de',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      child: Text(
+                        chatProvider.state.salaSeleccionada.nombre,
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    //miembros
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text(
+                        'Miembros',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      child: Text(
+                        "Miembros de la sala",
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    //codigo de sala
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Text(
+                        'Invitar a nuevos miembros',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(
+                            text: chatProvider.state.salaSeleccionada.codigo));
+                        // Agrega aquí una notificación o mensaje para indicar que se ha copiado el código al portapapeles
+                      },
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              readOnly: true,
+                              controller: TextEditingController(
+                                  text: chatProvider
+                                      .state.salaSeleccionada.codigo),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                              icon: Icon(Icons.content_copy),
+                              onPressed: () {
+                                Clipboard.setData(ClipboardData(
+                                    text: chatProvider
+                                        .state.salaSeleccionada.codigo));
+                                Fluttertoast.showToast(
+                                  msg: 'Copiado',
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.black87,
+                                );
+                              }),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

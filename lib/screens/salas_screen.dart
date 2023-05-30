@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
-import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
 import 'package:flutter_maps_adv/screens/code_create_sreen.dart';
@@ -13,45 +13,39 @@ class SalasScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final salasService = BlocProvider.of<RoomBloc>(context);
+    salasService.add(SalasInitEvent());
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
         title: const Text('Grupos',
             style: TextStyle(color: Colors.black, fontSize: 20)),
-        elevation: 1,
+        elevation: 0.5,
         actions: [IconModal()],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _listSalesGroup(context),
-          ),
-        ],
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              child: _listSalesGroup(context),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _listSalesGroup(BuildContext context) {
-    final salasService = BlocProvider.of<ChatProvider>(context);
-
-    return StreamBuilder<List<Sala>>(
-      stream: salasService.salasStream,
-      builder: (_, snapshot) {
-        if (snapshot.hasData) {
-          final salas = snapshot.data!;
-
-          return ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: salas.length,
-            itemBuilder: (_, i) => SalaListTitle(sala: salas[i]),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Error al cargar las salas: ${snapshot.error}'),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return BlocBuilder<RoomBloc, RoomState>(
+      builder: (context, state) {
+        return ListView.builder(
+          itemCount: state.salas.length,
+          itemBuilder: (context, index) {
+            return SalaListTitle(sala: state.salas[index]);
+          },
+        );
       },
     );
   }
@@ -63,6 +57,7 @@ class SalaListTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final salasService = BlocProvider.of<RoomBloc>(context);
     return ListTile(
       title: Text(sala.nombre),
       leading: Container(
@@ -84,15 +79,14 @@ class SalaListTitle extends StatelessWidget {
           child: Text(
             sala.nombre.substring(0, 2),
             style: TextStyle(
-              color: Color.fromARGB(255, 255, 255, 255),
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
       ),
       onTap: () {
-        final salaService = BlocProvider.of<ChatProvider>(context);
-        salaService.salaSeleccionada = sala;
+        salasService.add(SalaSelectEvent(sala));
         Navigator.pushNamed(context, ChatScreen.chatsalesroute);
       },
     );

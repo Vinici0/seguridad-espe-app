@@ -5,28 +5,15 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
-import 'package:flutter_maps_adv/models/publicacion.dart';
+import 'package:flutter_maps_adv/models/publication.dart';
 
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
-class PublicacionService extends StateStreamableSource<Object?> {
+class PublicacionService {
   late Publicacion publicacionSeleccionada;
-
-  List<String> imagePaths = [];
-  List<Publicacion> publicaciones = [];
-
-  late final StreamController<List<Publicacion>> _publicacionesController =
-      StreamController<List<Publicacion>>.broadcast(sync: true);
-
-  Stream<List<Publicacion>> get publicacionesStream =>
-      _publicacionesController.stream;
-
-  PublicacionService() {
-    this.getPublicacionesAll();
-  }
 
   Future<List<Publicacion>> getPublicacionesAll() async {
     final uri = Uri.parse('${Environment.apiUrl}/publicacion/cercanas');
@@ -37,15 +24,30 @@ class PublicacionService extends StateStreamableSource<Object?> {
     });
 
     final publicacionesData = json.decode(resp.body);
-    final publicacionesResp =
-        (publicacionesData['publicaciones'] as List<dynamic>)
-            .map((publicacion) => Publicacion.fromMap(publicacion))
-            .toList();
+    final publicacionesResp = publicacionesData['publicaciones'];
+    List<Publicacion> publicaciones = [];
+    for (var publicacion in publicacionesResp) {
+      publicaciones.add(Publicacion.fromMap(publicacion));
+    }
+    return publicaciones;
+  }
 
-    // print(publicacionesResp);
-    this.publicaciones.addAll(publicacionesResp);
-    _publicacionesController.add(publicacionesResp);
-    return publicacionesResp;
+  //update publicacion
+  Future<Publicacion> updatePublicacion(String uid, bool isLiked) async {
+    final uri = Uri.parse('${Environment.apiUrl}/publicacion/${uid}');
+
+    final resp = await http.put(uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken() as String,
+        },
+        body: json.encode({
+          'isLiked': isLiked,
+        }));
+
+    final decodedData = json.decode(resp.body);
+    final publicacionResp = Publicacion.fromMap(decodedData['publicacion']);
+    return publicacionResp;
   }
 
   Future<Publicacion> createPublicacion(
@@ -56,6 +58,7 @@ class PublicacionService extends StateStreamableSource<Object?> {
     bool isLiked,
     bool isPublic,
     String usuario,
+    List<String>? imagePaths,
   ) async {
     Position position = await Geolocator.getCurrentPosition();
 
@@ -66,8 +69,8 @@ class PublicacionService extends StateStreamableSource<Object?> {
       titulo: titulo,
       contenido: descripcion,
       color: color,
-      ciudad: placemarks[0].locality ?? 'S/N',
-      barrio: placemarks[0].street ?? 'S/N',
+      ciudad: "Luz de America",
+      barrio: 'S/N',
       isPublic: isPublic,
       usuario: usuario,
       imgAlerta: imgAlerta,
@@ -83,19 +86,25 @@ class PublicacionService extends StateStreamableSource<Object?> {
           'Content-Type': 'application/json',
           'x-token': await AuthService.getToken() as String,
         },
-        body: json.encode(publicacion
-            .toMap())); // Convertir el objeto publicacion a una cadena JSON
+        body: json.encode(publicacion.toMap()));
 
     final decodedData = json.decode(resp.body);
     final publicacionResp = Publicacion.fromMap(decodedData['publicacion']);
-    // this.publicaciones.add(publicacionResp);
-    // _publicacionesController.add(this.publicaciones);
+
+    if (imagePaths != null) {
+      final publicacionResp2 = await uploadImages(
+          publicacionResp.uid!, publicacion.titulo, imagePaths);
+
+      return publicacionResp2;
+    }
+
     return publicacionResp;
   }
 
-  Future<List<String>?> uploadImages(
+  Future<Publicacion> uploadImages(
       String uid, String titulo, List<String> imagePaths) async {
     final List<String> uploadedImageUrls = [];
+    late Publicacion secureUrlP;
 
     for (var imagePath in imagePaths) {
       final imageUploadRequest = http.MultipartRequest(
@@ -112,39 +121,37 @@ class PublicacionService extends StateStreamableSource<Object?> {
       if (resp.statusCode != 200 && resp.statusCode != 201) {
         print('Algo salió mal');
         print(resp.body);
-        return null;
+        throw Exception('Error: ${resp.body}');
       }
 
       final decodedData = json.decode(resp.body);
-      final secureUrl = Publicacion.fromMap(decodedData['publicacion']);
+      secureUrlP = Publicacion.fromMap(decodedData['publicacion']);
 
-      uploadedImageUrls.add(secureUrl.imgAlerta);
+      uploadedImageUrls.add(secureUrlP.imgAlerta);
     }
-
-    return uploadedImageUrls;
+    return secureUrlP;
   }
 
-  // void updateSelectedProductImage(List<String> imagePaths, List<String> paths,
-  //     String uid, String titulo) {
-  //   this.publicacionSeleccionada.archivo = paths;
-  // }
+//router.put("/like2/:id", validarJWT, likePublicacion);
+  Future<Publicacion> likePublicacion(String uid) async {
+    final uri = Uri.parse('${Environment.apiUrl}/publicacion/like2/${uid}');
 
-  @override
-  FutureOr<void> close() {
-    _publicacionesController.close();
-  }
+    final resp = await http.put(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      },
+    );
 
-  @override
-  bool get isClosed => _publicacionesController.isClosed;
+    final decodedData = json.decode(resp.body);
 
-  @override
-  Object? get state => this.publicaciones;
-
-  @override
-  Stream<Object?> get stream => _publicacionesController.stream;
-
-  @override
-  void dispose() {
-    _publicacionesController.close();
+    if (decodedData.containsKey('publicacion') &&
+        decodedData['publicacion'] != null) {
+      final publicacionResp = Publicacion.fromMap(decodedData['publicacion']);
+      return publicacionResp;
+    } else {
+      throw Exception('Error: Publicacion data not available.');
+    }
   }
 }

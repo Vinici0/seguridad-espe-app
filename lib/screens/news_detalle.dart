@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/comentarios.dart';
-import 'package:flutter_maps_adv/models/publicacion.dart';
+import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/widgets/comentarios.dart';
@@ -385,7 +385,7 @@ class _CustonAppBarDetalle extends StatelessWidget {
     return SliverAppBar(
       elevation: 2,
       backgroundColor: Color(int.parse('0xFF${publicacion.color}')),
-      expandedHeight: size.height * 0.35,
+      expandedHeight: size.height * 0.40,
       floating: false,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(

@@ -35,6 +35,7 @@ class CustonInput extends StatelessWidget {
           child: TextField(
             controller: this.textController,
             autocorrect: false,
+            obscureText: this.isPassword,
             keyboardType: this.keyboardType,
             decoration: InputDecoration(
                 prefixIcon: Icon(this.icon, color: Colors.indigo),

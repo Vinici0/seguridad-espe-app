@@ -3,9 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
-import 'package:flutter_maps_adv/models/publicacion.dart';
+import 'package:flutter_maps_adv/blocs/publication/publication_bloc.dart';
 import 'package:flutter_maps_adv/models/reporte.dart';
-import 'package:flutter_maps_adv/resources/services/publicacion.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -43,7 +42,7 @@ class _AlertScreenState extends State<AlertScreen> {
     final Reporte reporte =
         ModalRoute.of(context)!.settings.arguments as Reporte;
     final size = MediaQuery.of(context).size;
-    final publicaciones = BlocProvider.of<PublicacionService>(context);
+    final publicaciones = BlocProvider.of<PublicationBloc>(context);
     final authService = BlocProvider.of<AuthBloc>(context, listen: false);
     Color buttonColor = isPressed ? Colors.blue : Colors.grey;
     String tooltipText =
@@ -336,7 +335,8 @@ class _AlertScreenState extends State<AlertScreen> {
                               );
                               return;
                             }
-                            final resul = await publicaciones.createPublicacion(
+
+                            publicaciones.add(PublicacionesCreateEvent(
                               reporte.tipo,
                               _textController.text,
                               reporte.color,
@@ -344,12 +344,9 @@ class _AlertScreenState extends State<AlertScreen> {
                               false,
                               true,
                               authService.state.usuario!.uid,
-                            );
+                              imagePaths,
+                            ));
 
-                            if (imagefiles != null) {
-                              await publicaciones.uploadImages(
-                                  resul.uid!, resul.titulo, imagePaths!);
-                            }
                             Navigator.pop(context);
                           },
                           child: Container(

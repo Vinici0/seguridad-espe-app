@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_maps_adv/models/publicacion.dart';
+import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LikesComentariosDetalle extends StatelessWidget {

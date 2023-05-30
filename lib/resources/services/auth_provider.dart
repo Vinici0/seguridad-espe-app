@@ -110,10 +110,10 @@ class AuthService {
       }
     }
 
-    final token = await this._storage.read(key: 'token');
+    final token = await this._storage.read(key: 'token') ?? '';
 
     final resp = await http.get(Uri.parse('${Environment.apiUrl}/login/renew'),
-        headers: {'Content-Type': 'application/json', 'x-token': token!});
+        headers: {'Content-Type': 'application/json', 'x-token': token});
 
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);

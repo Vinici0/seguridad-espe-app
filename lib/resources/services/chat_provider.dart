@@ -1,30 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/salas_mensaje_response.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
-import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 import 'package:http/http.dart' as http;
 
-class ChatProvider extends StateStreamableSource<Object?> {
-  late Usuario usuarioPara; // TODO: Importante para el chat privado
-  late Sala salaSeleccionada;
-
-  List<Sala> salas = [];
-
-  late final StreamController<List<Sala>> _salasController =
-      StreamController<List<Sala>>.broadcast(sync: true);
-
-  Stream<List<Sala>> get salasStream => _salasController.stream;
-
-  ChatProvider() {
-    this.getSalesAll();
-  }
-
+class ChatProvider {
   Future<List<MensajesSala>> getChatSala(String salaID) async {
     final uri =
         Uri.parse('${Environment.apiUrl}/mensajes/get-mensaje-by-room/$salaID');
@@ -44,13 +27,9 @@ class ChatProvider extends StateStreamableSource<Object?> {
       'x-token': await AuthService.getToken() as String,
     });
     final salesResp = SalesResponse.fromJson(resp.body);
-
-    this.salas.addAll(salesResp.salas);
-    _salasController.add(salesResp.salas);
     return salesResp.salas;
   }
 
-  //localhost:3000/api/salas
   Future<Sala> createSala(String nombre) async {
     final uri = Uri.parse('${Environment.apiUrl}/salas');
 
@@ -62,13 +41,10 @@ class ChatProvider extends StateStreamableSource<Object?> {
         body: '{"nombre":"$nombre"}');
     final decodedData = json.decode(resp.body);
     final salaResp = Sala.fromMap(decodedData['sala']);
-    this.salas.add(salaResp);
-    _salasController.add(this.salas);
     return salaResp;
   }
 
-  //Unir a sala
-  Future<Sala> unirSala(String codigo) async {
+  Future<Sala> joinSala(String codigo) async {
     final uri = Uri.parse('${Environment.apiUrl}/salas/unir-sala');
 
     final resp = await http.post(uri,
@@ -80,22 +56,6 @@ class ChatProvider extends StateStreamableSource<Object?> {
 
     final decodedData = json.decode(resp.body);
     final salaResp = Sala.fromMap(decodedData['sala']);
-    this.salas.add(salaResp);
-    _salasController.add(this.salas);
     return salaResp;
   }
-
-  @override
-  FutureOr<void> close() {
-    _salasController.close();
-  }
-
-  @override
-  bool get isClosed => _salasController.isClosed;
-
-  @override
-  Object? get state => null;
-
-  @override
-  Stream<Object?> get stream => _salasController.stream;
 }

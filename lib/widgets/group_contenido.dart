@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
 import 'package:flutter_maps_adv/screens/salas_screen.dart';
 
@@ -19,7 +20,7 @@ class GroupContenido extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController nomController = TextEditingController();
-    final chatProvider = BlocProvider.of<ChatProvider>(context, listen: false);
+    final chatProvider = BlocProvider.of<RoomBloc>(context, listen: false);
     return Column(
       children: [
         Container(
@@ -30,56 +31,50 @@ class GroupContenido extends StatelessWidget {
                   fontSize: 16,
                 ))),
         const SizedBox(height: 10),
-        Container(
+        SizedBox(
           height: 40,
           child: TextField(
             cursorColor: Colors.black,
             decoration: InputDecoration(
-              disabledBorder: OutlineInputBorder(
+              disabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFF6165FA)),
               ),
-              enabledBorder: OutlineInputBorder(
+              enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFF6165FA)),
               ),
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFF6165FA)),
               ),
-              focusedBorder: OutlineInputBorder(
+              focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFF6165FA)),
               ),
               hintText: textoHint,
-              //color del texto plomo suave - #999
-              labelStyle: TextStyle(color: Color(0x99999999)),
-              hintStyle: TextStyle(color: Color(0x99999999)),
-              //color del de palpitacion del texto
-              focusColor: Color(0xFF6165FA),
-              contentPadding: EdgeInsets.all(10),
+              labelStyle: const TextStyle(color: Color(0x99999999)),
+              hintStyle: const TextStyle(color: Color(0x99999999)),
+              focusColor: const Color(0xFF6165FA),
+              contentPadding: const EdgeInsets.all(10),
             ),
             controller: nomController,
           ),
         ),
-        SizedBox(height: 10),
-        // //Boton de crear grupo
+        const SizedBox(height: 10),
         textoInfo != null
             ? Container(
                 alignment: Alignment.centerLeft,
                 child: Text(textoInfo!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color.fromARGB(255, 112, 109, 109),
                       fontSize: 12,
                     )))
             : Container(),
         MaterialButton(
-          //todo el ancho del contenedor
           minWidth: double.infinity,
           color: Color(0xffF3F3F3),
-          onPressed: () async {
+          onPressed: () {
             if (textoButton == 'Crear Grupo') {
-              await chatProvider.createSala(nomController.text);
-              // Navigator.pushNamed(context, SalasScreen.salasroute);
+              chatProvider.add(SalaCreateEvent(nomController.text));
             } else {
-              await chatProvider.unirSala(nomController.text);
-              // Navigator.pushNamed(context, SalasScreen.salasroute);
+              chatProvider.add(SalaJoinEvent(nomController.text));
             }
             Navigator.pop(context);
           },

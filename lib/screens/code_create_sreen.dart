@@ -13,15 +13,17 @@ class CodigoCreateGrupoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
+        elevation: 0.5,
+        iconTheme: IconThemeData(color: Colors.black87),
         title: Text('Crear Grupo',
             //alinea a la izquierda
-            style: TextStyle(color: Colors.black, fontSize: 20)),
+            style: TextStyle(color: Colors.black87, fontSize: 20)),
       ),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
           //alineacion de los elementos a la izquierda
-
+          color: Colors.white,
           child: GroupContenido(
             textoHint: 'Nombre del grupo',
             textoButton: 'Crear Grupo',

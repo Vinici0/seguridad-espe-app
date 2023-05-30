@@ -13,12 +13,12 @@ class ApiUserRepository {
   }
 
   Future<bool> isLoggedIn() async {
-    final token = await AuthService.getToken();
-    if (token == null) {
-      return false;
-    } else {
-      return await _authService.isLoggedIn();
-    }
+    // final token = await AuthService.getToken();
+    // if (token == null) {
+    //   return false;
+    // } else {
+    return await _authService.isLoggedIn();
+    // }
   }
 
   get usuario => _authService.usuario;

@@ -33,7 +33,7 @@ class PublicacionesResponse {
 
 class Publicacion {
   bool isPublic;
-  int? likes;
+  List<String>? likes;
   List<String>? archivo;
   List<dynamic>? comentarios;
   bool isLiked;
@@ -72,7 +72,9 @@ class Publicacion {
 
   factory Publicacion.fromMap(Map<String, dynamic> json) => Publicacion(
         isPublic: json["isPublic"],
-        likes: json["likes"],
+        likes: json["likes"] == null
+            ? []
+            : List<String>.from(json["likes"]!.map((x) => x)),
         archivo: json["imagenes"] != null
             ? List<String>.from(json["imagenes"].map((x) => x))
             : null,
@@ -94,7 +96,7 @@ class Publicacion {
 
   Map<String, dynamic> toMap() => {
         "isPublic": isPublic,
-        "likes": likes,
+        "likes": likes == null ? [] : List<dynamic>.from(likes!.map((x) => x)),
         "imagenes":
             archivo != null ? List<dynamic>.from(archivo!.map((x) => x)) : null,
         "comentarios": comentarios,

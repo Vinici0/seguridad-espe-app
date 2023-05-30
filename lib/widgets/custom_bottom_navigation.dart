@@ -13,8 +13,9 @@ class CustomBottomNavigation extends StatelessWidget {
             showUnselectedLabels: true,
             selectedItemColor: Color(0xFF6165FA),
             type: BottomNavigationBarType.fixed,
-            backgroundColor: const Color(0xFFF2F2F2),
-            unselectedItemColor: const Color(0xFF9B9B9B),
+            backgroundColor: Colors.white,
+            elevation: 0.5,
+            unselectedItemColor: Colors.black87,
             currentIndex: counterBloc.index,
             onTap: (int i) {
               counterBloc.cambiarIndex(i);
