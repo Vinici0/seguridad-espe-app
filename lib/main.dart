@@ -1,47 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/publication/publication_bloc.dart';
-import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
-
-import 'package:flutter_maps_adv/resources/services/socket_service.dart';
-import 'package:flutter_maps_adv/screens/alert_screen.dart';
-import 'package:flutter_maps_adv/screens/alerts_screen.dart';
-import 'package:flutter_maps_adv/screens/chatsales_miembros.dart';
-import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
-import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
-import 'package:flutter_maps_adv/screens/code_create_sreen.dart';
-import 'package:flutter_maps_adv/screens/config_screen.dart';
-import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
-import 'package:flutter_maps_adv/screens/home_screen.dart';
+import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
+import 'package:flutter_maps_adv/resources/services/push_notifications_service.dart';
+import 'package:flutter_maps_adv/resources/services/traffic_service.dart';
+import 'package:flutter_maps_adv/routes/routes.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
-import 'package:flutter_maps_adv/screens/login_screen.dart';
-import 'package:flutter_maps_adv/screens/lugares_screen.dart';
-import 'package:flutter_maps_adv/screens/menu_screen.dart';
-import 'package:flutter_maps_adv/screens/news_detalle.dart';
-import 'package:flutter_maps_adv/screens/news_screen.dart';
-import 'package:flutter_maps_adv/screens/register_screen.dart';
-import 'package:flutter_maps_adv/screens/salas_screen.dart';
-import 'package:flutter_maps_adv/screens/screens.dart';
-import 'package:flutter_maps_adv/widgets/modal_add_group.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //Lo primero que se ejecuta en la app
+  await PushNotificationService.initializeApp();
   runApp(MultiBlocProvider(providers: [
-    BlocProvider(create: (context) => SocketService()),
     BlocProvider(create: (context) => AuthBloc()),
     BlocProvider(create: (context) => GpsBloc()),
-    BlocProvider(create: (context) => LocaltionBloc()),
+    BlocProvider(create: (context) => LocationBloc()),
     BlocProvider(create: (context) => PublicationBloc()),
     BlocProvider(create: (context) => RoomBloc()),
     BlocProvider(
+        create: (context) => SearchBloc(trafficService: TrafficService())),
+    BlocProvider(
         create: (context) =>
-            MapBloc(locationBloc: BlocProvider.of<LocaltionBloc>(context))),
+            MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
   ], child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
+  @override
+  void initState() {
+    super.initState();
+    /*
+      Notificaciones
+    */
+    PushNotificationService.messagesStream.listen((message) {
+      navigatorKey.currentState?.pushNamed('salas', arguments: message);
+      final snackBar = SnackBar(content: Text(message));
+      messengerKey.currentState?.showSnackBar(snackBar);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,33 +57,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MapApp',
       initialRoute: LoadingLoginScreen.loadingroute,
-      routes: {
-        CodigoCreateGrupoScreen.codigoGruporoute: (_) =>
-            const CodigoCreateGrupoScreen(),
-        HomeScreen.homeroute: (_) => const HomeScreen(),
-        LoadingLoginScreen.loadingroute: (_) => const LoadingLoginScreen(),
-        LoadingMapScreen.loadingroute: (_) => const LoadingMapScreen(),
-        LoginScreen.loginroute: (_) => const LoginScreen(),
-        MapScreen.routemap: (_) => const MapScreen(),
-        RegisterScreen.registerroute: (_) => const RegisterScreen(),
-        // GruposScreen.salesroute: (_) => GruposScreen(),
-        ChatScreen.chatsalesroute: (_) => ChatScreen(),
-        ModalBottomSheet.modalBottomSheetRoute: (_) => ModalBottomSheet(),
-        CodigoAddGrupoScreen.codigoAddGruporoute: (_) => CodigoAddGrupoScreen(),
-        DetalleSalaScreen.detalleSalaroute: (_) => const DetalleSalaScreen(),
-        SalasScreen.salasroute: (_) => const SalasScreen(),
-        AlartasScreen.routeName: (_) => const AlartasScreen(),
-        NewsScreen.newsroute: (_) => const NewsScreen(),
-        ConfigScreen.configroute: (_) => const ConfigScreen(),
-        DetalleScreen.detalleroute: (_) => const DetalleScreen(),
-        AlertScreen.routeName: (_) => const AlertScreen(),
-        LugaresScreen.salesroute: (_) => const LugaresScreen(),
-        MenuScreen.salesroute: (_) => const MenuScreen(),
-        MienbrosChatScreen.mienbrosChatroute: (_) => const MienbrosChatScreen(),
-      },
+      routes: Routes.routes,
+      navigatorKey: navigatorKey,
+      scaffoldMessengerKey: messengerKey,
       theme: ThemeData.light().copyWith(
         primaryColor: myPurpleColor,
-        // focusColor:  myPurpleColor,
         appBarTheme: const AppBarTheme(
           color: Colors.white,
           elevation: 0,
@@ -90,16 +75,6 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        buttonTheme: ButtonThemeData(
-          buttonColor: myPurpleColor,
-          textTheme: ButtonTextTheme.primary,
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: myPurpleColor,
-        ),
-        indicatorColor: myPurpleColor,
-        highlightColor: myPurpleColor.withOpacity(0.5),
-        toggleableActiveColor: myPurpleColor,
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_maps_adv/resources/services/push_notifications_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +28,6 @@ class AuthService {
     // Obtener la instancia de SharedPreferences
     final _storage = new FlutterSecureStorage();
     final token = await _storage.read(key: 'token');
-    print('Token: $token');
     return token;
   }
 
@@ -35,7 +35,11 @@ class AuthService {
   Future<bool> login(String email, String password) async {
     this.autenticando = true;
 
-    final data = {'email': email, 'password': password};
+    final data = {
+      'email': email,
+      'password': password,
+      'tokenApp': PushNotificationService.token
+    };
     print(data);
 
     final uri = Uri.parse('${Environment.apiUrl}/login');
@@ -65,7 +69,12 @@ class AuthService {
   Future<bool> register(String nombre, String email, String password) async {
     this.autenticando = true;
 
-    final data = {'nombre': nombre, 'email': email, 'password': password};
+    final data = {
+      'nombre': nombre,
+      'email': email,
+      'password': password,
+      'tokenApp': PushNotificationService.token
+    };
 
     final uri = Uri.parse('${Environment.apiUrl}/login/new');
     final resp = await http.post(

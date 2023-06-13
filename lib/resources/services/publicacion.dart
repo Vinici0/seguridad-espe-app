@@ -1,14 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
@@ -61,9 +57,6 @@ class PublicacionService {
     List<String>? imagePaths,
   ) async {
     Position position = await Geolocator.getCurrentPosition();
-
-    final List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
 
     final publicacion = Publicacion(
       titulo: titulo,

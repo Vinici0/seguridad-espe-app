@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class CometarioPulbicacion extends StatelessWidget {
+class CommentPublication extends StatelessWidget {
   final String uid;
   final String comentario;
   final String nombre;
@@ -10,7 +10,7 @@ class CometarioPulbicacion extends StatelessWidget {
   final int likes;
   final int totalComentarios;
 
-  const CometarioPulbicacion(
+  const CommentPublication(
       {required this.uid,
       required this.comentario,
       required this.nombre,
@@ -65,17 +65,6 @@ class CometarioPulbicacion extends StatelessWidget {
                 SizedBox(width: 5),
                 Text(
                   likes.toString(),
-                  style: TextStyle(fontSize: 12, color: Colors.black54),
-                ),
-                SizedBox(width: 5),
-                Icon(
-                  FontAwesomeIcons.comment,
-                  size: 15,
-                  color: Colors.black54,
-                ),
-                SizedBox(width: 5),
-                Text(
-                  totalComentarios.toString(),
                   style: TextStyle(fontSize: 12, color: Colors.black54),
                 ),
               ],

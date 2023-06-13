@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
-import 'package:flutter_maps_adv/screens/salas_screen.dart';
+import 'package:flutter_maps_adv/screens/rooms_screen.dart';
 
 class GroupContenido extends StatelessWidget {
   final String textoTitulo;

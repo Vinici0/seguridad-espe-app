@@ -198,7 +198,7 @@ class PhysicalModelCircleContainer extends StatelessWidget {
             child: Text(
               text,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,

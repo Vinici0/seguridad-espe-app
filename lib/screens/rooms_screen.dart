@@ -7,9 +7,9 @@ import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
 import 'package:flutter_maps_adv/screens/code_create_sreen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SalasScreen extends StatelessWidget {
+class RoomsScreen extends StatelessWidget {
   static const String salasroute = 'salas';
-  const SalasScreen({Key? key}) : super(key: key);
+  const RoomsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +40,48 @@ class SalasScreen extends StatelessWidget {
   Widget _listSalesGroup(BuildContext context) {
     return BlocBuilder<RoomBloc, RoomState>(
       builder: (context, state) {
-        return ListView.builder(
-          itemCount: state.salas.length,
-          itemBuilder: (context, index) {
-            return SalaListTitle(sala: state.salas[index]);
-          },
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 13),
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  Navigator.pushNamed(
+                      context, CodigoCreateGrupoScreen.codigoGruporoute);
+                },
+                child: Row(
+                  children: const [
+                    //icon de add grupo
+                    Icon(
+                      FontAwesomeIcons.plus,
+                      color: Color(0xFF6165FA),
+                      size: 20,
+                    ),
+
+                    SizedBox(
+                      width: 30,
+                    ),
+                    Text(
+                      'Crear un nuevo grupo',
+                      style: TextStyle(color: Color(0xFF6165FA), fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: state.salas.length,
+                itemBuilder: (context, index) {
+                  return SalaListTitle(sala: state.salas[index]);
+                },
+              ),
+            )
+          ],
         );
       },
     );
@@ -61,24 +98,26 @@ class SalaListTitle extends StatelessWidget {
     return ListTile(
       title: Text(sala.nombre),
       leading: Container(
+        width: 50,
+        height: 50,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Color(int.parse(
                   '0xFF${sala.color.substring(0, 2)}DDBB${sala.color.substring(4)}')),
               Color(int.parse('0xFF${sala.color}')),
-              Color.fromARGB(255, 230, 116, 226),
+              const Color.fromARGB(255, 230, 116, 226),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(25.0),
+          borderRadius: BorderRadius.circular(100.0),
         ),
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           child: Text(
             sala.nombre.substring(0, 2),
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
@@ -87,6 +126,7 @@ class SalaListTitle extends StatelessWidget {
       ),
       onTap: () {
         salasService.add(SalaSelectEvent(sala));
+        salasService.add(ChatInitEvent(sala.uid));
         Navigator.pushNamed(context, ChatScreen.chatsalesroute);
       },
     );
@@ -109,7 +149,7 @@ class IconModal extends StatelessWidget {
       onPressed: () {
         showModalBottomSheet(
           context: context,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16),
@@ -133,7 +173,7 @@ class IconModal extends StatelessWidget {
                         FontAwesomeIcons.plus,
                         color: Colors.black,
                       ),
-                      title: Text('Crear un nuevo grupo'),
+                      title: const Text('Crear un nuevo grupo'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.pushNamed(
@@ -145,7 +185,7 @@ class IconModal extends StatelessWidget {
                         FontAwesomeIcons.userGroup,
                         color: Colors.black,
                       ),
-                      title: Text('Unir a un grupo'),
+                      title: const Text('Unir a un grupo'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.pushNamed(

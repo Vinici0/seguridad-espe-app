@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class LikesComentariosDetalle extends StatelessWidget {
+class LikesCommentsDetails extends StatelessWidget {
   //comentario, usuario, uid, fecha,
   final Publicacion publicacion;
+  final String likes;
 
-  const LikesComentariosDetalle({
+  const LikesCommentsDetails({
     Key? key,
     required this.publicacion,
+    required this.likes,
   }) : super(key: key);
 
   @override
@@ -22,7 +24,7 @@ class LikesComentariosDetalle extends StatelessWidget {
               //nombre de usuario que publico
               children: [
                 Text(
-                  publicacion.usuario,
+                  publicacion.usuarioNombre!,
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -39,7 +41,7 @@ class LikesComentariosDetalle extends StatelessWidget {
                 ),
                 SizedBox(width: 5),
                 Text(
-                  publicacion.likes.toString(),
+                  likes,
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(width: 28),

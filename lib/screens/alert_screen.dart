@@ -24,7 +24,7 @@ class _AlertScreenState extends State<AlertScreen> {
   Position? currentPosition;
   String name = '';
   String ciudad = '';
-  final _textController = new TextEditingController();
+  final _textController = TextEditingController();
   final ImagePicker imgpicker = ImagePicker();
   List<String>? imagePaths;
   List<XFile>? imagefiles;
@@ -55,8 +55,8 @@ class _AlertScreenState extends State<AlertScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Color(0xFF111b21),
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: const Color(0xFF111b21),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -69,12 +69,12 @@ class _AlertScreenState extends State<AlertScreen> {
                 color: Colors.white,
               ),
             ),
-            SizedBox(width: 10),
-            Container(
+            const SizedBox(width: 10),
+            SizedBox(
               width: size.width * 0.6,
               child: Text(
                 reporte.tipo,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                 ),
@@ -84,18 +84,18 @@ class _AlertScreenState extends State<AlertScreen> {
         ),
       ),
       body: Container(
-        color: Color(0xFF111b21),
+        color: const Color(0xFF111b21),
         child: Stack(
           children: [
             Column(
               children: [
                 Expanded(
                   child: Container(
-                    color: Color(0xFF111b21),
+                    color: const Color(0xFF111b21),
                     child: TextField(
                       controller:
                           _textController, //sirve para limpiar el texto del textfield cuando se envia el mensaje
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
                       maxLines: null,
                       expands: true,
                       keyboardType: TextInputType.multiline,
@@ -123,24 +123,24 @@ class _AlertScreenState extends State<AlertScreen> {
               right: 0,
               child: Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 50,
                     // color: Colors.white,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 15),
+                          margin: const EdgeInsets.only(left: 15),
                           alignment: Alignment.center,
                           width: MediaQuery.of(context).size.width * 0.1,
                           height: 35,
                           decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 49, 67, 78),
+                            color: const Color.fromARGB(255, 49, 67, 78),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: IconButton(
                             alignment: Alignment.center,
-                            icon: Icon(
+                            icon: const Icon(
                               FontAwesomeIcons.image,
                               color: Colors.white,
                               size: 18,
@@ -179,27 +179,27 @@ class _AlertScreenState extends State<AlertScreen> {
                         //   ),
                         // ),
                         Expanded(
-                            child: Container(
-                                child: Row(
+                            child: Row(
                           children: [
                             //icono de ubicacion
                             Expanded(
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Color(0xFF202c33),
+                                  color: const Color(0xFF202c33),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                margin: EdgeInsets.only(left: 20, right: 20),
+                                margin:
+                                    const EdgeInsets.only(left: 20, right: 20),
                                 child: Row(
                                   children: [
                                     Container(
                                         // color: Color.fromARGB(255, 49, 67, 78),
-                                        padding: EdgeInsets.all(5),
+                                        padding: const EdgeInsets.all(5),
                                         child: Icon(
                                           Icons.location_on,
                                           color: Colors.white,
                                         ),
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color:
                                               Color.fromARGB(255, 49, 67, 78),
                                           borderRadius: BorderRadius.only(
@@ -212,12 +212,10 @@ class _AlertScreenState extends State<AlertScreen> {
                                       // color: Color.fromARGB(255, 0, 93, 164),
                                       width: MediaQuery.of(context).size.width *
                                           0.45,
-                                      padding: EdgeInsets.only(left: 5),
+                                      padding: const EdgeInsets.only(left: 5),
                                       child: Text(
-                                        '${name.isNotEmpty ? name : 'Ubicación'}' +
-                                            ' - ' +
-                                            '${ciudad.isNotEmpty ? ciudad : 'Ciudad'}',
-                                        style: TextStyle(
+                                        '${name.isNotEmpty ? name : 'Ubicación'} - ${ciudad.isNotEmpty ? ciudad : 'Ciudad'}',
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 12,
                                         ),
@@ -228,7 +226,7 @@ class _AlertScreenState extends State<AlertScreen> {
                               ),
                             ),
                           ],
-                        ))),
+                        )),
                       ],
                     ),
                   ),
@@ -261,48 +259,34 @@ class _AlertScreenState extends State<AlertScreen> {
                         )
                       : Container(),
 
-                  Divider(
+                  const Divider(
                     color: Colors.white,
                   ),
                   //repotar o reportar incognito el incidente
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      //iconbutton de repotar y reportar incognito
                       MaterialButton(
                         onPressed: () {
                           // Acción de la galería
                         },
-                        child: MaterialButton(
-                          onPressed: () {
-                            setState(() {
-                              isPressed = !isPressed;
-                            });
-                          },
-                          child: Tooltip(
-                            message: tooltipText,
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: buttonColor,
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.userSecret,
-                                    color: Colors.white,
-                                  ),
-                                ],
-                              ),
+                        child: Tooltip(
+                          message: tooltipText,
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: buttonColor,
+                            ),
+                            child: const Icon(
+                              FontAwesomeIcons.userSecret,
+                              color: Colors.white,
                             ),
                           ),
                         ),
                       ),
                       Container(
                         height: 43,
-                        // width: 100,
-                        // padding: EdgeInsets.only(left: 15, right: 15),
                         margin: EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -317,10 +301,10 @@ class _AlertScreenState extends State<AlertScreen> {
                                   return AlertDialog(
                                     title: Text('Campo vacío'),
                                     content:
-                                        Text('Por favor, escriba que sucedió.'),
+                                        Text('Por favor, escriba qué sucedió.'),
                                     actions: [
                                       TextButton(
-                                        child: Text(
+                                        child: const Text(
                                           'Aceptar',
                                           style: TextStyle(
                                               color: Color(0xFF6165FA)),
@@ -347,26 +331,25 @@ class _AlertScreenState extends State<AlertScreen> {
                               imagePaths,
                             ));
 
-                            Navigator.pop(context);
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
                           },
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.bullhorn,
+                          child: Row(
+                            children: const [
+                              Icon(
+                                FontAwesomeIcons.bullhorn,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Reportar',
+                                style: TextStyle(
                                   color: Colors.white,
-                                  size: 16,
+                                  fontSize: 14,
                                 ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Reportar',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

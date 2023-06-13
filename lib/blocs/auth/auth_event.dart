@@ -39,3 +39,13 @@ class AuthLogoutEvent extends AuthEvent {
 class AuthInitEvent extends AuthEvent {
   AuthInitEvent();
 }
+
+//conect socket
+class AuthConectEvent extends AuthEvent {
+  AuthConectEvent();
+}
+
+//disconnect socket
+class AuthDisconnectEvent extends AuthEvent {
+  AuthDisconnectEvent();
+}

@@ -34,6 +34,8 @@ class MapView extends StatelessWidget {
           zoomControlsEnabled: false,
           myLocationButtonEnabled: false,
           polylines: polylines, //Hace que se vean las polilines
+          //TODO: No realiza tareas pesadas. por el consumo de memoria
+          onCameraMove: ((position) => mapBloc.mapCenter = position.target),
 
           //Para tener un control del mapa
           onMapCreated: (controller) =>

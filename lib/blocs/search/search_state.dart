@@ -1,10 +1,13 @@
 part of 'search_bloc.dart';
 
-abstract class SearchState extends Equatable {
-  const SearchState();
-  
-  @override
-  List<Object> get props => [];
-}
+class SearchState extends Equatable {
+  final bool displayManualMarker;
 
-class SearchInitial extends SearchState {}
+  const SearchState({this.displayManualMarker = false});
+
+  SearchState copyWith({bool? displayManualMarker}) => SearchState(
+      displayManualMarker: displayManualMarker ?? this.displayManualMarker);
+
+  @override
+  List<Object> get props => [displayManualMarker];
+}

@@ -5,7 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_maps_adv/blocs/location/localtion_bloc.dart';
-import 'package:flutter_maps_adv/themes/themes.dart';
+import 'package:flutter_maps_adv/models/route_destination.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 part 'map_event.dart';
@@ -13,8 +13,9 @@ part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
   //Importante lo que recibe el LocationBloc
-  final LocaltionBloc locationBloc;
+  final LocationBloc locationBloc;
   GoogleMapController? _mapController;
+  LatLng? mapCenter;
   StreamSubscription<LocaltionState>? locationStateSubscription;
 
   MapBloc({required this.locationBloc}) : super(const MapState()) {
@@ -25,6 +26,19 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<UpdateUserPolylineEvent>(_onPolylineNewPoint);
     on<OpToggleUserRouteEvent>((event, emit) =>
         emit(state.copyWith(showRoutePreview: !state.showRoutePreview)));
+
+    on<DisplayPolylinesEvent>(
+        (event, emit) => emit(state.copyWith(polylines: event.polylines)));
+
+    locationStateSubscription = locationBloc.stream.listen((locationState) {
+      if (locationState.lastKnownLocation != null) {
+        add(UpdateUserPolylineEvent(locationState.myLocationHistory));
+      }
+      if (!state.isFollowUser) return;
+      if (locationState.lastKnownLocation == null) return;
+
+      moveCamera(locationState.lastKnownLocation!);
+    });
 
     /*
       No se puede usar el on porque es un stream y no un evento 
@@ -85,6 +99,20 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     //Se emite el nuevo estado con la nueva polilinea
     emit(state.copyWith(polylines: currentPolylines));
+  }
+
+  Future drawRoutePolyline(RouteDestination destination) async {
+    final myRoute = Polyline(
+      polylineId: const PolylineId('route'),
+      color: Colors.black,
+      width: 5,
+      points: destination.points,
+      startCap: Cap.roundCap,
+      endCap: Cap.roundCap,
+    );
+    final curretPolylines = Map<String, Polyline>.from(state.polylines);
+    curretPolylines['route'] = myRoute;
+    add(DisplayPolylinesEvent(curretPolylines));
   }
 
   @override

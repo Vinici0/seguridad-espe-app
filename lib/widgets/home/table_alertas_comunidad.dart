@@ -10,10 +10,10 @@ class TableAlertsCompunidad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Variables de colores como cadenas
-    final String greenColor = "0xFF00FF00"; // Green
-    final String pinkColor = "0xFFFFC0CB"; // Pink
-    final String purpleColor = "0xFF800080"; // Purple
-    final String blueColor = "0xFF0000FF"; // Blue
+    const String greenColor = "0xFF00FF00"; // Green
+    const String pinkColor = "0xFFFFC0CB"; // Pink
+    const String purpleColor = "0xFF800080"; // Purple
+    const String blueColor = "0xFF0000FF"; // Blue
 
     return Table(
       children: [
@@ -84,10 +84,10 @@ class TableAlertsCompunidad extends StatelessWidget {
               ),
             ),
             // No quiero ubicar más columnas en esta fila
-            TableCell(
+            const TableCell(
               child: SizedBox(),
             ),
-            TableCell(
+            const TableCell(
               child: SizedBox(),
             ),
           ],
@@ -131,7 +131,8 @@ class PhysicalModelCircleContainer extends StatelessWidget {
                 "assets/alertas/$icon",
                 fit: BoxFit.cover,
                 width: 50,
-                colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               ),
             ),
           ),
@@ -140,7 +141,7 @@ class PhysicalModelCircleContainer extends StatelessWidget {
             child: Text(
               text,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,

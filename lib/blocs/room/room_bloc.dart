@@ -27,6 +27,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     on<SalaJoinEvent>(salaJoinEvent);
     on<SalaSelectEvent>(salaSelectEvent);
     on<ObtenerUsuariosSalaEvent>(obtenerUsuariosSalaEvent);
+    on<LimpiarMensajesEvent>(limpiarMensajesEvent);
   }
 
   FutureOr<void> salasInitEvent(
@@ -69,5 +70,10 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     emit(state.copyWith(isLoading: true));
     final usuariosSala = await _chatProvider.getUsuariosSala(event.idSala);
     emit(state.copyWith(usuariosSala: usuariosSala, isLoading: false));
+  }
+
+  FutureOr<void> limpiarMensajesEvent(
+      LimpiarMensajesEvent event, Emitter<RoomState> emit) {
+    emit(state.copyWith(mensajesSalas: []));
   }
 }

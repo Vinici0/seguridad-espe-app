@@ -10,11 +10,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 part 'localtion_event.dart';
 part 'localtion_state.dart';
 
-class LocaltionBloc extends Bloc<LocaltionEvent, LocaltionState> {
+class LocationBloc extends Bloc<LocaltionEvent, LocaltionState> {
   StreamSubscription? positionStream;
   final GpsBloc _gpsBloc = GpsBloc();
 
-  LocaltionBloc() : super(LocaltionState()) {
+  LocationBloc() : super(LocaltionState()) {
     //siguiendo al usuario
     on<OnStartFollowingUser>((event, emit) {
       emit(state.copyWith(followingUser: true));

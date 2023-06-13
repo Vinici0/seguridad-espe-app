@@ -62,3 +62,6 @@ class ObtenerUsuariosSalaEvent extends RoomEvent {
   @override
   List<Object> get props => [idSala];
 }
+
+//limipiar mensajes de la sala
+class LimpiarMensajesEvent extends RoomEvent {}

@@ -10,7 +10,7 @@ class BtnCurrentLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //TODO: Se accede a los dos blocs
-    final locationBloc = BlocProvider.of<LocaltionBloc>(context);
+    final locationBloc = BlocProvider.of<LocationBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
 
     return Container(

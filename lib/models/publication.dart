@@ -36,6 +36,7 @@ class Publicacion {
   List<String>? likes;
   List<String>? archivo;
   List<dynamic>? comentarios;
+  String? usuarioNombre;
   bool isLiked;
   String titulo;
   String contenido;
@@ -61,6 +62,7 @@ class Publicacion {
     required this.isPublic,
     required this.latitud,
     this.likes,
+    this.usuarioNombre,
     required this.longitud,
     required this.titulo,
     this.uid,
@@ -92,6 +94,7 @@ class Publicacion {
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
         uid: json["uid"],
+        usuarioNombre: json["usuarioNombre"],
       );
 
   Map<String, dynamic> toMap() => {

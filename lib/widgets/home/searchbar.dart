@@ -1,6 +1,9 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
+import 'package:flutter_maps_adv/delegates/search_destination_delegate.dart';
+import 'package:flutter_maps_adv/models/search_result.dart';
 
 class SearchBar extends StatelessWidget {
   const SearchBar({Key? key}) : super(key: key);
@@ -9,13 +12,11 @@ class SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        return Text('Hola');
-        // return state.displayManualMarker
-        //   ? const SizedBox()
-        //   : FadeInDown(
-        //     duration: const Duration( milliseconds: 300 ),
-        //     child: const _SearchBarBody()
-        //   );
+        return state.displayManualMarker
+            ? const SizedBox()
+            : FadeInDown(
+                duration: const Duration(milliseconds: 300),
+                child: const _SearchBarBody());
       },
     );
   }
@@ -24,16 +25,14 @@ class SearchBar extends StatelessWidget {
 class _SearchBarBody extends StatelessWidget {
   const _SearchBarBody({Key? key}) : super(key: key);
 
-  // void onSearchResults( BuildContext context, SearchResult result ) {
+  void onSearchResults(BuildContext context, SearchResult result) {
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
 
-  //   final searchBloc = BlocProvider.of<SearchBloc>(context);
-
-  //   if ( result.manual == true ) {
-  //     searchBloc.add( OnActivateManualMarkerEvent() );
-  //     return;
-  //   }
-
-  // }
+    if (result.manual == true) {
+      searchBloc.add(OnActivateManualMarkerEvent());
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +43,11 @@ class _SearchBarBody extends StatelessWidget {
         width: double.infinity,
         child: GestureDetector(
             onTap: () async {
-              // final result = await showSearch(context: context, delegate: SearchDestinationDelegate());
-              // if ( result == null ) return;
-
-              // onSearchResults( context, result );
+              //Si no se encuentra el archivo, se debe importar el archivo search_destination_delegate.dart
+              final result = await showSearch(
+                  context: context, delegate: SearchDestinationDelegate());
+              if (result == null) return;
+              onSearchResults(context, result);
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),

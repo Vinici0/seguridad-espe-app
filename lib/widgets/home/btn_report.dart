@@ -1,11 +1,29 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_maps_adv/screens/alert_screen.dart';
+import 'package:animate_do/animate_do.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/screens/alerts_screen.dart';
-
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BtnReport extends StatelessWidget {
   const BtnReport({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        return state.displayManualMarker
+            ? const SizedBox()
+            : FadeInUp(
+                duration: const Duration(milliseconds: 300),
+                child: const _BtnReport());
+      },
+    );
+  }
+}
+
+class _BtnReport extends StatelessWidget {
+  const _BtnReport({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +48,7 @@ class BtnReport extends StatelessWidget {
               ),
               onPressed: () {
                 // AlertasScreen.routeName
-                Navigator.pushNamed(context, AlartasScreen.routeName);
+                Navigator.pushNamed(context, AlertsScreen.routeName);
               },
               //icono de una campana de aleerta
               icon: Icon(FontAwesomeIcons.fire, size: 16, color: Colors.white),

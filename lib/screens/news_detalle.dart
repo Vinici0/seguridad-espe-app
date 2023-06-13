@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
-import 'package:flutter_maps_adv/models/comentarios.dart';
+import 'package:flutter_maps_adv/helpers/navegacion.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter_maps_adv/resources/services/socket_service.dart';
-import 'package:flutter_maps_adv/widgets/comentarios.dart';
-import 'package:flutter_maps_adv/widgets/cometario_pulbicacion.dart';
+import 'package:flutter_maps_adv/widgets/comments.dart';
+import 'package:flutter_maps_adv/widgets/comment_pulbicacion.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
 
 class DetalleScreen extends StatefulWidget {
   static const String detalleroute = 'detalle';
@@ -22,18 +22,8 @@ class DetalleScreen extends StatefulWidget {
 }
 
 class _DetalleScreenState extends State<DetalleScreen> {
-  //Ya tengo el arreglo de comentarios
-  /*
-    final String uid;
-  final String comentario;
-  final String nombre;
-  final String fotoPerfil;
-  final String fecha;
-  final int likes;
-  final int totalComentarios;
-   */
-  List<CometarioPulbicacion> _comentarios = [
-    CometarioPulbicacion(
+  List<CommentPublication> _comentarios = [
+    CommentPublication(
       comentario:
           'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
       nombre: 'Juan',
@@ -43,7 +33,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
       totalComentarios: 2,
       uid: 'ad',
     ),
-    CometarioPulbicacion(
+    CommentPublication(
       comentario:
           'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
       nombre: 'Juan',
@@ -53,7 +43,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
       totalComentarios: 2,
       uid: 'ad',
     ),
-    CometarioPulbicacion(
+    CommentPublication(
       comentario:
           'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
       nombre: 'Juan',
@@ -63,7 +53,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
       totalComentarios: 2,
       uid: 'ad',
     ),
-    CometarioPulbicacion(
+    CommentPublication(
       comentario:
           'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
       nombre: 'Juan',
@@ -74,27 +64,27 @@ class _DetalleScreenState extends State<DetalleScreen> {
       uid: 'ad',
     ),
   ];
-  SocketService socketService = SocketService();
   AuthBloc authService = AuthBloc();
   final _textController = new TextEditingController();
   bool _estaEscribiendo = false;
 
   @override
   void initState() {
-    this.socketService = BlocProvider.of<SocketService>(context, listen: false);
     this.authService = BlocProvider.of<AuthBloc>(context, listen: false);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final Publicacion publicacion =
-        ModalRoute.of(context)!.settings.arguments as Publicacion;
-
+    final Map<String, dynamic> mapNews =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final publicacion = mapNews['publicacion'] as Publicacion;
+    final likes = mapNews['likes'] as String;
     return Container(
       color: Colors.white,
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Colors.white,
           body: Stack(
             children: [
               CustomScrollView(
@@ -104,9 +94,10 @@ class _DetalleScreenState extends State<DetalleScreen> {
                     delegate: SliverChildListDelegate([
                       _UbicacionDetalle(publicacion: publicacion),
                       _DescripcionDetalle(publicacion: publicacion),
-                      Divider(),
-                      LikesComentariosDetalle(publicacion: publicacion),
-                      Divider(),
+                      const Divider(),
+                      LikesCommentsDetails(
+                          publicacion: publicacion, likes: likes),
+                      const Divider(),
                       ListView.builder(
                         shrinkWrap: true,
                         physics: BouncingScrollPhysics(),
@@ -114,8 +105,8 @@ class _DetalleScreenState extends State<DetalleScreen> {
                         itemBuilder: (_, i) => _comentarios[i],
                         reverse: true,
                       ),
-                      Divider(),
-                      SizedBox(
+                      const Divider(),
+                      const SizedBox(
                         height: 80,
                       ),
                     ]),
@@ -136,8 +127,9 @@ class _DetalleScreenState extends State<DetalleScreen> {
   }
 
   Widget _inputComentario() {
-    final Publicacion publicacion =
-        ModalRoute.of(context)!.settings.arguments as Publicacion;
+    final Map<String, dynamic> mapNews =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final publicacion = mapNews['publicacion'] as Publicacion;
     return Opacity(
       opacity: 1,
       child: Container(
@@ -164,7 +156,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
                     hintText: 'Escribe un comentario',
                     filled: true,
                     fillColor: Colors.white30,
-                    contentPadding: EdgeInsets.only(
+                    contentPadding: const EdgeInsets.only(
                         left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
@@ -175,7 +167,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
+              margin: const EdgeInsets.symmetric(horizontal: 4.0),
               child: IconTheme(
                 data: IconThemeData(
                     color: Color(int.parse('0xFF${publicacion.color}'))),
@@ -185,7 +177,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
                   onPressed: _estaEscribiendo
                       ? () => _handleSubmit(_textController.text.trim())
                       : null,
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                 ),
               ),
             ),
@@ -198,7 +190,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
   _handleSubmit(String comentario) {
     if (comentario.length == 0) return;
     _textController.clear();
-    final newComment = CometarioPulbicacion(
+    final newComment = CommentPublication(
       comentario: comentario,
       nombre: authService.state.usuario!.nombre,
       fotoPerfil: 'da',
@@ -237,11 +229,16 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
 
   @override
   Widget build(BuildContext context) {
-    final Publicacion publicacion =
-        ModalRoute.of(context)!.settings.arguments as Publicacion;
+    final locationBloc = BlocProvider.of<LocationBloc>(context);
+    final Map<String, dynamic> mapNews =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final publicacion = mapNews['publicacion'] as Publicacion;
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+    final mapBloc = BlocProvider.of<MapBloc>(context);
+    LatLng? end;
     return Container(
       //aagregar un margen en el contenedor
-      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+      margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
       // color: Color(0xFF6165FA),
       child: Row(
         children: [
@@ -255,7 +252,7 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
               ),
             ),
             child: Container(
-              padding: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
               color: Color(int.parse('0xFF${publicacion.color}')),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -265,22 +262,22 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
                   Text(
                     DateFormat('MMMM d').format(DateTime.parse(
                         widget.publicacion.createdAt.toString())),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Row(
                     children: [
-                      Icon(FontAwesomeIcons.clock,
+                      const Icon(FontAwesomeIcons.clock,
                           size: 20, color: Colors.white),
-                      SizedBox(
+                      const SizedBox(
                         width: 5,
                       ),
                       Text(
                         DateFormat('HH:mm').format(DateTime.parse(
                             widget.publicacion.createdAt.toString())),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       )
                     ],
                   ),
@@ -290,34 +287,31 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.only(left: 10, right: 10, bottom: 6.5),
-              decoration: BoxDecoration(),
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 6.5),
+              decoration: const BoxDecoration(),
 
               // color: Color.fromARGB(255, 252, 81, 81),
-              child: Container(
-                // padding: EdgeInsets.only(bottom: 5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      barrio,
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                    Text(
-                      ciudad,
-                      style: TextStyle(color: Colors.black, fontSize: 12),
-                    ),
-                  ],
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    barrio,
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                  Text(
+                    ciudad,
+                    style: const TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ],
               ),
             ),
           ),
           GestureDetector(
             child: Container(
               height: 50,
-              margin: EdgeInsets.only(right: 10),
-              padding: EdgeInsets.only(left: 10, right: 10),
+              margin: const EdgeInsets.only(right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.black26,
@@ -326,21 +320,29 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Icon(
                     FontAwesomeIcons.mapLocationDot,
                     size: 20,
-                    color: Colors.black,
+                    color: Color(int.parse('0xFF${publicacion.color}')),
                   ),
-                  Text(
+                  const Text(
                     'Ver pin',
                     style: TextStyle(color: Colors.black, fontSize: 12),
                   ),
                 ],
               ),
             ),
-            onTap: () {
-              print('Ver en el mapa');
+            onTap: () async {
+              final start = locationBloc.state.lastKnownLocation;
+              if (start == null) return;
+              end = LatLng(publicacion.latitud, publicacion.longitud);
+              if (end == null) return;
+              final destination =
+                  await searchBloc.getCoorsStartToEnd(start, end!);
+              await mapBloc.drawRoutePolyline(destination);
+              Navigator.pop(context);
+              counterBloc.cambiarIndex(0);
             },
           )
         ],
@@ -392,18 +394,14 @@ class _CustonAppBarDetalle extends StatelessWidget {
         centerTitle: false,
         title: Text(
           publicacion.titulo,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         background: Swiper(
-          pagination: SwiperPagination(),
+          pagination: const SwiperPagination(),
           itemCount: publicacion.archivo!.length,
           itemBuilder: (BuildContext context, int index) {
             return Image.network(
-              Environment.apiUrl +
-                  "/uploads/publicaciones/" +
-                  publicacion.uid! +
-                  "?imagenIndex=" +
-                  publicacion.archivo![index],
+              "${Environment.apiUrl}/uploads/publicaciones/${publicacion.uid!}?imagenIndex=${publicacion.archivo![index]}",
               fit: BoxFit.cover,
             );
           },
@@ -421,10 +419,10 @@ class _DescripcionDetalle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       child: Text(
         publicacion.contenido,
-        style: TextStyle(fontSize: 16, color: Colors.black87),
+        style: const TextStyle(fontSize: 16, color: Colors.black87),
         textAlign: TextAlign.justify,
       ),
     );
