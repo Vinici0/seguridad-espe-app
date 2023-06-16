@@ -21,11 +21,10 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final _textController = TextEditingController();
-  final _focusNode = new FocusNode();
+  final _focusNode = FocusNode();
 
-  List<ChatMessage> _messages = [];
+  final List<ChatMessage> _messages = [];
   // Variable para almacenar la fecha del último mensaje
-  DateTime? _lastMessageDate;
 
   bool _estaEscribiendo = false;
 
@@ -59,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           uid: m.usuario,
           nombre: m.nombre,
           animationController: AnimationController(
-              vsync: this, duration: Duration(milliseconds: 0))
+              vsync: this, duration: const Duration(milliseconds: 0))
             ..forward()));
       setState(() {
         _messages.insertAll(0, history);
@@ -73,7 +72,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       texto: payload['mensaje'],
       uid: payload['de'],
       animationController: AnimationController(
-          vsync: this, duration: Duration(milliseconds: 300)),
+          vsync: this, duration: const Duration(milliseconds: 300)),
     );
     setState(() {
       _messages.insert(0, message);
@@ -97,7 +96,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                         '0xFF${chatProvider.state.salaSeleccionada.color.substring(0, 2)}DDBB${chatProvider.state.salaSeleccionada.color.substring(4)}')),
                     Color(int.parse(
                         '0xFF${chatProvider.state.salaSeleccionada.color}')),
-                    Color.fromARGB(255, 230, 116, 226),
+                    const Color.fromARGB(255, 230, 116, 226),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -251,7 +250,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       texto: texto,
       nombre: authService.state.usuario!.nombre,
       animationController: AnimationController(
-          vsync: this, duration: Duration(milliseconds: 200)),
+          vsync: this, duration: const Duration(milliseconds: 200)),
     );
     _messages.insert(0, newMessage);
     newMessage.animationController.forward();

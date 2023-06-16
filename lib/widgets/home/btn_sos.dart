@@ -11,13 +11,14 @@ class BtnSOS extends StatelessWidget {
       builder: (context, state) {
         return state.displayManualMarker
             ? const SizedBox()
-            : PositionedBtnSOS();
+            : const PositionedBtnSOS();
       },
     );
   }
 }
 
 class PositionedBtnSOS extends StatelessWidget {
+  const PositionedBtnSOS({super.key});
   @override
   Widget build(BuildContext context) {
     return Positioned(

@@ -90,7 +90,7 @@ class DetalleSalaScreen extends StatelessWidget {
                     ),
                     //miembros
                     Container(
-                      margin: EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 20),
                       child: const Text(
                         'Miembros',
                         style: TextStyle(

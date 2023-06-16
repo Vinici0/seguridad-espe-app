@@ -12,7 +12,7 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   final PublicacionService _publicacionService = PublicacionService();
   PublicationBloc()
       : super(PublicationState(
-            publicaciones: [],
+            publicaciones: const [],
             currentPublicacion: Publicacion(
               barrio: '',
               ciudad: '',

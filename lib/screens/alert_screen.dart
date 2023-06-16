@@ -195,7 +195,7 @@ class _AlertScreenState extends State<AlertScreen> {
                                     Container(
                                         // color: Color.fromARGB(255, 49, 67, 78),
                                         padding: const EdgeInsets.all(5),
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.location_on,
                                           color: Colors.white,
                                         ),
@@ -234,7 +234,7 @@ class _AlertScreenState extends State<AlertScreen> {
                   //Lista de imagenes selccinoadas de la galeria
 
                   imagefiles != null
-                      ? Container(
+                      ? SizedBox(
                           height: 80,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -246,7 +246,7 @@ class _AlertScreenState extends State<AlertScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.white,
                                 ),
-                                margin: EdgeInsets.all(5),
+                                margin: const EdgeInsets.all(5),
                                 width: 100,
                                 height: 100,
                                 child: Image.file(
@@ -273,7 +273,7 @@ class _AlertScreenState extends State<AlertScreen> {
                         child: Tooltip(
                           message: tooltipText,
                           child: Container(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: buttonColor,
@@ -287,7 +287,7 @@ class _AlertScreenState extends State<AlertScreen> {
                       ),
                       Container(
                         height: 43,
-                        margin: EdgeInsets.symmetric(vertical: 10),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Color(0xFF6165FA),
@@ -299,9 +299,9 @@ class _AlertScreenState extends State<AlertScreen> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text('Campo vacío'),
-                                    content:
-                                        Text('Por favor, escriba qué sucedió.'),
+                                    title: const Text('Campo vacío'),
+                                    content: const Text(
+                                        'Por favor, escriba qué sucedió.'),
                                     actions: [
                                       TextButton(
                                         child: const Text(

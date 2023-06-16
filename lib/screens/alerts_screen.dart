@@ -17,7 +17,7 @@ class AlertsScreen extends StatelessWidget {
           title: const Text("Reportar"),
           //color de la flcha de regreso blanco
           iconTheme: const IconThemeData(color: Colors.white),
-          backgroundColor: Color(0xFF111b21),
+          backgroundColor: const Color(0xFF111b21),
           bottom: const TabBar(
             tabs: [
               Tab(

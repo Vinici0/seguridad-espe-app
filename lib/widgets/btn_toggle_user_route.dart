@@ -14,7 +14,7 @@ class BtnToggleUserRoute extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       child: Material(
         elevation: 0,
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         child: CircleAvatar(
           backgroundColor: Colors.white,
           maxRadius: 25,

@@ -13,13 +13,13 @@ class Labels extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(text, style: TextStyle(color: Colors.black54)),
+        Text(text, style: const TextStyle(color: Colors.black54)),
         TextButton(
           onPressed: () {
             Navigator.pushReplacementNamed(context, ruta);
           },
-          child:
-              Text(text2, style: TextStyle(color: Colors.indigo, fontSize: 18)),
+          child: Text(text2,
+              style: const TextStyle(color: Colors.indigo, fontSize: 18)),
         ),
       ],
     );

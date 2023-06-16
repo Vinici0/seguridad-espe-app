@@ -17,23 +17,23 @@ class AuthService {
   final _storage =
       const FlutterSecureStorage(); // Instancia de FlutterSecureStorage para almacenar el token de forma segura
 
-  bool get autenticando => this._autenticando;
+  bool get autenticando => _autenticando;
   set autenticando(bool valor) {
-    this._autenticando = valor;
+    _autenticando = valor;
   }
 
   // Getters del token de forma estática
 // Getters del token de forma estática
   static Future<String?> getToken() async {
     // Obtener la instancia de SharedPreferences
-    final _storage = new FlutterSecureStorage();
-    final token = await _storage.read(key: 'token');
+    const storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
     return token;
   }
 
   // Inicia sesión con correo electrónico y contraseña
   Future<bool> login(String email, String password) async {
-    this.autenticando = true;
+    autenticando = true;
 
     final data = {
       'email': email,
@@ -47,18 +47,18 @@ class AuthService {
     final resp = await http.post(uri,
         body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
 
-    this.autenticando = false;
+    autenticando = false;
 
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);
-      this.usuario = loginResponse.usuario;
+      usuario = loginResponse.usuario;
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('online', this.usuario!.online);
-      await prefs.setString('email', this.usuario!.email);
-      await prefs.setString('nombre', this.usuario!.nombre);
-      await prefs.setString('uid', this.usuario!.uid);
+      await prefs.setBool('online', usuario!.online);
+      await prefs.setString('email', usuario!.email);
+      await prefs.setString('nombre', usuario!.nombre);
+      await prefs.setString('uid', usuario!.uid);
 
-      await this._guardarToken(loginResponse.token);
+      await _guardarToken(loginResponse.token);
 
       return true;
     } else {
@@ -67,7 +67,7 @@ class AuthService {
   }
 
   Future<bool> register(String nombre, String email, String password) async {
-    this.autenticando = true;
+    autenticando = true;
 
     final data = {
       'nombre': nombre,
@@ -83,20 +83,20 @@ class AuthService {
       headers: {'Content-Type': 'application/json'},
     );
 
-    this.autenticando = false;
+    autenticando = false;
 
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);
-      this.usuario = loginResponse.usuario;
+      usuario = loginResponse.usuario;
 
       final prefs = await SharedPreferences.getInstance();
-      prefs.setString('nombre', this.usuario!.nombre);
-      prefs.setString('email', this.usuario!.email);
-      prefs.setString('uid', this.usuario!.uid);
-      prefs.setBool('online', this.usuario!.online);
+      prefs.setString('nombre', usuario!.nombre);
+      prefs.setString('email', usuario!.email);
+      prefs.setString('uid', usuario!.uid);
+      prefs.setBool('online', usuario!.online);
 
       print("Cuenta creada con éxito");
-      print(this.usuario);
+      print(usuario);
 
       await _guardarToken(loginResponse.token);
 
@@ -119,7 +119,7 @@ class AuthService {
       }
     }
 
-    final token = await this._storage.read(key: 'token') ?? '';
+    final token = await _storage.read(key: 'token') ?? '';
 
     final resp = await http.get(Uri.parse('${Environment.apiUrl}/login/renew'),
         headers: {'Content-Type': 'application/json', 'x-token': token});
@@ -133,11 +133,11 @@ class AuthService {
       prefs.setString('uid', loginResponse.usuario.uid);
       //guarda el token en prefs
       prefs.setString('token', loginResponse.token);
-      this.usuario = loginResponse.usuario;
-      await this._guardarToken(loginResponse.token);
+      usuario = loginResponse.usuario;
+      await _guardarToken(loginResponse.token);
       return true;
     } else {
-      this.logout();
+      logout();
       return false;
     }
   }

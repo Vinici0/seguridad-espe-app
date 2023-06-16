@@ -161,6 +161,7 @@ class PhysicalModelCircleContainer extends StatelessWidget {
   final Color color;
 
   const PhysicalModelCircleContainer({
+    super.key,
     required this.icon,
     required this.text,
     required this.color,
@@ -189,7 +190,8 @@ class PhysicalModelCircleContainer extends StatelessWidget {
                 "assets/alertas/$icon",
                 fit: BoxFit.cover,
                 width: 50,
-                colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               ),
             ),
           ),

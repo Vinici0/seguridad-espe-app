@@ -12,7 +12,7 @@ class AuthRegisterEvent extends AuthEvent {
   final String password;
   final String nombre;
 
-  AuthRegisterEvent({
+  const AuthRegisterEvent({
     required this.email,
     required this.password,
     required this.nombre,
@@ -32,20 +32,20 @@ class AuthLoginEvent extends AuthEvent {
 }
 
 class AuthLogoutEvent extends AuthEvent {
-  AuthLogoutEvent();
+  const AuthLogoutEvent();
 }
 
 //init event
 class AuthInitEvent extends AuthEvent {
-  AuthInitEvent();
+  const AuthInitEvent();
 }
 
 //conect socket
 class AuthConectEvent extends AuthEvent {
-  AuthConectEvent();
+  const AuthConectEvent();
 }
 
 //disconnect socket
 class AuthDisconnectEvent extends AuthEvent {
-  AuthDisconnectEvent();
+  const AuthDisconnectEvent();
 }

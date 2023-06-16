@@ -40,7 +40,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
     searchBloc.getResultsByQuery(proximity!, query);
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        final places = state.history;
+        final places = state.places;
         return ListView.separated(
             itemBuilder: (_, i) {
               final place = places[i];
@@ -48,12 +48,14 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
                 leading: const Icon(Icons.place),
                 title: Text(place.textEs!),
                 subtitle: Text(place.placeNameEs!),
-                // onTap: () {
-                //   close(
-                //       context,
-                //       SearchResult(
-                //           cancel: false, manual: false, places: place));
-                // },
+                onTap: () {
+                  // close(
+                  //     context,
+                  //     SearchResult(
+                  //         cancel: false, manual: false, places: place));
+                  searchBloc.add(AddToHistoryEvent(place));
+                  print("Tapped");
+                },
               );
             },
             separatorBuilder: (_, i) => const Divider(),
@@ -65,6 +67,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   //Sugerencias que aparecen cuando la persona escribe en el buscador
   @override
   Widget buildSuggestions(BuildContext context) {
+    final history = BlocProvider.of<SearchBloc>(context).state.history;
     return ListView(
       children: [
         ListTile(
@@ -75,7 +78,19 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
             onTap: () {
               final result = SearchResult(cancel: false, manual: true);
               close(context, result);
-            })
+            }),
+        ...history
+            .map((place) => ListTile(
+                  leading: const Icon(Icons.history, color: Colors.black),
+                  title: Text(place.textEs!),
+                  subtitle: Text(place.placeNameEs!),
+                  // onTap: () {
+                  //   final result = SearchResult(
+                  //       cancel: false, manual: false, places: place);
+                  //   close(context, result);
+                  // },
+                ))
+            .toList()
       ],
     );
   }

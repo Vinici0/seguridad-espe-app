@@ -22,7 +22,7 @@ class CommentPublication extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -31,51 +31,52 @@ class CommentPublication extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  backgroundColor: Color(0xFF6165FA),
+                  backgroundColor: const Color(0xFF6165FA),
                   //Las dos primeras letras del nombre
                   child: Text(
                     nombre.substring(0, 2),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         nombre,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
 
                       //fecha de publicacion
                       Text(
                         fecha,
-                        style: TextStyle(fontSize: 12, color: Colors.black54),
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.black54),
                       ),
                     ],
                   ),
                 ),
-                Icon(
+                const Icon(
                   FontAwesomeIcons.heart,
                   size: 15,
                   color: Colors.black54,
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 Text(
                   likes.toString(),
-                  style: TextStyle(fontSize: 12, color: Colors.black54),
+                  style: const TextStyle(fontSize: 12, color: Colors.black54),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.only(left: 79),
             child: Text(
               comentario,
-              style: TextStyle(fontSize: 15, color: Colors.black87),
+              style: const TextStyle(fontSize: 15, color: Colors.black87),
               // textAlign: TextAlign.end,
             ),
           ),

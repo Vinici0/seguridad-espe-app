@@ -28,7 +28,7 @@ class CodigoAddGrupoScreen extends StatelessWidget {
                   color: Colors.white,
                   margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
                   //alineacion de los elementos a la izquierda
-                  child: GroupContenido(
+                  child: const GroupContenido(
                       textoHint: '000-000',
                       textoButton: 'Unirme al Grupo',
                       textoTitulo: 'Código',

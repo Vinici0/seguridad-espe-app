@@ -8,32 +8,32 @@ class SocketService {
   ServerStatus _serverStatus = ServerStatus.Connecting;
   late IO.Socket _socket;
 
-  ServerStatus get serverStatus => this._serverStatus;
+  ServerStatus get serverStatus => _serverStatus;
 
-  IO.Socket get socket => this._socket;
-  Function get emit => this._socket.emit;
+  IO.Socket get socket => _socket;
+  Function get emit => _socket.emit;
 
   void connect() async {
     final token = await AuthService.getToken();
 
     // Dart client
-    this._socket = IO.io(Environment.socketUrl, {
+    _socket = IO.io(Environment.socketUrl, {
       'transports': ['websocket'],
       'autoConnect': true,
       'forceNew': true,
       'extraHeaders': {'x-token': token}
     });
 
-    this._socket.on('connect', (_) {
-      this._serverStatus = ServerStatus.Online;
+    _socket.on('connect', (_) {
+      _serverStatus = ServerStatus.Online;
     });
 
-    this._socket.on('disconnect', (_) {
-      this._serverStatus = ServerStatus.Offline;
+    _socket.on('disconnect', (_) {
+      _serverStatus = ServerStatus.Offline;
     });
   }
 
   void disconnect() {
-    this._socket.disconnect();
+    _socket.disconnect();
   }
 }

@@ -22,7 +22,7 @@ class RoomsScreen extends StatelessWidget {
         title: const Text('Grupos',
             style: TextStyle(color: Colors.black, fontSize: 20)),
         elevation: 0.5,
-        actions: [IconModal()],
+        actions: const [IconModal()],
       ),
       body: Container(
         color: Colors.white,

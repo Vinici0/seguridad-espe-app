@@ -69,7 +69,7 @@ class GroupContenido extends StatelessWidget {
             : Container(),
         MaterialButton(
           minWidth: double.infinity,
-          color: Color(0xffF3F3F3),
+          color: const Color(0xffF3F3F3),
           onPressed: () {
             if (textoButton == 'Crear Grupo') {
               chatProvider.add(SalaCreateEvent(nomController.text));
@@ -79,7 +79,7 @@ class GroupContenido extends StatelessWidget {
             Navigator.pop(context);
           },
           child: Text(textoButton,
-              style: TextStyle(color: Color(0xFF6165FA), fontSize: 14)),
+              style: const TextStyle(color: Color(0xFF6165FA), fontSize: 14)),
         ),
       ],
     );

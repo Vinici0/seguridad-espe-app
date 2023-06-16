@@ -7,7 +7,8 @@ class PushNotificationService {
   //La instancia de firebase messaging para conocer el token y el estado de la app
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
   static String? token;
-  static StreamController<String> _messageStream = StreamController.broadcast();
+  static final StreamController<String> _messageStream =
+      StreamController.broadcast();
 
   static Stream<String> get messagesStream => _messageStream.stream;
 

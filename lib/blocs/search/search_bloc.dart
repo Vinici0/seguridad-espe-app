@@ -11,6 +11,7 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   TrafficService trafficService;
+  final _history = <Feature>[];
 
   SearchBloc({
     SearchState? initialState,
@@ -23,6 +24,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     on<OnNewPlacesFoundEvent>((event, emit) {
       emit(state.copyWith(history: event.places));
+    });
+
+    on<AddToHistoryEvent>((event, emit) {
+      emit(state.copyWith(history: [event.history, ...state.history]));
     });
   }
 

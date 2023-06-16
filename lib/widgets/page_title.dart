@@ -6,10 +6,10 @@ class PageTitle extends StatelessWidget {
     return SafeArea(
       bottom: false,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: const [
             Text('Classify transaction',
                 style: TextStyle(
                     fontSize: 20,

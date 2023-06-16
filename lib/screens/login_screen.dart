@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/mostrar_alerta.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
-import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_maps_adv/widgets/boton_login.dart';
 import 'package:flutter_maps_adv/widgets/custom_input.dart';
@@ -66,40 +65,37 @@ class __FromState extends State<_From> {
 
     final socketService = SocketService();
 
-    return Container(
-      child: Column(children: [
-        CustonInput(
-          icon: Icons.mail_outline,
-          placeholder: "Email",
-          keyboardType: TextInputType.emailAddress,
-          textController: emailController,
-        ),
-        CustonInput(
-          icon: Icons.lock_outline,
-          placeholder: "Password",
-          textController: passwordController,
-          isPassword: true,
-        ),
-        BotonForm(
-          text: "Ingrese",
-          onPressed: () async {
-            FocusScope.of(context).unfocus();
+    return Column(children: [
+      CustonInput(
+        icon: Icons.mail_outline,
+        placeholder: "Email",
+        keyboardType: TextInputType.emailAddress,
+        textController: emailController,
+      ),
+      CustonInput(
+        icon: Icons.lock_outline,
+        placeholder: "Password",
+        textController: passwordController,
+        isPassword: true,
+      ),
+      BotonForm(
+        text: "Ingrese",
+        onPressed: () async {
+          FocusScope.of(context).unfocus();
 
-            authBloc.add(AuthLoginEvent(
-                email: emailController.text,
-                password: passwordController.text));
+          authBloc.add(AuthLoginEvent(
+              email: emailController.text, password: passwordController.text));
 
-            socketService.connect();
-            if (await authBloc.apiAuthRepository
-                .login(emailController.text, passwordController.text)) {
-              Navigator.pushReplacementNamed(context, HomeScreen.homeroute);
-            } else {
-              mostrarAlerta(context, "Login incorrecto",
-                  "Revise sus credenciales nuevamente");
-            }
-          },
-        ),
-      ]),
-    );
+          socketService.connect();
+          if (await authBloc.apiAuthRepository
+              .login(emailController.text, passwordController.text)) {
+            Navigator.pushReplacementNamed(context, HomeScreen.homeroute);
+          } else {
+            mostrarAlerta(context, "Login incorrecto",
+                "Revise sus credenciales nuevamente");
+          }
+        },
+      ),
+    ]);
   }
 }

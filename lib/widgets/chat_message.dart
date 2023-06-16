@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
-import 'package:provider/provider.dart';
 
 class ChatMessage extends StatelessWidget {
   final String texto;
@@ -43,8 +42,8 @@ class ChatMessage extends StatelessWidget {
         //Para alinear el mensaje al lado derecho
         alignment: Alignment.centerRight,
         child: Container(
-          padding: EdgeInsets.all(8.0),
-          margin: EdgeInsets.only(right: 5, bottom: 5, left: 50
+          padding: const EdgeInsets.all(8.0),
+          margin: const EdgeInsets.only(right: 5, bottom: 5, left: 50
               //muy important el left para que no se sobreponga con el otro mensaje
               ),
           child: Text(
@@ -52,7 +51,7 @@ class ChatMessage extends StatelessWidget {
             style: TextStyle(color: Colors.white),
           ),
           decoration: BoxDecoration(
-              color: Color(0xFF6165FA),
+              color: const Color(0xFF6165FA),
               borderRadius: BorderRadius.circular(20)),
         ));
   }
@@ -67,18 +66,18 @@ class ChatMessage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 10.0),
             child: Text(
               this.nombre,
-              style: TextStyle(color: Colors.black87, fontSize: 10),
+              style: const TextStyle(color: Colors.black87, fontSize: 10),
             ),
           ),
           Container(
-            padding: EdgeInsets.all(8.0),
-            margin: EdgeInsets.only(left: 5, bottom: 5, right: 50),
+            padding: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.only(left: 5, bottom: 5, right: 50),
             child: Text(
               this.texto,
-              style: TextStyle(color: Colors.black87),
+              style: const TextStyle(color: Colors.black87),
             ),
             decoration: BoxDecoration(
-                color: Color(0xffE4E5E8),
+                color: const Color(0xffE4E5E8),
                 borderRadius: BorderRadius.circular(20)),
           )
         ],

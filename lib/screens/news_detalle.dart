@@ -100,7 +100,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
                       const Divider(),
                       ListView.builder(
                         shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         itemCount: _comentarios.length,
                         itemBuilder: (_, i) => _comentarios[i],
                         reverse: true,
@@ -145,7 +145,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
                   onSubmitted: _handleSubmit,
                   onChanged: (comentario) {
                     setState(() {
-                      if (comentario.length > 0) {
+                      if (comentario.isNotEmpty) {
                         _estaEscribiendo = true;
                       } else {
                         _estaEscribiendo = false;
@@ -188,7 +188,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
   }
 
   _handleSubmit(String comentario) {
-    if (comentario.length == 0) return;
+    if (comentario.isEmpty) return;
     _textController.clear();
     final newComment = CommentPublication(
       comentario: comentario,
@@ -369,7 +369,7 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
 // class from type SliverAppBar
 class _CustonAppBarDetalle extends StatelessWidget {
   final Publicacion publicacion;
-  const _CustonAppBarDetalle({Key? key, required this.publicacion});
+  const _CustonAppBarDetalle({required this.publicacion});
 
   @override
   Widget build(BuildContext context) {
@@ -424,7 +424,7 @@ class _CustonAppBarDetalle extends StatelessWidget {
 }
 
 class _DescripcionDetalle extends StatelessWidget {
-  const _DescripcionDetalle({super.key, required this.publicacion});
+  const _DescripcionDetalle({required this.publicacion});
 
   final Publicacion publicacion;
 

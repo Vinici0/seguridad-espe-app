@@ -11,10 +11,10 @@ class MienbrosChatScreen extends StatelessWidget {
     final chatProvider = BlocProvider.of<RoomBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black87),
+        iconTheme: const IconThemeData(color: Colors.black87),
         centerTitle: false,
         elevation: 0.5,
-        title: Text('Miembros del Grupo',
+        title: const Text('Miembros del Grupo',
             //alinea a la izquierda
             style: TextStyle(color: Colors.black, fontSize: 20)),
       ),
@@ -30,7 +30,7 @@ class MienbrosChatScreen extends StatelessWidget {
                   chatProvider.state.usuariosSala[index].nombre
                       .substring(0, 2)
                       .toUpperCase(),
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color.fromARGB(255, 255, 255, 255),
                     fontWeight: FontWeight.bold,
                   ),
@@ -38,14 +38,14 @@ class MienbrosChatScreen extends StatelessWidget {
               ),
               title: Text(
                 chatProvider.state.usuariosSala[index].nombre,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black87,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               subtitle: Text(
                 chatProvider.state.usuariosSala[index].email,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black87,
                 ),
               ),

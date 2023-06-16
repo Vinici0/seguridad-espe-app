@@ -32,16 +32,16 @@ class _BtnReport extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
             width: width * 0.95,
             height: 40,
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 //largor del boton
 
-                backgroundColor: Color(0xFF6165FA),
+                backgroundColor: const Color(0xFF6165FA),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 // padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
@@ -51,8 +51,9 @@ class _BtnReport extends StatelessWidget {
                 Navigator.pushNamed(context, AlertsScreen.routeName);
               },
               //icono de una campana de aleerta
-              icon: Icon(FontAwesomeIcons.fire, size: 16, color: Colors.white),
-              label: Text("REPORTAR",
+              icon: const Icon(FontAwesomeIcons.fire,
+                  size: 16, color: Colors.white),
+              label: const Text("REPORTAR",
                   style: TextStyle(fontSize: 16, color: Colors.white)),
             ),
           ),

@@ -7,7 +7,8 @@ class MapView extends StatelessWidget {
   final LatLng initialLocation;
   final Set<Polyline> polylines;
 
-  MapView({super.key, required this.initialLocation, required this.polylines});
+  const MapView(
+      {super.key, required this.initialLocation, required this.polylines});
 
   @override
   Widget build(BuildContext context) {

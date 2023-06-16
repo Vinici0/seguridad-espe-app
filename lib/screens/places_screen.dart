@@ -41,9 +41,9 @@ class PlacesScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 20, left: 20),
+                margin: const EdgeInsets.only(top: 20, left: 20),
                 width: MediaQuery.of(context).size.width * 0.95,
-                child: Text(
+                child: const Text(
                   "Agrega direcciones para mantenerte informado de lo que sucede alrededor de tus seres queridos y protegelos.",
                   style: TextStyle(
                     color: Colors.black45,
@@ -78,29 +78,27 @@ class PlacesScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Divider(
+              const Divider(
                 color: Colors.black12,
                 thickness: 1,
               ),
-              Container(
-                child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: lugares.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(lugares[index].ciudad),
-                      subtitle: Text(lugares[index].barrio),
-                      trailing: Icon(Icons.arrow_forward_ios),
-                      onTap: () {
-                        // Navigator.pushNamed(context, 'lugardetail',
-                        //     arguments: lugares[index]);
-                      },
-                    );
-                  },
-                ),
+              ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: lugares.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(lugares[index].ciudad),
+                    subtitle: Text(lugares[index].barrio),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      // Navigator.pushNamed(context, 'lugardetail',
+                      //     arguments: lugares[index]);
+                    },
+                  );
+                },
               ),
-              Divider(
+              const Divider(
                 color: Colors.black12,
                 thickness: 1,
               ),

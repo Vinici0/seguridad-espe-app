@@ -17,6 +17,6 @@ class OnNewPlacesFoundEvent extends SearchEvent {
 }
 
 class AddToHistoryEvent extends SearchEvent {
-  final Feature place;
-  const AddToHistoryEvent(this.place);
+  final Feature history;
+  const AddToHistoryEvent(this.history);
 }

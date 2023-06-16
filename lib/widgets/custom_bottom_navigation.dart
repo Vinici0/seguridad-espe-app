@@ -11,7 +11,7 @@ class CustomBottomNavigation extends StatelessWidget {
           return BottomNavigationBar(
             showSelectedLabels: true,
             showUnselectedLabels: true,
-            selectedItemColor: Color(0xFF6165FA),
+            selectedItemColor: const Color(0xFF6165FA),
             type: BottomNavigationBarType.fixed,
             backgroundColor: Colors.white,
             elevation: 0.5,

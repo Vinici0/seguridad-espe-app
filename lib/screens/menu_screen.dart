@@ -22,12 +22,12 @@ class _MenuScreenState extends State<MenuScreen> {
     Position? currentPosition;
     String name = '';
     String ciudad = '';
-    final _textController = new TextEditingController();
-    final ImagePicker imgpicker = ImagePicker();
-    List<String>? imagePaths;
-    List<XFile>? imagefiles;
-    bool isPressed = false;
-    bool _estaEscribiendo = false;
+    // final _textController =  TextEditingController();
+    // final ImagePicker imgpicker = ImagePicker();
+    // List<String>? imagePaths;
+    // List<XFile>? imagefiles;
+    // bool isPressed = false;
+    // bool _estaEscribiendo = false;
 
     Future<void> _getCurrentLocation() async {
       try {
@@ -64,46 +64,46 @@ class _MenuScreenState extends State<MenuScreen> {
       body: Column(
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 50,
             backgroundImage: AssetImage('assets/perroPerdido.jpg'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             authBloc.state.usuario!.nombre,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 20,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           buildInfoRow(Icons.location_on, 'Dirección', Colors.black45, 14),
-          Divider(height: 20, thickness: 2),
+          const Divider(height: 20, thickness: 2),
           buildInfoRow(Icons.phone, 'Teléfono', Colors.black45, 14),
-          Divider(height: 20, thickness: 2),
+          const Divider(height: 20, thickness: 2),
           buildInfoRow(Icons.email, 'Correo', Colors.black45, 14),
-          Divider(height: 20, thickness: 2),
-          SizedBox(height: 20),
+          const Divider(height: 20, thickness: 2),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               BlocProvider.of<AuthBloc>(context).add(AuthLogoutEvent());
               Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => LoadingLoginScreen(),
-                      transitionDuration: Duration(milliseconds: 0)));
+                      pageBuilder: (_, __, ___) => const LoadingLoginScreen(),
+                      transitionDuration: const Duration(milliseconds: 0)));
             },
-            child: Text(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Text(
               'Cerrar Sesión',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              primary: Colors.red,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
               ),
             ),
           ),
@@ -115,12 +115,12 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget buildInfoRow(
       IconData icon, String text, Color textColor, double fontSize) {
     return Container(
-      margin: EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, color: Colors.black54),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Row(
             children: [
               Text(
