@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/models/search_result.dart';
 
 class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
@@ -31,7 +34,32 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   //Cuando se selecciona una opcion del buscador
   @override
   Widget buildResults(BuildContext context) {
-    return const Text('buildResults');
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
+    final proximity =
+        BlocProvider.of<LocationBloc>(context).state.lastKnownLocation;
+    searchBloc.getResultsByQuery(proximity!, query);
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        final places = state.history;
+        return ListView.separated(
+            itemBuilder: (_, i) {
+              final place = places[i];
+              return ListTile(
+                leading: const Icon(Icons.place),
+                title: Text(place.textEs!),
+                subtitle: Text(place.placeNameEs!),
+                // onTap: () {
+                //   close(
+                //       context,
+                //       SearchResult(
+                //           cancel: false, manual: false, places: place));
+                // },
+              );
+            },
+            separatorBuilder: (_, i) => const Divider(),
+            itemCount: places.length);
+      },
+    );
   }
 
   //Sugerencias que aparecen cuando la persona escribe en el buscador
@@ -45,7 +73,6 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
             title: const Text('Colocar la ubicación manualmente',
                 style: TextStyle(color: Colors.black)),
             onTap: () {
-              //TODO: Retornar algo
               final result = SearchResult(cancel: false, manual: true);
               close(context, result);
             })

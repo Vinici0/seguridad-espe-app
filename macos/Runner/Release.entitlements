@@ -4,9 +4,9 @@
 	<dict>
 		<key>com.apple.security.app-sandbox</key>
 		<true />
-		<key>com.apple.developer.associated-domains</key>
+		<!-- <key>com.apple.developer.associated-domains</key>
 		<array>
 			<string>applinks:vinicio2000B.com</string>
-		</array>
+		</array> -->
 	</dict>
 </plist>

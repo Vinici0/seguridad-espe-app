@@ -22,8 +22,8 @@ class DetalleScreen extends StatefulWidget {
 }
 
 class _DetalleScreenState extends State<DetalleScreen> {
-  List<CommentPublication> _comentarios = [
-    CommentPublication(
+  final List<CommentPublication> _comentarios = [
+    const CommentPublication(
       comentario:
           'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
       nombre: 'Juan',
@@ -33,7 +33,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
       totalComentarios: 2,
       uid: 'ad',
     ),
-    CommentPublication(
+    const CommentPublication(
       comentario:
           'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
       nombre: 'Juan',
@@ -43,7 +43,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
       totalComentarios: 2,
       uid: 'ad',
     ),
-    CommentPublication(
+    const CommentPublication(
       comentario:
           'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
       nombre: 'Juan',
@@ -53,7 +53,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
       totalComentarios: 2,
       uid: 'ad',
     ),
-    CommentPublication(
+    const CommentPublication(
       comentario:
           'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
       nombre: 'Juan',
@@ -65,7 +65,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
     ),
   ];
   AuthBloc authService = AuthBloc();
-  final _textController = new TextEditingController();
+  final _textController = TextEditingController();
   bool _estaEscribiendo = false;
 
   @override
@@ -327,7 +327,7 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
                     color: Color(int.parse('0xFF${publicacion.color}')),
                   ),
                   const Text(
-                    'Ver pin',
+                    'Ver mapa',
                     style: TextStyle(color: Colors.black, fontSize: 12),
                   ),
                 ],
@@ -385,6 +385,18 @@ class _CustonAppBarDetalle extends StatelessWidget {
     }
 
     return SliverAppBar(
+      //color del appbar al regresar sobre negrea transparencia
+
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+        shadows: [
+          Shadow(
+            blurRadius: 18.0,
+            color: Colors.black,
+            offset: Offset(1.0, 1.0),
+          ),
+        ],
+      ),
       elevation: 2,
       backgroundColor: Color(int.parse('0xFF${publicacion.color}')),
       expandedHeight: size.height * 0.40,

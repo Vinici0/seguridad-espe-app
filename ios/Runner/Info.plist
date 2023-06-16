@@ -11,12 +11,12 @@
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Necesita acceso al microfono</string>
 
-		<key>CFBundleURLName</key>
+		<!-- <key>CFBundleURLName</key>
 		<string>vinicio2000B.com</string>
 		<key>CFBundleURLSchemes</key>
 		<array>
 			<string>vinicio2000B</string>
-		</array>
+		</array> -->
 
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>This app needs access to location when open.</string>

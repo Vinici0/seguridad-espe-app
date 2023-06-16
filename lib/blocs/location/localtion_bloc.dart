@@ -35,13 +35,11 @@ class LocationBloc extends Bloc<LocaltionEvent, LocaltionState> {
 
   Future getCurrentLocation() async {
     if (!_gpsBloc.state.isAllGranted) {
-      print("No se puede obtener la ubicación");
       return;
     }
 
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!isLocationServiceEnabled) {
-      print("Los servicios de ubicación no están habilitados.");
       // Aquí puedes mostrar un mensaje al usuario o redirigirlo a la configuración de ubicación del dispositivo para que pueda habilitar los servicios de ubicación.
       return;
     }

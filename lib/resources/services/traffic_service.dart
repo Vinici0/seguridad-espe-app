@@ -12,46 +12,54 @@ class TrafficService {
   final String _baseTrafficUrl = 'api.mapbox.com';
 
   Future<TrafficResponse> getCoorsStartToEnd(LatLng start, LatLng end) async {
-    final coorsString =
-        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}';
+    try {
+      final coorsString =
+          '${start.longitude},${start.latitude};${end.longitude},${end.latitude}';
 
-    final queryParams = {
-      'alternatives': 'true',
-      'geometries': 'polyline6',
-      'overview': 'simplified',
-      'steps': 'false',
-      'access_token': accessToken,
-    };
-    final url = Uri.https(_baseTrafficUrl,
-        'directions/v5/mapbox/driving/$coorsString', queryParams);
+      final queryParams = {
+        'alternatives': 'true',
+        'geometries': 'polyline6',
+        'overview': 'simplified',
+        'steps': 'false',
+        'access_token': accessToken,
+      };
+      final url = Uri.https(_baseTrafficUrl,
+          'directions/v5/mapbox/driving/$coorsString', queryParams);
 
-    final response = await http.get(
-      url,
-    );
-    final decodedData = json.decode(response.body);
-    final data = TrafficResponse.fromMap(decodedData);
-    return data;
+      final response = await http.get(url);
+      final decodedData = json.decode(response.body);
+      final data = TrafficResponse.fromMap(decodedData);
+      return data;
+    } catch (error) {
+      print('Error getting coors: $error');
+      return TrafficResponse(routes: [], waypoints: [], code: '', uuid: '');
+    }
   }
 
   Future<List<Feature>> getResultsByQuery(
       LatLng proximity, String query) async {
-    if (query.isEmpty) return [];
+    try {
+      if (query.isEmpty) return [];
 
-    final queryParams = {
-      'access_token': accessToken,
-      'autocomplete': 'true',
-      'proximity': '${proximity.longitude},${proximity.latitude}',
-      'language': 'es',
-      "limit": "5",
-      "country": "ec"
-    };
+      final queryParams = {
+        'access_token': accessToken,
+        'autocomplete': 'true',
+        'proximity': '${proximity.longitude},${proximity.latitude}',
+        'language': 'es',
+        "limit": "5",
+        "country": "ec"
+      };
 
-    final url = Uri.https(_baseTrafficUrl,
-        '/geocoding/v5/mapbox.places/mapbox.places/$query.json', queryParams);
+      final url = Uri.https(_baseTrafficUrl,
+          '/geocoding/v5/mapbox.places/mapbox.places/$query.json', queryParams);
 
-    final response = await http.get(url);
-    final decodedData = json.decode(response.body);
-    final placesResponse = PlacesResponse.fromJson(decodedData.data);
-    return placesResponse.features;
+      final response = await http.get(url);
+      // final decodedData = json.decode(response.body);
+      final placesResponse = PlacesResponse.fromJson(response.body);
+      return placesResponse.features;
+    } catch (error) {
+      print('Error getting query results: $error');
+      return [];
+    }
   }
 }

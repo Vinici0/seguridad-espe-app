@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_maps_adv/widgets/group_contenido.dart';
 
 class CodigoCreateGrupoScreen extends StatelessWidget {
-  static final String codigoGruporoute = 'codigoGrupo';
+  static const String codigoGruporoute = 'codigoGrupo';
 
   const CodigoCreateGrupoScreen({
     Key? key,
@@ -14,8 +14,8 @@ class CodigoCreateGrupoScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: false,
         elevation: 0.5,
-        iconTheme: IconThemeData(color: Colors.black87),
-        title: Text('Crear Grupo',
+        iconTheme: const IconThemeData(color: Colors.black87),
+        title: const Text('Crear Grupo',
             //alinea a la izquierda
             style: TextStyle(color: Colors.black87, fontSize: 20)),
       ),
@@ -26,7 +26,7 @@ class CodigoCreateGrupoScreen extends StatelessWidget {
               margin: const EdgeInsets.only(left: 10, top: 10, right: 10),
               //alineacion de los elementos a la izquierda
               color: Colors.white,
-              child: GroupContenido(
+              child: const GroupContenido(
                 textoHint: 'Nombre del grupo',
                 textoButton: 'Crear Grupo',
                 textoTitulo: 'Nombre',

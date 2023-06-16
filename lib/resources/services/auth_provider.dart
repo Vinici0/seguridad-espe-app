@@ -15,7 +15,7 @@ class AuthService {
   bool _autenticando = false;
 
   final _storage =
-      new FlutterSecureStorage(); // Instancia de FlutterSecureStorage para almacenar el token de forma segura
+      const FlutterSecureStorage(); // Instancia de FlutterSecureStorage para almacenar el token de forma segura
 
   bool get autenticando => this._autenticando;
   set autenticando(bool valor) {

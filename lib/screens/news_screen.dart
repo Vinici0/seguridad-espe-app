@@ -9,8 +9,7 @@ import 'package:flutter_maps_adv/screens/news_detalle.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:uni_links/uni_links.dart';
+// import 'package:uni_links/uni_links.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NewsScreen extends StatefulWidget {
@@ -29,21 +28,21 @@ class _NewsScreenState extends State<NewsScreen> {
   void initState() {
     _publicationBloc = BlocProvider.of<PublicationBloc>(context);
     _publicationBloc.add(PublicacionesInitEvent());
-    initUniLinks();
+    // initUniLinks();
 
     super.initState();
   }
 
   final ScrollController _firstController = ScrollController();
-  Future<void> initUniLinks() async {
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      final initialLink = await getInitialLink();
-      print('initialLink: $initialLink');
-    } on PlatformException {
-      // Manejar la excepción PlatformException si es necesario
-    }
-  }
+  // Future<void> initUniLinks() async {
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     // final initialLink = await getInitialLink();
+  //     // print('initialLink: $initialLink');
+  //   } on PlatformException {
+  //     // Manejar la excepción PlatformException si es necesario
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +115,11 @@ class _NewsScreenState extends State<NewsScreen> {
                                 ),
                                 SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.6,
+                                      MediaQuery.of(context).size.width * 0.50,
                                   child: Text(
                                     publicaciones[i].titulo,
                                     style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black87),
                                   ),

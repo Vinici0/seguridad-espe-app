@@ -34,10 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
                 return IndexedStack(
                   index: counterBloc.index,
-                  children: [
+                  children: const [
                     //if counterBloc
                     // Center(child: Text("Home")),
-                    const LoadingMapScreen(),
+                    LoadingMapScreen(),
                     NewsScreen(),
 
                     // GruposScreen(),

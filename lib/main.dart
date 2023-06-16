@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final Color myPurpleColor = Color(0xFF6165FA);
+    Color myPurpleColor = const Color(0xFF6165FA);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MapApp',

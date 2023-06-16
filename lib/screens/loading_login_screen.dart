@@ -1,7 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
-import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
 
@@ -37,15 +38,15 @@ class LoadingLoginScreen extends StatelessWidget {
       Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-              pageBuilder: (_, __, ___) => HomeScreen(),
-              transitionDuration: Duration(milliseconds: 0)));
+              pageBuilder: (_, __, ___) => const HomeScreen(),
+              transitionDuration: const Duration(milliseconds: 0)));
     } else {
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-              pageBuilder: (_, __, ___) => LoginScreen(),
-              transitionDuration: Duration(milliseconds: 0)));
+              pageBuilder: (_, __, ___) => const LoginScreen(),
+              transitionDuration: const Duration(milliseconds: 0)));
     }
   }
 }

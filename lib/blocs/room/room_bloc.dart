@@ -14,13 +14,13 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   final ChatProvider _chatProvider = ChatProvider();
   RoomBloc()
       : super(RoomState(
-            salas: [],
-            mensajesSalas: [],
+            salas: const [],
+            mensajesSalas: const [],
             salaSeleccionada: Sala(
                 nombre: '', codigo: '', color: '', uid: '', propietario: ''),
             isLoading: false,
             isError: false,
-            usuariosSala: [])) {
+            usuariosSala: const [])) {
     on<SalasInitEvent>(salasInitEvent);
     on<ChatInitEvent>(chatInitEvent);
     on<SalaCreateEvent>(salaCreateEvent);

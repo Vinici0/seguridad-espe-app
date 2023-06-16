@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_maps_adv/widgets/group_contenido.dart';
 
 class CodigoAddGrupoScreen extends StatelessWidget {
-  static final String codigoAddGruporoute = 'codigoGrupoAdd';
+  static const String codigoAddGruporoute = 'codigoGrupoAdd';
 
   final TextEditingController nomController = TextEditingController();
 
@@ -12,9 +12,9 @@ class CodigoAddGrupoScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: false,
         //color de la flecha de regreso
-        iconTheme: IconThemeData(color: Colors.black87),
+        iconTheme: const IconThemeData(color: Colors.black87),
         elevation: 0.5,
-        title: Text('Unirse a un Grupo',
+        title: const Text('Unirse a un Grupo',
             //alinea a la izquierda
             style: TextStyle(color: Colors.black87, fontSize: 20)),
       ),

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_maps_adv/models/places_models.dart';
 import 'package:flutter_maps_adv/models/route_destination.dart';
 import 'package:flutter_maps_adv/resources/services/traffic_service.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
@@ -19,6 +20,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         (event, emit) => emit(state.copyWith(displayManualMarker: true)));
     on<OnDeactivateManualMarkerEvent>(
         (event, emit) => emit(state.copyWith(displayManualMarker: false)));
+
+    on<OnNewPlacesFoundEvent>((event, emit) {
+      emit(state.copyWith(history: event.places));
+    });
   }
 
   Future<RouteDestination> getCoorsStartToEnd(LatLng start, LatLng end) async {
@@ -37,5 +42,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     return RouteDestination(
         points: latLngList, duration: duration, distance: distance);
+  }
+
+  Future<List<Feature>> getResultsByQuery(
+      LatLng proximity, String query) async {
+    final results = await trafficService.getResultsByQuery(proximity, query);
+    add(OnNewPlacesFoundEvent(results));
+    return results;
   }
 }
