@@ -23,7 +23,7 @@ class ConfigScreen extends StatelessWidget {
           return MaterialButton(
             child: Text('Cerrar sesion ${state.usuario?.nombre}'),
             onPressed: () {
-              BlocProvider.of<AuthBloc>(context).add(AuthLogoutEvent());
+              BlocProvider.of<AuthBloc>(context).add(const AuthLogoutEvent());
               Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(

@@ -11,7 +11,8 @@ class CommentPublication extends StatelessWidget {
   final int totalComentarios;
 
   const CommentPublication(
-      {required this.uid,
+      {super.key,
+      required this.uid,
       required this.comentario,
       required this.nombre,
       required this.fotoPerfil,

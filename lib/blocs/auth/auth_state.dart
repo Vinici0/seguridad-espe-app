@@ -2,26 +2,25 @@ part of 'auth_bloc.dart';
 
 class AuthState extends Equatable {
   final Usuario? usuario;
-  final bool existeUsuario;
+  final List<Ubicacion> ubicaciones;
 
   const AuthState({
-    usuario,
-    autenticando,
-  })  : usuario = usuario ?? null,
-        existeUsuario = (usuario != null) ? true : false;
+    this.usuario,
+    required this.ubicaciones,
+  });
 
   AuthState copyWith({
     Usuario? usuario,
-    bool? autenticando,
+    List<Ubicacion>? ubicaciones,
   }) =>
       AuthState(
         usuario: usuario ?? this.usuario,
-        autenticando: autenticando ?? this.existeUsuario,
+        ubicaciones: ubicaciones ?? this.ubicaciones,
       );
 
   @override
   List<Object?> get props => [
-        usuario ?? null,
-        existeUsuario,
+        usuario,
+        ubicaciones,
       ];
 }

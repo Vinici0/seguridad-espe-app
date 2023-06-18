@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_maps_adv/models/places_models.dart';
+import 'package:flutter_maps_adv/models/ubicacion.dart';
 import 'package:flutter_maps_adv/models/route_destination.dart';
 import 'package:flutter_maps_adv/resources/services/traffic_service.dart';
 import 'package:google_polyline_algorithm/google_polyline_algorithm.dart';
@@ -22,12 +23,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<OnDeactivateManualMarkerEvent>(
         (event, emit) => emit(state.copyWith(displayManualMarker: false)));
 
-    on<OnNewPlacesFoundEvent>((event, emit) {
-      emit(state.copyWith(history: event.places));
+    on<OnNewUbicacionFoundEvent>((event, emit) {
+      emit(state.copyWith(ubicacion: event.ubicacion));
     });
 
     on<AddToHistoryEvent>((event, emit) {
       emit(state.copyWith(history: [event.history, ...state.history]));
+    });
+
+    on<AddUbicacionByUserEvent>((event, emit) async {
+      final newUbicacion = await trafficService.addUbicacionByUser(event.id);
+      if (newUbicacion == null) return;
+      emit(state.copyWith(ubicacion: [newUbicacion, ...state.ubicacion]));
     });
   }
 
@@ -49,10 +56,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         points: latLngList, duration: duration, distance: distance);
   }
 
-  Future<List<Feature>> getResultsByQuery(
-      LatLng proximity, String query) async {
-    final results = await trafficService.getResultsByQuery(proximity, query);
-    add(OnNewPlacesFoundEvent(results));
+  Future<List<Ubicacion>> getResultsByQueryUbicacion(String query) async {
+    final results = await trafficService.getResultsByQueryUbicacion(query);
+    add(OnNewUbicacionFoundEvent(results));
     return results;
+  }
+
+  Future<List<Feature>> getHistory() async {
+    return _history;
   }
 }

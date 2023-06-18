@@ -212,10 +212,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             margin: const EdgeInsets.symmetric(horizontal: 4.0),
             child: Platform.isIOS
                 ? CupertinoButton(
-                    child: const Text('Enviar'),
                     onPressed: _estaEscribiendo
                         ? () => _handleSubmit(_textController.text.trim())
                         : null,
+                    child: const Text('Enviar'),
                   )
                 : Container(
                     margin: const EdgeInsets.symmetric(horizontal: 4.0),

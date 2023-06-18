@@ -20,12 +20,8 @@ class PublicacionService {
     });
 
     final publicacionesData = json.decode(resp.body);
-    final publicacionesResp = publicacionesData['publicaciones'];
-    List<Publicacion> publicaciones = [];
-    for (var publicacion in publicacionesResp) {
-      publicaciones.add(Publicacion.fromMap(publicacion));
-    }
-    return publicaciones;
+    final publicacionesResp = PublicacionResponse.fromMap(publicacionesData);
+    return publicacionesResp.publicacion;
   }
 
   //update publicacion

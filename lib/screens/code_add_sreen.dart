@@ -6,6 +6,8 @@ class CodigoAddGrupoScreen extends StatelessWidget {
 
   final TextEditingController nomController = TextEditingController();
 
+  CodigoAddGrupoScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

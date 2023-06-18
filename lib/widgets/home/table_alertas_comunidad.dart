@@ -103,6 +103,7 @@ class PhysicalModelCircleContainer extends StatelessWidget {
   final Color color;
 
   const PhysicalModelCircleContainer({
+    super.key,
     required this.icon,
     required this.text,
     required this.color,

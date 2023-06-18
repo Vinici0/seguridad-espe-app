@@ -54,9 +54,6 @@ class _ManualMarkerBody extends StatelessWidget {
                 duration: const Duration(milliseconds: 300),
                 child: MaterialButton(
                   minWidth: size.width - 120,
-                  child: const Text('Confimar destino',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w300)),
                   color: Colors.black,
                   elevation: 0,
                   height: 50,
@@ -80,6 +77,9 @@ class _ManualMarkerBody extends StatelessWidget {
 
                     Navigator.pop(context);
                   },
+                  child: const Text('Confimar destino',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w300)),
                 ),
               )),
         ],

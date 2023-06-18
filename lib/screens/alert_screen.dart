@@ -195,10 +195,6 @@ class _AlertScreenState extends State<AlertScreen> {
                                     Container(
                                         // color: Color.fromARGB(255, 49, 67, 78),
                                         padding: const EdgeInsets.all(5),
-                                        child: const Icon(
-                                          Icons.location_on,
-                                          color: Colors.white,
-                                        ),
                                         decoration: const BoxDecoration(
                                           color:
                                               Color.fromARGB(255, 49, 67, 78),
@@ -206,6 +202,10 @@ class _AlertScreenState extends State<AlertScreen> {
                                               //bordes redondeados
                                               topLeft: Radius.circular(10),
                                               bottomLeft: Radius.circular(10)),
+                                        ),
+                                        child: const Icon(
+                                          Icons.location_on,
+                                          color: Colors.white,
                                         )),
                                     //icono con texto de ubicacion
                                     Container(
@@ -290,7 +290,7 @@ class _AlertScreenState extends State<AlertScreen> {
                         margin: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color(0xFF6165FA),
+                          color: const Color(0xFF6165FA),
                         ),
                         child: MaterialButton(
                           onPressed: () async {

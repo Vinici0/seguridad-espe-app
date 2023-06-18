@@ -86,7 +86,7 @@ class _MenuScreenState extends State<MenuScreen> {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              BlocProvider.of<AuthBloc>(context).add(AuthLogoutEvent());
+              BlocProvider.of<AuthBloc>(context).add(const AuthLogoutEvent());
               Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(

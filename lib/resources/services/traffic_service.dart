@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/places_models.dart';
 import 'package:flutter_maps_adv/models/traffic_response.dart';
+import 'package:flutter_maps_adv/models/ubicacion.dart';
+import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
 
@@ -60,6 +63,38 @@ class TrafficService {
     } catch (error) {
       print('Error getting query results: $error');
       return [];
+    }
+  }
+
+  Future<List<Ubicacion>> getResultsByQueryUbicacion(String query) async {
+    final uri = Uri.parse('${Environment.apiUrl}/buscar/ubicaciones/$query');
+
+    final resp = await http.get(uri, headers: {
+      'Content-Type': 'application/json',
+      'x-token': await AuthService.getToken() as String,
+    });
+
+    final ubicacionesData = json.decode(resp.body);
+    final ubicaciones = UbicacionResponse.fromMap(ubicacionesData);
+    return ubicaciones.ubicacion;
+  }
+
+  //put ubcacion add
+  Future<Ubicacion> addUbicacionByUser(String idUbicacion) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/ubicaciones/$idUbicacion');
+
+      final resp = await http.put(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+
+      final ubicacionData = json.decode(resp.body);
+      final ubicacion = Ubicacion.fromMap(ubicacionData);
+      return ubicacion;
+    } catch (e) {
+      print('Error adding ubicacion: $e');
+      rethrow;
     }
   }
 }

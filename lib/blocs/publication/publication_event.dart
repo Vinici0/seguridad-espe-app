@@ -9,17 +9,6 @@ abstract class PublicationEvent extends Equatable {
 
 class PublicacionesInitEvent extends PublicationEvent {}
 
-/*
-                                        final resul = await publicaciones.createPublicacion(
-                              reporte.tipo,
-                              _textController.text,
-                              reporte.color,
-                              reporte.icon,
-                              false,
-                              true,
-                              authService.state.usuario!.uid,
-                            );
-                             */
 class PublicacionesCreateEvent extends PublicationEvent {
   final String tipo;
   final String descripcion;

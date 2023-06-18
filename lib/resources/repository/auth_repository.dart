@@ -1,3 +1,4 @@
+import 'package:flutter_maps_adv/models/ubicacion.dart';
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 
 class ApiUserRepository {
@@ -27,6 +28,12 @@ class ApiUserRepository {
 
   set autenticando(bool valor) {
     _authService.autenticando = valor;
+  }
+
+  List<Ubicacion> get ubicaciones => _authService.ubicaciones ?? [];
+
+  set ubicaciones(List<Ubicacion> ubicaciones) {
+    _authService.ubicaciones = ubicaciones;
   }
 
   Future<void> logout() async {

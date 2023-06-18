@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_maps_adv/models/ubicacion.dart';
 import 'package:flutter_maps_adv/resources/services/push_notifications_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -12,29 +13,24 @@ import 'package:flutter_maps_adv/models/usuario.dart';
 
 class AuthService {
   Usuario? usuario;
+  List<Ubicacion>? ubicaciones;
   bool _autenticando = false;
 
-  final _storage =
-      const FlutterSecureStorage(); // Instancia de FlutterSecureStorage para almacenar el token de forma segura
+  final _storage = const FlutterSecureStorage();
 
   bool get autenticando => _autenticando;
   set autenticando(bool valor) {
     _autenticando = valor;
   }
 
-  // Getters del token de forma estática
-// Getters del token de forma estática
   static Future<String?> getToken() async {
-    // Obtener la instancia de SharedPreferences
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token');
     return token;
   }
 
-  // Inicia sesión con correo electrónico y contraseña
   Future<bool> login(String email, String password) async {
     autenticando = true;
-
     final data = {
       'email': email,
       'password': password,
@@ -52,6 +48,7 @@ class AuthService {
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);
       usuario = loginResponse.usuario;
+      ubicaciones = loginResponse.usuario.ubicacion;
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('online', usuario!.online);
       await prefs.setString('email', usuario!.email);
@@ -88,16 +85,13 @@ class AuthService {
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);
       usuario = loginResponse.usuario;
+      ubicaciones = loginResponse.usuario.ubicacion;
 
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('nombre', usuario!.nombre);
       prefs.setString('email', usuario!.email);
       prefs.setString('uid', usuario!.uid);
       prefs.setBool('online', usuario!.online);
-
-      print("Cuenta creada con éxito");
-      print(usuario);
-
       await _guardarToken(loginResponse.token);
 
       return true;
@@ -126,14 +120,13 @@ class AuthService {
 
     if (resp.statusCode == 200) {
       final loginResponse = loginResponseFromJson(resp.body);
-
+      usuario = loginResponse.usuario;
+      ubicaciones = loginResponse.usuario.ubicacion;
       prefs.setBool('online', loginResponse.usuario.online);
       prefs.setString('email', loginResponse.usuario.email);
       prefs.setString('nombre', loginResponse.usuario.nombre);
       prefs.setString('uid', loginResponse.usuario.uid);
-      //guarda el token en prefs
       prefs.setString('token', loginResponse.token);
-      usuario = loginResponse.usuario;
       await _guardarToken(loginResponse.token);
       return true;
     } else {
@@ -143,33 +136,37 @@ class AuthService {
   }
 
   Future<void> _guardarToken(String token) async {
-    // Almacenar token en secure storage
     await _storage.write(key: 'token', value: token);
-
-    // Almacenar datos del usuario en secure storage
-
-    // Almacenar token en shared preferences
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', token);
-
-    // Almacenar datos del usuario en shared preferences
     return await _storage.write(key: 'token', value: token);
   }
 
   Future<void> logout() async {
-    // Eliminar token de secure storage
-    await _storage.delete(key: 'token');
-    // Eliminar datos del usuario de secure storage
-    await _storage.delete(key: 'email');
-    await _storage.delete(key: 'nombre');
-    await _storage.delete(key: 'uid');
-
-    // Eliminar token
     final prefs = await SharedPreferences.getInstance();
+    const storage = FlutterSecureStorage();
+    storage.delete(key: 'token');
     await prefs.remove('token');
-    // Eliminar datos del usuario
     await prefs.remove('email');
     await prefs.remove('nombre');
     await prefs.remove('uid');
+  }
+
+  //delete ubicacion
+  Future<bool> deleteUbicacion(String id) async {
+    final uri = Uri.parse('${Environment.apiUrl}/ubicacion/$id');
+
+    final resp = await http.delete(uri, headers: {
+      'Content-Type': 'application/json',
+      'x-token': await getToken() as String,
+    });
+
+    if (resp.statusCode == 200) {
+      final ubicacionResponse = ubicacionResponseFromMap(resp.body);
+      ubicaciones = ubicacionResponse.ubicacion;
+      return true;
+    } else {
+      return false;
+    }
   }
 }

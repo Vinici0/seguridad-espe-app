@@ -9,6 +9,8 @@ class Background extends StatelessWidget {
           stops: [0.2, 0.8],
           colors: [Color(0xff2E305F), Color(0xff202333)]));
 
+  const Background({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Stack(

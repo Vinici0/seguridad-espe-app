@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//  final loginResponse = loginResponseFromJson(jsonString);
+//     final loginResponse = loginResponseFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -12,15 +12,15 @@ LoginResponse loginResponseFromJson(String str) =>
 String loginResponseToJson(LoginResponse data) => json.encode(data.toJson());
 
 class LoginResponse {
+  bool ok;
+  Usuario usuario;
+  String token;
+
   LoginResponse({
     required this.ok,
     required this.usuario,
     required this.token,
   });
-
-  bool ok;
-  Usuario usuario;
-  String token;
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
         ok: json["ok"],

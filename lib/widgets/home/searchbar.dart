@@ -51,8 +51,6 @@ class _SearchBarBody extends StatelessWidget {
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-              child: const Text('¿Dónde quieres ir?',
-                  style: TextStyle(color: Colors.black87)),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(100),
@@ -62,6 +60,8 @@ class _SearchBarBody extends StatelessWidget {
                         blurRadius: 5,
                         offset: Offset(0, 5))
                   ]),
+              child: const Text('¿Dónde quieres ir?',
+                  style: TextStyle(color: Colors.black87)),
             )),
       ),
     );

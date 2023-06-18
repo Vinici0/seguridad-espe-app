@@ -176,8 +176,8 @@ class _NewsScreenState extends State<NewsScreen> {
                               },
                             ),
 
-                            publicaciones[i].archivo != null &&
-                                    publicaciones[i].archivo!.isNotEmpty
+                            publicaciones[i].imagenes != null &&
+                                    publicaciones[i].imagenes!.isNotEmpty
                                 ? GestureDetector(
                                     behavior: HitTestBehavior.translucent,
                                     child: Container(
@@ -194,7 +194,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                           Radius.circular(9.0),
                                         ),
                                         child: Image.network(
-                                          "${Environment.apiUrl}/uploads/publicaciones/${publicaciones[i].uid!}?imagenIndex=${publicaciones[i].archivo!.first}",
+                                          "${Environment.apiUrl}/uploads/publicaciones/${publicaciones[i].uid!}?imagenIndex=${publicaciones[i].imagenes!.first}",
                                           fit: BoxFit.cover,
                                         ),
                                       ),

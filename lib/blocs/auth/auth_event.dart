@@ -17,6 +17,9 @@ class AuthRegisterEvent extends AuthEvent {
     required this.password,
     required this.nombre,
   });
+
+  @override
+  List<Object> get props => [email, password, nombre];
 }
 
 class AuthLoginEvent extends AuthEvent {
@@ -29,23 +32,52 @@ class AuthLoginEvent extends AuthEvent {
   }) {
     print("Login event");
   }
+
+  @override
+  List<Object> get props => [email, password];
 }
 
 class AuthLogoutEvent extends AuthEvent {
   const AuthLogoutEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 //init event
 class AuthInitEvent extends AuthEvent {
   const AuthInitEvent();
+  @override
+  List<Object> get props => [];
 }
 
 //conect socket
 class AuthConectEvent extends AuthEvent {
   const AuthConectEvent();
+
+  @override
+  List<Object> get props => [];
 }
 
 //disconnect socket
 class AuthDisconnectEvent extends AuthEvent {
   const AuthDisconnectEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AuthAddUbicacionEvent extends AuthEvent {
+  final Ubicacion ubicacion;
+  const AuthAddUbicacionEvent(this.ubicacion);
+  @override
+  List<Object> get props => [ubicacion];
+}
+
+// delete Ubicacion
+class AuthDeleteUbicacionEvent extends AuthEvent {
+  final String uid;
+  const AuthDeleteUbicacionEvent(this.uid);
+  @override
+  List<Object> get props => [uid];
 }

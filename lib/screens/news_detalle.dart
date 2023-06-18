@@ -375,7 +375,7 @@ class _CustonAppBarDetalle extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    if (publicacion.archivo == null || publicacion.archivo!.isEmpty) {
+    if (publicacion.imagenes == null || publicacion.imagenes!.isEmpty) {
       return SliverAppBar(
         elevation: 1,
         backgroundColor: Color(int.parse('0xFF${publicacion.color}')),
@@ -410,10 +410,10 @@ class _CustonAppBarDetalle extends StatelessWidget {
         ),
         background: Swiper(
           pagination: const SwiperPagination(),
-          itemCount: publicacion.archivo!.length,
+          itemCount: publicacion.imagenes!.length,
           itemBuilder: (BuildContext context, int index) {
             return Image.network(
-              "${Environment.apiUrl}/uploads/publicaciones/${publicacion.uid!}?imagenIndex=${publicacion.archivo![index]}",
+              "${Environment.apiUrl}/uploads/publicaciones/${publicacion.uid!}?imagenIndex=${publicacion.imagenes![index]}",
               fit: BoxFit.cover,
             );
           },

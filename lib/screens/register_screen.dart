@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/mostrar_alerta.dart';
-import 'package:flutter_maps_adv/resources/services/socket_service.dart';
-import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_maps_adv/widgets/boton_login.dart';
 import 'package:flutter_maps_adv/widgets/custom_input.dart';
@@ -62,7 +60,6 @@ class __FromState extends State<_From> {
   @override
   Widget build(BuildContext context) {
     final authServiceBloc = BlocProvider.of<AuthBloc>(context);
-    final socketService = SocketService();
 
     return Column(children: [
       //Nombre
@@ -87,27 +84,21 @@ class __FromState extends State<_From> {
       ),
       BotonForm(
         text: "Crear cuenta",
-        onPressed: authServiceBloc.state.existeUsuario
+        onPressed: authServiceBloc.isLoggedInTrue
             ? () {}
             : () async {
                 FocusScope.of(context).unfocus();
+                await authServiceBloc.register(
+                    nomController.text.trim(),
+                    emailController.text.trim(),
+                    passwordController.text.trim());
 
-                authServiceBloc.add(AuthRegisterEvent(
-                    email: emailController.text.trim(),
-                    password: passwordController.text.trim(),
-                    nombre: nomController.text.trim()));
-
-                final loginOk = await authServiceBloc.apiAuthRepository
-                    .register(
-                        nomController.text.trim(),
-                        emailController.text.trim(),
-                        passwordController.text.trim());
-
-                if (loginOk == true) {
-                  socketService.connect();
+                if (authServiceBloc.isLoggedInTrue) {
+                  // ignore: use_build_context_synchronously
                   Navigator.pushReplacementNamed(context, HomeScreen.homeroute);
                 } else {
                   //mostrar alerta
+                  // ignore: use_build_context_synchronously
                   mostrarAlerta(context, 'Login incorrecto',
                       'Revise sus credenciales nuevamente');
                 }

@@ -46,13 +46,13 @@ class ChatMessage extends StatelessWidget {
           margin: const EdgeInsets.only(right: 5, bottom: 5, left: 50
               //muy important el left para que no se sobreponga con el otro mensaje
               ),
-          child: Text(
-            this.texto,
-            style: TextStyle(color: Colors.white),
-          ),
           decoration: BoxDecoration(
               color: const Color(0xFF6165FA),
               borderRadius: BorderRadius.circular(20)),
+          child: Text(
+            this.texto,
+            style: const TextStyle(color: Colors.white),
+          ),
         ));
   }
 
@@ -72,13 +72,13 @@ class ChatMessage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8.0),
             margin: const EdgeInsets.only(left: 5, bottom: 5, right: 50),
+            decoration: BoxDecoration(
+                color: const Color(0xffE4E5E8),
+                borderRadius: BorderRadius.circular(20)),
             child: Text(
               this.texto,
               style: const TextStyle(color: Colors.black87),
             ),
-            decoration: BoxDecoration(
-                color: const Color(0xffE4E5E8),
-                borderRadius: BorderRadius.circular(20)),
           )
         ],
       ),

@@ -20,10 +20,11 @@ class Routes {
     MapScreen.routemap: (_) => const MapScreen(),
     MenuScreen.salesroute: (_) => const MenuScreen(),
     MienbrosChatScreen.mienbrosChatroute: (_) => const MienbrosChatScreen(),
-    ModalBottomSheet.modalBottomSheetRoute: (_) => ModalBottomSheet(),
+    ModalBottomSheet.modalBottomSheetRoute: (_) => const ModalBottomSheet(),
     NewsScreen.newsroute: (_) => const NewsScreen(),
     RegisterScreen.registerroute: (_) => const RegisterScreen(),
     RoomsScreen.salasroute: (_) => const RoomsScreen(),
     PlaceAddScreen.placeddd: (_) => const PlaceAddScreen(),
+    PlaceDetailScreen.place: (_) => const PlaceDetailScreen(),
   };
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class ModalBottomSheet extends StatefulWidget {
   static const String modalBottomSheetRoute = 'modalBottomSheet';
+
+  const ModalBottomSheet({super.key});
   @override
   _ModalBottomSheetState createState() => _ModalBottomSheetState();
 }

@@ -1,96 +1,99 @@
 // To parse this JSON data, do
 //
-//     final publicacionesResponse = publicacionesResponseFromMap(jsonString);
+//     final publicacionResponse = publicacionResponseFromMap(jsonString);
 
 import 'dart:convert';
 
-PublicacionesResponse publicacionesResponseFromMap(String str) =>
-    PublicacionesResponse.fromMap(json.decode(str));
+PublicacionResponse publicacionResponseFromMap(String str) =>
+    PublicacionResponse.fromMap(json.decode(str));
 
-String publicacionesResponseToMap(PublicacionesResponse data) =>
+String publicacionResponseToMap(PublicacionResponse data) =>
     json.encode(data.toMap());
 
-class PublicacionesResponse {
+class PublicacionResponse {
   bool ok;
-  Publicacion publicacion;
+  List<Publicacion> publicacion;
 
-  PublicacionesResponse({
+  PublicacionResponse({
     required this.ok,
     required this.publicacion,
   });
 
-  factory PublicacionesResponse.fromMap(Map<String, dynamic> json) =>
-      PublicacionesResponse(
+  factory PublicacionResponse.fromMap(Map<String, dynamic> json) =>
+      PublicacionResponse(
         ok: json["ok"],
-        publicacion: Publicacion.fromMap(json["publicacion"]),
+        publicacion: List<Publicacion>.from(
+            json["publicaciones"].map((x) => Publicacion.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "ok": ok,
-        "publicacion": publicacion.toMap(),
+        "publicaciones": List<dynamic>.from(publicacion.map((x) => x.toMap())),
       };
 }
 
 class Publicacion {
-  bool isPublic;
-  List<String>? likes;
-  List<String>? archivo;
-  List<dynamic>? comentarios;
-  String? usuarioNombre;
-  bool isLiked;
   String titulo;
   String contenido;
   String color;
   String ciudad;
   String barrio;
+  bool isPublic;
   String usuario;
-  String imgAlerta;
+  List<String>? likes;
+  List<String>? imagenes;
   double latitud;
   double longitud;
+  List<dynamic>? comentarios;
+  String imgAlerta;
+  bool isLiked;
   String? createdAt;
   String? updatedAt;
   String? uid;
+  String? usuarioNombre;
 
   Publicacion({
-    required this.barrio,
-    required this.ciudad,
-    required this.color,
+    required this.titulo,
     required this.contenido,
-    this.createdAt,
+    required this.color,
+    required this.ciudad,
+    required this.barrio,
+    required this.isPublic,
+    required this.usuario,
+    this.likes,
+    this.imagenes,
+    required this.latitud,
+    required this.longitud,
+    this.comentarios,
     required this.imgAlerta,
     required this.isLiked,
-    required this.isPublic,
-    required this.latitud,
-    this.likes,
-    this.usuarioNombre,
-    required this.longitud,
-    required this.titulo,
-    this.uid,
-    required this.usuario,
-    this.comentarios,
-    this.archivo,
+    this.createdAt,
     this.updatedAt,
+    this.uid,
+    this.usuarioNombre,
   });
 
   factory Publicacion.fromMap(Map<String, dynamic> json) => Publicacion(
-        isPublic: json["isPublic"],
-        likes: json["likes"] == null
-            ? []
-            : List<String>.from(json["likes"]!.map((x) => x)),
-        archivo: json["imagenes"] != null
-            ? List<String>.from(json["imagenes"].map((x) => x))
-            : null,
-        comentarios: List<dynamic>.from(json["comentarios"].map((x) => x)),
-        isLiked: json["isLiked"],
         titulo: json["titulo"],
         contenido: json["contenido"],
         color: json["color"],
         ciudad: json["ciudad"],
         barrio: json["barrio"],
+        isPublic: json["isPublic"],
         usuario: json["usuario"],
-        imgAlerta: json["imgAlerta"],
+        likes: json["likes"] == null
+            ? []
+            : List<String>.from(json["likes"]!.map((x) => x)),
+        imagenes: json["imagenes"] == null
+            ? []
+            : List<String>.from(json["imagenes"]!.map((x) => x)),
         latitud: json["latitud"]?.toDouble(),
         longitud: json["longitud"]?.toDouble(),
+        comentarios: json["comentarios"] == null
+            ? []
+            : List<dynamic>.from(json["comentarios"]!.map((x) => x)),
+        imgAlerta: json["imgAlerta"],
+        isLiked: json["isLiked"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
         uid: json["uid"],
@@ -98,23 +101,26 @@ class Publicacion {
       );
 
   Map<String, dynamic> toMap() => {
-        "isPublic": isPublic,
-        "likes": likes == null ? [] : List<dynamic>.from(likes!.map((x) => x)),
-        "imagenes":
-            archivo != null ? List<dynamic>.from(archivo!.map((x) => x)) : null,
-        "comentarios": comentarios,
-        "isLiked": isLiked,
         "titulo": titulo,
         "contenido": contenido,
         "color": color,
         "ciudad": ciudad,
         "barrio": barrio,
+        "isPublic": isPublic,
         "usuario": usuario,
-        "imgAlerta": imgAlerta,
+        "likes": likes == null ? [] : List<dynamic>.from(likes!.map((x) => x)),
+        "imagenes":
+            imagenes == null ? [] : List<dynamic>.from(imagenes!.map((x) => x)),
         "latitud": latitud,
         "longitud": longitud,
+        "comentarios": comentarios == null
+            ? []
+            : List<dynamic>.from(comentarios!.map((x) => x)),
+        "imgAlerta": imgAlerta,
+        "isLiked": isLiked,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "uid": uid,
+        "usuarioNombre": usuarioNombre,
       };
 }

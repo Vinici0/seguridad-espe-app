@@ -3,6 +3,8 @@ import 'package:flutter_maps_adv/helpers/navegacion.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
+  const CustomBottomNavigation({super.key});
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(

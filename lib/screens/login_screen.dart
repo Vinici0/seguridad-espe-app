@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/mostrar_alerta.dart';
-import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_maps_adv/widgets/boton_login.dart';
 import 'package:flutter_maps_adv/widgets/custom_input.dart';
@@ -63,8 +62,6 @@ class __FromState extends State<_From> {
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
 
-    final socketService = SocketService();
-
     return Column(children: [
       CustonInput(
         icon: Icons.mail_outline,
@@ -82,15 +79,12 @@ class __FromState extends State<_From> {
         text: "Ingrese",
         onPressed: () async {
           FocusScope.of(context).unfocus();
-
-          authBloc.add(AuthLoginEvent(
-              email: emailController.text, password: passwordController.text));
-
-          socketService.connect();
-          if (await authBloc.apiAuthRepository
-              .login(emailController.text, passwordController.text)) {
+          await authBloc.login(emailController.text, passwordController.text);
+          if (authBloc.isLoggedInTrue) {
+            // ignore: use_build_context_synchronously
             Navigator.pushReplacementNamed(context, HomeScreen.homeroute);
           } else {
+            // ignore: use_build_context_synchronously
             mostrarAlerta(context, "Login incorrecto",
                 "Revise sus credenciales nuevamente");
           }

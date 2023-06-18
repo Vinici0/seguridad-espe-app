@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class CardTable extends StatelessWidget {
+  const CardTable({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Table(
@@ -60,12 +62,12 @@ class _SigleCard extends StatelessWidget {
       children: [
         CircleAvatar(
           backgroundColor: this.color,
+          radius: 30,
           child: Icon(
             this.icon,
             size: 35,
             color: Colors.white,
           ),
-          radius: 30,
         ),
         const SizedBox(height: 10),
         Text(
