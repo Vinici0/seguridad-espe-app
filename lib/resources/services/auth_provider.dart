@@ -169,4 +169,63 @@ class AuthService {
       return false;
     }
   }
+
+  //agregar telefono
+  Future<bool> addTelefono(String telefono) async {
+    final data = {
+      'telefono': telefono,
+    };
+
+    final uri = Uri.parse('${Environment.apiUrl}/usuarios/add-telefono');
+
+    final resp = await http.put(uri, body: jsonEncode(data), headers: {
+      'Content-Type': 'application/json',
+      'x-token': await getToken() as String,
+    });
+
+    if (resp.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> addTelefonos(String telefonos) async {
+    final data = {
+      'telefono': telefonos,
+    };
+
+    final uri = Uri.parse('${Environment.apiUrl}/usuarios/add-telefonos');
+
+    final resp = await http.put(uri, body: jsonEncode(data), headers: {
+      'Content-Type': 'application/json',
+      'x-token': await getToken() as String,
+    });
+
+    if (resp.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //delete telefono
+  Future<bool> deleteTelefono(String telefono) async {
+    final data = {
+      'telefono': telefono,
+    };
+
+    final uri = Uri.parse('${Environment.apiUrl}/usuarios/delete-telefono');
+
+    final resp = await http.delete(uri, body: jsonEncode(data), headers: {
+      'Content-Type': 'application/json',
+      'x-token': await getToken() as String,
+    });
+
+    if (resp.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

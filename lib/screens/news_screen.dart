@@ -26,22 +26,12 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   void initState() {
     _publicationBloc = BlocProvider.of<PublicationBloc>(context);
-    _publicationBloc.add(PublicacionesInitEvent());
-    // initUniLinks();
+    _publicationBloc.getAllPublicaciones();
 
     super.initState();
   }
 
   final ScrollController _firstController = ScrollController();
-  // Future<void> initUniLinks() async {
-  //   // Platform messages may fail, so we use a try/catch PlatformException.
-  //   try {
-  //     // final initialLink = await getInitialLink();
-  //     // print('initialLink: $initialLink');
-  //   } on PlatformException {
-  //     // Manejar la excepción PlatformException si es necesario
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

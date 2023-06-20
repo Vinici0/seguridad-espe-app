@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter_maps_adv/models/mensajes_response.dart';
+
 class SalesResponse {
   SalesResponse({
     required this.ok,
@@ -38,33 +40,51 @@ Sala salaFromMap(String str) => Sala.fromMap(json.decode(str));
 String salaToMap(Sala data) => json.encode(data.toMap());
 
 class Sala {
+  String uid;
   String nombre;
   String codigo;
   String color;
-  String uid;
+  String idUsuario;
   String propietario;
+  List<String>? usuarios;
+  List<Mensaje>? mensajes;
 
   Sala({
     required this.nombre,
     required this.codigo,
     required this.color,
     required this.uid,
+    required this.idUsuario,
     required this.propietario,
+    this.usuarios,
+    this.mensajes,
   });
 
   factory Sala.fromMap(Map<String, dynamic> json) => Sala(
         nombre: json["nombre"],
+        uid: json.containsKey("uid") ? json["uid"] : json["_id"],
         codigo: json["codigo"],
         color: json["color"],
-        uid: json["uid"],
+        idUsuario: json["idUsuario"],
+        mensajes: json["mensajes"] == null
+            ? []
+            : List<Mensaje>.from(json["mensajes"]!.map((x) => x)),
+        usuarios: json["usuarios"] == null
+            ? []
+            : List<String>.from(json["usuarios"]!.map((x) => x)),
         propietario: json["propietario"],
       );
 
   Map<String, dynamic> toMap() => {
         "nombre": nombre,
         "codigo": codigo,
+        "_id": uid,
         "color": color,
-        "uid": uid,
+        "idUsuario": idUsuario,
+        "mensajes":
+            mensajes == null ? [] : List<Mensaje>.from(mensajes!.map((x) => x)),
+        "usuarios":
+            usuarios == null ? [] : List<dynamic>.from(usuarios!.map((x) => x)),
         "propietario": propietario,
       };
 }

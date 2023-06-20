@@ -10,12 +10,12 @@ abstract class RoomEvent extends Equatable {
 class SalasInitEvent extends RoomEvent {}
 
 class ChatInitEvent extends RoomEvent {
-  final String uid;
+  final List<MensajesSala> mensajes;
 
-  const ChatInitEvent(this.uid);
+  const ChatInitEvent(this.mensajes);
 
   @override
-  List<Object> get props => [uid];
+  List<Object> get props => [mensajes];
 }
 
 class SalaCreateEvent extends RoomEvent {

@@ -41,11 +41,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
     authService.socketService.socket.emit('join-room', {
-      'codigo': chatProvider.state.salaSeleccionada.uid,
+      'codigo': chatProvider.state.salaSeleccionada.idUsuario,
     });
 
     authService.socketService.socket.on('mensaje-grupal', _escucharMensaje);
-
+    _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
     super.initState();
   }
 
@@ -138,45 +138,24 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           )
         ],
       ),
-      body: BlocListener<RoomBloc, RoomState>(
-        listener: (context, state) {
-          if (state.mensajesSalas == 0) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('No hay mensajes'),
-                duration: Duration(milliseconds: 1500),
-              ),
-            );
-          } else if (state.isError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Error al cargar los mensajes'),
-                duration: Duration(milliseconds: 1500),
-              ),
-            );
-          } else {
-            _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
-          }
-        },
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            children: <Widget>[
-              Flexible(
-                  child: ListView.builder(
-                physics:
-                    const BouncingScrollPhysics(), //sirve para que el scroll se vea mas real
-                itemCount: _messages.length,
-                itemBuilder: (_, i) => _messages[i],
-                reverse: true,
-              )),
-              const Divider(height: 1),
-              Container(
-                color: Colors.white,
-                child: _inputChat(),
-              )
-            ],
-          ),
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Flexible(
+                child: ListView.builder(
+              physics:
+                  const BouncingScrollPhysics(), //sirve para que el scroll se vea mas real
+              itemCount: _messages.length,
+              itemBuilder: (_, i) => _messages[i],
+              reverse: true,
+            )),
+            const Divider(height: 1),
+            Container(
+              color: Colors.white,
+              child: _inputChat(),
+            )
+          ],
         ),
       ),
     );

@@ -17,7 +17,12 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
             salas: const [],
             mensajesSalas: const [],
             salaSeleccionada: Sala(
-                nombre: '', codigo: '', color: '', uid: '', propietario: ''),
+                nombre: '',
+                codigo: '',
+                color: '',
+                idUsuario: '',
+                propietario: '',
+                uid: ''),
             isLoading: false,
             isError: false,
             usuariosSala: const [])) {
@@ -40,8 +45,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   FutureOr<void> chatInitEvent(
       ChatInitEvent event, Emitter<RoomState> emit) async {
     emit(state.copyWith(isLoading: true));
-    final mensajesSalas = await _chatProvider.getChatSala(event.uid);
-    emit(state.copyWith(mensajesSalas: mensajesSalas, isLoading: false));
+    emit(state.copyWith(mensajesSalas: event.mensajes, isLoading: false));
   }
 
   FutureOr<void> salaCreateEvent(
@@ -75,5 +79,12 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   FutureOr<void> limpiarMensajesEvent(
       LimpiarMensajesEvent event, Emitter<RoomState> emit) {
     emit(state.copyWith(mensajesSalas: []));
+  }
+
+  //cargar mensajes
+  cargarMensajes(String uid) async {
+    final mensajes = await _chatProvider.getChatSala(uid);
+    add(ChatInitEvent(mensajes));
+    return mensajes;
   }
 }

@@ -38,8 +38,7 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   FutureOr<void> publicacionesInitEvent(
       PublicacionesInitEvent event, Emitter<PublicationState> emit) async {
     emit(state.copyWith(isLoading: true));
-    final publicaciones = await _publicacionService.getPublicacionesAll();
-    emit(state.copyWith(publicaciones: publicaciones, isLoading: false));
+    emit(state.copyWith(publicaciones: event.publicaciones, isLoading: false));
   }
 
   FutureOr<void> publicacionesUpdateEvent(
@@ -72,5 +71,10 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     );
     final newPublicaciones = [newPublicacion, ...state.publicaciones];
     emit(state.copyWith(publicaciones: newPublicaciones, isLoading: false));
+  }
+
+  getAllPublicaciones() async {
+    final publicaciones = await _publicacionService.getPublicacionesAll();
+    add(PublicacionesInitEvent(publicaciones));
   }
 }

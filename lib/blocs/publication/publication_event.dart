@@ -7,7 +7,14 @@ abstract class PublicationEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PublicacionesInitEvent extends PublicationEvent {}
+class PublicacionesInitEvent extends PublicationEvent {
+  List<Publicacion> publicaciones;
+
+  PublicacionesInitEvent(this.publicaciones);
+
+  @override
+  List<Object> get props => [publicaciones];
+}
 
 class PublicacionesCreateEvent extends PublicationEvent {
   final String tipo;

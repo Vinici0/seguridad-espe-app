@@ -150,34 +150,6 @@ class _AlertScreenState extends State<AlertScreen> {
                             },
                           ),
                         ),
-                        // Container(
-                        //   margin: EdgeInsets.only(left: 15),
-                        //   alignment: Alignment.center,
-                        //   // width: MediaQuery.of(context).size.width * 0.1,
-                        //   height: 35,
-                        //   decoration: BoxDecoration(
-                        //     color: Color.fromARGB(255, 49, 67, 78),
-                        //     borderRadius: BorderRadius.circular(10),
-                        //   ),
-                        //   child: IconButton(
-                        //     alignment: Alignment.center,
-                        //     icon: Icon(
-                        //       FontAwesomeIcons.camera,
-                        //       color: Colors.white,
-                        //       size: 18,
-                        //     ),
-                        //     onPressed: () async {
-                        //       final XFile? image = await imgpicker.pickImage(
-                        //           source: ImageSource.camera);
-                        //       if (image != null) {
-                        //         setState(() {
-                        //           imagefiles = [image];
-                        //         });
-                        //       }
-                        //       // openImages();
-                        //     },
-                        //   ),
-                        // ),
                         Expanded(
                             child: Row(
                           children: [

@@ -88,6 +88,7 @@ class __FromState extends State<_From> {
             ? () {}
             : () async {
                 FocusScope.of(context).unfocus();
+
                 await authServiceBloc.register(
                     nomController.text.trim(),
                     emailController.text.trim(),
@@ -95,7 +96,8 @@ class __FromState extends State<_From> {
 
                 if (authServiceBloc.isLoggedInTrue) {
                   // ignore: use_build_context_synchronously
-                  Navigator.pushReplacementNamed(context, HomeScreen.homeroute);
+                  Navigator.pushReplacementNamed(
+                      context, LoadingLoginScreen.loadingroute);
                 } else {
                   //mostrar alerta
                   // ignore: use_build_context_synchronously

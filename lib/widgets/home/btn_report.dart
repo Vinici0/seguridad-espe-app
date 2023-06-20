@@ -12,11 +12,9 @@ class BtnReport extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        return state.displayManualMarker
-            ? const SizedBox()
-            : FadeInUp(
-                duration: const Duration(milliseconds: 300),
-                child: const _BtnReport());
+        return FadeInUp(
+            duration: const Duration(milliseconds: 300),
+            child: const _BtnReport());
       },
     );
   }

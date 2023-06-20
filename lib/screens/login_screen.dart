@@ -82,7 +82,8 @@ class __FromState extends State<_From> {
           await authBloc.login(emailController.text, passwordController.text);
           if (authBloc.isLoggedInTrue) {
             // ignore: use_build_context_synchronously
-            Navigator.pushReplacementNamed(context, HomeScreen.homeroute);
+            Navigator.pushReplacementNamed(
+                context, LoadingLoginScreen.loadingroute);
           } else {
             // ignore: use_build_context_synchronously
             mostrarAlerta(context, "Login incorrecto",

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/delegates/search_destination_delegate.dart';
+import 'package:flutter_maps_adv/helpers/navegacion.dart';
 import 'package:flutter_maps_adv/models/search_result.dart';
 import 'package:flutter_maps_adv/screens/place_details_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,9 +24,12 @@ class PlacesScreen extends StatelessWidget {
       }
     }
 
+    final gpsBloc = BlocProvider.of<GpsBloc>(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.black87),
         centerTitle: false,
         title: const Text('Mis Direcciones',
             style: TextStyle(color: Colors.black, fontSize: 20)),
@@ -61,6 +65,12 @@ class PlacesScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
+                      if (!gpsBloc.state.isGpsEnabled ||
+                          !gpsBloc.state.isGpsPermissionGranted) {
+                        counterBloc.cambiarIndex(0);
+                        return;
+                      }
+
                       // Navigator.pushNamed(context, PlaceAddScreen.placeddd);
                       final result = await showSearch(
                           context: context,

@@ -23,10 +23,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthRegisterEvent>(_onAuthRegisterEvent);
     on<AuthAddUbicacionEvent>(_onAuthAddUbicacionEvent);
     on<AuthDeleteUbicacionEvent>(_onAuthDeleteUbicacionEvent);
+    on<AuthAddTelefonoEvent>(_onAuthAddTelefonoEvent);
+    on<AuthDeleteTeleFamilyEvent>(_onAuthDeleteTeleFamilyEvent);
+    on<AuthAddTelefonFamilyEvent>(_aonAddTelefonoFamilyEvent);
   }
 
-  void _onAuthRegisterEvent(
-      AuthRegisterEvent event, Emitter<AuthState> emit) async {
+  void _onAuthRegisterEvent(AuthRegisterEvent event, Emitter<AuthState> emit) {
     emit(state.copyWith(
       usuario: apiAuthRepository.usuario,
     ));
@@ -78,11 +80,59 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             .toList()));
   }
 
+  void _onAuthAddTelefonoEvent(
+      AuthAddTelefonoEvent event, Emitter<AuthState> emit) async {
+    final usuario = Usuario(
+        online: state.usuario!.online,
+        nombre: state.usuario!.nombre,
+        email: state.usuario!.email,
+        telefono: event.telefono,
+        tokenApp: state.usuario!.tokenApp,
+        ubicacion: state.usuario!.ubicacion,
+        uid: state.usuario!.uid,
+        telefonos: state.usuario!.telefonos);
+
+    emit(state.copyWith(usuario: usuario));
+  }
+
+  void _aonAddTelefonoFamilyEvent(
+      AuthAddTelefonFamilyEvent event, Emitter<AuthState> emit) async {
+    final usuario = Usuario(
+        online: state.usuario!.online,
+        nombre: state.usuario!.nombre,
+        email: state.usuario!.email,
+        telefono: state.usuario!.telefono,
+        tokenApp: state.usuario!.tokenApp,
+        ubicacion: state.usuario!.ubicacion,
+        uid: state.usuario!.uid,
+        telefonos: [...state.usuario!.telefonos, event.telefono]);
+
+    emit(state.copyWith(usuario: usuario));
+  }
+
+  void _onAuthDeleteTeleFamilyEvent(
+      AuthDeleteTeleFamilyEvent event, Emitter<AuthState> emit) async {
+    final usuario = Usuario(
+        online: state.usuario!.online,
+        nombre: state.usuario!.nombre,
+        email: state.usuario!.email,
+        telefono: state.usuario!.telefono,
+        tokenApp: state.usuario!.tokenApp,
+        ubicacion: state.usuario!.ubicacion,
+        uid: state.usuario!.uid,
+        telefonos: state.usuario!.telefonos
+            .where((telefono) => telefono != event.telefono)
+            .toList());
+
+    emit(state.copyWith(usuario: usuario));
+  }
+
   init() async {
     final isLoggedIn = await apiAuthRepository.isLoggedIn();
+
+    add(const AuthInitEvent());
     isLoggedInTrue = isLoggedIn;
     if (isLoggedIn) {
-      add(const AuthInitEvent());
       add(const AuthConectEvent());
     }
   }
@@ -105,5 +155,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     isLoggedInTrue = false;
     add(const AuthLogoutEvent());
     add(const AuthDisconnectEvent());
+  }
+
+  addTelefono(String telefono) async {
+    await apiAuthRepository.addTelefono(telefono);
+    add(AuthAddTelefonoEvent(telefono));
+  }
+
+  addTelefonoFamily(String telefono) async {
+    await apiAuthRepository.addTelefonos(telefono);
+    add(AuthAddTelefonFamilyEvent(telefono));
+  }
+
+  deleteTelefonoFamily(String telefono) async {
+    await apiAuthRepository.deleteTelefono(telefono);
+    add(AuthDeleteTeleFamilyEvent(telefono));
+  }
+
+  deleteTelefono(String telefono) async {
+    await apiAuthRepository.deleteTelefono(telefono);
+    add(AuthDeleteTeleFamilyEvent(telefono));
   }
 }

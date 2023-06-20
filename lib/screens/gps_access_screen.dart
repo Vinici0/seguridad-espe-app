@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class GpsAccessScreen extends StatelessWidget {
   static const String routegps = 'gps_access_screen';
@@ -57,9 +58,22 @@ class _EnableGpsMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Debe de habilitar el GPS',
-      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        //cargar imagen svg
+        Container(
+          margin: const EdgeInsets.only(bottom: 20),
+          width: MediaQuery.of(context).size.width * 0.5,
+          child: SvgPicture.asset(
+            'assets/info/lugares1.svg',
+          ),
+        ),
+        const Text(
+          'Debe de habilitar el GPS',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        )
+      ],
     );
   }
 }

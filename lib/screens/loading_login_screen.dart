@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
+import 'package:flutter_maps_adv/screens/information_family_screen.dart';
+import 'package:flutter_maps_adv/screens/information_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
 
 class LoadingLoginScreen extends StatelessWidget {
   static const String loadingroute = 'loadingLogin';
+
   const LoadingLoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print('LoadingLoginScreen');
     return Scaffold(
       body: FutureBuilder(
         future: checkLoginState(context),
@@ -25,21 +27,37 @@ class LoadingLoginScreen extends StatelessWidget {
     );
   }
 
-  Future checkLoginState(BuildContext context) async {
-    final authService = BlocProvider.of<AuthBloc>(context, listen: false);
+  Future<void> checkLoginState(BuildContext context) async {
+    final authService = BlocProvider.of<AuthBloc>(context);
+
     await authService.init();
+
+    // Esperar hasta que el usuario esté disponible en el estado del AuthBloc
+
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    final usuario = authService.state.usuario;
+
     if (authService.isLoggedInTrue) {
-      Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-              pageBuilder: (_, __, ___) => const HomeScreen(),
-              transitionDuration: const Duration(milliseconds: 0)));
+      if (usuario?.telefono == null) {
+        navigateToReplacement(context, const InformationScreen());
+      } else if ((usuario?.telefonos.length ?? 0) < 2) {
+        navigateToReplacement(context, const InformationFamily());
+      } else {
+        navigateToReplacement(context, const HomeScreen());
+      }
     } else {
-      Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-              pageBuilder: (_, __, ___) => const LoginScreen(),
-              transitionDuration: const Duration(milliseconds: 0)));
+      navigateToReplacement(context, const LoginScreen());
     }
+  }
+
+  void navigateToReplacement(BuildContext context, Widget page) {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => page,
+        transitionDuration: const Duration(milliseconds: 0),
+      ),
+    );
   }
 }

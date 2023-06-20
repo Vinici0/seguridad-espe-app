@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/navegacion.dart';
-import 'package:flutter_maps_adv/screens/loading_map_screen.dart';
-import 'package:flutter_maps_adv/screens/places_screen.dart';
-import 'package:flutter_maps_adv/screens/menu_screen.dart';
-import 'package:flutter_maps_adv/screens/news_screen.dart';
-import 'package:flutter_maps_adv/screens/rooms_screen.dart';
+import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_maps_adv/widgets/custom_bottom_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -43,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // GruposScreen(),
                     RoomsScreen(),
                     PlacesScreen(),
-                    MenuScreen(),
+                    PerfilScreen(),
                     // Center(
                     //     child: Column(
                     //         mainAxisAlignment: MainAxisAlignment.center,

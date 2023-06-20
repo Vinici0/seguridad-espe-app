@@ -6,6 +6,7 @@ import 'package:flutter_maps_adv/resources/services/push_notifications_service.d
 import 'package:flutter_maps_adv/resources/services/traffic_service.dart';
 import 'package:flutter_maps_adv/routes/routes.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
+import 'package:flutter_maps_adv/screens/screens.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

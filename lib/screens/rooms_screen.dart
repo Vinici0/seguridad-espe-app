@@ -18,8 +18,9 @@ class RoomsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.black87),
         centerTitle: false,
-        title: const Text('Grupos',
+        title: const Text('Gruposs',
             style: TextStyle(color: Colors.black, fontSize: 20)),
         elevation: 0.5,
         actions: const [IconModal()],
@@ -124,9 +125,9 @@ class SalaListTitle extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () {
+      onTap: () async {
         salasService.add(SalaSelectEvent(sala));
-        salasService.add(ChatInitEvent(sala.uid));
+        await salasService.cargarMensajes(sala.uid);
         Navigator.pushNamed(context, ChatScreen.chatsalesroute);
       },
     );

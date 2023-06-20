@@ -13,6 +13,18 @@ class ApiUserRepository {
     return await _authService.register(nombre, email, password);
   }
 
+  Future<bool> addTelefono(String telefono) async {
+    return await _authService.addTelefono(telefono);
+  }
+
+  Future<bool> addTelefonos(String telefono) async {
+    return await _authService.addTelefonos(telefono);
+  }
+
+  Future<bool> deleteTelefono(String telefono) async {
+    return await _authService.deleteTelefono(telefono);
+  }
+
   Future<bool> isLoggedIn() async {
     // final token = await AuthService.getToken();
     // if (token == null) {

@@ -81,3 +81,25 @@ class AuthDeleteUbicacionEvent extends AuthEvent {
   @override
   List<Object> get props => [uid];
 }
+
+//add telefono
+class AuthAddTelefonoEvent extends AuthEvent {
+  final String telefono;
+  const AuthAddTelefonoEvent(this.telefono);
+  @override
+  List<Object> get props => [telefono];
+}
+
+class AuthAddTelefonFamilyEvent extends AuthEvent {
+  final String telefono;
+  const AuthAddTelefonFamilyEvent(this.telefono);
+  @override
+  List<Object> get props => [telefono];
+}
+
+class AuthDeleteTeleFamilyEvent extends AuthEvent {
+  final String telefono;
+  const AuthDeleteTeleFamilyEvent(this.telefono);
+  @override
+  List<Object> get props => [telefono];
+}
