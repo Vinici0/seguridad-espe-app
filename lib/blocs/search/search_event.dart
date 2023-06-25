@@ -30,3 +30,8 @@ class AddUbicacionByUserEvent extends SearchEvent {
   final String id;
   const AddUbicacionByUserEvent(this.id);
 }
+
+class DeleteUbicacionByUserEvent extends SearchEvent {
+  final String id;
+  const DeleteUbicacionByUserEvent(this.id);
+}

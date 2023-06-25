@@ -25,6 +25,10 @@ class ApiUserRepository {
     return await _authService.deleteTelefono(telefono);
   }
 
+  Future<bool> notificacion(double lat, double lng) async {
+    return await _authService.notificacion(lat, lng);
+  }
+
   Future<bool> isLoggedIn() async {
     // final token = await AuthService.getToken();
     // if (token == null) {

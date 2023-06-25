@@ -19,14 +19,15 @@ class Routes {
     LoadingMapScreen.loadingroute: (_) => const LoadingMapScreen(),
     LoginScreen.loginroute: (_) => const LoginScreen(),
     MapScreen.routemap: (_) => const MapScreen(),
-    PerfilScreen.salesroute: (_) => const PerfilScreen(),
     MienbrosChatScreen.mienbrosChatroute: (_) => const MienbrosChatScreen(),
     ModalBottomSheet.modalBottomSheetRoute: (_) => const ModalBottomSheet(),
     NewsScreen.newsroute: (_) => const NewsScreen(),
+    PerfilScreen.salesroute: (_) => const PerfilScreen(),
     PlaceAddScreen.placeddd: (_) => const PlaceAddScreen(),
     PlaceDetailScreen.place: (_) => const PlaceDetailScreen(),
     PlacesScreen.salesroute: (_) => const PlacesScreen(),
     RegisterScreen.registerroute: (_) => const RegisterScreen(),
     RoomsScreen.salasroute: (_) => const RoomsScreen(),
+    SosScreen.sosroute: (_) => const SosScreen(),
   };
 }

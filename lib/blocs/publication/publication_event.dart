@@ -17,45 +17,25 @@ class PublicacionesInitEvent extends PublicationEvent {
 }
 
 class PublicacionesCreateEvent extends PublicationEvent {
-  final String tipo;
-  final String descripcion;
-  final String color;
-  final String icon;
-  final bool activo;
-  final bool visible;
-  final String uid;
-  final List<String>? path;
+  final List<Publicacion> publicacion;
 
   const PublicacionesCreateEvent(
-    this.tipo,
-    this.descripcion,
-    this.color,
-    this.icon,
-    this.activo,
-    this.visible,
-    this.uid,
-    this.path,
+    this.publicacion,
   );
 
   @override
   List<Object> get props => [
-        tipo,
-        descripcion,
-        color,
-        icon,
-        activo,
-        visible,
-        uid,
+        publicacion,
       ];
 }
 
 class PublicacionesUpdate extends PublicationEvent {
-  final String uid;
+  final List<Publicacion> publicacion;
 
-  const PublicacionesUpdate(this.uid);
+  const PublicacionesUpdate(this.publicacion);
 
   @override
-  List<Object> get props => [uid];
+  List<Object> get props => [publicacion];
 }
 
 class PublicacionesDelete extends PublicationEvent {
@@ -66,3 +46,24 @@ class PublicacionesDelete extends PublicationEvent {
   @override
   List<Object> get props => [publicacion];
 }
+
+class PublicacionSelectEvent extends PublicationEvent {
+  final Publicacion publicacion;
+
+  const PublicacionSelectEvent(this.publicacion);
+
+  @override
+  List<Object> get props => [publicacion];
+}
+
+class GetAllCommentsEvent extends PublicationEvent {
+  final List<Comentario> comentarios;
+
+  const GetAllCommentsEvent(this.comentarios);
+
+  @override
+  List<Object> get props => [comentarios];
+}
+
+//esta cargando evento
+class LoadingEvent extends PublicationEvent {}

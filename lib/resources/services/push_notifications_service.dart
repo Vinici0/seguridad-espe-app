@@ -1,33 +1,35 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PushNotificationService {
-  //La instancia de firebase messaging para conocer el token y el estado de la app
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
   static String? token;
-  static final StreamController<String> _messageStream =
+  static final StreamController<Map<String, dynamic>> _messageStream =
       StreamController.broadcast();
 
-  static Stream<String> get messagesStream => _messageStream.stream;
+  static Stream<Map<String, dynamic>> get messagesStream =>
+      _messageStream.stream;
 
-  static Future _backgroundHandler(RemoteMessage message) async {
+  static Future<void> _backgroundHandler(RemoteMessage message) async {
     print('onBackground Handler ${message.messageId}');
-    // print(message.data);
-    _messageStream.add(message.data['product'] ?? 'No data');
+    final Map<String, dynamic> messageData = message.data;
+    final String dataString = messageData['usuario'] ?? 'No data';
+    final Map<String, dynamic> userData = jsonDecode(dataString);
+    _messageStream.add(userData);
   }
 
-  static Future _onMessageHandler(RemoteMessage message) async {
+  static Future<void> _onMessageHandler(RemoteMessage message) async {
     print('onMessage Handler ${message.messageId}');
     print(message.data);
-    _messageStream.add(message.data['product'] ?? 'No data');
+    _messageStream.add(message.data);
   }
 
-  static Future _onMessageOpenApp(RemoteMessage message) async {
-    // print( 'onMessageOpenApp Handler ${ message.messageId }');
+  static Future<void> _onMessageOpenApp(RemoteMessage message) async {
     print(message.data);
-    _messageStream.add(message.data['product'] ?? 'No data');
+    _messageStream.add(message.data);
   }
 
   static Future initializeApp() async {

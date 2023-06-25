@@ -2,15 +2,17 @@ part of 'publication_bloc.dart';
 
 class PublicationState extends Equatable {
   final List<Publicacion> publicaciones;
-  final Publicacion currentPublicacion;
+  final List<Comentario> comentarios;
+  Publicacion? currentPublicacion; //
   final bool isLoading; // Indicador de carga
   final bool isError; // Indicador de error
 
-  const PublicationState({
+  PublicationState({
     required this.publicaciones,
-    required this.currentPublicacion,
+    this.currentPublicacion,
     required this.isLoading,
     required this.isError,
+    this.comentarios = const [],
   });
 
   PublicationState copyWith({
@@ -18,12 +20,14 @@ class PublicationState extends Equatable {
     Publicacion? currentPublicacion,
     bool? isLoading,
     bool? isError,
+    List<Comentario>? comentarios,
   }) {
     return PublicationState(
       publicaciones: publicaciones ?? this.publicaciones,
       currentPublicacion: currentPublicacion ?? this.currentPublicacion,
       isLoading: isLoading ?? this.isLoading,
       isError: isError ?? this.isError,
+      comentarios: comentarios ?? this.comentarios,
     );
   }
 
@@ -33,5 +37,6 @@ class PublicationState extends Equatable {
         currentPublicacion,
         isLoading,
         isError,
+        comentarios,
       ];
 }

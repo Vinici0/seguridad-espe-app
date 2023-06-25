@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:flutter_maps_adv/models/sales_response.dart';
 import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
 
@@ -22,48 +23,32 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
+  RoomBloc chatProvider = RoomBloc();
 
   final List<ChatMessage> _messages = [];
   // Variable para almacenar la fecha del último mensaje
 
   bool _estaEscribiendo = false;
-
   AuthBloc authService = AuthBloc();
-  RoomBloc chatProvider = RoomBloc();
 
   @override
   void initState() {
     chatProvider = BlocProvider.of<RoomBloc>(context);
-    // chatProvider.add(ChatInitEvent(chatProvider.state.salaSeleccionada.uid));
-    // chatProvider
-    //     .add(ObtenerUsuariosSalaEvent(chatProvider.state.salaSeleccionada.uid));
 
+    // chatProvider.cargarMensajes(chatProvider.state.salaSeleccionada.uid);
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
+    _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
     authService.socketService.socket.emit('join-room', {
-      'codigo': chatProvider.state.salaSeleccionada.idUsuario,
+      'codigo': chatProvider.state.salaSeleccionada.uid,
     });
 
     authService.socketService.socket.on('mensaje-grupal', _escucharMensaje);
-    _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
     super.initState();
   }
 
-  void _caragrHistorial(String uid) {
-    List<dynamic>? chat = chatProvider.state.mensajesSalas;
-
-    if (chat.isNotEmpty && chat != null) {
-      final history = chat.map((m) => ChatMessage(
-          texto: m.mensaje,
-          uid: m.usuario,
-          nombre: m.nombre,
-          animationController: AnimationController(
-              vsync: this, duration: const Duration(milliseconds: 0))
-            ..forward()));
-      setState(() {
-        _messages.insertAll(0, history);
-      });
-    }
+  void _caragrHistorial(String uid) async {
+    await chatProvider.cargarMensajes(uid);
   }
 
   void _escucharMensaje(dynamic payload) {
@@ -82,6 +67,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    //argumentos que se reciben de la pantalla anterior
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
@@ -138,25 +124,53 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           )
         ],
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            Flexible(
-                child: ListView.builder(
-              physics:
-                  const BouncingScrollPhysics(), //sirve para que el scroll se vea mas real
-              itemCount: _messages.length,
-              itemBuilder: (_, i) => _messages[i],
-              reverse: true,
-            )),
-            const Divider(height: 1),
-            Container(
-              color: Colors.white,
-              child: _inputChat(),
-            )
-          ],
-        ),
+      body: BlocBuilder<RoomBloc, RoomState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.black87),
+            );
+          }
+
+          if (state.mensajesSalas.isEmpty) {
+            return const Center(
+              child: Text('No hay mensajes'),
+            );
+          }
+
+          chatProvider.state.mensajesSalas.forEach((element) {
+            final message = ChatMessage(
+              nombre: element.nombre,
+              texto: element.mensaje,
+              uid: element.usuario,
+              animationController: AnimationController(
+                  vsync: this, duration: const Duration(milliseconds: 0))
+                ..forward(),
+            );
+            _messages.insert(0, message);
+          });
+
+          return Container(
+            color: Colors.white,
+            child: Column(
+              children: <Widget>[
+                Flexible(
+                    child: ListView.builder(
+                  physics:
+                      const BouncingScrollPhysics(), //sirve para que el scroll se vea mas real
+                  itemCount: _messages.length,
+                  itemBuilder: (_, i) => _messages[i],
+                  reverse: true,
+                )),
+                const Divider(height: 1),
+                Container(
+                  color: Colors.white,
+                  child: _inputChat(),
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -247,6 +261,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     });
   }
 
+  //void async cargar mensajes
+
   @override
   void dispose() {
     //TODO: Off del socket
@@ -258,7 +274,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
     this.authService.socketService.socket.off(
         'mensaje-grupal'); //Sirve para dejar de escuchar un evento en particular
-
+    chatProvider.add(SalasInitEvent());
     super.dispose();
   }
 }

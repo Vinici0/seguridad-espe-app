@@ -1,48 +1,77 @@
-/*
-  Model Comentarios:
-  id, id_usuario, nombre, comentario, fecha, hora, id_publicacion
- */
+// To parse this JSON data, do
+//
+//     final comentarioResponse = comentarioResponseFromJson(jsonString);
 
-class Comentarios {
-  String id;
-  String id_usuario;
-  String nombre;
-  String comentario;
-  String fecha;
-  String hora;
-  String id_publicacion;
-  int likes;
+import 'dart:convert';
 
-  Comentarios({
-    required this.id,
-    required this.id_usuario,
-    required this.nombre,
-    required this.comentario,
-    required this.fecha,
-    required this.hora,
-    required this.id_publicacion,
-    required this.likes,
+ComentarioResponse comentarioResponseFromJson(String str) =>
+    ComentarioResponse.fromJson(json.decode(str));
+
+String comentarioResponseToJson(ComentarioResponse data) =>
+    json.encode(data.toJson());
+
+class ComentarioResponse {
+  bool ok;
+  List<Comentario> comentarios;
+
+  ComentarioResponse({
+    required this.ok,
+    required this.comentarios,
   });
 
-  factory Comentarios.fromJson(Map<String, dynamic> json) => Comentarios(
-        id: json["id"],
-        id_usuario: json["id_usuario"],
-        nombre: json["nombre"],
-        comentario: json["comentario"],
-        fecha: json["fecha"],
-        hora: json["hora"],
-        id_publicacion: json["id_publicacion"],
-        likes: json["likes"],
+  factory ComentarioResponse.fromJson(Map<String, dynamic> json) =>
+      ComentarioResponse(
+        ok: json["ok"],
+        comentarios: List<Comentario>.from(
+            json["comentarios"].map((x) => Comentario.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "id_usuario": id_usuario,
-        "nombre": nombre,
-        "comentario": comentario,
-        "fecha": fecha,
-        "hora": hora,
-        "id_publicacion": id_publicacion,
+        "ok": ok,
+        "comentarios": List<dynamic>.from(comentarios.map((x) => x.toJson())),
+      };
+}
+
+class Comentario {
+  String contenido;
+  String usuario;
+  String publicacion;
+  int likes;
+  String estado;
+  String createdAt;
+  String updatedAt;
+  String uid;
+
+  Comentario({
+    required this.contenido,
+    required this.usuario,
+    required this.publicacion,
+    required this.likes,
+    required this.estado,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.uid,
+  });
+
+  factory Comentario.fromJson(Map<String, dynamic> json) => Comentario(
+        contenido: json["contenido"],
+        usuario: json["usuario"],
+        publicacion: json["publicacion"],
+        likes: json["likes"],
+        estado: json["estado"],
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
+        uid: json["uid"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "contenido": contenido,
+        "usuario": usuario,
+        "publicacion": publicacion,
         "likes": likes,
+        "estado": estado,
+        "createdAt": createdAt,
+        "updatedAt": updatedAt,
+        "uid": uid,
       };
 }

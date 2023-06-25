@@ -35,8 +35,11 @@ class RoomState extends Equatable {
     );
   }
 
+  //set and get salaseleccionada
+  Sala get getSalaSeleccionada => salaSeleccionada;
+
   @override
-  List<Object?> get props => [
+  List<Object> get props => [
         salas,
         mensajesSalas,
         salaSeleccionada,

@@ -13,9 +13,6 @@ class RoomsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final salasService = BlocProvider.of<RoomBloc>(context);
-    salasService.add(SalasInitEvent());
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
@@ -125,9 +122,9 @@ class SalaListTitle extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () async {
+      onTap: () {
+        salasService.add(ChatInitEvent());
         salasService.add(SalaSelectEvent(sala));
-        await salasService.cargarMensajes(sala.uid);
         Navigator.pushNamed(context, ChatScreen.chatsalesroute);
       },
     );

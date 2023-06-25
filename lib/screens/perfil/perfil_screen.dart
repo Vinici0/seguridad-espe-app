@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 
 class PerfilScreen extends StatelessWidget {
   static const String salesroute = 'perfil';
@@ -7,7 +9,7 @@ class PerfilScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF3F4F6),
+      backgroundColor: const Color(0xFFF3F4F6),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         centerTitle: false,
@@ -72,7 +74,7 @@ class PerfilScreen extends StatelessWidget {
                     )
                   ]),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
@@ -96,7 +98,6 @@ class PerfilScreen extends StatelessWidget {
                     height: 10,
                   ),
                   _ListIconName(
-                    //agrega el icono de cuenta de datos personales
                     icon: Icons.account_circle_outlined,
                     name: 'Cuenta',
                     route: '',
@@ -129,28 +130,45 @@ class _ListIconName extends StatelessWidget {
   final route;
   @override
   Widget build(BuildContext context) {
+    final authServiceBloc = BlocProvider.of<AuthBloc>(context);
     const bool routeActive = true;
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20),
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onTap: () {
+        onTap: () async {
+          if (name.contains('Cerrar sesión')) {
+            await authServiceBloc.logout();
+            // ignore: use_build_context_synchronously
+            Navigator.pushReplacementNamed(context, 'login');
+            return;
+          }
+
           Navigator.pushNamed(context, route, arguments: routeActive);
         },
         child: Row(
           children: [
-            //icono de perfil
-            Icon(
-              icon,
-              color: Colors.black87,
-              size: 30,
-            ),
+            name.contains('Cerrar sesión')
+                ? const Icon(
+                    Icons.logout,
+                    color: Colors.red,
+                    size: 30,
+                  )
+                : Icon(
+                    icon,
+                    color: Colors.black87,
+                    size: 30,
+                  ),
             const SizedBox(
               width: 30,
             ),
             Text(
               name,
-              style: TextStyle(color: Colors.black87, fontSize: 18),
+              style: TextStyle(
+                  color: name.contains('Cerrar sesión')
+                      ? Colors.red
+                      : Colors.black87,
+                  fontSize: 18),
             ),
           ],
         ),

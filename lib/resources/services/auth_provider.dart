@@ -228,4 +228,24 @@ class AuthService {
       return false;
     }
   }
+
+  //usuarios/notificacion
+  Future<bool> notificacion(double lat, double lng) async {
+    final data = {
+      'lat': lat,
+      'lng': lng,
+    };
+    final uri = Uri.parse('${Environment.apiUrl}/usuarios/notificacion');
+
+    final resp = await http.post(uri, body: jsonEncode(data), headers: {
+      'Content-Type': 'application/json',
+      'x-token': await getToken() as String,
+    });
+
+    if (resp.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

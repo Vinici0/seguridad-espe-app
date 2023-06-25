@@ -70,6 +70,7 @@ class GroupContenido extends StatelessWidget {
           color: const Color(0xffF3F3F3),
           onPressed: () {
             if (textoButton == 'Crear Grupo') {
+              //TODO: crear grupo PENDIENTE
               chatProvider.add(SalaCreateEvent(nomController.text));
             } else {
               chatProvider.add(SalaJoinEvent(nomController.text));

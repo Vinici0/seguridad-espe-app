@@ -97,4 +97,23 @@ class TrafficService {
       rethrow;
     }
   }
+
+  // delete ubcacion add
+  Future<Ubicacion> deleteUbicacionByUser(String idUbicacion) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/ubicaciones/$idUbicacion');
+
+      final resp = await http.delete(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+
+      final ubicacionData = json.decode(resp.body);
+      final ubicacion = Ubicacion.fromMap(ubicacionData);
+      return ubicacion;
+    } catch (e) {
+      print('Error adding ubicacion: $e');
+      rethrow;
+    }
+  }
 }

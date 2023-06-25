@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 
 class BtnSOS extends StatelessWidget {
@@ -21,6 +23,10 @@ class PositionedBtnSOS extends StatelessWidget {
   const PositionedBtnSOS({super.key});
   @override
   Widget build(BuildContext context) {
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    final lacationBloc = BlocProvider.of<LocationBloc>(context);
+    final lat = lacationBloc.state.lastKnownLocation!.latitude;
+    final lng = lacationBloc.state.lastKnownLocation!.longitude;
     return Positioned(
       top: MediaQuery.of(context).size.height * 0.09,
       right: 16.0,
@@ -49,7 +55,9 @@ class PositionedBtnSOS extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(
                   MediaQuery.of(context).size.width * 0.3 / 2),
-              onTap: () {},
+              onTap: () async {
+                await authBloc.notificacion(lat, lng);
+              },
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.25,
                 height: MediaQuery.of(context).size.width * 0.30,

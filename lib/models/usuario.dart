@@ -14,6 +14,7 @@ class Usuario {
   String tokenApp;
   List<Ubicacion> ubicacion;
   String uid;
+  String? img;
   List<String> telefonos;
 
   Usuario({
@@ -24,6 +25,7 @@ class Usuario {
     required this.tokenApp,
     required this.ubicacion,
     required this.uid,
+    this.img,
     required this.telefonos,
   });
 
@@ -32,6 +34,7 @@ class Usuario {
         nombre: json["nombre"],
         email: json["email"],
         telefono: json["telefono"],
+        img: json["img"],
         telefonos: List<String>.from(json["telefonos"].map((x) => x)),
         tokenApp: json["tokenApp"],
         ubicacion: List<Ubicacion>.from(
@@ -44,6 +47,7 @@ class Usuario {
         "nombre": nombre,
         "email": email,
         "telefono": telefono,
+        "img": img,
         "telefonos": List<dynamic>.from(telefonos.map((x) => x)),
         "tokenApp": tokenApp,
         "ubicaciones": List<dynamic>.from(ubicacion.map((x) => x.toMap())),

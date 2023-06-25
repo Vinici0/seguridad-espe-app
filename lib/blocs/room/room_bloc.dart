@@ -12,6 +12,20 @@ part 'room_state.dart';
 
 class RoomBloc extends Bloc<RoomEvent, RoomState> {
   final ChatProvider _chatProvider = ChatProvider();
+  final initSate = RoomState(
+    salas: const [],
+    mensajesSalas: const [],
+    salaSeleccionada: Sala(
+        nombre: '',
+        codigo: '',
+        color: '',
+        idUsuario: '',
+        propietario: '',
+        uid: ''),
+    isLoading: false,
+    isError: false,
+    usuariosSala: const [],
+  );
   RoomBloc()
       : super(RoomState(
             salas: const [],
@@ -28,6 +42,10 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
             usuariosSala: const [])) {
     on<SalasInitEvent>(salasInitEvent);
     on<ChatInitEvent>(chatInitEvent);
+    on<ChatLoadedEvent>(chatLoadedEvent);
+    on<CargandoEvent>((event, emit) {
+      emit(state.copyWith(isLoading: true));
+    });
     on<SalaCreateEvent>(salaCreateEvent);
     on<SalaJoinEvent>(salaJoinEvent);
     on<SalaSelectEvent>(salaSelectEvent);
@@ -44,7 +62,12 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
   FutureOr<void> chatInitEvent(
       ChatInitEvent event, Emitter<RoomState> emit) async {
-    emit(state.copyWith(isLoading: true));
+    final List<MensajesSala> mensajes = [];
+    emit(state.copyWith(mensajesSalas: mensajes, isLoading: false));
+  }
+
+  FutureOr<void> chatLoadedEvent(
+      ChatLoadedEvent event, Emitter<RoomState> emit) {
     emit(state.copyWith(mensajesSalas: event.mensajes, isLoading: false));
   }
 
@@ -81,10 +104,11 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     emit(state.copyWith(mensajesSalas: []));
   }
 
-  //cargar mensajes
+  // cargar mensajes
   cargarMensajes(String uid) async {
+    add(CargandoEvent());
     final mensajes = await _chatProvider.getChatSala(uid);
-    add(ChatInitEvent(mensajes));
+    add(ChatLoadedEvent(mensajes));
     return mensajes;
   }
 }

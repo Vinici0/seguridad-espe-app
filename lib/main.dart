@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
@@ -45,9 +47,18 @@ class _MyAppState extends State<MyApp> {
       Notificaciones
     */
     PushNotificationService.messagesStream.listen((message) {
-      navigatorKey.currentState?.pushNamed('salas', arguments: message);
-      final snackBar = SnackBar(content: Text(message));
-      messengerKey.currentState?.showSnackBar(snackBar);
+      print('MyApp: $message');
+      final usuarioData = jsonDecode(message['usuario']);
+      String nombre = usuarioData['nombre'];
+      double latitud = usuarioData['latitud'];
+      double longitud = usuarioData['longitud'];
+
+      if (latitud == null || longitud == null) return;
+      navigatorKey.currentState?.pushNamed('sos', arguments: {
+        'nombre': nombre,
+        'latitud': latitud,
+        'longitud': longitud,
+      });
     });
   }
 

@@ -56,6 +56,8 @@ dependencies:
   shared_preferences: ^2.1.0
   socket_io_client: ^2.0.1
   timeago: ^3.4.0
+  url_launcher: ^6.1.11
+  flutter_launcher_icons: ^0.13.1
 
 
 dev_dependencies:
@@ -63,6 +65,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
@@ -76,6 +83,8 @@ flutter:
     - assets/
     - assets/alertas/
     - assets/info/
+    - assets/icon/
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

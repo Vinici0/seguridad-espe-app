@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_maps_adv/global/environment.dart';
+import 'package:flutter_maps_adv/models/comentarios.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
-
+import 'package:flutter_maps_adv/widgets/comment_pulbicacion.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -53,13 +55,17 @@ class PublicacionService {
     List<String>? imagePaths,
   ) async {
     Position position = await Geolocator.getCurrentPosition();
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    print('placemarks: $placemarks');
 
     final publicacion = Publicacion(
       titulo: titulo,
       contenido: descripcion,
       color: color,
-      ciudad: "Luz de America",
-      barrio: 'S/N',
+      ciudad: placemarks[0].locality ?? 'S/N',
+      barrio: placemarks[0].name ?? 'S/N',
       isPublic: isPublic,
       usuario: usuario,
       imgAlerta: imgAlerta,
@@ -142,5 +148,21 @@ class PublicacionService {
     } else {
       throw Exception('Error: Publicacion data not available.');
     }
+  }
+
+  Future<List<Comentario>> getAllComments(String uid) async {
+    final uri = Uri.parse('${Environment.apiUrl}/comentarios/${uid}');
+
+    final resp = await http.get(
+      uri,
+      headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      },
+    );
+
+    final decodedData = json.decode(resp.body);
+    final commentResp = ComentarioResponse.fromJson(decodedData);
+    return commentResp.comentarios;
   }
 }

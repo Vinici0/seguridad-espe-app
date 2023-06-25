@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/models/ubicacion.dart';
-import 'package:flutter_maps_adv/widgets/manual_marker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -30,6 +29,13 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
       target: LatLng(0, 0),
       zoom: 14.4746,
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.future.then((controller) => controller
+        .dispose()); //Sirve para liberar la memoria del controlador del mapa cuando se cierra la pantalla de detalles de ubicacion
   }
 
   @override
@@ -119,10 +125,16 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                 ),
-                                onPressed: () {
-                                  authBloc.add(
-                                      AuthDeleteUbicacionEvent(ubicacion.uid!));
-                                  Navigator.pop(context);
+                                onPressed: () async {
+                                  await searchBloc
+                                      .eliminarUbicacion(ubicacion.uid!);
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    'lugares', //Es la ruta a la que se va a redirigir
+                                    ModalRoute.withName(
+                                        'place_details'), //Es la ruta actual de la que se va a redirigir y se va a eliminar
+                                  );
                                 },
                                 //icono de ubicacion
                                 icon: const Icon(FontAwesomeIcons.trashAlt,
@@ -142,7 +154,12 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
                                   if (authBloc.state.ubicaciones.any(
                                       (element) =>
                                           element.uid == ubicacion.uid)) {
-                                    Navigator.pop(context);
+                                    Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      'lugares', //Es la ruta a la que se va a redirigir
+                                      ModalRoute.withName(
+                                          'place_details'), //Es la ruta actual de la que se va a redirigir y se va a eliminar
+                                    );
                                     return;
                                   }
                                   searchBloc.add(

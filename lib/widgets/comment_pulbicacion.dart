@@ -6,19 +6,18 @@ class CommentPublication extends StatelessWidget {
   final String comentario;
   final String nombre;
   final String fotoPerfil;
-  final String fecha;
+  final String createdAt;
   final int likes;
-  final int totalComentarios;
 
-  const CommentPublication(
-      {super.key,
-      required this.uid,
-      required this.comentario,
-      required this.nombre,
-      required this.fotoPerfil,
-      required this.fecha,
-      required this.likes,
-      required this.totalComentarios});
+  const CommentPublication({
+    super.key,
+    required this.uid,
+    required this.comentario,
+    required this.nombre,
+    required this.fotoPerfil,
+    required this.createdAt,
+    required this.likes,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class CommentPublication extends StatelessWidget {
 
                       //fecha de publicacion
                       Text(
-                        fecha,
+                        createdAt,
                         style: const TextStyle(
                             fontSize: 12, color: Colors.black54),
                       ),

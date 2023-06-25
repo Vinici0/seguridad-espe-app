@@ -103,3 +103,11 @@ class AuthDeleteTeleFamilyEvent extends AuthEvent {
   @override
   List<Object> get props => [telefono];
 }
+
+class AuthNotificacionEvent extends AuthEvent {
+  final double lat;
+  final double lng;
+  const AuthNotificacionEvent(this.lat, this.lng);
+  @override
+  List<Object> get props => [lat, lng];
+}

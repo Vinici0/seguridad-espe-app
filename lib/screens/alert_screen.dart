@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
@@ -229,7 +230,18 @@ class _AlertScreenState extends State<AlertScreen> {
                             },
                           ),
                         )
-                      : Container(),
+                      : Container(
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: const Text(
+                            'Máximo 3 fotos',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
 
                   const Divider(
                     color: Colors.white,
@@ -292,7 +304,7 @@ class _AlertScreenState extends State<AlertScreen> {
                               return;
                             }
 
-                            publicaciones.add(PublicacionesCreateEvent(
+                            await publicaciones.createpublication(
                               reporte.tipo,
                               _textController.text,
                               reporte.color,
@@ -301,7 +313,7 @@ class _AlertScreenState extends State<AlertScreen> {
                               true,
                               authService.state.usuario!.uid,
                               imagePaths,
-                            ));
+                            );
 
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
@@ -355,16 +367,70 @@ class _AlertScreenState extends State<AlertScreen> {
 
   openImages() async {
     try {
-      var pickedfiles = await imgpicker.pickMultiImage();
-      if (pickedfiles != null) {
-        imagefiles = pickedfiles;
-        imagePaths = pickedfiles.map((e) => e.path).toList();
+      var pickedFiles = await ImagePicker().pickMultiImage();
+
+      if (pickedFiles != null) {
+        if (pickedFiles.length <= 3) {
+          imagefiles = pickedFiles;
+          imagePaths = pickedFiles.map((e) => e.path).toList();
+        } else {
+          if (Platform.isIOS) {
+            // ignore: use_build_context_synchronously
+            showCupertinoDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return CupertinoAlertDialog(
+                  title: const Text('Máximo 3 fotos'),
+                  content: const Text(
+                    'Por favor, seleccione máximo 3 fotos para su reporte.',
+                  ),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: const Text(
+                        'Aceptar',
+                        style: TextStyle(color: CupertinoColors.activeBlue),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          } else {
+            // ignore: use_build_context_synchronously
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Máximo 3 fotos'),
+                  content: const Text(
+                    'Por favor, seleccione máximo 3 fotos para su reporte.',
+                  ),
+                  actions: [
+                    TextButton(
+                      child: const Text(
+                        'Aceptar',
+                        style: TextStyle(color: Color(0xFF6165FA)),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        }
+
         setState(() {});
       } else {
         print("No image is selected.");
       }
     } catch (e) {
-      print("error while picking file.");
+      print("Error while picking file.");
     }
   }
 }

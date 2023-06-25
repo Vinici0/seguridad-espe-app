@@ -26,6 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthAddTelefonoEvent>(_onAuthAddTelefonoEvent);
     on<AuthDeleteTeleFamilyEvent>(_onAuthDeleteTeleFamilyEvent);
     on<AuthAddTelefonFamilyEvent>(_aonAddTelefonoFamilyEvent);
+    on<AuthNotificacionEvent>(_onAuthNotificacionEvent);
   }
 
   void _onAuthRegisterEvent(AuthRegisterEvent event, Emitter<AuthState> emit) {
@@ -54,8 +55,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(usuario: null));
   }
 
-  void _onAuthConnectEvent(
-      AuthConectEvent event, Emitter<AuthState> emit) async {
+  _onAuthConnectEvent(AuthConectEvent event, Emitter<AuthState> emit) async {
     socketService.connect();
   }
 
@@ -127,6 +127,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(usuario: usuario));
   }
 
+  void _onAuthNotificacionEvent(
+      AuthNotificacionEvent event, Emitter<AuthState> emit) async {}
+
   init() async {
     final isLoggedIn = await apiAuthRepository.isLoggedIn();
 
@@ -175,5 +178,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   deleteTelefono(String telefono) async {
     await apiAuthRepository.deleteTelefono(telefono);
     add(AuthDeleteTeleFamilyEvent(telefono));
+  }
+
+  notificacion(double lat, double lng) async {
+    await apiAuthRepository.notificacion(lat, lng);
+    add(AuthNotificacionEvent(lat, lng));
   }
 }

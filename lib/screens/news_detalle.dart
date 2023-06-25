@@ -4,6 +4,7 @@ import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/helpers/navegacion.dart';
+import 'package:flutter_maps_adv/models/comentarios.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter_maps_adv/widgets/comments.dart';
@@ -12,6 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class DetalleScreen extends StatefulWidget {
   static const String detalleroute = 'detalle';
@@ -22,56 +24,50 @@ class DetalleScreen extends StatefulWidget {
 }
 
 class _DetalleScreenState extends State<DetalleScreen> {
-  final List<CommentPublication> _comentarios = [
-    const CommentPublication(
-      comentario:
-          'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
-      nombre: 'Juan',
-      fotoPerfil: 'assets/images/usuario.png',
-      fecha: '2021-09-10 10:00:00',
-      likes: 10,
-      totalComentarios: 2,
-      uid: 'ad',
-    ),
-    const CommentPublication(
-      comentario:
-          'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
-      nombre: 'Juan',
-      fotoPerfil: 'assets/images/usuario.png',
-      fecha: '2021-09-10 10:00:00',
-      likes: 10,
-      totalComentarios: 2,
-      uid: 'ad',
-    ),
-    const CommentPublication(
-      comentario:
-          'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
-      nombre: 'Juan',
-      fotoPerfil: 'assets/images/usuario.png',
-      fecha: '2021-09-10 10:00:00',
-      likes: 10,
-      totalComentarios: 2,
-      uid: 'ad',
-    ),
-    const CommentPublication(
-      comentario:
-          'lore ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad e ipsum dolor sit amet consectetur adipiscing elit a mi awddad qdwdad',
-      nombre: 'Juan',
-      fotoPerfil: 'assets/images/usuario.png',
-      fecha: '2021-09-10 10:00:00',
-      likes: 10,
-      totalComentarios: 2,
-      uid: 'ad',
-    ),
-  ];
-  AuthBloc authService = AuthBloc();
-  final _textController = TextEditingController();
+  PublicationBloc publicationBloc = PublicationBloc();
+  final List<CommentPublication> _comentariosP = [];
   bool _estaEscribiendo = false;
+  AuthBloc authService = AuthBloc();
+
+  final _textController = TextEditingController();
 
   @override
   void initState() {
-    this.authService = BlocProvider.of<AuthBloc>(context, listen: false);
+    publicationBloc = BlocProvider.of<PublicationBloc>(context);
+
+    authService = BlocProvider.of<AuthBloc>(context, listen: false);
+
+    publicationBloc
+        .cargarComentarios(publicationBloc.state.currentPublicacion!.uid!);
+
+    authService.socketService.socket.emit('join-room', {
+      'codigo': publicationBloc.state.currentPublicacion!.uid!,
+    });
+
+    authService.socketService.socket
+        .on('comentario-publicacion', _escucharComeentario);
+
+    _caragrHistorial(publicationBloc.state.currentPublicacion!.uid!);
+
     super.initState();
+  }
+
+  void _caragrHistorial(String uid) async {
+    await publicationBloc.getAllComments(uid);
+  }
+
+  void _escucharComeentario(dynamic payload) {
+    CommentPublication comment = CommentPublication(
+      comentario: payload['mensaje'],
+      nombre: payload['nombre'],
+      fotoPerfil: payload['fotoPerfil'],
+      createdAt: payload['createdAt'],
+      likes: payload['likes'],
+      uid: payload['uid'],
+    );
+
+    _comentariosP.insert(0, comment);
+    setState(() {});
   }
 
   @override
@@ -85,42 +81,51 @@ class _DetalleScreenState extends State<DetalleScreen> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: Stack(
-            children: [
-              CustomScrollView(
-                slivers: [
-                  _CustonAppBarDetalle(publicacion: publicacion),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      _UbicacionDetalle(publicacion: publicacion),
-                      _DescripcionDetalle(publicacion: publicacion),
-                      const Divider(),
-                      LikesCommentsDetails(
-                          publicacion: publicacion, likes: likes),
-                      const Divider(),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: _comentarios.length,
-                        itemBuilder: (_, i) => _comentarios[i],
-                        reverse: true,
-                      ),
-                      const Divider(),
-                      const SizedBox(
-                        height: 80,
-                      ),
-                    ]),
-                  ),
-                ],
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: _inputComentario(),
-              ),
-            ],
-          ),
+          body: BlocBuilder<PublicationBloc, PublicationState>(
+              builder: (context, state) {
+            publicationBloc.state.comentarios.forEach((element) {
+              final comment = CommentPublication(
+                comentario: element.contenido,
+                nombre: "Vincio",
+                fotoPerfil: "assets/images/usuario.png",
+                createdAt: element.createdAt,
+                likes: element.likes,
+                uid: element.uid,
+              );
+              _comentariosP.add(comment);
+            });
+
+            return Stack(
+              children: [
+                CustomScrollView(
+                  slivers: [
+                    _CustonAppBarDetalle(publicacion: publicacion),
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        _UbicacionDetalle(publicacion: publicacion),
+                        _DescripcionDetalle(publicacion: publicacion),
+                        const Divider(),
+                        LikesCommentsDetails(
+                            publicacion: publicacion, likes: likes),
+                        const Divider(),
+                        _ListComentario(comentariosP: _comentariosP),
+                        const Divider(),
+                        const SizedBox(
+                          height: 80,
+                        ),
+                      ]),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: _inputComentario(),
+                ),
+              ],
+            );
+          }),
         ),
       ),
     );
@@ -190,19 +195,73 @@ class _DetalleScreenState extends State<DetalleScreen> {
   _handleSubmit(String comentario) {
     if (comentario.isEmpty) return;
     _textController.clear();
+    final createdAt = DateTime.now();
     final newComment = CommentPublication(
       comentario: comentario,
       nombre: authService.state.usuario!.nombre,
       fotoPerfil: 'da',
-      fecha: '2021-10-10',
+      createdAt: timeago.format(createdAt, locale: 'es'),
       likes: 0,
-      totalComentarios: 0,
       uid: authService.state.usuario!.uid,
     );
 
-    _comentarios.insert(0, newComment);
-    _estaEscribiendo = false;
-    setState(() {});
+    _comentariosP.insert(0, newComment);
+    setState(() {
+      _estaEscribiendo = false;
+
+      this.authService.socketService.socket.emit('comentario-publicacion', {
+        'nombre': authService.state.usuario!.nombre,
+        'mensaje': newComment.comentario,
+        'fotoPerfil': authService.state.usuario!.img ?? '',
+        'createdAt': createdAt.toString(),
+        'likes': newComment.likes,
+        'uid': newComment.uid,
+        'codigo': publicationBloc.state.currentPublicacion!.uid!,
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    publicationBloc.add(const GetAllCommentsEvent([]));
+    authService.socketService.socket.off('comentario-publicacion');
+    super.dispose();
+  }
+}
+
+class _ListComentario extends StatelessWidget {
+  const _ListComentario({
+    super.key,
+    required List<CommentPublication> comentariosP,
+  }) : _comentariosP = comentariosP;
+
+  final List<CommentPublication> _comentariosP;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PublicationBloc, PublicationState>(
+      builder: (context, state) {
+        if (state.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (state.comentarios.isEmpty) {
+          return const Center(
+            child: Text('No hay comentarios'),
+          );
+        }
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const BouncingScrollPhysics(),
+          itemCount: _comentariosP.length,
+          itemBuilder: (_, i) => _comentariosP[i],
+          reverse: true,
+        );
+      },
+    );
   }
 }
 

@@ -31,6 +31,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(state.copyWith(history: [event.history, ...state.history]));
     });
 
+    on<DeleteUbicacionByUserEvent>(deleteUbicacionByUserEvent);
+
     on<AddUbicacionByUserEvent>((event, emit) async {
       final newUbicacion = await trafficService.addUbicacionByUser(event.id);
       if (newUbicacion == null) return;
@@ -64,5 +66,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Future<List<Feature>> getHistory() async {
     return _history;
+  }
+
+  void deleteUbicacionByUserEvent(
+      DeleteUbicacionByUserEvent event, Emitter<SearchState> emit) async {
+    emit(state.copyWith(
+        ubicacion: state.ubicacion
+            .where((element) => element.uid! != event.id)
+            .toList()));
+  }
+
+  eliminarUbicacion(String id) async {
+    final deletedUbicacion = await trafficService.deleteUbicacionByUser(id);
+    if (deletedUbicacion == null) return;
+    add(DeleteUbicacionByUserEvent(deletedUbicacion.uid!));
   }
 }
