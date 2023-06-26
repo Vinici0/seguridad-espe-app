@@ -6,8 +6,6 @@ import 'package:flutter_maps_adv/widgets/home/btn_follow_user.dart';
 import 'package:flutter_maps_adv/widgets/home/btn_report.dart';
 import 'package:flutter_maps_adv/widgets/btn_toggle_user_route.dart';
 import 'package:flutter_maps_adv/widgets/home/btn_sos.dart';
-import 'package:flutter_maps_adv/widgets/manual_marker.dart';
-import 'package:flutter_maps_adv/widgets/home/searchbar.dart';
 import 'package:flutter_maps_adv/widgets/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -64,6 +62,7 @@ class _MapScreenState extends State<MapScreen> {
                   MapView(
                     initialLocation: localtionState.lastKnownLocation!,
                     polylines: polylines.values.toSet(),
+                    markers: mapState.markers.values.toSet(),
                   ),
                   // const SearchBar(),
                   // const ManualMarker(),

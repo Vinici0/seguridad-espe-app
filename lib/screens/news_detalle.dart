@@ -4,7 +4,6 @@ import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/helpers/navegacion.dart';
-import 'package:flutter_maps_adv/models/comentarios.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter_maps_adv/widgets/comments.dart';
@@ -25,7 +24,6 @@ class DetalleScreen extends StatefulWidget {
 
 class _DetalleScreenState extends State<DetalleScreen> {
   PublicationBloc publicationBloc = PublicationBloc();
-  final List<CommentPublication> _comentariosP = [];
   bool _estaEscribiendo = false;
   AuthBloc authService = AuthBloc();
 
@@ -35,10 +33,8 @@ class _DetalleScreenState extends State<DetalleScreen> {
   void initState() {
     publicationBloc = BlocProvider.of<PublicationBloc>(context);
 
+    _caragrHistorial(publicationBloc.state.currentPublicacion!.uid!);
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
-
-    publicationBloc
-        .cargarComentarios(publicationBloc.state.currentPublicacion!.uid!);
 
     authService.socketService.socket.emit('join-room', {
       'codigo': publicationBloc.state.currentPublicacion!.uid!,
@@ -47,13 +43,12 @@ class _DetalleScreenState extends State<DetalleScreen> {
     authService.socketService.socket
         .on('comentario-publicacion', _escucharComeentario);
 
-    _caragrHistorial(publicationBloc.state.currentPublicacion!.uid!);
-
     super.initState();
   }
 
   void _caragrHistorial(String uid) async {
-    await publicationBloc.getAllComments(uid);
+    await publicationBloc
+        .getAllComments(publicationBloc.state.currentPublicacion!.uid!);
   }
 
   void _escucharComeentario(dynamic payload) {
@@ -62,12 +57,13 @@ class _DetalleScreenState extends State<DetalleScreen> {
       nombre: payload['nombre'],
       fotoPerfil: payload['fotoPerfil'],
       createdAt: payload['createdAt'],
-      likes: payload['likes'],
       uid: payload['uid'],
+      likes: payload['likes'],
     );
 
-    _comentariosP.insert(0, comment);
-    setState(() {});
+    setState(() {
+      publicationBloc.comentariosP.insert(0, comment);
+    });
   }
 
   @override
@@ -76,56 +72,42 @@ class _DetalleScreenState extends State<DetalleScreen> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final publicacion = mapNews['publicacion'] as Publicacion;
     final likes = mapNews['likes'] as String;
+
     return Container(
       color: Colors.white,
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: BlocBuilder<PublicationBloc, PublicationState>(
-              builder: (context, state) {
-            publicationBloc.state.comentarios.forEach((element) {
-              final comment = CommentPublication(
-                comentario: element.contenido,
-                nombre: "Vincio",
-                fotoPerfil: "assets/images/usuario.png",
-                createdAt: element.createdAt,
-                likes: element.likes,
-                uid: element.uid,
-              );
-              _comentariosP.add(comment);
-            });
-
-            return Stack(
-              children: [
-                CustomScrollView(
-                  slivers: [
-                    _CustonAppBarDetalle(publicacion: publicacion),
-                    SliverList(
-                      delegate: SliverChildListDelegate([
-                        _UbicacionDetalle(publicacion: publicacion),
-                        _DescripcionDetalle(publicacion: publicacion),
-                        const Divider(),
-                        LikesCommentsDetails(
-                            publicacion: publicacion, likes: likes),
-                        const Divider(),
-                        _ListComentario(comentariosP: _comentariosP),
-                        const Divider(),
-                        const SizedBox(
-                          height: 80,
-                        ),
-                      ]),
-                    ),
-                  ],
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: _inputComentario(),
-                ),
-              ],
-            );
-          }),
+          body: Stack(
+            children: [
+              CustomScrollView(
+                slivers: [
+                  _CustonAppBarDetalle(publicacion: publicacion),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      _UbicacionDetalle(publicacion: publicacion),
+                      _DescripcionDetalle(publicacion: publicacion),
+                      const Divider(),
+                      LikesCommentsDetails(
+                          publicacion: publicacion, likes: likes),
+                      const Divider(),
+                      _ListComentario(
+                          comentariosP: publicationBloc.comentariosP),
+                      const SizedBox(
+                        height: 80,
+                      ),
+                    ]),
+                  ),
+                ],
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: _inputComentario(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -200,23 +182,22 @@ class _DetalleScreenState extends State<DetalleScreen> {
       comentario: comentario,
       nombre: authService.state.usuario!.nombre,
       fotoPerfil: 'da',
-      createdAt: timeago.format(createdAt, locale: 'es'),
-      likes: 0,
+      createdAt: createdAt.toString(),
       uid: authService.state.usuario!.uid,
+      likes: publicationBloc.state.comentarios!.length.toString(),
     );
 
-    _comentariosP.insert(0, newComment);
+    publicationBloc.comentariosP.insert(0, newComment);
     setState(() {
       _estaEscribiendo = false;
 
       this.authService.socketService.socket.emit('comentario-publicacion', {
         'nombre': authService.state.usuario!.nombre,
         'mensaje': newComment.comentario,
-        'fotoPerfil': authService.state.usuario!.img ?? '',
+        'fotoPerfil': authService.state.usuario!.img ?? 'S/N',
         'createdAt': createdAt.toString(),
-        'likes': newComment.likes,
-        'uid': newComment.uid,
-        'codigo': publicationBloc.state.currentPublicacion!.uid!,
+        'para': publicationBloc.state.currentPublicacion!.uid!,
+        'de': authService.state.usuario!.uid,
       });
     });
   }
@@ -224,7 +205,9 @@ class _DetalleScreenState extends State<DetalleScreen> {
   @override
   void dispose() {
     publicationBloc.add(const GetAllCommentsEvent([]));
+    publicationBloc.comentariosP.clear();
     authService.socketService.socket.off('comentario-publicacion');
+
     super.dispose();
   }
 }
@@ -239,6 +222,7 @@ class _ListComentario extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
     return BlocBuilder<PublicationBloc, PublicationState>(
       builder: (context, state) {
         if (state.isLoading) {
@@ -247,7 +231,7 @@ class _ListComentario extends StatelessWidget {
           );
         }
 
-        if (state.comentarios.isEmpty) {
+        if (publicationBloc.comentariosP.isEmpty) {
           return const Center(
             child: Text('No hay comentarios'),
           );

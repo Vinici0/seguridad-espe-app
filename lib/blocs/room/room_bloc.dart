@@ -6,12 +6,14 @@ import 'package:flutter_maps_adv/models/salas_mensaje_response.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
 import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter_maps_adv/resources/services/chat_provider.dart';
+import 'package:flutter_maps_adv/widgets/comment_pulbicacion.dart';
 
 part 'room_event.dart';
 part 'room_state.dart';
 
 class RoomBloc extends Bloc<RoomEvent, RoomState> {
   final ChatProvider _chatProvider = ChatProvider();
+  final List<MensajesSala> mensajesAll = [];
   final initSate = RoomState(
     salas: const [],
     mensajesSalas: const [],
@@ -106,8 +108,10 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
   // cargar mensajes
   cargarMensajes(String uid) async {
+    mensajesAll.clear();
     add(CargandoEvent());
     final mensajes = await _chatProvider.getChatSala(uid);
+    mensajesAll.addAll(mensajes);
     add(ChatLoadedEvent(mensajes));
     return mensajes;
   }

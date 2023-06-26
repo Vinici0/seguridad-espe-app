@@ -34,44 +34,70 @@ class ComentarioResponse {
 
 class Comentario {
   String contenido;
-  String usuario;
+  Usuario usuario;
   String publicacion;
-  int likes;
   String estado;
   String createdAt;
   String updatedAt;
   String uid;
+  List<String>? likes;
 
   Comentario({
     required this.contenido,
     required this.usuario,
     required this.publicacion,
-    required this.likes,
     required this.estado,
     required this.createdAt,
     required this.updatedAt,
     required this.uid,
+    this.likes,
   });
 
   factory Comentario.fromJson(Map<String, dynamic> json) => Comentario(
         contenido: json["contenido"],
-        usuario: json["usuario"],
+        usuario: Usuario.fromJson(json["usuario"]),
         publicacion: json["publicacion"],
-        likes: json["likes"],
         estado: json["estado"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
         uid: json["uid"],
+        likes: json["likes"] == null
+            ? []
+            : List<String>.from(json["likes"]!.map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
         "contenido": contenido,
-        "usuario": usuario,
+        "usuario": usuario.toJson(),
         "publicacion": publicacion,
-        "likes": likes,
         "estado": estado,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "uid": uid,
+        "likes": likes == null ? [] : List<dynamic>.from(likes!.map((x) => x)),
+      };
+}
+
+class Usuario {
+  String id;
+  String nombre;
+  String? img;
+
+  Usuario({
+    required this.id,
+    required this.nombre,
+    this.img,
+  });
+
+  factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
+        id: json["_id"],
+        nombre: json["nombre"],
+        img: json["img"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "nombre": nombre,
+        "img": img,
       };
 }

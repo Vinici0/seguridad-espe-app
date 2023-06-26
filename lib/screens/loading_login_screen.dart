@@ -32,8 +32,6 @@ class LoadingLoginScreen extends StatelessWidget {
 
     await authService.init();
 
-    // Esperar hasta que el usuario esté disponible en el estado del AuthBloc
-
     await Future.delayed(const Duration(milliseconds: 100));
 
     final usuario = authService.state.usuario;

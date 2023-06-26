@@ -1,9 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/publication/publication_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:flutter_maps_adv/screens/news_detalle.dart';
@@ -102,6 +100,7 @@ class _ListNews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final publicationBloc = BlocProvider.of<PublicationBloc>(context);
+
     final localtionBloc = BlocProvider.of<LocationBloc>(context);
     return ListView.builder(
       itemCount: publicaciones.length,
@@ -276,6 +275,7 @@ class _ListNews extends StatelessWidget {
               ),
               onTap: () {
                 publicationBloc.add(PublicacionSelectEvent(publicaciones[i]));
+
                 Navigator.pushNamed(context, DetalleScreen.detalleroute,
                     arguments: {
                       'publicacion': publicaciones[i],
@@ -320,7 +320,11 @@ class _OptionNews extends StatelessWidget {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () async {
-            await _publicationBloc.publicacionesUpdate(publicaciones[i].uid!);
+            try {
+              await _publicationBloc.publicacionesUpdate(publicaciones[i].uid!);
+            } catch (e) {
+              print(e);
+            }
           },
           child: Column(
             children: [

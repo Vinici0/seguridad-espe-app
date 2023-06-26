@@ -54,10 +54,10 @@ class LikesCommentsDetails extends StatelessWidget {
                 size: 16,
               ),
               const SizedBox(width: 5),
-              // Text(
-              //     comentarios!.length.toString(),
-              //   style: TextStyle(fontSize: 20),
-              // ),
+              Text(
+                publicacion.comentarios!.length.toString(),
+                style: TextStyle(fontSize: 20),
+              ),
               const Spacer(),
               //Icono de compartir
               GestureDetector(

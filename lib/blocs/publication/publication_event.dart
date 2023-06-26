@@ -65,5 +65,23 @@ class GetAllCommentsEvent extends PublicationEvent {
   List<Object> get props => [comentarios];
 }
 
+class GetAllCommentsIDEvent extends PublicationEvent {
+  final String id;
+
+  const GetAllCommentsIDEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
+
 //esta cargando evento
 class LoadingEvent extends PublicationEvent {}
+
+class ToggleLikeComentarioEvent extends PublicationEvent {
+  final List<Comentario> comentarios;
+
+  const ToggleLikeComentarioEvent(this.comentarios);
+
+  @override
+  List<Object> get props => [comentarios];
+}

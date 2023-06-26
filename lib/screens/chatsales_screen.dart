@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
-import 'package:flutter_maps_adv/models/sales_response.dart';
+import 'package:flutter_maps_adv/models/salas_mensaje_response.dart';
 import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
 
@@ -23,19 +23,18 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
-  RoomBloc chatProvider = RoomBloc();
 
   final List<ChatMessage> _messages = [];
-  // Variable para almacenar la fecha del último mensaje
 
   bool _estaEscribiendo = false;
+
   AuthBloc authService = AuthBloc();
+  RoomBloc chatProvider = RoomBloc();
 
   @override
   void initState() {
     chatProvider = BlocProvider.of<RoomBloc>(context);
 
-    // chatProvider.cargarMensajes(chatProvider.state.salaSeleccionada.uid);
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
     _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
@@ -48,7 +47,23 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   void _caragrHistorial(String uid) async {
+    //isLoading != true
     await chatProvider.cargarMensajes(uid);
+
+    List<MensajesSala>? chat = chatProvider.mensajesAll;
+
+    if (chat.isNotEmpty) {
+      final history = chat.map((m) => ChatMessage(
+          texto: m.mensaje,
+          uid: m.usuario,
+          nombre: m.nombre,
+          animationController: AnimationController(
+              vsync: this, duration: const Duration(milliseconds: 0))
+            ..forward()));
+      setState(() {
+        _messages.insertAll(0, history);
+      });
+    }
   }
 
   void _escucharMensaje(dynamic payload) {
@@ -67,7 +82,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    //argumentos que se reciben de la pantalla anterior
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
@@ -128,27 +142,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(color: Colors.black87),
+              child: CircularProgressIndicator(),
             );
           }
-
-          if (state.mensajesSalas.isEmpty) {
-            return const Center(
-              child: Text('No hay mensajes'),
-            );
-          }
-
-          chatProvider.state.mensajesSalas.forEach((element) {
-            final message = ChatMessage(
-              nombre: element.nombre,
-              texto: element.mensaje,
-              uid: element.usuario,
-              animationController: AnimationController(
-                  vsync: this, duration: const Duration(milliseconds: 0))
-                ..forward(),
-            );
-            _messages.insert(0, message);
-          });
 
           return Container(
             color: Colors.white,
@@ -231,7 +227,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     ));
   }
 
-  _handleSubmit(String texto) {
+  void _handleSubmit(String texto) {
     if (texto.length == 0) return;
 
     print(texto);
@@ -245,20 +241,23 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       animationController: AnimationController(
           vsync: this, duration: const Duration(milliseconds: 200)),
     );
-    _messages.insert(0, newMessage);
-    newMessage.animationController.forward();
 
-    setState(() {
-      _estaEscribiendo = false;
+    /// Check if the state is mounted before calling setState()
+    if (mounted) {
+      _messages.insert(0, newMessage);
+      newMessage.animationController.forward();
 
-      this.authService.socketService.socket.emit('mensaje-grupal', {
-        'de': this.authService.state.usuario!.uid,
-        //TODO: Paso 3 - Enviar el mensaje al socket con el uid de la sala seleccionada para que el socket lo envie a todos los usuarios de la sala
-        'para': this.chatProvider.state.salaSeleccionada.uid,
-        'nombre': this.authService.state.usuario!.nombre,
-        'mensaje': texto
+      setState(() {
+        _estaEscribiendo = false;
+
+        this.authService.socketService.socket.emit('mensaje-grupal', {
+          'de': this.authService.state.usuario!.uid,
+          'para': this.chatProvider.state.salaSeleccionada.uid,
+          'nombre': this.authService.state.usuario!.nombre,
+          'mensaje': texto
+        });
       });
-    });
+    }
   }
 
   //void async cargar mensajes
@@ -268,13 +267,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     //TODO: Off del socket
 
     for (ChatMessage message in _messages) {
-      //Para evitar fugas de memoria en la animacion del boton de enviar mensaje
-      //Una vwz que se cierra se limpia la animacion del boton de enviar mensaje para evitar fugas de memoria
       message.animationController.dispose();
     }
-    this.authService.socketService.socket.off(
-        'mensaje-grupal'); //Sirve para dejar de escuchar un evento en particular
-    chatProvider.add(SalasInitEvent());
+
+    _messages.clear(); // Limpia la lista de mensajes
+
+    chatProvider.add(LimpiarMensajesEvent());
+    this.authService.socketService.socket.off('mensaje-grupal');
+
     super.dispose();
   }
 }

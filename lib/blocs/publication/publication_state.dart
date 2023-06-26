@@ -1,8 +1,9 @@
 part of 'publication_bloc.dart';
 
+// ignore: must_be_immutable
 class PublicationState extends Equatable {
   final List<Publicacion> publicaciones;
-  final List<Comentario> comentarios;
+  List<Comentario>? comentarios;
   Publicacion? currentPublicacion; //
   final bool isLoading; // Indicador de carga
   final bool isError; // Indicador de error
@@ -12,7 +13,7 @@ class PublicationState extends Equatable {
     this.currentPublicacion,
     required this.isLoading,
     required this.isError,
-    this.comentarios = const [],
+    this.comentarios,
   });
 
   PublicationState copyWith({

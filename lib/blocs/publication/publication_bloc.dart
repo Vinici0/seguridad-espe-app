@@ -5,12 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_maps_adv/models/comentarios.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:flutter_maps_adv/resources/services/publicacion.dart';
+import 'package:flutter_maps_adv/widgets/comment_pulbicacion.dart';
 
 part 'publication_event.dart';
 part 'publication_state.dart';
 
 class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   final PublicacionService _publicacionService = PublicacionService();
+  final List<CommentPublication> comentariosP = [];
   PublicationBloc()
       : super(PublicationState(
             publicaciones: const [],
@@ -32,6 +34,8 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     on<PublicacionesInitEvent>(publicacionesInitEvent);
 
     on<PublicacionesUpdate>(publicacionesUpdateEvent);
+
+    on<ToggleLikeComentarioEvent>(_toggleLikeComentario);
 
     on<PublicacionesCreateEvent>(publicacionesCreateEvent);
 
@@ -57,6 +61,11 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   FutureOr<void> publicacionesUpdateEvent(
       PublicacionesUpdate event, Emitter<PublicationState> emit) async {
     emit(state.copyWith(publicaciones: event.publicacion));
+  }
+
+  FutureOr<void> _toggleLikeComentario(
+      ToggleLikeComentarioEvent event, Emitter<PublicationState> emit) async {
+    emit(state.copyWith(comentarios: event.comentarios));
   }
 
   FutureOr<void> publicacionesCreateEvent(
@@ -95,10 +104,35 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     add(PublicacionesUpdate(newPublicaciones));
   }
 
+  //toggleLikeComentario
+  toggleLikeComentario(String uid) async {
+    final newComentario = await _publicacionService.toggleLikeComentario(uid);
+    final newComentarios = state.comentarios!.map((comentario) {
+      if (comentario.uid == newComentario.uid) {
+        return newComentario;
+      } else {
+        return comentario;
+      }
+    }).toList();
+    add(ToggleLikeComentarioEvent(newComentarios));
+  }
+
   getAllComments(String uid) async {
     add(LoadingEvent());
     final List<Comentario> comentarios =
         await _publicacionService.getAllComments(uid);
+
+    for (var element in comentarios) {
+      final comment = CommentPublication(
+        comentario: element.contenido,
+        nombre: "Vincio",
+        fotoPerfil: "assets/images/usuario.png",
+        createdAt: element.createdAt,
+        uid: element.uid,
+        likes: element.likes!.length.toString(),
+      );
+      comentariosP.add(comment);
+    }
     add(GetAllCommentsEvent(comentarios));
   }
 }

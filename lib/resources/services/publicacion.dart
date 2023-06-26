@@ -165,4 +165,30 @@ class PublicacionService {
     final commentResp = ComentarioResponse.fromJson(decodedData);
     return commentResp.comentarios;
   }
+
+  Future<Comentario> toggleLikeComentario(String uid) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/comentarios/like/${uid}');
+
+      final resp = await http.put(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken() as String,
+        },
+      );
+
+      final decodedData = json.decode(resp.body);
+
+      if (decodedData.containsKey('comentario') &&
+          decodedData['comentario'] != null) {
+        final commentResp = Comentario.fromJson(decodedData['comentario']);
+        return commentResp;
+      } else {
+        throw Exception('Error: Publicacion data not available.');
+      }
+    } catch (e) {
+      throw Exception('Error: Failed to toggle like on comentario.');
+    }
+  }
 }

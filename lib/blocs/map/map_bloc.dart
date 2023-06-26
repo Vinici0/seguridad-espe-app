@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_maps_adv/blocs/location/localtion_bloc.dart';
+import 'package:flutter_maps_adv/helpers/custom_image_marker.dart';
 import 'package:flutter_maps_adv/models/route_destination.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -27,8 +28,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OpToggleUserRouteEvent>((event, emit) =>
         emit(state.copyWith(showRoutePreview: !state.showRoutePreview)));
 
-    on<DisplayPolylinesEvent>(
-        (event, emit) => emit(state.copyWith(polylines: event.polylines)));
+    on<DisplayPolylinesEvent>((event, emit) => emit(
+        state.copyWith(polylines: event.polylines, markers: event.markers)));
 
     locationStateSubscription = locationBloc.stream.listen((locationState) {
       if (locationState.lastKnownLocation != null) {
@@ -110,9 +111,49 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       startCap: Cap.roundCap,
       endCap: Cap.roundCap,
     );
+
+    double kms = destination.distance / 1000;
+    kms = (kms * 100).floorToDouble();
+    kms /= 100;
+
+    int tripDuration = (destination.duration / 60).floorToDouble().toInt();
+
+    //custom marker
+    final startMakerImg = await getAssetImageMarker();
+
+    final startMarker = Marker(
+        // anchor: const Offset(0.1, 1),
+        markerId: const MarkerId('start'),
+        position: destination.points.first,
+        infoWindow: InfoWindow(
+          title: 'Inicio',
+          snippet: 'Kms: $kms, duration: $tripDuration',
+        ));
+
+    final endMarker = Marker(
+      // anchor: const Offset(0.1, 1),
+      markerId: const MarkerId('end'),
+      position: destination.points.last,
+      // icon: startMaker,
+      // infoWindow: InfoWindow(
+      //   title: destination.destinationName,
+      //   snippet: 'Kms: $kms, duration: $tripDuration',
+      // )
+    );
+
     final curretPolylines = Map<String, Polyline>.from(state.polylines);
     curretPolylines['route'] = myRoute;
-    add(DisplayPolylinesEvent(curretPolylines));
+
+    final currentMarkers = Map<String, Marker>.from(state.markers);
+    currentMarkers['start'] = startMarker;
+    currentMarkers['end'] = endMarker;
+
+    add(DisplayPolylinesEvent(curretPolylines, currentMarkers));
+
+    await Future.delayed(const Duration(milliseconds: 300), () {
+      _mapController?.showMarkerInfoWindow(const MarkerId('start'));
+      _mapController?.showMarkerInfoWindow(const MarkerId('end'));
+    });
   }
 
   @override
