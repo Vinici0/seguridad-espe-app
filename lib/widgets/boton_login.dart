@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BotonForm extends StatelessWidget {
   final String text;
@@ -21,8 +22,22 @@ class BotonForm extends StatelessWidget {
         shape: const StadiumBorder(),
         minWidth: double.infinity,
         height: 50,
-        child: Text(this.text,
-            style: const TextStyle(color: Colors.white, fontSize: 20)),
+        child: text == "Google"
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    FontAwesomeIcons.google,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(text,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 20)),
+                ],
+              )
+            : Text(text,
+                style: const TextStyle(color: Colors.white, fontSize: 20)),
       ),
     );
   }

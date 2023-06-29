@@ -14,7 +14,6 @@ class PushNotificationService {
       _messageStream.stream;
 
   static Future<void> _backgroundHandler(RemoteMessage message) async {
-    print('onBackground Handler ${message.messageId}');
     final Map<String, dynamic> messageData = message.data;
     final String dataString = messageData['usuario'] ?? 'No data';
     final Map<String, dynamic> userData = jsonDecode(dataString);
@@ -22,8 +21,6 @@ class PushNotificationService {
   }
 
   static Future<void> _onMessageHandler(RemoteMessage message) async {
-    print('onMessage Handler ${message.messageId}');
-    print(message.data);
     _messageStream.add(message.data);
   }
 

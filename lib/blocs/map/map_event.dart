@@ -25,6 +25,9 @@ class UpdateUserPolylineEvent extends MapEvent {
 
 class OpToggleUserRouteEvent extends MapEvent {}
 
+//reiniciar polylines
+class OnMapMovedEvent extends MapEvent {}
+
 class DisplayPolylinesEvent extends MapEvent {
   final Map<String, Polyline> polylines;
   final Map<String, Marker> markers;

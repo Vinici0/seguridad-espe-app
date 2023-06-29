@@ -12,9 +12,41 @@ import 'package:http/http.dart' as http;
 
 class PublicacionService {
   late Publicacion publicacionSeleccionada;
+  final Publicacion publError = Publicacion(
+    titulo: '',
+    contenido: '',
+    color: '',
+    ciudad: '',
+    barrio: '',
+    isPublic: false,
+    usuario: '',
+    imgAlerta: '',
+    isLiked: false,
+    latitud: 0,
+    longitud: 0,
+  );
 
   Future<List<Publicacion>> getPublicacionesAll() async {
-    final uri = Uri.parse('${Environment.apiUrl}/publicacion/cercanas');
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/publicacion/cercanas');
+
+      final resp = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+
+      final publicacionesData = json.decode(resp.body);
+      final publicacionesResp = PublicacionResponse.fromMap(publicacionesData);
+      return publicacionesResp.publicacion;
+    } catch (e) {
+      print('Error: $e');
+      return []; // Return an empty list in case of an error
+    }
+  }
+
+  // localhost:3000/api/publicacionUsuario
+  Future<List<Publicacion>> getPublicacionesUsuario() async {
+    final uri = Uri.parse('${Environment.apiUrl}/publicacion');
 
     final resp = await http.get(uri, headers: {
       'Content-Type': 'application/json',
@@ -54,77 +86,89 @@ class PublicacionService {
     String usuario,
     List<String>? imagePaths,
   ) async {
-    Position position = await Geolocator.getCurrentPosition();
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
+    try {
+      Position position = await Geolocator.getCurrentPosition();
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
 
-    print('placemarks: $placemarks');
+      final publicacion = Publicacion(
+        titulo: titulo,
+        contenido: descripcion,
+        color: color,
+        ciudad: placemarks.isNotEmpty ? placemarks[0].locality ?? 'S/N' : 'S/N',
+        barrio: placemarks.isNotEmpty ? placemarks[0].name ?? 'S/N' : 'S/N',
+        isPublic: isPublic,
+        usuario: usuario,
+        imgAlerta: imgAlerta,
+        isLiked: isLiked,
+        latitud: position.latitude,
+        longitud: position.longitude,
+      );
 
-    final publicacion = Publicacion(
-      titulo: titulo,
-      contenido: descripcion,
-      color: color,
-      ciudad: placemarks[0].locality ?? 'S/N',
-      barrio: placemarks[0].name ?? 'S/N',
-      isPublic: isPublic,
-      usuario: usuario,
-      imgAlerta: imgAlerta,
-      isLiked: isLiked,
-      latitud: position.latitude,
-      longitud: position.longitude,
-    );
+      final uri = Uri.parse('${Environment.apiUrl}/publicacion');
 
-    final uri = Uri.parse('${Environment.apiUrl}/publicacion');
-
-    final resp = await http.post(uri,
+      final resp = await http.post(
+        uri,
         headers: {
           'Content-Type': 'application/json',
           'x-token': await AuthService.getToken() as String,
         },
-        body: json.encode(publicacion.toMap()));
+        body: json.encode(publicacion.toMap()),
+      );
 
-    final decodedData = json.decode(resp.body);
-    final publicacionResp = Publicacion.fromMap(decodedData['publicacion']);
+      final decodedData = json.decode(resp.body);
+      final publicacionResp = Publicacion.fromMap(decodedData['publicacion']);
 
-    if (imagePaths != null) {
-      final publicacionResp2 = await uploadImages(
-          publicacionResp.uid!, publicacion.titulo, imagePaths);
+      if (imagePaths != null) {
+        final publicacionResp2 = await uploadImages(
+            publicacionResp.uid!, publicacion.titulo, imagePaths);
 
-      return publicacionResp2;
+        return publicacionResp2;
+      }
+
+      return publicacionResp;
+    } catch (e) {
+      print('Error: $e');
+      return publError;
     }
-
-    return publicacionResp;
   }
 
   Future<Publicacion> uploadImages(
       String uid, String titulo, List<String> imagePaths) async {
-    final List<String> uploadedImageUrls = [];
-    late Publicacion secureUrlP;
+    try {
+      final List<String> uploadedImageUrls = [];
+      late Publicacion secureUrlP;
 
-    for (var imagePath in imagePaths) {
-      final imageUploadRequest = http.MultipartRequest(
+      for (var imagePath in imagePaths) {
+        final imageUploadRequest = http.MultipartRequest(
           'POST',
           Uri.parse(
-              '${Environment.apiUrl}/publicacion/listaArchivos/$uid/$titulo'));
+              '${Environment.apiUrl}/publicacion/listaArchivos/$uid/$titulo'),
+        );
 
-      final file = await http.MultipartFile.fromPath('archivo', imagePath);
-      imageUploadRequest.files.add(file);
+        final file = await http.MultipartFile.fromPath('archivo', imagePath);
+        imageUploadRequest.files.add(file);
 
-      final streamResponse = await imageUploadRequest.send();
-      final resp = await http.Response.fromStream(streamResponse);
+        final streamResponse = await imageUploadRequest.send();
+        final resp = await http.Response.fromStream(streamResponse);
 
-      if (resp.statusCode != 200 && resp.statusCode != 201) {
-        print('Algo salió mal');
-        print(resp.body);
-        throw Exception('Error: ${resp.body}');
+        if (resp.statusCode != 200 && resp.statusCode != 201) {
+          print('Something went wrong');
+          print(resp.body);
+          throw Exception('Error uploading images: ${resp.body}');
+        }
+
+        final decodedData = json.decode(resp.body);
+        secureUrlP = Publicacion.fromMap(decodedData['publicacion']);
+
+        uploadedImageUrls.add(secureUrlP.imgAlerta);
       }
 
-      final decodedData = json.decode(resp.body);
-      secureUrlP = Publicacion.fromMap(decodedData['publicacion']);
-
-      uploadedImageUrls.add(secureUrlP.imgAlerta);
+      return secureUrlP;
+    } catch (e) {
+      print('Error: $e');
+      return publError;
     }
-    return secureUrlP;
   }
 
 //router.put("/like2/:id", validarJWT, likePublicacion);
@@ -146,24 +190,29 @@ class PublicacionService {
       final publicacionResp = Publicacion.fromMap(decodedData['publicacion']);
       return publicacionResp;
     } else {
-      throw Exception('Error: Publicacion data not available.');
+      return publError;
     }
   }
 
   Future<List<Comentario>> getAllComments(String uid) async {
-    final uri = Uri.parse('${Environment.apiUrl}/comentarios/${uid}');
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/comentarios/${uid}');
 
-    final resp = await http.get(
-      uri,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-token': await AuthService.getToken() as String,
-      },
-    );
+      final resp = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken() as String,
+        },
+      );
 
-    final decodedData = json.decode(resp.body);
-    final commentResp = ComentarioResponse.fromJson(decodedData);
-    return commentResp.comentarios;
+      final decodedData = json.decode(resp.body);
+      final commentResp = ComentarioResponse.fromJson(decodedData);
+      return commentResp.comentarios;
+    } catch (e) {
+      print('Error: $e');
+      return []; // Return an empty list in case of an error
+    }
   }
 
   Future<Comentario> toggleLikeComentario(String uid) async {

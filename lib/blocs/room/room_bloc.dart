@@ -62,8 +62,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     emit(state.copyWith(salas: salas, isLoading: false));
   }
 
-  FutureOr<void> chatInitEvent(
-      ChatInitEvent event, Emitter<RoomState> emit) async {
+  FutureOr<void> chatInitEvent(ChatInitEvent event, Emitter<RoomState> emit) {
     final List<MensajesSala> mensajes = [];
     emit(state.copyWith(mensajesSalas: mensajes, isLoading: false));
   }

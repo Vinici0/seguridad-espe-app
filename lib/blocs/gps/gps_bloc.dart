@@ -51,8 +51,6 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
       final isEnable = await Geolocator.isLocationServiceEnabled();
       // Aquí es cuando se activa o desactiva el gps en tiempo real
       gpsSubscription = Geolocator.getServiceStatusStream().listen((status) {
-        print(
-            "Comprobando el estado del gps: $status" + status.index.toString());
         final isGpsEnabled = (status.index == 1) ? true : false;
         add(GpsPermissionGranted(
             // El estado que este actualmente

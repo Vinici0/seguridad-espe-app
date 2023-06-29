@@ -303,17 +303,21 @@ class _AlertScreenState extends State<AlertScreen> {
                               );
                               return;
                             }
-
-                            await publicaciones.createpublication(
-                              reporte.tipo,
-                              _textController.text,
-                              reporte.color,
-                              reporte.icon,
-                              false,
-                              true,
-                              authService.state.usuario!.uid,
-                              imagePaths,
-                            );
+                            try {
+                              await publicaciones.createpublication(
+                                reporte.tipo,
+                                _textController.text,
+                                reporte.color,
+                                reporte.icon,
+                                false,
+                                true,
+                                authService.state.usuario!.uid,
+                                imagePaths,
+                              );
+                            } catch (e) {
+                              print('Error: $e');
+                              return;
+                            }
 
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();

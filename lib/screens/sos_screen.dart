@@ -22,7 +22,7 @@ class SosScreen extends StatelessWidget {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
     LatLng? end;
-    final String number = '911';
+    // const String number = '911';
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -38,14 +38,14 @@ class SosScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Column(
-              children: [],
+              children: const [],
             ),
             Center(
               child: SvgPicture.asset(
                 "assets/info/advertencia.svg",
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width * 0.30,
-                color: Color(0xFF6165FA),
+                color: const Color(0xFF6165FA),
               ),
             ),
             const SizedBox(
@@ -125,7 +125,7 @@ class SosScreen extends StatelessWidget {
                       } else {
                         // Show an error message.
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text('Phone app not installed'),
                           ),
                         );

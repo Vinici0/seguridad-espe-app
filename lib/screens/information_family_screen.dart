@@ -19,12 +19,17 @@ class InformationFamily extends StatefulWidget {
 class _InformationFamilyState extends State<InformationFamily> {
   final TextEditingController telefonoController = TextEditingController();
   bool areFieldsEmpty = true;
+  bool routeActive = false;
+  List<String> telefonos = [];
+  AuthBloc authBloc = AuthBloc();
   late SvgPicture image1;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    authBloc = BlocProvider.of<AuthBloc>(context);
+    telefonos = authBloc.state.usuario?.telefonos ?? [];
     telefonoController.addListener(updateFieldsState);
     image1 = SvgPicture.asset(
       "assets/info/numberfamily.svg",
@@ -57,8 +62,10 @@ class _InformationFamilyState extends State<InformationFamily> {
       context,
     );
 
-    //recupera dato de los argumentos
-    final routeActive = ModalRoute.of(context)?.settings.arguments as bool;
+    routeActive = ModalRoute.of(context)?.settings.arguments as bool;
+    routeActive == null || routeActive == false
+        ? routeActive = false
+        : routeActive = true;
 
     return Scaffold(
       appBar: AppBar(
@@ -70,11 +77,10 @@ class _InformationFamilyState extends State<InformationFamily> {
           style: TextStyle(color: Colors.black87),
         ),
         actions: [
-          routeActive
+          !routeActive
               ? Container()
               : TextButton(
-                  onPressed: authService.state.usuario?.telefonos.isNotEmpty ??
-                          false
+                  onPressed: telefonos.length >= 2
                       ? () {
                           Navigator.pushNamedAndRemoveUntil(
                               context, HomeScreen.homeroute, (route) => false);
@@ -83,8 +89,7 @@ class _InformationFamilyState extends State<InformationFamily> {
                   child: Text(
                     'Siguiente',
                     style: TextStyle(
-                      color: authService.state.usuario?.telefonos.isNotEmpty ??
-                              false
+                      color: telefonos.length >= 2
                           ? const Color(0xFF6165FA)
                           : Colors.grey,
                       fontSize: 16,
@@ -152,6 +157,13 @@ class _InformationFamilyState extends State<InformationFamily> {
                                 authService.addTelefonoFamily(
                                     telefonoController.text.trim());
                                 telefonoController.clear();
+                                setState(() {
+                                  //agregar al array de telefonos
+                                  telefonos =
+                                      authService.state.usuario?.telefonos ??
+                                          [];
+                                  routeActive = true;
+                                });
                               },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF6165FA),
@@ -165,7 +177,7 @@ class _InformationFamilyState extends State<InformationFamily> {
                     const SizedBox(
                       height: 20,
                     ),
-                    _ListContact(authService: authService),
+                    _ListContact(authService: authService, telefonos: telefonos)
                   ],
                 ),
               ),
@@ -281,11 +293,12 @@ class _TextFieldAddTelefono extends StatelessWidget {
 }
 
 class _ListContact extends StatelessWidget {
-  const _ListContact({
+  _ListContact({
     Key? key,
     required this.authService,
+    required this.telefonos,
   }) : super(key: key);
-
+  List<String> telefonos;
   final AuthBloc authService;
 
   @override
@@ -326,6 +339,8 @@ class _ListContact extends StatelessWidget {
               onPressed: () async {
                 await authService.deleteTelefonoFamily(
                     state.usuario?.telefonos[index] ?? '');
+                //eliminar del array de telefonos
+                telefonos = authService.state.usuario?.telefonos ?? [];
               },
               icon: const Icon(
                 Icons.delete,

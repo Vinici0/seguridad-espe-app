@@ -15,8 +15,7 @@ class ConfigScreen extends StatelessWidget {
             context,
             PageRouteBuilder(
                 pageBuilder: (_, __, ___) => const LoadingMapScreen(),
-                transitionDuration:
-                    const Duration(milliseconds: 0))); //TODO: cambiar a loading
+                transitionDuration: const Duration(milliseconds: 0)));
       }, child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           //Boton cerrar sesion de
@@ -28,8 +27,7 @@ class ConfigScreen extends StatelessWidget {
                   context,
                   PageRouteBuilder(
                       pageBuilder: (_, __, ___) => const LoadingLoginScreen(),
-                      transitionDuration: const Duration(
-                          milliseconds: 0))); //TODO: cambiar a loading
+                      transitionDuration: const Duration(milliseconds: 0)));
             },
           );
         },

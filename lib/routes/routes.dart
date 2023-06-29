@@ -23,11 +23,12 @@ class Routes {
     ModalBottomSheet.modalBottomSheetRoute: (_) => const ModalBottomSheet(),
     NewsScreen.newsroute: (_) => const NewsScreen(),
     PerfilScreen.salesroute: (_) => const PerfilScreen(),
-    PlaceAddScreen.placeddd: (_) => const PlaceAddScreen(),
     PlaceDetailScreen.place: (_) => const PlaceDetailScreen(),
     PlacesScreen.salesroute: (_) => const PlacesScreen(),
     RegisterScreen.registerroute: (_) => const RegisterScreen(),
     RoomsScreen.salasroute: (_) => const RoomsScreen(),
     SosScreen.sosroute: (_) => const SosScreen(),
+    PerfilDetalleScreen.perfilDetalleroute: (_) => const PerfilDetalleScreen(),
+    EditPerfilScreen.editPerfilroute: (_) => const EditPerfilScreen(),
   };
 }

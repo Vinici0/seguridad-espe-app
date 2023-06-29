@@ -28,6 +28,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OpToggleUserRouteEvent>((event, emit) =>
         emit(state.copyWith(showRoutePreview: !state.showRoutePreview)));
 
+    on<OnMapMovedEvent>(
+        (event, emit) => emit(state.copyWith(polylines: {}, markers: {})));
+
     on<DisplayPolylinesEvent>((event, emit) => emit(
         state.copyWith(polylines: event.polylines, markers: event.markers)));
 

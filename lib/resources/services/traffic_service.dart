@@ -99,7 +99,7 @@ class TrafficService {
   }
 
   // delete ubcacion add
-  Future<Ubicacion> deleteUbicacionByUser(String idUbicacion) async {
+  Future<bool> deleteUbicacionByUser(String idUbicacion) async {
     try {
       final uri = Uri.parse('${Environment.apiUrl}/ubicaciones/$idUbicacion');
 
@@ -110,10 +110,10 @@ class TrafficService {
 
       final ubicacionData = json.decode(resp.body);
       final ubicacion = Ubicacion.fromMap(ubicacionData);
-      return ubicacion;
+      return true;
     } catch (e) {
       print('Error adding ubicacion: $e');
-      rethrow;
+      return false;
     }
   }
 }

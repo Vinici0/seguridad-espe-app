@@ -55,17 +55,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(usuario: null));
   }
 
-  _onAuthConnectEvent(AuthConectEvent event, Emitter<AuthState> emit) async {
+  _onAuthConnectEvent(AuthConectEvent event, Emitter<AuthState> emit) {
     socketService.connect();
   }
 
   void _onAuthDisconnectEvent(
-      AuthDisconnectEvent event, Emitter<AuthState> emit) async {
+      AuthDisconnectEvent event, Emitter<AuthState> emit) {
     socketService.disconnect();
   }
 
   void _onAuthAddUbicacionEvent(
-      AuthAddUbicacionEvent event, Emitter<AuthState> emit) async {
+      AuthAddUbicacionEvent event, Emitter<AuthState> emit) {
     if (state.ubicaciones
         .any((ubicacion) => ubicacion.uid == event.ubicacion.uid)) return;
 
@@ -73,7 +73,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onAuthDeleteUbicacionEvent(
-      AuthDeleteUbicacionEvent event, Emitter<AuthState> emit) async {
+      AuthDeleteUbicacionEvent event, Emitter<AuthState> emit) {
     emit(state.copyWith(
         ubicaciones: state.ubicaciones
             .where((ubicacion) => ubicacion.uid != event.uid)
@@ -81,7 +81,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onAuthAddTelefonoEvent(
-      AuthAddTelefonoEvent event, Emitter<AuthState> emit) async {
+      AuthAddTelefonoEvent event, Emitter<AuthState> emit) {
     final usuario = Usuario(
         online: state.usuario!.online,
         nombre: state.usuario!.nombre,
@@ -96,7 +96,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _aonAddTelefonoFamilyEvent(
-      AuthAddTelefonFamilyEvent event, Emitter<AuthState> emit) async {
+      AuthAddTelefonFamilyEvent event, Emitter<AuthState> emit) {
     final usuario = Usuario(
         online: state.usuario!.online,
         nombre: state.usuario!.nombre,
@@ -147,6 +147,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     add(const AuthConectEvent());
   }
 
+  //authGoogle - signInWithGoogle
+  Future<Usuario?> signInWithGoogle() async {
+    final usuario = await apiAuthRepository.signInWithGoogle();
+    isLoggedInTrue = usuario != null;
+    add(AuthLoginEvent(email: usuario!.email, password: "@@@"));
+    add(const AuthConectEvent());
+    return null;
+  }
+
   register(String nombre, String email, String password) async {
     final register = await apiAuthRepository.register(nombre, email, password);
     isLoggedInTrue = register;
@@ -154,7 +163,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     add(const AuthConectEvent());
   }
 
-  logout() async {
+  logout() {
     isLoggedInTrue = false;
     add(const AuthLogoutEvent());
     add(const AuthDisconnectEvent());

@@ -40,6 +40,62 @@ class RoomsScreen extends StatelessWidget {
   Widget _listSalesGroup(BuildContext context) {
     return BlocBuilder<RoomBloc, RoomState>(
       builder: (context, state) {
+        //si no hay salas que salga un mensaje de que no hay salas
+        if (state.salas.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  FontAwesomeIcons.userFriends,
+                  color: Color(0xFF6165FA),
+                  size: 100,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'No hay grupos',
+                  style: TextStyle(
+                    color: Color(0xFF6165FA),
+                    fontSize: 20,
+                  ),
+                ),
+                //boton de crear grupo
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context, CodigoCreateGrupoScreen.codigoGruporoute);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        FontAwesomeIcons.plus,
+                        color: Color(0xFF6165FA),
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Crear un nuevo grupo',
+                        style: TextStyle(
+                          color: Color(0xFF6165FA),
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
         return Column(
           children: [
             Padding(

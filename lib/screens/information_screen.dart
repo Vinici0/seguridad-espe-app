@@ -146,15 +146,16 @@ class _InformationScreenState extends State<InformationScreen> {
                             .addTelefono(telefonoController.text.trim());
                         // ignore: use_build_context_synchronously
                         Navigator.pushNamed(
-                            context, InformationFamily.informationFamily);
+                            context, InformationFamily.informationFamily,
+                            arguments: false);
                       },
-                child: const Text('Guardar'),
                 style: ElevatedButton.styleFrom(
-                  primary: const Color(0xFF6165FA),
+                  backgroundColor: const Color(0xFF6165FA),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),
+                child: const Text('Guardar'),
               ),
             ),
           ],

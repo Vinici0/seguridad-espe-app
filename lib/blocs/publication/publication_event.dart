@@ -29,13 +29,13 @@ class PublicacionesCreateEvent extends PublicationEvent {
       ];
 }
 
-class PublicacionesUpdate extends PublicationEvent {
-  final List<Publicacion> publicacion;
+class PublicacionesUpdateEvent extends PublicationEvent {
+  final String uid;
 
-  const PublicacionesUpdate(this.publicacion);
+  const PublicacionesUpdateEvent(this.uid);
 
   @override
-  List<Object> get props => [publicacion];
+  List<Object> get props => [uid];
 }
 
 class PublicacionesDelete extends PublicationEvent {
@@ -74,6 +74,15 @@ class GetAllCommentsIDEvent extends PublicationEvent {
   List<Object> get props => [id];
 }
 
+class CountCommentEvent extends PublicationEvent {
+  final int conuntComentarios;
+
+  const CountCommentEvent(this.conuntComentarios);
+
+  @override
+  List<Object> get props => [conuntComentarios];
+}
+
 //esta cargando evento
 class LoadingEvent extends PublicationEvent {}
 
@@ -84,4 +93,14 @@ class ToggleLikeComentarioEvent extends PublicationEvent {
 
   @override
   List<Object> get props => [comentarios];
+}
+
+//cargar publicaciones de un usuario
+class PublicacionesUsuarioEvent extends PublicationEvent {
+  final List<Publicacion> publicacionesUsuario;
+
+  const PublicacionesUsuarioEvent(this.publicacionesUsuario);
+
+  @override
+  List<Object> get props => [publicacionesUsuario];
 }

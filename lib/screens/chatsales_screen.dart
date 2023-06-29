@@ -60,9 +60,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           animationController: AnimationController(
               vsync: this, duration: const Duration(milliseconds: 0))
             ..forward()));
-      setState(() {
-        _messages.insertAll(0, history);
-      });
+
+      if (mounted) {
+        setState(() {
+          _messages.insertAll(0, history);
+        });
+      }
     }
   }
 
@@ -239,23 +242,23 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       texto: texto,
       nombre: authService.state.usuario!.nombre,
       animationController: AnimationController(
-          vsync: this, duration: const Duration(milliseconds: 200)),
+        vsync: this,
+        duration: const Duration(milliseconds: 200),
+      ),
     );
 
-    /// Check if the state is mounted before calling setState()
     if (mounted) {
-      _messages.insert(0, newMessage);
-      newMessage.animationController.forward();
-
       setState(() {
+        _messages.insert(0, newMessage);
+        newMessage.animationController.forward();
         _estaEscribiendo = false;
+      });
 
-        this.authService.socketService.socket.emit('mensaje-grupal', {
-          'de': this.authService.state.usuario!.uid,
-          'para': this.chatProvider.state.salaSeleccionada.uid,
-          'nombre': this.authService.state.usuario!.nombre,
-          'mensaje': texto
-        });
+      this.authService.socketService.socket.emit('mensaje-grupal', {
+        'de': this.authService.state.usuario!.uid,
+        'para': this.chatProvider.state.salaSeleccionada.uid,
+        'nombre': this.authService.state.usuario!.nombre,
+        'mensaje': texto,
       });
     }
   }
@@ -264,16 +267,16 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    //TODO: Off del socket
+    _textController.dispose();
+    _focusNode.dispose();
 
     for (ChatMessage message in _messages) {
       message.animationController.dispose();
     }
 
-    _messages.clear(); // Limpia la lista de mensajes
+    // chatProvider.close(); // Close the chatProvider stream
 
-    chatProvider.add(LimpiarMensajesEvent());
-    this.authService.socketService.socket.off('mensaje-grupal');
+    authService.socketService.socket.off('mensaje-grupal');
 
     super.dispose();
   }

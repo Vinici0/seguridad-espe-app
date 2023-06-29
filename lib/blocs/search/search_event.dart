@@ -19,19 +19,31 @@ class OnNewUbicacionFoundEvent extends SearchEvent {
 class AddToHistoryEvent extends SearchEvent {
   final Ubicacion history;
   const AddToHistoryEvent(this.history);
+
+  @override
+  List<Object> get props => [history];
 }
 
 class OnSelectUbicacionEvent extends SearchEvent {
   final Ubicacion selectedUbicacion;
   const OnSelectUbicacionEvent(this.selectedUbicacion);
+
+  @override
+  List<Object> get props => [selectedUbicacion];
 }
 
 class AddUbicacionByUserEvent extends SearchEvent {
   final String id;
   const AddUbicacionByUserEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
 }
 
 class DeleteUbicacionByUserEvent extends SearchEvent {
   final String id;
   const DeleteUbicacionByUserEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
 }

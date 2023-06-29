@@ -1,5 +1,6 @@
 import 'package:flutter_maps_adv/models/ubicacion.dart';
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ApiUserRepository {
   final AuthService _authService = AuthService();
@@ -36,6 +37,11 @@ class ApiUserRepository {
     // } else {
     return await _authService.isLoggedIn();
     // }
+  }
+
+  //signInWithGoogle
+  Future<GoogleSignInAccount?> signInWithGoogle() async {
+    return await _authService.signInWithGoogle();
   }
 
   get usuario => _authService.usuario;

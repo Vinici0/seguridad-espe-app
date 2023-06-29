@@ -45,6 +45,13 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         final places = state.ubicacion;
+
+        if (places.isEmpty || places == null) {
+          return const Center(
+            child: Text('No hay resultados'),
+          );
+        }
+
         return ListView.separated(
             itemBuilder: (_, i) {
               final place = places[i];
@@ -72,6 +79,7 @@ class SearchDestinationDelegate extends SearchDelegate<SearchResult> {
   @override
   Widget buildSuggestions(BuildContext context) {
     final history = BlocProvider.of<SearchBloc>(context).state.history;
+
     return ListView(
       children: [
         ListTile(

@@ -10,9 +10,9 @@ class CommentPublication extends StatefulWidget {
   final String nombre;
   final String fotoPerfil;
   final String createdAt;
-  final String likes;
+  int likes;
 
-  const CommentPublication({
+  CommentPublication({
     Key? key,
     required this.uid,
     required this.comentario,
@@ -28,49 +28,50 @@ class CommentPublication extends StatefulWidget {
 
 class _CommentPublicationState extends State<CommentPublication> {
   bool isLiked = false;
+  String userLikes = '';
   int likeCount = 0;
-  AuthBloc socketService = AuthBloc();
-
+  AuthBloc authBloc = AuthBloc();
+  PublicationBloc publicationBloc = PublicationBloc();
   @override
   void initState() {
-    super.initState();
-    likeCount = int.parse(widget.likes);
+    publicationBloc = BlocProvider.of<PublicationBloc>(context);
+    likeCount = 0;
+    authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
     initializeLikedStatus();
-    socketService = BlocProvider.of<AuthBloc>(context, listen: false);
 
-    socketService.socketService.socket.on('toggle-like-comentario', (data) {
-      if (data['comentarioUid'] == widget.uid) {
-        setState(() {
-          likeCount = data['likeCount'];
-        });
-      }
-    });
+    // socketService.socketService.socket.on('toggle-like-comentario', (data) {
+    //   if (data['comentarioUid'] == widget.uid) {
+    //     setState(() {
+    super.initState();
+    //       likeCount = data['likeCount'];
+    //     });
+    //   }
+    // });
   }
 
   @override
   void dispose() {
-    //off el socket
-    socketService.socketService.socket.off('toggle-like-comentario');
+    publicationBloc.comentarios.clear();
+
     super.dispose();
   }
 
   Future<void> initializeLikedStatus() async {
-    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
-    final authBloc = BlocProvider.of<AuthBloc>(context);
+    final comments = publicationBloc.comentarios;
+    //Si no hay comentarios no se hace nada
+    if (comments.isEmpty) return;
 
-    final comments = publicationBloc.state.comentarios!;
     final comment = comments.firstWhere((element) => element.uid == widget.uid);
-    final userLikes = comment.likes!;
+    final userLikes = comment.likes;
 
     setState(() {
-      isLiked = userLikes.contains(authBloc.state.usuario!.uid);
+      isLiked = userLikes!.contains(authBloc.state.usuario!.uid);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final publicationBloc = BlocProvider.of<PublicationBloc>(context);
-
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -116,18 +117,18 @@ class _CommentPublicationState extends State<CommentPublication> {
                   onTap: () async {
                     setState(() {
                       if (isLiked) {
-                        likeCount--;
+                        widget.likes--;
                         isLiked = false;
                       } else {
-                        likeCount++;
+                        widget.likes++;
                         isLiked = true;
                       }
                     });
 
                     try {
                       await publicationBloc.toggleLikeComentario(widget.uid);
-                      socketService.socketService.emit('toggle-like-comentario',
-                          {'comentarioUid': widget.uid});
+                      // socketService.socketService.emit('toggle-like-comentario',
+                      //     {'comentarioUid': widget.uid});
                     } catch (e) {
                       print('Error: $e');
                     }
@@ -139,7 +140,7 @@ class _CommentPublicationState extends State<CommentPublication> {
                           : const Icon(FontAwesomeIcons.heart),
                       const SizedBox(width: 5),
                       Text(
-                        likeCount.toString(),
+                        widget.likes.toString(),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black54,

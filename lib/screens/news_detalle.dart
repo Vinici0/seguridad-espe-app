@@ -4,6 +4,7 @@ import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/helpers/navegacion.dart';
+import 'package:flutter_maps_adv/helpers/show_loading_message.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter_maps_adv/widgets/comments.dart';
@@ -117,6 +118,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
     final Map<String, dynamic> mapNews =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final publicacion = mapNews['publicacion'] as Publicacion;
+    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
     return Opacity(
       opacity: 1,
       child: Container(
@@ -162,7 +164,11 @@ class _DetalleScreenState extends State<DetalleScreen> {
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onPressed: _estaEscribiendo
-                      ? () => _handleSubmit(_textController.text.trim())
+                      ? () => {
+                            _handleSubmit(_textController.text.trim()),
+                            publicationBloc.add(CountCommentEvent(
+                                publicationBloc.state.conuntComentarios + 1))
+                          }
                       : null,
                   icon: const Icon(Icons.send),
                 ),
@@ -184,7 +190,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
       fotoPerfil: 'da',
       createdAt: createdAt.toString(),
       uid: authService.state.usuario!.uid,
-      likes: publicationBloc.state.comentarios!.length.toString(),
+      likes: publicationBloc.state.comentarios!.length,
     );
 
     publicationBloc.comentariosP.insert(0, newComment);
@@ -207,6 +213,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
     publicationBloc.add(const GetAllCommentsEvent([]));
     publicationBloc.comentariosP.clear();
     authService.socketService.socket.off('comentario-publicacion');
+    authService.socketService.socket.off('join-room');
 
     super.dispose();
   }
@@ -381,9 +388,14 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
               if (start == null) return;
               end = LatLng(publicacion.latitud, publicacion.longitud);
               if (end == null) return;
+              searchBloc.add(OnActivateManualMarkerEvent());
+              showLoadingMessage(context);
               final destination =
                   await searchBloc.getCoorsStartToEnd(start, end!);
               await mapBloc.drawRoutePolyline(destination);
+              // ignore: use_build_context_synchronously
+              Navigator.pop(context);
+              // ignore: use_build_context_synchronously
               Navigator.pop(context);
               counterBloc.cambiarIndex(0);
             },

@@ -14,7 +14,7 @@ class SearchState extends Equatable {
           {bool? displayManualMarker,
           List<Ubicacion>? history,
           List<Ubicacion>? ubicacion,
-          List<Feature>? places}) =>
+          List<Ubicacion>? places}) =>
       SearchState(
           displayManualMarker: displayManualMarker ?? this.displayManualMarker,
           history: history ?? this.history,

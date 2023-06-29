@@ -58,19 +58,13 @@ class _NewsScreenState extends State<NewsScreen> {
           return Scrollbar(
             thumbVisibility: true,
             controller: _firstController,
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification is ScrollUpdateNotification) {}
-                return false;
-              },
-              child: _ListNews(
-                  publicaciones: publicaciones,
-                  firstController: _firstController,
-                  size: size,
-                  publicationBloc: _publicationBloc,
-                  usuarioBloc: usuarioBloc,
-                  state: state),
-            ),
+            child: _ListNews(
+                publicaciones: publicaciones,
+                firstController: _firstController,
+                size: size,
+                publicationBloc: _publicationBloc,
+                usuarioBloc: usuarioBloc,
+                state: state),
           );
         },
       ),
@@ -296,36 +290,74 @@ class _ListNews extends StatelessWidget {
   }
 }
 
-class _OptionNews extends StatelessWidget {
+class _OptionNews extends StatefulWidget {
   const _OptionNews({
-    super.key,
-    required PublicationBloc publicationBloc,
+    Key? key,
+    required this.publicationBloc,
     required this.publicaciones,
     required this.state,
     required this.usuarioBloc,
     required this.i,
-  }) : _publicationBloc = publicationBloc;
+  }) : super(key: key);
 
-  final PublicationBloc _publicationBloc;
+  final PublicationBloc publicationBloc;
   final List<Publicacion> publicaciones;
   final PublicationState state;
   final AuthBloc usuarioBloc;
   final int i;
 
   @override
+  _OptionNewsState createState() => _OptionNewsState();
+}
+
+class _OptionNewsState extends State<_OptionNews> {
+  bool isLiked = false;
+  PublicationBloc publicationBloc = PublicationBloc();
+
+  @override
+  void initState() {
+    super.initState();
+    // Verificar si el usuario actual ya ha dado like en la publicación
+    final currentUserUid = widget.usuarioBloc.state.usuario!.uid;
+    publicationBloc = BlocProvider.of<PublicationBloc>(context);
+    isLiked =
+        widget.publicaciones[widget.i].likes?.contains(currentUserUid) ?? false;
+  }
+
+  Future<void> _handleLike() async {
+    final publicationUid = widget.publicaciones[widget.i].uid!;
+    final currentUserUid = widget.usuarioBloc.state.usuario!.uid;
+
+    // Guardar el like en la base de datos
+    // Código para guardar en la base de datos...
+    try {
+      publicationBloc.add(PublicacionesUpdateEvent(publicationUid));
+    } catch (e) {
+      print('Error: $e');
+    }
+    // Actualizar el estado local
+    setState(() {
+      if (isLiked) {
+        // Si ya le dio like, se remueve
+        widget.publicaciones[widget.i].likes?.remove(currentUserUid);
+      } else {
+        // Si no le ha dado like, se agrega
+        widget.publicaciones[widget.i].likes?.add(currentUserUid);
+      }
+      // Cambiar el valor de isLiked
+      isLiked = !isLiked;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onTap: () async {
-            try {
-              await _publicationBloc.publicacionesUpdate(publicaciones[i].uid!);
-            } catch (e) {
-              print(e);
-            }
-          },
+          onTap: _handleLike, // Llamar al método de manejo del like
           child: Column(
             children: [
               Row(
@@ -333,28 +365,24 @@ class _OptionNews extends StatelessWidget {
                   Container(
                     width: 30.0,
                     height: 35.0,
-
-                    ///margin de la izquierda
                     margin: EdgeInsets.only(left: 28),
-                    child: state.publicaciones[i].likes
-                                ?.contains(usuarioBloc.state.usuario!.uid) ==
-                            true
+                    child: isLiked
                         ? Icon(
                             Icons.favorite,
                             color: Colors.red,
-                            size: 18.5,
+                            size: 22.5,
                           )
                         : Icon(
                             Icons.favorite_border,
                             color: Colors.grey,
-                            size: 18.5,
+                            size: 22.5,
                           ),
                   ),
                   SizedBox(
                     width: 5,
                   ),
                   Text(
-                    publicaciones[i].likes!.length.toString(),
+                    widget.publicaciones[widget.i].likes!.length.toString(),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -366,7 +394,6 @@ class _OptionNews extends StatelessWidget {
             ],
           ),
         ),
-        //comentario y cantidad de comentarios
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           child: Column(
@@ -380,7 +407,7 @@ class _OptionNews extends StatelessWidget {
                     child: Icon(
                       FontAwesomeIcons.comment,
                       color: Colors.grey,
-                      size: 16,
+                      size: 19.5,
                     ),
                   ),
                   Text(
@@ -398,50 +425,11 @@ class _OptionNews extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(context, DetalleScreen.detalleroute,
                 arguments: {
-                  'publicacion': publicaciones[i],
-                  'likes': publicaciones[i].likes!.length.toString(),
+                  'publicacion': widget.publicaciones[widget.i],
+                  'likes':
+                      widget.publicaciones[widget.i].likes!.length.toString(),
                 });
           },
-        ),
-
-        //compartir
-        Column(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () async {
-                // await Share.share('Confirme');
-              },
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.zero,
-                    width: 30.0,
-                    height: 35.0,
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.share_outlined,
-                        color: Colors.grey,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.zero,
-                    child: Text(
-                      'Compartir',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ],
     );

@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_maps_adv/models/ubicacion.dart';
 import 'package:flutter_maps_adv/resources/services/push_notifications_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/login_response.dart';
 import 'package:flutter_maps_adv/models/usuario.dart';
@@ -60,6 +61,48 @@ class AuthService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<GoogleSignInAccount?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? account = await _googleSignIn.signIn();
+      //en caso de que no se seleccione una cuenta
+      if (account == null) return null;
+
+      final googleKey = await account.authentication;
+
+      final uri = Uri.parse('${Environment.apiUrl}/login/google');
+
+      final data = {
+        'token': googleKey.idToken,
+        'tokenApp': PushNotificationService.token
+      };
+
+      final resp = await http.post(uri,
+          body: jsonEncode(data),
+          headers: {'Content-Type': 'application/json'});
+      print(resp.body);
+
+      if (resp.statusCode == 200) {
+        final loginResponse = loginResponseFromJson(resp.body);
+        usuario = loginResponse.usuario;
+        ubicaciones = loginResponse.usuario.ubicacion;
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('online', usuario!.online);
+        await prefs.setString('email', usuario!.email);
+        await prefs.setString('nombre', usuario!.nombre);
+        await prefs.setString('uid', usuario!.uid);
+
+        await _guardarToken(loginResponse.token);
+
+        return account;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 
@@ -146,6 +189,7 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     const storage = FlutterSecureStorage();
     storage.delete(key: 'token');
+    await _googleSignIn.signOut();
     await prefs.remove('token');
     await prefs.remove('email');
     await prefs.remove('nombre');
@@ -248,4 +292,12 @@ class AuthService {
       return false;
     }
   }
+
+  static final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email'],
+  );
+
+  // Future signOut() async {
+  //   await _googleSignIn.signOut();
+  // }
 }

@@ -39,6 +39,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
+  flutter_launcher_icons: ^0.13.1
+  flutter_map: ^4.0.0
   flutter_secure_storage: ^8.0.0
   flutter_svg: ^2.0.5
   fluttertoast: ^8.2.2
@@ -47,6 +49,7 @@ dependencies:
   geolocator: ^9.0.2
   google_maps_flutter: ^2.2.5
   google_polyline_algorithm: ^3.1.0
+  google_sign_in: ^6.1.4
   http: ^0.13.5
   image_picker: ^0.8.7+5
   intl: ^0.18.1
@@ -56,9 +59,8 @@ dependencies:
   shared_preferences: ^2.1.0
   socket_io_client: ^2.0.1
   timeago: ^3.4.0
+  uni_links: ^0.5.1
   url_launcher: ^6.1.11
-  flutter_launcher_icons: ^0.13.1
-
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -84,7 +86,6 @@ flutter:
     - assets/alertas/
     - assets/info/
     - assets/icon/
-    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

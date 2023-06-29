@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapView extends StatefulWidget {
@@ -34,28 +35,33 @@ class _MapViewState extends State<MapView> {
     final CameraPosition initialCameraPosition =
         CameraPosition(target: widget.initialLocation, zoom: 15);
     final size = MediaQuery.of(context).size;
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
 
-    return SizedBox(
-      width: size.width,
-      height: size.height,
-      child: Listener(
-        onPointerMove: (pointerMoveEvent) =>
-            mapBloc.add(OnStopFollowingUserEvent()),
-        child: GoogleMap(
-          initialCameraPosition: initialCameraPosition,
-          compassEnabled: false,
-          myLocationEnabled: true,
-          zoomControlsEnabled: false,
-          myLocationButtonEnabled: false,
-          polylines: widget.polylines,
-          markers: widget.markers,
-          onCameraMove: (position) => mapBloc.mapCenter = position.target,
-          onMapCreated: (controller) {
-            mapController = controller;
-            mapBloc.add(OnMapInitialzedEvent(controller));
-          },
-        ),
-      ),
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        return SizedBox(
+          width: size.width,
+          height: size.height,
+          child: Listener(
+            onPointerMove: (pointerMoveEvent) =>
+                mapBloc.add(OnStopFollowingUserEvent()),
+            child: GoogleMap(
+              initialCameraPosition: initialCameraPosition,
+              compassEnabled: false,
+              myLocationEnabled: true,
+              zoomControlsEnabled: false,
+              myLocationButtonEnabled: false,
+              polylines: state.displayManualMarker ? widget.polylines : {},
+              markers: state.displayManualMarker ? widget.markers : {},
+              onCameraMove: (position) => mapBloc.mapCenter = position.target,
+              onMapCreated: (controller) {
+                mapController = controller;
+                mapBloc.add(OnMapInitialzedEvent(controller));
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

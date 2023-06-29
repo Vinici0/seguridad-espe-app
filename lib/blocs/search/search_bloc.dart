@@ -35,8 +35,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     on<AddUbicacionByUserEvent>((event, emit) async {
       final newUbicacion = await trafficService.addUbicacionByUser(event.id);
-      if (newUbicacion == null) return;
-      emit(state.copyWith(ubicacion: [newUbicacion, ...state.ubicacion]));
+      // if (newUbicacion == null) return;
+      // emit(state.copyWith(ubicacion: [newUbicacion, ...state.ubicacion]));
     });
   }
 
@@ -60,6 +60,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Future<List<Ubicacion>> getResultsByQueryUbicacion(String query) async {
     final results = await trafficService.getResultsByQueryUbicacion(query);
+    if (results.isEmpty) return [];
     add(OnNewUbicacionFoundEvent(results));
     return results;
   }
@@ -69,16 +70,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   void deleteUbicacionByUserEvent(
-      DeleteUbicacionByUserEvent event, Emitter<SearchState> emit) async {
-    emit(state.copyWith(
-        ubicacion: state.ubicacion
-            .where((element) => element.uid! != event.id)
-            .toList()));
+      DeleteUbicacionByUserEvent event, Emitter<SearchState> emit) {
+    // emit(state.copyWith(ubicacion: newUbicacion));
   }
 
   eliminarUbicacion(String id) async {
-    final deletedUbicacion = await trafficService.deleteUbicacionByUser(id);
-    if (deletedUbicacion == null) return;
-    add(DeleteUbicacionByUserEvent(deletedUbicacion.uid!));
+    await trafficService.deleteUbicacionByUser(id);
+    // add(DeleteUbicacionByUserEvent(id));
   }
 }

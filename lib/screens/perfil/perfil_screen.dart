@@ -44,7 +44,7 @@ class PerfilScreen extends StatelessWidget {
                     _ListIconName(
                       icon: Icons.person_outline,
                       name: 'Mi perfil',
-                      route: '',
+                      route: 'perfilDetalle',
                     ),
                     Divider(
                       color: Colors.black45,
@@ -97,11 +97,11 @@ class PerfilScreen extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  _ListIconName(
-                    icon: Icons.account_circle_outlined,
-                    name: 'Cuenta',
-                    route: '',
-                  ),
+                  // _ListIconName(
+                  //   icon: Icons.account_circle_outlined,
+                  //   name: 'Cuenta',
+                  //   route: '',
+                  // ),
                   Divider(
                     color: Colors.black45,
                   ),
