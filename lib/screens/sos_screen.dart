@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/helpers/navegacion.dart';
+import 'package:flutter_maps_adv/helpers/show_loading_message.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -35,7 +37,7 @@ class SosScreen extends StatelessWidget {
         ),
         body: Column(
           //spacebetween
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               children: const [],
@@ -68,13 +70,18 @@ class SosScreen extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () async {
+                      searchBloc.add(const IsActiveNotification(true));
                       final start = locationBloc.state.lastKnownLocation;
                       if (start == null) return;
                       end = LatLng(args['latitud'], args['longitud']);
                       if (end == null) return;
+                      searchBloc.add(OnActivateManualMarkerEvent());
+                      showLoadingMessage(context);
                       final destination =
                           await searchBloc.getCoorsStartToEnd(start, end!);
                       await mapBloc.drawRoutePolyline(destination);
+                      // ignore: use_build_context_synchronously
+                      Navigator.pop(context);
                       Navigator.pop(context);
                       counterBloc.cambiarIndex(0);
                     },
@@ -108,56 +115,6 @@ class SosScreen extends StatelessWidget {
                 ),
                 const SizedBox(
                   height: 20,
-                ),
-                //boton de llamar
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      // The `tel:` scheme is used to launch a phone call.
-                      final Uri _url = Uri.parse('tel:+1-555-010-999');
-
-                      // Check if the phone app is installed.
-                      if (await canLaunchUrl(_url)) {
-                        // Launch the phone app.
-                        await launchUrl(_url);
-                      } else {
-                        // Show an error message.
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Phone app not installed'),
-                          ),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.call,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Llamar al 911',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
                 ),
               ],
             ),

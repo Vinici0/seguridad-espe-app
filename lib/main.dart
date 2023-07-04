@@ -39,13 +39,14 @@ class _MyAppState extends State<MyApp> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final GlobalKey<ScaffoldMessengerState> messengerKey =
       GlobalKey<ScaffoldMessengerState>();
+  bool isSosScreenOpen = false;
 
   @override
   void initState() {
     super.initState();
     /*
-      Notificaciones
-    */
+    Notificaciones
+  */
     PushNotificationService.messagesStream.listen((message) {
       print('MyApp: $message');
       final usuarioData = jsonDecode(message['usuario']);
@@ -53,11 +54,16 @@ class _MyAppState extends State<MyApp> {
       double latitud = usuarioData['latitud'];
       double longitud = usuarioData['longitud'];
 
-      if (latitud == null || longitud == null) return;
+      if (latitud == null || longitud == null || isSosScreenOpen) return;
+
+      isSosScreenOpen = true;
       navigatorKey.currentState?.pushNamed('sos', arguments: {
         'nombre': nombre,
         'latitud': latitud,
         'longitud': longitud,
+      }).then((value) {
+        // Este bloque de código se ejecutará cuando la pantalla 'sos' se cierre.
+        isSosScreenOpen = false;
       });
     });
   }

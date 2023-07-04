@@ -9,10 +9,17 @@ class BtnSOS extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lacationBloc = BlocProvider.of<LocationBloc>(context);
+    final lat = lacationBloc.state.lastKnownLocation!.latitude;
+    final lng = lacationBloc.state.lastKnownLocation!.longitude;
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return state.displayManualMarker
-            ? const SizedBox()
+            ? _SOSNumber(
+                authBloc: BlocProvider.of<AuthBloc>(context),
+                lat: lat,
+                lng: lng,
+              )
             : const PositionedBtnSOS();
       },
     );
@@ -27,6 +34,32 @@ class PositionedBtnSOS extends StatelessWidget {
     final lacationBloc = BlocProvider.of<LocationBloc>(context);
     final lat = lacationBloc.state.lastKnownLocation!.latitude;
     final lng = lacationBloc.state.lastKnownLocation!.longitude;
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        return _SOSNotification(
+          authBloc: authBloc,
+          lat: lat,
+          lng: lng,
+        );
+      },
+    );
+  }
+}
+
+class _SOSNotification extends StatelessWidget {
+  const _SOSNotification({
+    Key? key,
+    required this.authBloc,
+    required this.lat,
+    required this.lng,
+  }) : super(key: key);
+
+  final AuthBloc authBloc;
+  final double lat;
+  final double lng;
+
+  @override
+  Widget build(BuildContext context) {
     return Positioned(
       top: MediaQuery.of(context).size.height * 0.09,
       right: 16.0,
@@ -69,6 +102,78 @@ class PositionedBtnSOS extends StatelessWidget {
                     fontSize: MediaQuery.of(context).size.width * 0.1,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SOSNumber extends StatelessWidget {
+  const _SOSNumber({
+    Key? key,
+    required this.authBloc,
+    required this.lat,
+    required this.lng,
+  }) : super(key: key);
+
+  final AuthBloc authBloc;
+  final double lat;
+  final double lng;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: MediaQuery.of(context).size.height * 0.09,
+      right: 16.0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: MaterialButton(
+          onPressed: () {},
+          child: Ink(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF616161), // Gris más fuerte
+                  Color(0xFF616161), // Gris más fuerte (más transparente)
+                ],
+              ),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0xFF616161)
+                      .withOpacity(0.5), // Gris más fuerte (más transparente)
+                  spreadRadius: 9,
+                  blurRadius: 5,
+                  // offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(
+                MediaQuery.of(context).size.width * 0.3 / 2,
+              ),
+              onTap: () async {
+                await authBloc.notificacion(lat, lng);
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.25,
+                height: MediaQuery.of(context).size.width * 0.30,
+                alignment: Alignment.center,
+                child: Text(
+                  '911 Emergencia',
+                  style: TextStyle(
+                    color: Colors.white,
+
+                    fontSize: MediaQuery.of(context).size.width * 0.04,
+                    fontWeight: FontWeight.bold,
+                    //texto en el centro del boton
+                  ),
+                  //texto en el centro del boton
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),

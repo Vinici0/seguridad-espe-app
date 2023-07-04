@@ -351,87 +351,90 @@ class _OptionNewsState extends State<_OptionNews> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: _handleLike, // Llamar al método de manejo del like
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 30.0,
-                    height: 35.0,
-                    margin: EdgeInsets.only(left: 28),
-                    child: isLiked
-                        ? Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                            size: 22.5,
-                          )
-                        : Icon(
-                            Icons.favorite_border,
-                            color: Colors.grey,
-                            size: 22.5,
-                          ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    widget.publicaciones[widget.i].likes!.length.toString(),
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey[600],
+    return BlocBuilder<PublicationBloc, PublicationState>(
+        builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: _handleLike, // Llamar al método de manejo del like
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 30.0,
+                      height: 35.0,
+                      margin: EdgeInsets.only(left: 28),
+                      child: isLiked
+                          ? Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                              size: 22.5,
+                            )
+                          : Icon(
+                              Icons.favorite_border,
+                              color: Colors.grey,
+                              size: 22.5,
+                            ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.zero,
-                    width: 30.0,
-                    height: 35.0,
-                    child: Icon(
-                      FontAwesomeIcons.comment,
-                      color: Colors.grey,
-                      size: 19.5,
+                    SizedBox(
+                      width: 5,
                     ),
-                  ),
-                  Text(
-                    '0',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          onTap: () {
-            Navigator.pushNamed(context, DetalleScreen.detalleroute,
-                arguments: {
-                  'publicacion': widget.publicaciones[widget.i],
-                  'likes':
+                    Text(
                       widget.publicaciones[widget.i].likes!.length.toString(),
-                });
-          },
-        ),
-      ],
-    );
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.zero,
+                      width: 30.0,
+                      height: 35.0,
+                      child: Icon(
+                        FontAwesomeIcons.comment,
+                        color: Colors.grey,
+                        size: 19.5,
+                      ),
+                    ),
+                    Text(
+                      state.conuntComentarios.toString(),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, DetalleScreen.detalleroute,
+                  arguments: {
+                    'publicacion': widget.publicaciones[widget.i],
+                    'likes':
+                        widget.publicaciones[widget.i].likes!.length.toString(),
+                  });
+            },
+          ),
+        ],
+      );
+    });
   }
 }

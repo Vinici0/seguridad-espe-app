@@ -68,28 +68,6 @@ class LikesCommentsDetails extends StatelessWidget {
                           style: const TextStyle(fontSize: 20),
                         ),
                   const Spacer(),
-                  //Icono de compartir
-                  // GestureDetector(
-                  //     child: Row(
-                  //       children: const [
-                  //         Icon(
-                  //           FontAwesomeIcons.shareFromSquare,
-                  //           size: 16,
-                  //           color: Color(0xFF6165FA),
-                  //         ),
-                  //         SizedBox(width: 8),
-                  //         Text(
-                  //           'Compartir',
-                  //           style: TextStyle(
-                  //             fontSize: 16,
-                  //             color: Color(0xFF6165FA),
-                  //           ),
-                  //         )
-                  //       ],
-                  //     ),
-                  //     onTap: () {
-                  //       print('Compartir');
-                  //     })
                 ],
               ),
             )

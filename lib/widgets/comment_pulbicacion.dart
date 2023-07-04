@@ -27,7 +27,7 @@ class CommentPublication extends StatefulWidget {
 }
 
 class _CommentPublicationState extends State<CommentPublication> {
-  bool isLiked = false;
+  bool _isLiked = false;
   String userLikes = '';
   int likeCount = 0;
   AuthBloc authBloc = AuthBloc();
@@ -38,7 +38,6 @@ class _CommentPublicationState extends State<CommentPublication> {
     likeCount = 0;
     authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
     initializeLikedStatus();
-
     // socketService.socketService.socket.on('toggle-like-comentario', (data) {
     //   if (data['comentarioUid'] == widget.uid) {
     //     setState(() {
@@ -52,7 +51,7 @@ class _CommentPublicationState extends State<CommentPublication> {
   @override
   void dispose() {
     publicationBloc.comentarios.clear();
-
+    _isLiked = false;
     super.dispose();
   }
 
@@ -65,7 +64,7 @@ class _CommentPublicationState extends State<CommentPublication> {
     final userLikes = comment.likes;
 
     setState(() {
-      isLiked = userLikes!.contains(authBloc.state.usuario!.uid);
+      _isLiked = userLikes!.contains(authBloc.state.usuario!.uid);
     });
   }
 
@@ -115,17 +114,19 @@ class _CommentPublicationState extends State<CommentPublication> {
                 ),
                 GestureDetector(
                   onTap: () async {
+                    final isLikedNow = !_isLiked;
+
                     setState(() {
-                      if (isLiked) {
-                        widget.likes--;
-                        isLiked = false;
-                      } else {
-                        widget.likes++;
-                        isLiked = true;
-                      }
+                      _isLiked = isLikedNow;
                     });
 
                     try {
+                      if (isLikedNow) {
+                        widget.likes++;
+                      } else {
+                        widget.likes--;
+                      }
+
                       await publicationBloc.toggleLikeComentario(widget.uid);
                       // socketService.socketService.emit('toggle-like-comentario',
                       //     {'comentarioUid': widget.uid});
@@ -135,7 +136,7 @@ class _CommentPublicationState extends State<CommentPublication> {
                   },
                   child: Row(
                     children: [
-                      isLiked
+                      _isLiked
                           ? const Icon(Icons.favorite, color: Colors.red)
                           : const Icon(FontAwesomeIcons.heart),
                       const SizedBox(width: 5),

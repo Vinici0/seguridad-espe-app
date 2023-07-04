@@ -47,3 +47,13 @@ class DeleteUbicacionByUserEvent extends SearchEvent {
   @override
   List<Object> get props => [id];
 }
+
+class IsActiveNotification extends SearchEvent {
+  final bool isActive;
+
+  const IsActiveNotification(this.isActive);
+  @override
+  List<Object> get props => [
+        isActive,
+      ];
+}

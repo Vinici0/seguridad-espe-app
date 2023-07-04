@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_maps_adv/models/places_models.dart';
@@ -37,6 +39,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       final newUbicacion = await trafficService.addUbicacionByUser(event.id);
       // if (newUbicacion == null) return;
       // emit(state.copyWith(ubicacion: [newUbicacion, ...state.ubicacion]));
+    });
+
+    on<IsActiveNotification>((event, emit) {
+      emit(state.copyWith(isActiveNotification: event.isActive));
     });
   }
 

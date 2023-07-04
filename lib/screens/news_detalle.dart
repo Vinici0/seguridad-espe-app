@@ -190,7 +190,9 @@ class _DetalleScreenState extends State<DetalleScreen> {
       fotoPerfil: 'da',
       createdAt: createdAt.toString(),
       uid: authService.state.usuario!.uid,
-      likes: publicationBloc.state.comentarios!.length,
+      likes: publicationBloc.state.comentarios!.where((element) {
+        return element.uid == authService.state.usuario!.uid;
+      }).length,
     );
 
     publicationBloc.comentariosP.insert(0, newComment);
@@ -478,19 +480,72 @@ class _CustonAppBarDetalle extends StatelessWidget {
   }
 }
 
-class _DescripcionDetalle extends StatelessWidget {
+class _DescripcionDetalle extends StatefulWidget {
   const _DescripcionDetalle({required this.publicacion});
 
   final Publicacion publicacion;
 
   @override
+  _DescripcionDetalleState createState() => _DescripcionDetalleState();
+}
+
+class _DescripcionDetalleState extends State<_DescripcionDetalle> {
+  bool alertaAtendida = false;
+
+  @override
   Widget build(BuildContext context) {
+    final isAlertaAtendida = alertaAtendida;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-      child: Text(
-        publicacion.contenido,
-        style: const TextStyle(fontSize: 16, color: Colors.black87),
-        textAlign: TextAlign.justify,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: () {
+              setState(() {
+                alertaAtendida = !alertaAtendida;
+              });
+            },
+            borderRadius: BorderRadius.circular(5),
+            child: Ink(
+              decoration: BoxDecoration(
+                color: isAlertaAtendida ? Colors.green[100] : Colors.red[100],
+                borderRadius: BorderRadius.circular(5),
+              ),
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                children: [
+                  Icon(
+                    isAlertaAtendida
+                        ? Icons.check_circle_outline
+                        : Icons.error_outline,
+                    size: 16,
+                    color: isAlertaAtendida ? Colors.green : Colors.red,
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    isAlertaAtendida
+                        ? 'Haz clic aquí si la alerta ha sido atendida'
+                        : 'Haz clic aquí si la alerta no ha sido atendida',
+                    style: TextStyle(
+                      color: isAlertaAtendida ? Colors.green : Colors.red,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.publicacion.contenido,
+            style: const TextStyle(fontSize: 16, color: Colors.black87),
+            textAlign: TextAlign.start,
+          ),
+        ],
       ),
     );
   }
