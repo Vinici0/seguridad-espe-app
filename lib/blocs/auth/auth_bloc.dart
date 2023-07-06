@@ -90,7 +90,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         tokenApp: state.usuario!.tokenApp,
         ubicacion: state.usuario!.ubicacion,
         uid: state.usuario!.uid,
-        telefonos: state.usuario!.telefonos);
+        telefonos: state.usuario!.telefonos,
+        google: state.usuario!.google);
 
     emit(state.copyWith(usuario: usuario));
   }
@@ -105,6 +106,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         tokenApp: state.usuario!.tokenApp,
         ubicacion: state.usuario!.ubicacion,
         uid: state.usuario!.uid,
+        google: state.usuario!.google,
         telefonos: [...state.usuario!.telefonos, event.telefono]);
 
     emit(state.copyWith(usuario: usuario));
@@ -119,6 +121,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         telefono: state.usuario!.telefono,
         tokenApp: state.usuario!.tokenApp,
         ubicacion: state.usuario!.ubicacion,
+        google: state.usuario!.google,
         uid: state.usuario!.uid,
         telefonos: state.usuario!.telefonos
             .where((telefono) => telefono != event.telefono)

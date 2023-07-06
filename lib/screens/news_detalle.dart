@@ -502,6 +502,7 @@ class _DescripcionDetalleState extends State<_DescripcionDetalle> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
+            //inkwell es para que se pueda hacer click en el texto y se pueda cambiar el estado
             onTap: () {
               setState(() {
                 alertaAtendida = !alertaAtendida;

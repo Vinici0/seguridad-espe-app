@@ -15,11 +15,13 @@ class BtnSOS extends StatelessWidget {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return state.displayManualMarker
-            ? _SOSNumber(
-                authBloc: BlocProvider.of<AuthBloc>(context),
-                lat: lat,
-                lng: lng,
-              )
+            ? state.isActiveNotification
+                ? _SOSNumber(
+                    authBloc: BlocProvider.of<AuthBloc>(context),
+                    lat: lat,
+                    lng: lng,
+                  )
+                : SizedBox()
             : const PositionedBtnSOS();
       },
     );
@@ -34,14 +36,10 @@ class PositionedBtnSOS extends StatelessWidget {
     final lacationBloc = BlocProvider.of<LocationBloc>(context);
     final lat = lacationBloc.state.lastKnownLocation!.latitude;
     final lng = lacationBloc.state.lastKnownLocation!.longitude;
-    return BlocBuilder<SearchBloc, SearchState>(
-      builder: (context, state) {
-        return _SOSNotification(
-          authBloc: authBloc,
-          lat: lat,
-          lng: lng,
-        );
-      },
+    return _SOSNotification(
+      authBloc: authBloc,
+      lat: lat,
+      lng: lng,
     );
   }
 }
@@ -137,8 +135,9 @@ class _SOSNumber extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: const LinearGradient(
                 colors: [
-                  Color(0xFF616161), // Gris más fuerte
-                  Color(0xFF616161), // Gris más fuerte (más transparente)
+                  Color.fromARGB(255, 30, 29, 29), // Gris más fuerte
+                  Color.fromARGB(
+                      255, 67, 67, 67), // Gris más fuerte (más transparente)
                 ],
               ),
               shape: BoxShape.circle,
@@ -157,23 +156,39 @@ class _SOSNumber extends StatelessWidget {
                 MediaQuery.of(context).size.width * 0.3 / 2,
               ),
               onTap: () async {
-                await authBloc.notificacion(lat, lng);
+                final Uri smsLaunchUri = Uri(
+                  scheme: 'tel',
+                  path: '911',
+                );
               },
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.25,
                 height: MediaQuery.of(context).size.width * 0.30,
                 alignment: Alignment.center,
-                child: Text(
-                  '911 Emergencia',
-                  style: TextStyle(
-                    color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'LLAMAR',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.width * 0.02,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '911',
+                      style: TextStyle(
+                        color: Colors.white,
 
-                    fontSize: MediaQuery.of(context).size.width * 0.04,
-                    fontWeight: FontWeight.bold,
-                    //texto en el centro del boton
-                  ),
-                  //texto en el centro del boton
-                  textAlign: TextAlign.center,
+                        fontSize: MediaQuery.of(context).size.width * 0.08,
+                        fontWeight: FontWeight.bold,
+                        //texto en el centro del boton
+                      ),
+                      //texto en el centro del boton
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
             ),

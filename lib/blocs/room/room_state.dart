@@ -6,6 +6,7 @@ class RoomState extends Equatable {
   final List<MensajesSala> mensajesSalas;
   final List<Sala> salas;
   final List<Usuario> usuariosSala;
+
   final Sala salaSeleccionada;
 
   const RoomState({

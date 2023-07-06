@@ -26,7 +26,7 @@ class DetalleSalaScreen extends StatelessWidget {
       body: Container(
         color: Colors.white,
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(
               child: Container(
@@ -61,126 +61,161 @@ class DetalleSalaScreen extends StatelessWidget {
               ),
             ),
             //acerca de
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(left: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: const Text(
-                        'Acerca de',
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+            Container(
+              margin: const EdgeInsets.only(left: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: const Text(
+                      'Acerca de',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        chatProvider.state.salaSeleccionada.nombre,
-                        style: const TextStyle(
-                          color: Colors.black87,
-                          fontSize: 14,
-                        ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      chatProvider.state.salaSeleccionada.nombre,
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontSize: 14,
                       ),
                     ),
-                    //miembros
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: const Text(
-                        'Miembros',
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  ),
+                  //miembros
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: const Text(
+                      'Miembros',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Material(
+                    child: InkWell(
                       onTap: () {
-                        ///MienbrosChatScreen.mienbrosChatroute
                         Navigator.pushNamed(
                             context, MienbrosChatScreen.mienbrosChatroute);
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(top: 10),
-                            child: const Text(
-                              "Miembros de la sala",
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 14,
+                      borderRadius: BorderRadius.circular(10),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(top: 10),
+                              child: const Text(
+                                "Miembros de la sala",
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
-                          ),
-                          //un icon de flecha mas info
-                          const Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Icon(Icons.arrow_forward_ios, size: 20)),
-                        ],
-                      ),
-                    ),
-                    //codigo de sala
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: const Text(
-                        'Invitar a nuevos miembros',
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                            //un icon de flecha mas info
+                            const Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: Icon(Icons.arrow_forward_ios, size: 20)),
+                          ],
                         ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(
-                            text: chatProvider.state.salaSeleccionada.codigo));
-                        // Agrega aquí una notificación o mensaje para indicar que se ha copiado el código al portapapeles
-                      },
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              readOnly: true,
-                              controller: TextEditingController(
-                                  text: chatProvider
-                                      .state.salaSeleccionada.codigo),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                              icon: const Icon(Icons.content_copy, size: 20),
-                              onPressed: () {
-                                Clipboard.setData(ClipboardData(
-                                    text: chatProvider
-                                        .state.salaSeleccionada.codigo));
-                                Fluttertoast.showToast(
-                                  msg: 'Copiado',
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  backgroundColor: Colors.black87,
-                                );
-                              }),
-                        ],
+                  ),
+                  //codigo de sala
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: const Text(
+                      'Invitar a nuevos miembros',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(
+                          text: chatProvider.state.salaSeleccionada.codigo));
+                      // Agrega aquí una notificación o mensaje para indicar que se ha copiado el código al portapapeles
+                    },
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            readOnly: true,
+                            controller: TextEditingController(
+                                text:
+                                    chatProvider.state.salaSeleccionada.codigo),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                            icon: const Icon(Icons.content_copy, size: 20),
+                            onPressed: () {
+                              Clipboard.setData(ClipboardData(
+                                  text: chatProvider
+                                      .state.salaSeleccionada.codigo));
+                              Fluttertoast.showToast(
+                                msg: 'Copiado',
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.black87,
+                              );
+                            }),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
+            const Divider(
+              height: 1,
+              color: Colors.black26,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+              child: Material(
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Ink(
+                      width: MediaQuery.of(context).size.width * 0.999,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.only(top: 5, bottom: 5),
+                        child: Text(
+                          'Salir del grupo',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 14,
+                          ),
+                        ),
+                      )),
+                  onTap: () {},
+                ),
+              ),
+            )
           ],
         ),
       ),

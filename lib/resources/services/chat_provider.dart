@@ -5,6 +5,7 @@ import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/salas_mensaje_response.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
 import 'package:flutter_maps_adv/models/usuario.dart';
+import 'package:flutter_maps_adv/models/usuarios_response.dart';
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,8 +41,8 @@ class ChatProvider {
       'x-token': await AuthService.getToken() as String,
     });
     final decodedData = json.decode(resp.body);
-    final usuarios = decodedData['usuarios'];
-    return usuarios;
+    final usuarios = UsuariosResponse.fromJson(decodedData);
+    return usuarios.usuarios;
   }
 
   Future<Sala> createSala(String nombre) async {

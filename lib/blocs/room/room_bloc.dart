@@ -14,6 +14,8 @@ part 'room_state.dart';
 class RoomBloc extends Bloc<RoomEvent, RoomState> {
   final ChatProvider _chatProvider = ChatProvider();
   final List<MensajesSala> mensajesAll = [];
+  final List<Usuario> usuariosAllSala = [];
+
   final initSate = RoomState(
     salas: const [],
     mensajesSalas: const [],
@@ -42,37 +44,37 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
             isLoading: false,
             isError: false,
             usuariosSala: const [])) {
-    on<SalasInitEvent>(salasInitEvent);
-    on<ChatInitEvent>(chatInitEvent);
-    on<ChatLoadedEvent>(chatLoadedEvent);
+    on<SalasInitEvent>(_salasInitEvent);
+    on<ChatInitEvent>(_chatInitEvent);
+    on<ChatLoadedEvent>(_chatLoadedEvent);
     on<CargandoEvent>((event, emit) {
       emit(state.copyWith(isLoading: true));
     });
-    on<SalaCreateEvent>(salaCreateEvent);
-    on<SalaJoinEvent>(salaJoinEvent);
-    on<SalaSelectEvent>(salaSelectEvent);
-    on<ObtenerUsuariosSalaEvent>(obtenerUsuariosSalaEvent);
-    on<LimpiarMensajesEvent>(limpiarMensajesEvent);
+    on<SalaCreateEvent>(_salaCreateEvent);
+    on<SalaJoinEvent>(_salaJoinEvent);
+    on<SalaSelectEvent>(_salaSelectEvent);
+    on<ObtenerUsuariosSalaEvent>(_obtenerUsuariosSalaEvent);
+    on<LimpiarMensajesEvent>(_limpiarMensajesEvent);
   }
 
-  FutureOr<void> salasInitEvent(
+  FutureOr<void> _salasInitEvent(
       SalasInitEvent event, Emitter<RoomState> emit) async {
     emit(state.copyWith(isLoading: true));
     final salas = await _chatProvider.getSalesAll();
     emit(state.copyWith(salas: salas, isLoading: false));
   }
 
-  FutureOr<void> chatInitEvent(ChatInitEvent event, Emitter<RoomState> emit) {
+  FutureOr<void> _chatInitEvent(ChatInitEvent event, Emitter<RoomState> emit) {
     final List<MensajesSala> mensajes = [];
     emit(state.copyWith(mensajesSalas: mensajes, isLoading: false));
   }
 
-  FutureOr<void> chatLoadedEvent(
+  FutureOr<void> _chatLoadedEvent(
       ChatLoadedEvent event, Emitter<RoomState> emit) {
     emit(state.copyWith(mensajesSalas: event.mensajes, isLoading: false));
   }
 
-  FutureOr<void> salaCreateEvent(
+  FutureOr<void> _salaCreateEvent(
       SalaCreateEvent event, Emitter<RoomState> emit) async {
     emit(state.copyWith(isLoading: true));
     final newSala = await _chatProvider.createSala(event.nombre);
@@ -80,7 +82,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     emit(state.copyWith(salas: newSalas, isLoading: false));
   }
 
-  FutureOr<void> salaJoinEvent(
+  FutureOr<void> _salaJoinEvent(
       SalaJoinEvent event, Emitter<RoomState> emit) async {
     emit(state.copyWith(isLoading: true));
     final newSala = await _chatProvider.joinSala(event.codigo);
@@ -88,19 +90,17 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     emit(state.copyWith(salas: newSalas, isLoading: false));
   }
 
-  FutureOr<void> salaSelectEvent(
+  FutureOr<void> _salaSelectEvent(
       SalaSelectEvent event, Emitter<RoomState> emit) {
     emit(state.copyWith(salaSeleccionada: event.salaSeleccionada));
   }
 
-  FutureOr<void> obtenerUsuariosSalaEvent(
+  FutureOr<void> _obtenerUsuariosSalaEvent(
       ObtenerUsuariosSalaEvent event, Emitter<RoomState> emit) async {
     emit(state.copyWith(isLoading: true));
-    final usuariosSala = await _chatProvider.getUsuariosSala(event.idSala);
-    emit(state.copyWith(usuariosSala: usuariosSala, isLoading: false));
   }
 
-  FutureOr<void> limpiarMensajesEvent(
+  FutureOr<void> _limpiarMensajesEvent(
       LimpiarMensajesEvent event, Emitter<RoomState> emit) {
     emit(state.copyWith(mensajesSalas: []));
   }
@@ -113,5 +113,12 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     mensajesAll.addAll(mensajes);
     add(ChatLoadedEvent(mensajes));
     return mensajes;
+  }
+
+  cargarUsuariosSala(String uid) async {
+    add(CargandoEvent());
+    final usuarios = await _chatProvider.getUsuariosSala(uid);
+    usuariosAllSala = usuarios;
+    return usuarios;
   }
 }

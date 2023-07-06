@@ -18,7 +18,7 @@ class BotonForm extends StatelessWidget {
         onPressed: () => this.onPressed(),
         elevation: 2,
         highlightElevation: 5,
-        color: Colors.indigo,
+        color: const Color(0xFF6165FA),
         shape: const StadiumBorder(),
         minWidth: double.infinity,
         height: 50,

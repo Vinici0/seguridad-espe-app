@@ -19,7 +19,7 @@ class Routes {
     LoadingMapScreen.loadingroute: (_) => const LoadingMapScreen(),
     LoginScreen.loginroute: (_) => const LoginScreen(),
     MapScreen.routemap: (_) => const MapScreen(),
-    MienbrosChatScreen.mienbrosChatroute: (_) => const MienbrosChatScreen(),
+    MienbrosChatScreen.mienbrosChatroute: (_) => MienbrosChatScreen(),
     ModalBottomSheet.modalBottomSheetRoute: (_) => const ModalBottomSheet(),
     NewsScreen.newsroute: (_) => const NewsScreen(),
     PerfilScreen.salesroute: (_) => const PerfilScreen(),

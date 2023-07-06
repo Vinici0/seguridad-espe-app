@@ -8,6 +8,7 @@ String usuarioToJson(Usuario data) => json.encode(data.toJson());
 
 class Usuario {
   bool online;
+  bool google;
   String nombre;
   String email;
   String telefono;
@@ -25,12 +26,14 @@ class Usuario {
     required this.tokenApp,
     required this.ubicacion,
     required this.uid,
+    required this.google,
     this.img,
     required this.telefonos,
   });
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         online: json["online"],
+        google: json["google"],
         nombre: json["nombre"],
         email: json["email"],
         telefono: json["telefono"],
@@ -44,6 +47,7 @@ class Usuario {
 
   Map<String, dynamic> toJson() => {
         "online": online,
+        "google": google,
         "nombre": nombre,
         "email": email,
         "telefono": telefono,
