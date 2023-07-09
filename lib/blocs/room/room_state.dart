@@ -5,16 +5,15 @@ class RoomState extends Equatable {
   final bool isLoading;
   final List<MensajesSala> mensajesSalas;
   final List<Sala> salas;
-  final List<Usuario> usuariosSala;
-
+  final List<ChatMessage> messages;
   final Sala salaSeleccionada;
 
-  const RoomState({
+  RoomState({
     required this.isError,
     required this.isLoading,
     required this.mensajesSalas,
     required this.salas,
-    required this.usuariosSala,
+    this.messages = const [],
     required this.salaSeleccionada,
   });
 
@@ -23,6 +22,7 @@ class RoomState extends Equatable {
     bool? isLoading,
     List<MensajesSala>? mensajesSalas,
     List<Sala>? salas,
+    List<ChatMessage>? messages,
     List<Usuario>? usuariosSala,
     Sala? salaSeleccionada,
   }) {
@@ -31,7 +31,7 @@ class RoomState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       mensajesSalas: mensajesSalas ?? this.mensajesSalas,
       salas: salas ?? this.salas,
-      usuariosSala: usuariosSala ?? this.usuariosSala,
+      messages: messages ?? this.messages,
       salaSeleccionada: salaSeleccionada ?? this.salaSeleccionada,
     );
   }
@@ -46,6 +46,6 @@ class RoomState extends Equatable {
         salaSeleccionada,
         isLoading,
         isError,
-        usuariosSala,
+        messages,
       ];
 }

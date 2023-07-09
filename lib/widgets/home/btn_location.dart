@@ -19,8 +19,7 @@ class BtnCurrentLocation extends StatelessWidget {
         backgroundColor: Colors.white,
         maxRadius: 25,
         child: IconButton(
-            icon:
-                const Icon(FontAwesomeIcons.locationArrow, color: Colors.black),
+            icon: Icon(FontAwesomeIcons.locationArrow, color: Colors.grey[800]),
             onPressed: () {
               //ultima ubicacion conocida del usuario
               final userLocation = locationBloc.state.lastKnownLocation;

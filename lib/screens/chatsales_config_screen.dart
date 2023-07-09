@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/screens/chatsales_miembros.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,6 +13,7 @@ class DetalleSalaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatProvider = BlocProvider.of<RoomBloc>(context);
+    final auth = BlocProvider.of<AuthBloc>(context);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -202,15 +204,33 @@ class DetalleSalaScreen extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 5, bottom: 5),
-                        child: Text(
-                          'Salir del grupo',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 14,
-                          ),
-                        ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 5, bottom: 5),
+                        child: auth.state.usuario!.uid ==
+                                chatProvider.state.salaSeleccionada.propietario
+                            ? GestureDetector(
+                                onTap: () {
+                                  chatProvider.add(CargandoEvent());
+                                  chatProvider.add(SalaSelectEvent(
+                                      chatProvider.state.salaSeleccionada));
+
+                                  Navigator.pop(context);
+                                },
+                                child: const Text(
+                                  'Salir y eliminar grupo',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              )
+                            : const Text(
+                                'Salir del grupo',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 14,
+                                ),
+                              ),
                       )),
                   onTap: () {},
                 ),

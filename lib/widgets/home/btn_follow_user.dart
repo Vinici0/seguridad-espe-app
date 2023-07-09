@@ -22,7 +22,7 @@ class BtnFollowUser extends StatelessWidget {
                     state.isFollowUser
                         ? FontAwesomeIcons.solidCompass
                         : FontAwesomeIcons.compass,
-                    color: Colors.black),
+                    color: Colors.grey[800]),
                 onPressed: () {
                   print("Boton presionado");
                   mapBloc.add(OnStartFollowingUserEvent());

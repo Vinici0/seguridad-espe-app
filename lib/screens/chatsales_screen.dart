@@ -23,8 +23,9 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
-
+  final ScrollController _firstController = ScrollController();
   final List<ChatMessage> _messages = [];
+  bool _isLoading = false;
 
   bool _estaEscribiendo = false;
 
@@ -34,40 +35,53 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     chatProvider = BlocProvider.of<RoomBloc>(context);
-
+    chatProvider.cargarMensajes(chatProvider.state.salaSeleccionada.uid);
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
-    _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
+    // _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
     authService.socketService.socket.emit('join-room', {
       'codigo': chatProvider.state.salaSeleccionada.uid,
     });
 
     authService.socketService.socket.on('mensaje-grupal', _escucharMensaje);
+
+    _firstController.addListener(() {
+      if (!_isLoading &&
+          _firstController.position.pixels >=
+              _firstController.position.maxScrollExtent) {
+        print('llego al final');
+        chatProvider.getNextChat().then((_) {
+          _isLoading = false;
+        });
+        _isLoading = true;
+      }
+    });
     super.initState();
   }
 
-  void _caragrHistorial(String uid) async {
-    //isLoading != true
-    await chatProvider.cargarMensajes(uid);
+  // void _caragrHistorial(String uid) async {
+  //   //isLoading != true
+  //   await chatProvider.cargarMensajes(uid);
 
-    List<MensajesSala>? chat = chatProvider.mensajesAll;
+  //   List<MensajesSala>? chat = chatProvider.mensajesAll;
 
-    if (chat.isNotEmpty) {
-      final history = chat.map((m) => ChatMessage(
-          texto: m.mensaje,
-          uid: m.usuario,
-          nombre: m.nombre,
-          animationController: AnimationController(
-              vsync: this, duration: const Duration(milliseconds: 0))
-            ..forward()));
+  //   if (chat.isNotEmpty) {
+  //     final history = chat.map((m) => ChatMessage(
+  //         texto: m.mensaje,
+  //         uid: m.usuario,
+  //         nombre: m.nombre,
+  //         animationController: AnimationController(
+  //             vsync: this, duration: const Duration(milliseconds: 0))
+  //           ..forward()));
 
-      if (mounted) {
-        setState(() {
-          _messages.insertAll(0, history);
-        });
-      }
-    }
-  }
+  //     if (mounted) {
+  //       setState(() {
+  //         _messages.insertAll(0, history);
+  //       });
+  //     }
+  //   }
+  //   chatProvider.add(GetLoadedChatMessage(_messages));
+  // }
 
   void _escucharMensaje(dynamic payload) {
     ChatMessage message = ChatMessage(
@@ -79,8 +93,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     );
     setState(() {
       _messages.insert(0, message);
+      chatProvider.add(AddMessageEvent(message));
     });
-    message.animationController.forward();
+    message.animationController?.forward();
   }
 
   @override
@@ -134,20 +149,20 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               Icons.settings,
               color: Colors.black87,
             ),
-            onPressed: () {
+            onPressed: () async {
+              // ignore: use_build_context_synchronously
               Navigator.pushNamed(context, DetalleSalaScreen.detalleSalaroute);
-              // chatProvider.add(LimpiarMensajesEvent());
             },
           )
         ],
       ),
       body: BlocBuilder<RoomBloc, RoomState>(
         builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+          // if (state.isLoading) {
+          //   return const Center(
+          //     child: CircularProgressIndicator(),
+          //   );
+          // }
 
           return Container(
             color: Colors.white,
@@ -157,8 +172,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                     child: ListView.builder(
                   physics:
                       const BouncingScrollPhysics(), //sirve para que el scroll se vea mas real
-                  itemCount: _messages.length,
-                  itemBuilder: (_, i) => _messages[i],
+                  itemCount: state.messages.length,
+                  controller: _firstController,
+                  itemBuilder: (_, i) => state.messages[i],
                   reverse: true,
                 )),
                 const Divider(height: 1),
@@ -249,8 +265,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
     if (mounted) {
       setState(() {
-        _messages.insert(0, newMessage);
-        newMessage.animationController.forward();
+        _messages.insert(0,
+            newMessage); //inserta el mensaje en la primera posicion de la lista
+        chatProvider.add(AddMessageEvent(newMessage));
+
+        newMessage.animationController?.forward();
         _estaEscribiendo = false;
       });
 
@@ -263,21 +282,15 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
   }
 
-  //void async cargar mensajes
-
   @override
   void dispose() {
     _textController.dispose();
     _focusNode.dispose();
-
     for (ChatMessage message in _messages) {
-      message.animationController.dispose();
+      //ssss
+      message.animationController?.dispose();
     }
-
-    // chatProvider.close(); // Close the chatProvider stream
-
     authService.socketService.socket.off('mensaje-grupal');
-
     super.dispose();
   }
 }

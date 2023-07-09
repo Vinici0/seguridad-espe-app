@@ -5,9 +5,9 @@ class PublicationState extends Equatable {
   final List<Publicacion> publicaciones;
   final List<Publicacion> publicacionesUsuario;
   List<Comentario>? comentarios;
-  Publicacion? currentPublicacion; //
-  final bool isLoading; // Indicador de carga
-  final bool isError; // Indicador de error
+  Publicacion? currentPublicacion;
+  final bool isLoading;
+  final bool isError;
   final int conuntComentarios;
 
   PublicationState({

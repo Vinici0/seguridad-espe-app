@@ -10,10 +10,10 @@ class TableAlertsCompunidad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Variables de colores como cadenas
-    const String greenColor = "0xFF00FF00"; // Green
-    const String pinkColor = "0xFFFFC0CB"; // Pink
-    const String purpleColor = "0xFF800080"; // Purple
-    const String blueColor = "0xFF0000FF"; // Blue
+    const String greenColor = "0xFF8EB582"; // Green
+    const String pinkColor = "0xFFff2e74"; // Pink
+    const String purpleColor = "0xFF7f66ff"; // Purple
+    const String blueColor = "0xFF43abcd"; // Blue
 
     return Table(
       children: [
@@ -84,9 +84,20 @@ class TableAlertsCompunidad extends StatelessWidget {
               ),
             ),
             // No quiero ubicar más columnas en esta fila
-            const TableCell(
-              child: SizedBox(),
-            ),
+            GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child: const PhysicalModelCircleContainer(
+                  icon: "problems-de-transporte-publico.svg",
+                  text: "Problemas de transporte publico",
+                  color: Color(0xFF414073),
+                ),
+                onTap: () => {
+                      Navigator.pushNamed(context, 'reporte',
+                          arguments: Reporte(
+                              tipo: "Problemas de transporte publico",
+                              icon: "problems-de-transporte-publico.svg",
+                              color: "414073"))
+                    }),
             const TableCell(
               child: SizedBox(),
             ),
@@ -143,7 +154,7 @@ class PhysicalModelCircleContainer extends StatelessWidget {
               text,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Colors.white,
+                color: Color(0xFFFFFFFF),
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
               ),

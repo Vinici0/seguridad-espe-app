@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -31,10 +33,12 @@ class _AlertScreenState extends State<AlertScreen> {
   List<XFile>? imagefiles;
   bool isPressed = false;
   bool _estaEscribiendo = false;
+  bool isButtonDisabled = false;
 
   @override
   void initState() {
     super.initState();
+    isButtonDisabled = false;
     _getCurrentLocation();
   }
 
@@ -42,6 +46,7 @@ class _AlertScreenState extends State<AlertScreen> {
   Widget build(BuildContext context) {
     final Reporte reporte =
         ModalRoute.of(context)!.settings.arguments as Reporte;
+
     final size = MediaQuery.of(context).size;
     final publicaciones = BlocProvider.of<PublicationBloc>(context);
     final authService = BlocProvider.of<AuthBloc>(context, listen: false);
@@ -49,10 +54,7 @@ class _AlertScreenState extends State<AlertScreen> {
     String tooltipText =
         isPressed ? 'Inconicto activado' : 'Inconicto desactivado';
 
-    /*
-      
-      final position = await Geolocator.getCurrentPosition();
-    */
+    //controlar que reporte no sea null
 
     return Scaffold(
       appBar: AppBar(
@@ -277,51 +279,56 @@ class _AlertScreenState extends State<AlertScreen> {
                           color: const Color(0xFF6165FA),
                         ),
                         child: MaterialButton(
-                          onPressed: () async {
-                            if (_textController.text.isEmpty) {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('Campo vacío'),
-                                    content: const Text(
-                                        'Por favor, escriba qué sucedió.'),
-                                    actions: [
-                                      TextButton(
-                                        child: const Text(
-                                          'Aceptar',
-                                          style: TextStyle(
-                                              color: Color(0xFF6165FA)),
-                                        ),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
+                          onPressed: isButtonDisabled
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    isButtonDisabled = true;
+                                  });
+                                  if (_textController.text.isEmpty) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('Campo vacío'),
+                                          content: const Text(
+                                              'Por favor, escriba qué sucedió.'),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text(
+                                                'Aceptar',
+                                                style: TextStyle(
+                                                    color: Color(0xFF6165FA)),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                    return;
+                                  }
+                                  try {
+                                    await publicaciones.createpublication(
+                                      reporte.tipo,
+                                      _textController.text,
+                                      reporte.color,
+                                      reporte.icon,
+                                      false,
+                                      true,
+                                      authService.state.usuario!.uid,
+                                      imagePaths ?? [],
+                                    );
+                                  } catch (e) {
+                                    print('Error: $e');
+                                    return;
+                                  }
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
                                 },
-                              );
-                              return;
-                            }
-                            try {
-                              await publicaciones.createpublication(
-                                reporte.tipo,
-                                _textController.text,
-                                reporte.color,
-                                reporte.icon,
-                                false,
-                                true,
-                                authService.state.usuario!.uid,
-                                imagePaths,
-                              );
-                            } catch (e) {
-                              print('Error: $e');
-                              return;
-                            }
-
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                          },
                           child: Row(
                             children: const [
                               Icon(

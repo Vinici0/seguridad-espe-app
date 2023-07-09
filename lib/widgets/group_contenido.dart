@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class GroupContenido extends StatelessWidget {
   final String textoTitulo;
@@ -19,6 +20,7 @@ class GroupContenido extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController nomController = TextEditingController();
     final chatProvider = BlocProvider.of<RoomBloc>(context, listen: false);
+    final blocRoom = BlocProvider.of<RoomBloc>(context);
     return Column(
       children: [
         Container(
@@ -68,14 +70,25 @@ class GroupContenido extends StatelessWidget {
         MaterialButton(
           minWidth: double.infinity,
           color: const Color(0xffF3F3F3),
-          onPressed: () {
+          onPressed: () async {
             if (textoButton == 'Crear Grupo') {
-              //TODO: crear grupo PENDIENTE
               chatProvider.add(SalaCreateEvent(nomController.text));
+              Navigator.pop(context);
             } else {
-              chatProvider.add(SalaJoinEvent(nomController.text));
+              final res = await chatProvider.joinSala(nomController.text);
+              if (res) {
+                Navigator.pop(context);
+              } else {
+                Fluttertoast.showToast(
+                    msg: "El código no es correcto",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: const Color(0xFF6165FA),
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              }
             }
-            Navigator.pop(context);
           },
           child: Text(textoButton,
               style: const TextStyle(color: Color(0xFF6165FA), fontSize: 14)),

@@ -26,9 +26,11 @@ class PublicacionService {
     longitud: 0,
   );
 
-  Future<List<Publicacion>> getPublicacionesAll() async {
+  Future<List<Publicacion>> getPublicacionesAll(
+      {int publicationNext = 0}) async {
     try {
-      final uri = Uri.parse('${Environment.apiUrl}/publicacion/cercanas');
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/publicacion/cercanas?desde=$publicationNext');
 
       final resp = await http.get(uri, headers: {
         'Content-Type': 'application/json',

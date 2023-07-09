@@ -18,35 +18,35 @@ class TableAlertsSeguridad extends StatelessWidget {
                 child: const PhysicalModelCircleContainer(
                   icon: "robo-a-casa.svg",
                   text: "Robo a casa",
-                  color: Colors.green,
+                  color: Color(0xFF58b368),
                 ),
                 onTap: () => {
                       Navigator.pushNamed(context, 'reporte',
                           arguments: Reporte(
                               tipo: "Robo a casa",
                               icon: "robo-a-casa.svg",
-                              color: "4CAF50"))
+                              color: "58b368"))
                     }),
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: const PhysicalModelCircleContainer(
                   icon: "robo-a-persona.svg",
                   text: "Robo a persona",
-                  color: Colors.pink,
+                  color: Color(0xFF2C3E50),
                 ),
                 onTap: () => {
                       Navigator.pushNamed(context, 'reporte',
                           arguments: Reporte(
                               tipo: "Robo a persona",
                               icon: "robo-a-persona.svg",
-                              color: "E91E63"))
+                              color: "2C3E50"))
                     }),
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: const PhysicalModelCircleContainer(
                   icon: "robo-de-vehiculo.svg",
                   text: "Robo de vehiculo",
-                  color: Colors.purple,
+                  color: Color(0xFF9C27B0),
                 ),
                 onTap: () => {
                       Navigator.pushNamed(context, 'reporte',
@@ -64,14 +64,14 @@ class TableAlertsSeguridad extends StatelessWidget {
               child: const PhysicalModelCircleContainer(
                 icon: "accidente.svg",
                 text: "Accidente",
-                color: Colors.blue,
+                color: Color(0xFF3498DB),
               ),
               onTap: () => {
                 Navigator.pushNamed(context, 'reporte',
                     arguments: Reporte(
                         tipo: "Accidente",
                         icon: "accidente.svg",
-                        color: "2196F3"))
+                        color: "3498DB"))
               },
             ),
             GestureDetector(
@@ -79,28 +79,28 @@ class TableAlertsSeguridad extends StatelessWidget {
                 child: const PhysicalModelCircleContainer(
                   icon: "emergencia-de-ambulancia.svg",
                   text: "Emergencia de ambulancia",
-                  color: Color.fromRGBO(244, 67, 54, 1),
+                  color: Color(0xFFE74C3C),
                 ),
                 onTap: () => {
                       Navigator.pushNamed(context, 'reporte',
                           arguments: Reporte(
                               tipo: "Emergencia de ambulancia",
                               icon: "emergencia-de-ambulancia.svg",
-                              color: "F44336"))
+                              color: "E74C3C"))
                     }),
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: const PhysicalModelCircleContainer(
                   icon: "emergencia-de-bomberos.svg",
                   text: "Emergencia de bomberos",
-                  color: Color(0xFFFFC107),
+                  color: Color(0xFFFFBC3B),
                 ),
                 onTap: () => {
                       Navigator.pushNamed(context, 'reporte',
                           arguments: Reporte(
                               tipo: "Emergencia de bomberos",
                               icon: "emergencia-de-bomberos.svg",
-                              color: "FFC107"))
+                              color: "FFBC3B"))
                     }),
           ],
         ),
@@ -111,42 +111,42 @@ class TableAlertsSeguridad extends StatelessWidget {
                 child: const PhysicalModelCircleContainer(
                   icon: "drogas.svg",
                   text: "Drogas",
-                  color: Colors.orange,
+                  color: Color(0xFFE67F22),
                 ),
                 onTap: () => {
                       Navigator.pushNamed(context, 'reporte',
                           arguments: Reporte(
                               tipo: "Drogas",
                               icon: "drogas.svg",
-                              color: "FF9800"))
+                              color: "E67F22"))
                     }),
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: const PhysicalModelCircleContainer(
                   icon: "actividad-sospechosa.svg",
                   text: "Actividad sospechosa",
-                  color: Colors.cyan,
+                  color: Color(0xFF2980B9),
                 ),
                 onTap: () => {
                       Navigator.pushNamed(context, 'reporte',
                           arguments: Reporte(
                               tipo: "Actividad sospechosa",
                               icon: "actividad-sospechosa.svg",
-                              color: "00BCD4"))
+                              color: "2980B9"))
                     }),
             GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: const PhysicalModelCircleContainer(
-                  icon: "problems-de-transporte-publico.svg",
-                  text: "Problemas de transporte publico",
-                  color: Colors.blueAccent,
+                  icon: "prueba.svg",
+                  text: "Prueba",
+                  color: Color(0xFF6D6D6D),
                 ),
                 onTap: () => {
                       Navigator.pushNamed(context, 'reporte',
                           arguments: Reporte(
-                              tipo: "Problemas de transporte publico",
-                              icon: "problems-de-transporte-publico.svg",
-                              color: "448AFF"))
+                              tipo: "Prueba",
+                              icon: "prueba.svg",
+                              color: "6D6D6D"))
                     }),
           ],
         ),

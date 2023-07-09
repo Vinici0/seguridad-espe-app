@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
-import 'package:flutter_maps_adv/helpers/navegacion.dart';
 import 'package:flutter_maps_adv/helpers/show_loading_message.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SosScreen extends StatelessWidget {
   static const String sosroute = 'sos';
@@ -23,6 +20,7 @@ class SosScreen extends StatelessWidget {
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
+    final counterBloc = BlocProvider.of<NavigatorBloc>(context);
     LatLng? end;
     // const String number = '911';
 
@@ -83,7 +81,7 @@ class SosScreen extends StatelessWidget {
                       // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                       Navigator.pop(context);
-                      counterBloc.cambiarIndex(0);
+                      counterBloc.add(const NavigatorIndexEvent(index: 0));
                     },
                     style: ElevatedButton.styleFrom(
                       primary: const Color(0xFF6165FA),

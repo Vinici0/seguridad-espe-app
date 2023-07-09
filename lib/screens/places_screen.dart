@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/delegates/search_destination_delegate.dart';
-import 'package:flutter_maps_adv/helpers/navegacion.dart';
 import 'package:flutter_maps_adv/models/search_result.dart';
 import 'package:flutter_maps_adv/screens/place_details_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,7 +24,7 @@ class PlacesScreen extends StatelessWidget {
     }
 
     final gpsBloc = BlocProvider.of<GpsBloc>(context);
-
+    final counterBloc = BlocProvider.of<NavigatorBloc>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -67,7 +66,7 @@ class PlacesScreen extends StatelessWidget {
                     onTap: () async {
                       if (!gpsBloc.state.isGpsEnabled ||
                           !gpsBloc.state.isGpsPermissionGranted) {
-                        counterBloc.cambiarIndex(0);
+                        counterBloc.add(const NavigatorIndexEvent(index: 0));
                         return;
                       }
 

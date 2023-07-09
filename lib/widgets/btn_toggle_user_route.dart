@@ -19,7 +19,7 @@ class BtnToggleUserRoute extends StatelessWidget {
           backgroundColor: Colors.white,
           maxRadius: 25,
           child: IconButton(
-              icon: const Icon(FontAwesomeIcons.route, color: Colors.black),
+              icon: Icon(FontAwesomeIcons.route, color: Colors.grey[800]),
               onPressed: () {
                 mapBloc.add(OpToggleUserRouteEvent());
               }),

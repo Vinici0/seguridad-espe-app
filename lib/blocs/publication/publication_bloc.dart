@@ -41,6 +41,10 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
 
     on<PublicacionesCreateEvent>(publicacionesCreateEvent);
 
+    on<LoadingEventFalse>((event, emit) {
+      emit(state.copyWith(isLoading: false));
+    });
+
     on<PublicacionSelectEvent>((event, emit) {
       emit(state.copyWith(currentPublicacion: event.publicacion));
     });
@@ -62,11 +66,16 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
       emit(state.copyWith(
           conuntComentarios: event.conuntComentarios, isLoading: false));
     });
+
+    on<PublicationGetMoreEvent>((event, emit) {
+      //agrega las nuevas publicaciones a la lista
+      final newPublicaciones = [...state.publicaciones, ...event.publicaciones];
+      emit(state.copyWith(publicaciones: newPublicaciones, isLoading: false));
+    });
   }
 
   FutureOr<void> publicacionesInitEvent(
       PublicacionesInitEvent event, Emitter<PublicationState> emit) {
-    emit(state.copyWith(isLoading: true));
     emit(state.copyWith(publicaciones: event.publicaciones, isLoading: false));
   }
 
@@ -82,20 +91,37 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
 
   FutureOr<void> publicacionesCreateEvent(
       PublicacionesCreateEvent event, Emitter<PublicationState> emit) {
-    emit(state.copyWith(isLoading: true));
-
     emit(state.copyWith(publicaciones: event.publicacion, isLoading: false));
   }
 
   getAllPublicaciones() async {
+    add(LoadingEvent());
     final publicaciones = await _publicacionService.getPublicacionesAll();
+
     add(PublicacionesInitEvent(publicaciones));
+  }
+
+  getNextPublicaciones() async {
+    add(LoadingEvent());
+    final publicaciones = await _publicacionService.getPublicacionesAll(
+        publicationNext: state.publicaciones.length);
+    if (publicaciones.isEmpty) {
+      add(LoadingEventFalse());
+      return;
+    }
+    add(PublicationGetMoreEvent(publicaciones));
   }
 
   createpublication(String tipo, String descripcion, String color, String icon,
       bool activo, bool visible, String uid, List<String>? path) async {
+    add(LoadingEvent());
     final newPublicacion = await _publicacionService.createPublicacion(
         tipo, descripcion, color, icon, activo, visible, uid, path);
+
+    if (newPublicacion.uid == null || newPublicacion.uid == '') {
+      return;
+    }
+
     final newPublicaciones = [newPublicacion, ...state.publicaciones];
     add(PublicacionesCreateEvent(newPublicaciones));
   }

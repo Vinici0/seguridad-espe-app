@@ -24,15 +24,31 @@ class RoomsScreen extends StatelessWidget {
         elevation: 0.5,
         actions: const [IconModal()],
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Expanded(
-              child: _listSalesGroup(context),
+      body: BlocBuilder<RoomBloc, RoomState>(
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return Container(
+            color: Colors.white,
+            child: RefreshIndicator(
+              onRefresh: () async {
+                // roonBloc.add(SalasInitEvent());
+              },
+              color: Color(0xFF6165FA),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: _listSalesGroup(context),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -183,8 +199,6 @@ class SalaListTitle extends StatelessWidget {
       onTap: () {
         salasService.add(ChatInitEvent());
         salasService.add(SalaSelectEvent(sala));
-        // await salasService.cargarMensajes(sala.uid);
-        // ignore: use_build_context_synchronously
         Navigator.pushNamed(context, ChatScreen.chatsalesroute);
       },
     );

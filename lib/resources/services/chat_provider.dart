@@ -10,67 +10,127 @@ import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 import 'package:http/http.dart' as http;
 
 class ChatProvider {
-  Future<List<MensajesSala>> getChatSala(String salaID) async {
-    final uri =
-        Uri.parse('${Environment.apiUrl}/mensajes/get-mensaje-by-room/$salaID');
-    final resp = await http.get(uri, headers: {
-      'Content-Type': 'application/json',
-      'x-token': await AuthService.getToken() as String,
-    });
-    final mensajesResp = salasMensajeResponseFromMap(resp.body);
-    if (mensajesResp.mensajesSala.isEmpty) return [];
-    return mensajesResp.mensajesSala;
+  Future<List<MensajesSala>> getChatSala(
+      {required String salaID, int next = 0}) async {
+    try {
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/mensajes/get-mensaje-by-room/$salaID');
+      final resp = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+      final mensajesResp = salasMensajeResponseFromMap(resp.body);
+      if (mensajesResp.mensajesSala.isEmpty) return [];
+      return mensajesResp.mensajesSala;
+    } catch (e) {
+      print('Error en getChatSala: $e');
+      return [];
+    }
   }
 
   Future<List<Sala>> getSalesAll() async {
-    final uri = Uri.parse('${Environment.apiUrl}/salas/obtener-salas-usuario');
-    final resp = await http.get(uri, headers: {
-      'Content-Type': 'application/json',
-      'x-token': await AuthService.getToken() as String,
-    });
-    final salesResp = SalesResponse.fromJson(resp.body);
-    return salesResp.salas;
+    try {
+      final uri =
+          Uri.parse('${Environment.apiUrl}/salas/obtener-salas-usuario');
+      final resp = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+      final salesResp = SalesResponse.fromJson(resp.body);
+      return salesResp.salas;
+    } catch (e) {
+      print('Error en getSalesAll: $e');
+      return [];
+    }
   }
 
-  //localhost:3000/api/salas/obtener-usuarios-sala/6475910feca9c72f60705ca3
   Future<List<Usuario>> getUsuariosSala(String salaID) async {
-    final uri =
-        Uri.parse('${Environment.apiUrl}/salas/obtener-usuarios-sala/$salaID');
-    final resp = await http.get(uri, headers: {
-      'Content-Type': 'application/json',
-      'x-token': await AuthService.getToken() as String,
-    });
-    final decodedData = json.decode(resp.body);
-    final usuarios = UsuariosResponse.fromJson(decodedData);
-    return usuarios.usuarios;
+    try {
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/salas/obtener-usuarios-sala/$salaID');
+      final resp = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+      final decodedData = json.decode(resp.body);
+      final usuarios = UsuariosResponse.fromJson(decodedData);
+      return usuarios.usuarios;
+    } catch (e) {
+      print('Error en getUsuariosSala: $e');
+      return [];
+    }
   }
 
-  Future<Sala> createSala(String nombre) async {
-    final uri = Uri.parse('${Environment.apiUrl}/salas');
+  Future<Sala?> createSala(String nombre) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/salas');
 
-    final resp = await http.post(uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'x-token': await AuthService.getToken() as String,
-        },
-        body: '{"nombre":"$nombre"}');
-    final decodedData = json.decode(resp.body);
-    final salaResp = Sala.fromMap(decodedData['sala']);
-    return salaResp;
+      final resp = await http.post(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': await AuthService.getToken() as String,
+          },
+          body: '{"nombre":"$nombre"}');
+      final decodedData = json.decode(resp.body);
+      final salaResp = Sala.fromMap(decodedData['sala']);
+      return salaResp;
+    } catch (e) {
+      print('Error en createSala: $e');
+      return null;
+    }
   }
 
-  Future<Sala> joinSala(String codigo) async {
-    final uri = Uri.parse('${Environment.apiUrl}/salas/unir-sala');
+  Future<Sala?> joinSala(String codigo) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/salas/unir-sala');
 
-    final resp = await http.post(uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'x-token': await AuthService.getToken() as String,
-        },
-        body: '{"codigo":"$codigo"}');
+      final resp = await http.post(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': await AuthService.getToken() as String,
+          },
+          body: '{"codigo":"$codigo"}');
 
-    final decodedData = json.decode(resp.body);
-    final salaResp = Sala.fromMap(decodedData['sala']);
-    return salaResp;
+      final decodedData = json.decode(resp.body);
+      final salaResp = Sala.fromMap(decodedData['sala']);
+      return salaResp;
+    } catch (e) {
+      print('Error en joinSala: $e');
+      return null;
+    }
+  }
+
+  Future<bool> deleteSala(String salaID) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/salas/$salaID');
+      final resp = await http.delete(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+      final decodedData = json.decode(resp.body);
+      final salaResp = Sala.fromMap(decodedData['sala']);
+      return salaResp.uid == salaID;
+    } catch (e) {
+      print('Error en deleteSala: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteUsuarioSala(String uid) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/salas/eliminar-usuario');
+      final resp = await http.post(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': await AuthService.getToken() as String,
+          },
+          body: '{"uid":"$uid"}');
+      final decodedData = json.decode(resp.body);
+      final salaResp = Sala.fromMap(decodedData['sala']);
+      return salaResp.uid == uid;
+    } catch (e) {
+      print('Error en deleteUsuarioSala: $e');
+      return false;
+    }
   }
 }

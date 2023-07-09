@@ -30,12 +30,12 @@ class SalaCreateEvent extends RoomEvent {
 }
 
 class SalaJoinEvent extends RoomEvent {
-  final String codigo;
+  final List<Sala> salas;
 
-  const SalaJoinEvent(this.codigo);
+  const SalaJoinEvent(this.salas);
 
   @override
-  List<Object> get props => [codigo];
+  List<Object> get props => [salas];
 }
 
 class ChatCreate extends RoomEvent {
@@ -57,16 +57,52 @@ class SalaSelectEvent extends RoomEvent {
 }
 
 class ObtenerUsuariosSalaEvent extends RoomEvent {
-  final String idSala;
+  final List<Usuario> usuarioAll;
 
-  const ObtenerUsuariosSalaEvent(this.idSala);
+  const ObtenerUsuariosSalaEvent(this.usuarioAll);
 
   @override
-  List<Object> get props => [idSala];
+  List<Object> get props => [usuarioAll];
 }
 
 //esta cargando
 class CargandoEvent extends RoomEvent {}
 
-//limipiar mensajes de la sala
 class LimpiarMensajesEvent extends RoomEvent {}
+
+class DeleteSalaEvent extends RoomEvent {
+  final String uid;
+
+  const DeleteSalaEvent(this.uid);
+
+  @override
+  List<Object> get props => [uid];
+}
+
+class ChatGetMoreEvent extends RoomEvent {
+  final List<MensajesSala> mensajes;
+
+  const ChatGetMoreEvent(this.mensajes);
+
+  @override
+  List<Object> get props => [mensajes];
+}
+
+class GetLoadedChatMessage extends RoomEvent {
+  final List<ChatMessage> messages;
+
+  const GetLoadedChatMessage(this.messages);
+
+  @override
+  List<Object> get props => [messages];
+}
+
+//agregar un mensajeChartMessage
+class AddMessageEvent extends RoomEvent {
+  final ChatMessage message;
+
+  const AddMessageEvent(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

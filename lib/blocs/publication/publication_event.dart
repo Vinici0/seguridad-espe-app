@@ -86,6 +86,8 @@ class CountCommentEvent extends PublicationEvent {
 //esta cargando evento
 class LoadingEvent extends PublicationEvent {}
 
+class LoadingEventFalse extends PublicationEvent {}
+
 class ToggleLikeComentarioEvent extends PublicationEvent {
   final List<Comentario> comentarios;
 
@@ -103,4 +105,13 @@ class PublicacionesUsuarioEvent extends PublicationEvent {
 
   @override
   List<Object> get props => [publicacionesUsuario];
+}
+
+class PublicationGetMoreEvent extends PublicationEvent {
+  final List<Publicacion> publicaciones;
+
+  const PublicationGetMoreEvent(this.publicaciones);
+
+  @override
+  List<Object> get props => [publicaciones];
 }

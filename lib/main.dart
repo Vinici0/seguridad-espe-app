@@ -20,6 +20,8 @@ void main() async {
     BlocProvider(create: (context) => LocationBloc()),
     BlocProvider(create: (context) => PublicationBloc()),
     BlocProvider(create: (context) => RoomBloc()),
+    BlocProvider(create: (context) => MembersBloc()),
+    BlocProvider(create: (context) => NavigatorBloc()),
     BlocProvider(
         create: (context) => SearchBloc(trafficService: TrafficService())),
     BlocProvider(

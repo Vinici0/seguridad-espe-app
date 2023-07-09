@@ -21,7 +21,6 @@ class Routes {
     MapScreen.routemap: (_) => const MapScreen(),
     MienbrosChatScreen.mienbrosChatroute: (_) => MienbrosChatScreen(),
     ModalBottomSheet.modalBottomSheetRoute: (_) => const ModalBottomSheet(),
-    NewsScreen.newsroute: (_) => const NewsScreen(),
     PerfilScreen.salesroute: (_) => const PerfilScreen(),
     PlaceDetailScreen.place: (_) => const PlaceDetailScreen(),
     PlacesScreen.salesroute: (_) => const PlacesScreen(),

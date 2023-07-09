@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/information_family_screen.dart';
 import 'package:flutter_maps_adv/screens/information_screen.dart';
@@ -29,11 +30,10 @@ class LoadingLoginScreen extends StatelessWidget {
 
   Future<void> checkLoginState(BuildContext context) async {
     final authService = BlocProvider.of<AuthBloc>(context);
-
+    final _publicationBloc = BlocProvider.of<PublicationBloc>(context);
+    await _publicationBloc.getAllPublicaciones();
     await authService.init();
-
     await Future.delayed(const Duration(milliseconds: 100));
-
     final usuario = authService.state.usuario;
 
     if (authService.isLoggedInTrue) {

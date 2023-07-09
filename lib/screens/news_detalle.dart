@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
-import 'package:flutter_maps_adv/helpers/navegacion.dart';
 import 'package:flutter_maps_adv/helpers/show_loading_message.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -287,6 +286,7 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
     final publicacion = mapNews['publicacion'] as Publicacion;
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
+    final counterBloc = BlocProvider.of<NavigatorBloc>(context);
     LatLng? end;
     return Container(
       //aagregar un margen en el contenedor
@@ -399,7 +399,7 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
               Navigator.pop(context);
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
-              counterBloc.cambiarIndex(0);
+              counterBloc.add(const NavigatorIndexEvent(index: 0));
             },
           )
         ],
