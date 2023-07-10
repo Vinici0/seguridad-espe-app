@@ -121,7 +121,7 @@ class PublicacionService {
       final decodedData = json.decode(resp.body);
       final publicacionResp = Publicacion.fromMap(decodedData['publicacion']);
 
-      if (imagePaths != null) {
+      if (imagePaths!.isNotEmpty) {
         final publicacionResp2 = await uploadImages(
             publicacionResp.uid!, publicacion.titulo, imagePaths);
 

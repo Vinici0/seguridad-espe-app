@@ -3,35 +3,27 @@ part of 'room_bloc.dart';
 class RoomState extends Equatable {
   final bool isError;
   final bool isLoading;
-  final List<MensajesSala> mensajesSalas;
   final List<Sala> salas;
-  final List<ChatMessage> messages;
   final Sala salaSeleccionada;
 
   RoomState({
     required this.isError,
     required this.isLoading,
-    required this.mensajesSalas,
     required this.salas,
-    this.messages = const [],
     required this.salaSeleccionada,
   });
 
   RoomState copyWith({
     bool? isError,
     bool? isLoading,
-    List<MensajesSala>? mensajesSalas,
     List<Sala>? salas,
-    List<ChatMessage>? messages,
     List<Usuario>? usuariosSala,
     Sala? salaSeleccionada,
   }) {
     return RoomState(
       isError: isError ?? this.isError,
       isLoading: isLoading ?? this.isLoading,
-      mensajesSalas: mensajesSalas ?? this.mensajesSalas,
       salas: salas ?? this.salas,
-      messages: messages ?? this.messages,
       salaSeleccionada: salaSeleccionada ?? this.salaSeleccionada,
     );
   }
@@ -42,10 +34,8 @@ class RoomState extends Equatable {
   @override
   List<Object> get props => [
         salas,
-        mensajesSalas,
         salaSeleccionada,
         isLoading,
         isError,
-        messages,
       ];
 }

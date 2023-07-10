@@ -12,8 +12,7 @@ part 'publication_state.dart';
 
 class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   final PublicacionService _publicacionService = PublicacionService();
-  final List<CommentPublication> comentariosP = [];
-  List<Comentario> comentarios = [];
+
   PublicationBloc()
       : super(PublicationState(
             publicacionesUsuario: const [],
@@ -33,13 +32,13 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
             ),
             isLoading: false,
             isError: false)) {
-    on<PublicacionesInitEvent>(publicacionesInitEvent);
+    on<PublicacionesInitEvent>(_publicacionesInitEvent);
 
-    on<PublicacionesUpdateEvent>(publicacionesUpdateEvent);
+    on<PublicacionesUpdateEvent>(_publicacionesUpdateEvent);
 
     on<ToggleLikeComentarioEvent>(_toggleLikeComentario);
 
-    on<PublicacionesCreateEvent>(publicacionesCreateEvent);
+    on<PublicacionesCreateEvent>(_publicacionesCreateEvent);
 
     on<LoadingEventFalse>((event, emit) {
       emit(state.copyWith(isLoading: false));
@@ -72,14 +71,41 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
       final newPublicaciones = [...state.publicaciones, ...event.publicaciones];
       emit(state.copyWith(publicaciones: newPublicaciones, isLoading: false));
     });
+
+    on<AddCommentPublicationEvent>((event, emit) {
+      try {
+        final List<CommentPublication>? newComentarios = [
+          event.commentPublication,
+          ...state.comentariosP,
+        ];
+        emit(state.copyWith(comentariosP: newComentarios, isLoading: false));
+      } catch (e) {
+        print('Error al agregar comentario: $e');
+      }
+    });
+
+    on<UpdatePublicationEvent>((event, emit) {
+      final newPublicaciones = state.publicaciones.map((publicacion) {
+        if (publicacion.uid == event.publicacion.uid) {
+          return event.publicacion;
+        } else {
+          return publicacion;
+        }
+      }).toList();
+      emit(state.copyWith(publicaciones: newPublicaciones, isLoading: false));
+    });
+
+    on<ResetCommentPublicationEvent>((event, emit) {
+      emit(state.copyWith(comentariosP: [], isLoading: false));
+    });
   }
 
-  FutureOr<void> publicacionesInitEvent(
+  FutureOr<void> _publicacionesInitEvent(
       PublicacionesInitEvent event, Emitter<PublicationState> emit) {
     emit(state.copyWith(publicaciones: event.publicaciones, isLoading: false));
   }
 
-  FutureOr<void> publicacionesUpdateEvent(
+  FutureOr<void> _publicacionesUpdateEvent(
       PublicacionesUpdateEvent event, Emitter<PublicationState> emit) async {
     await _publicacionService.likePublicacion(event.uid);
   }
@@ -89,7 +115,7 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     emit(state.copyWith(comentarios: event.comentarios));
   }
 
-  FutureOr<void> publicacionesCreateEvent(
+  FutureOr<void> _publicacionesCreateEvent(
       PublicacionesCreateEvent event, Emitter<PublicationState> emit) {
     emit(state.copyWith(publicaciones: event.publicacion, isLoading: false));
   }
@@ -118,10 +144,6 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     final newPublicacion = await _publicacionService.createPublicacion(
         tipo, descripcion, color, icon, activo, visible, uid, path);
 
-    if (newPublicacion.uid == null || newPublicacion.uid == '') {
-      return;
-    }
-
     final newPublicaciones = [newPublicacion, ...state.publicaciones];
     add(PublicacionesCreateEvent(newPublicaciones));
   }
@@ -129,18 +151,6 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   cargarComentarios(String uid) async {
     final publicaciones = await _publicacionService.getAllComments(uid);
   }
-
-  // publicacionesUpdate(String uid) async {
-  //   final newPublicacion = await _publicacionService.likePublicacion(uid);
-  //   final newPublicaciones = state.publicaciones.map((publicacion) {
-  //     if (publicacion.uid == newPublicacion.uid) {
-  //       return newPublicacion;
-  //     } else {
-  //       return publicacion;
-  //     }
-  //   }).toList();
-  //   add(PublicacionesUpdate(newPublicaciones));
-  // }
 
   getPublicacionesUsuario() async {
     add(LoadingEvent());
@@ -162,6 +172,7 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   }
 
   getAllComments(String uid) async {
+    add(ResetCommentPublicationEvent());
     add(LoadingEvent());
     final List<Comentario> comentariosL =
         await _publicacionService.getAllComments(uid);
@@ -175,10 +186,9 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
         uid: element.uid,
         likes: element.likes!.length,
       );
-      comentariosP.add(comment);
+      add(AddCommentPublicationEvent(comment));
     }
-    add(CountCommentEvent(comentariosP.length));
-    add(GetAllCommentsEvent(comentarios));
-    comentarios.addAll(comentariosL);
+    add(CountCommentEvent(state.comentariosP.length));
+    add(GetAllCommentsEvent(comentariosL));
   }
 }

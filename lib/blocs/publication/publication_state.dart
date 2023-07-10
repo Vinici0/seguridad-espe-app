@@ -6,6 +6,7 @@ class PublicationState extends Equatable {
   final List<Publicacion> publicacionesUsuario;
   List<Comentario>? comentarios;
   Publicacion? currentPublicacion;
+  final List<CommentPublication> comentariosP;
   final bool isLoading;
   final bool isError;
   final int conuntComentarios;
@@ -17,6 +18,7 @@ class PublicationState extends Equatable {
     required this.isError,
     this.comentarios,
     required this.publicacionesUsuario,
+    this.comentariosP = const [],
     this.conuntComentarios = 0,
   });
 
@@ -27,6 +29,7 @@ class PublicationState extends Equatable {
     bool? isError,
     List<Comentario>? comentarios,
     List<Publicacion>? publicacionesUsuario,
+    List<CommentPublication>? comentariosP,
     int? conuntComentarios,
   }) {
     return PublicationState(
@@ -35,6 +38,7 @@ class PublicationState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       isError: isError ?? this.isError,
       comentarios: comentarios ?? this.comentarios,
+      comentariosP: comentariosP ?? this.comentariosP,
       publicacionesUsuario: publicacionesUsuario ?? this.publicacionesUsuario,
       conuntComentarios: conuntComentarios ?? this.conuntComentarios,
     );
@@ -49,5 +53,6 @@ class PublicationState extends Equatable {
         comentarios,
         publicacionesUsuario,
         conuntComentarios,
+        comentariosP,
       ];
 }

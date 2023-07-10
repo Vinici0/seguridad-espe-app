@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/helpers/show_loading_message.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
@@ -32,7 +31,12 @@ class _DetalleScreenState extends State<DetalleScreen> {
   @override
   void initState() {
     publicationBloc = BlocProvider.of<PublicationBloc>(context);
-
+    publicationBloc.add(CountCommentEvent(publicationBloc.state.publicaciones
+        .where((element) =>
+            element.uid == publicationBloc.state.currentPublicacion!.uid)
+        .first
+        .comentarios!
+        .length));
     _caragrHistorial(publicationBloc.state.currentPublicacion!.uid!);
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
@@ -61,8 +65,10 @@ class _DetalleScreenState extends State<DetalleScreen> {
       likes: payload['likes'],
     );
 
+    publicationBloc.add(AddCommentPublicationEvent(comment));
+
     setState(() {
-      publicationBloc.comentariosP.insert(0, comment);
+      // publicationBloc.comentariosP.insert(0, comment);
     });
   }
 
@@ -71,7 +77,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
     final Map<String, dynamic> mapNews =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final publicacion = mapNews['publicacion'] as Publicacion;
-    final likes = mapNews['likes'] as String;
+    final List<String>? likes = publicationBloc.state.currentPublicacion!.likes;
 
     return Container(
       color: Colors.white,
@@ -85,14 +91,13 @@ class _DetalleScreenState extends State<DetalleScreen> {
                   _CustonAppBarDetalle(publicacion: publicacion),
                   SliverList(
                     delegate: SliverChildListDelegate([
-                      _UbicacionDetalle(publicacion: publicacion),
                       _DescripcionDetalle(publicacion: publicacion),
+                      _UbicacionDetalle(publicacion: publicacion),
                       const Divider(),
                       LikesCommentsDetails(
-                          publicacion: publicacion, likes: likes),
+                          publicacion: publicacion, likes: likes!),
                       const Divider(),
-                      _ListComentario(
-                          comentariosP: publicationBloc.comentariosP),
+                      _ListComentario(),
                       const SizedBox(
                         height: 80,
                       ),
@@ -194,7 +199,36 @@ class _DetalleScreenState extends State<DetalleScreen> {
       }).length,
     );
 
-    publicationBloc.comentariosP.insert(0, newComment);
+    publicationBloc.add(AddCommentPublicationEvent(newComment));
+
+    final List<String> comentarios = [
+      ...publicationBloc.state.currentPublicacion!.comentarios ?? [],
+      newComment.uid!
+    ]; //agrega el comentario a la lista de comentarios
+
+    publicationBloc.add(UpdatePublicationEvent(Publicacion(
+      titulo: publicationBloc.state.currentPublicacion!.titulo,
+      contenido: publicationBloc.state.currentPublicacion!.contenido,
+      color: publicationBloc.state.currentPublicacion!.color,
+      ciudad: publicationBloc.state.currentPublicacion!.ciudad,
+      barrio: publicationBloc.state.currentPublicacion!.barrio,
+      isPublic: publicationBloc.state.currentPublicacion!.isPublic,
+      usuario: publicationBloc.state.currentPublicacion!.usuario,
+      latitud: publicationBloc.state.currentPublicacion!.latitud,
+      longitud: publicationBloc.state.currentPublicacion!.longitud,
+      imgAlerta: publicationBloc.state.currentPublicacion!.imgAlerta,
+      isLiked: publicationBloc.state.currentPublicacion!.isLiked,
+      uid: publicationBloc.state.currentPublicacion!.uid,
+      comentarios: comentarios,
+      likes: publicationBloc.state.currentPublicacion!.likes,
+      imagenes: publicationBloc.state.currentPublicacion!.imagenes,
+      createdAt: publicationBloc.state.currentPublicacion!.createdAt,
+      updatedAt: publicationBloc.state.currentPublicacion!.updatedAt,
+      usuarioNombre: publicationBloc.state.currentPublicacion!.usuarioNombre,
+    )));
+
+    publicationBloc.add(CountCommentEvent(
+        publicationBloc.state.conuntComentarios + 1)); //aumenta el contador
     setState(() {
       _estaEscribiendo = false;
 
@@ -212,9 +246,9 @@ class _DetalleScreenState extends State<DetalleScreen> {
   @override
   void dispose() {
     publicationBloc.add(const GetAllCommentsEvent([]));
-    publicationBloc.comentariosP.clear();
     authService.socketService.socket.off('comentario-publicacion');
     authService.socketService.socket.off('join-room');
+    publicationBloc.add(const ResetCommentPublicationEvent());
 
     super.dispose();
   }
@@ -222,11 +256,8 @@ class _DetalleScreenState extends State<DetalleScreen> {
 
 class _ListComentario extends StatelessWidget {
   const _ListComentario({
-    super.key,
-    required List<CommentPublication> comentariosP,
-  }) : _comentariosP = comentariosP;
-
-  final List<CommentPublication> _comentariosP;
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -239,18 +270,22 @@ class _ListComentario extends StatelessWidget {
           );
         }
 
-        if (publicationBloc.comentariosP.isEmpty) {
+        if (state.comentariosP.isEmpty) {
           return const Center(
             child: Text('No hay comentarios'),
           );
         }
 
+        final comentariosP = state.comentariosP;
+
         return ListView.builder(
           shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          itemCount: _comentariosP.length,
-          itemBuilder: (_, i) => _comentariosP[i],
           reverse: true,
+
+          physics: const BouncingScrollPhysics(),
+          itemCount: comentariosP.length,
+          itemBuilder: (_, i) => comentariosP[i],
+          // reverse: true,
         );
       },
     );
@@ -501,45 +536,45 @@ class _DescripcionDetalleState extends State<_DescripcionDetalle> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            //inkwell es para que se pueda hacer click en el texto y se pueda cambiar el estado
-            onTap: () {
-              setState(() {
-                alertaAtendida = !alertaAtendida;
-              });
-            },
-            borderRadius: BorderRadius.circular(5),
-            child: Ink(
-              decoration: BoxDecoration(
-                color: isAlertaAtendida ? Colors.green[100] : Colors.red[100],
-                borderRadius: BorderRadius.circular(5),
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Icon(
-                    isAlertaAtendida
-                        ? Icons.check_circle_outline
-                        : Icons.error_outline,
-                    size: 16,
-                    color: isAlertaAtendida ? Colors.green : Colors.red,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    isAlertaAtendida
-                        ? 'Haz clic aquí si la alerta ha sido atendida'
-                        : 'Haz clic aquí si la alerta no ha sido atendida',
-                    style: TextStyle(
-                      color: isAlertaAtendida ? Colors.green : Colors.red,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            ),
-          ),
+          // InkWell(
+          //   //inkwell es para que se pueda hacer click en el texto y se pueda cambiar el estado
+          //   onTap: () {
+          //     setState(() {
+          //       alertaAtendida = !alertaAtendida;
+          //     });
+          //   },
+          //   borderRadius: BorderRadius.circular(5),
+          //   child: Ink(
+          //     decoration: BoxDecoration(
+          //       color: isAlertaAtendida ? Colors.green[100] : Colors.red[100],
+          //       borderRadius: BorderRadius.circular(5),
+          //     ),
+          //     padding: const EdgeInsets.all(10),
+          //     child: Row(
+          //       children: [
+          //         Icon(
+          //           isAlertaAtendida
+          //               ? Icons.check_circle_outline
+          //               : Icons.error_outline,
+          //           size: 16,
+          //           color: isAlertaAtendida ? Colors.green : Colors.red,
+          //         ),
+          //         const SizedBox(width: 5),
+          //         Text(
+          //           isAlertaAtendida
+          //               ? 'Haz clic aquí si la alerta ha sido atendida'
+          //               : 'Haz clic aquí si la alerta no ha sido atendida',
+          //           style: TextStyle(
+          //             color: isAlertaAtendida ? Colors.green : Colors.red,
+          //             fontSize: 16,
+          //             fontWeight: FontWeight.bold,
+          //           ),
+          //         ),
+          //         const Spacer(),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           const SizedBox(height: 10),
           Text(
             widget.publicacion.contenido,

@@ -115,3 +115,37 @@ class PublicationGetMoreEvent extends PublicationEvent {
   @override
   List<Object> get props => [publicaciones];
 }
+
+class UpdateArryComentsByPublication extends PublicationEvent {
+  final List<Comentario> comentarios;
+
+  const UpdateArryComentsByPublication(this.comentarios);
+
+  @override
+  List<Object> get props => [comentarios];
+}
+
+class UpdatePublicationEvent extends PublicationEvent {
+  final Publicacion publicacion;
+
+  const UpdatePublicationEvent(this.publicacion);
+
+  @override
+  List<Object> get props => [publicacion];
+}
+
+class AddCommentPublicationEvent extends PublicationEvent {
+  final CommentPublication commentPublication;
+
+  const AddCommentPublicationEvent(this.commentPublication);
+
+  @override
+  List<Object> get props => [commentPublication];
+}
+
+class ResetCommentPublicationEvent extends PublicationEvent {
+  const ResetCommentPublicationEvent();
+
+  @override
+  List<Object> get props => [];
+}

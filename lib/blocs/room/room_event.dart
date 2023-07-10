@@ -9,8 +9,6 @@ abstract class RoomEvent extends Equatable {
 
 class SalasInitEvent extends RoomEvent {}
 
-class ChatInitEvent extends RoomEvent {}
-
 class ChatLoadedEvent extends RoomEvent {
   final List<MensajesSala> mensajes;
 
@@ -68,8 +66,6 @@ class ObtenerUsuariosSalaEvent extends RoomEvent {
 //esta cargando
 class CargandoEvent extends RoomEvent {}
 
-class LimpiarMensajesEvent extends RoomEvent {}
-
 class DeleteSalaEvent extends RoomEvent {
   final String uid;
 
@@ -77,32 +73,4 @@ class DeleteSalaEvent extends RoomEvent {
 
   @override
   List<Object> get props => [uid];
-}
-
-class ChatGetMoreEvent extends RoomEvent {
-  final List<MensajesSala> mensajes;
-
-  const ChatGetMoreEvent(this.mensajes);
-
-  @override
-  List<Object> get props => [mensajes];
-}
-
-class GetLoadedChatMessage extends RoomEvent {
-  final List<ChatMessage> messages;
-
-  const GetLoadedChatMessage(this.messages);
-
-  @override
-  List<Object> get props => [messages];
-}
-
-//agregar un mensajeChartMessage
-class AddMessageEvent extends RoomEvent {
-  final ChatMessage message;
-
-  const AddMessageEvent(this.message);
-
-  @override
-  List<Object> get props => [message];
 }

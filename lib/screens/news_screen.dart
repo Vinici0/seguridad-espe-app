@@ -262,10 +262,6 @@ class _ListNews extends StatelessWidget {
                                         context, DetalleScreen.detalleroute,
                                         arguments: {
                                           'publicacion': publicaciones[i],
-                                          'likes': publicaciones[i]
-                                              .likes!
-                                              .length
-                                              .toString(),
                                         });
                                   },
                                   child: Column(
@@ -297,7 +293,6 @@ class _ListNews extends StatelessWidget {
                     },
                   ),
                   OptionNews(
-                      publicationBloc: _publicationBloc,
                       publicaciones: publicaciones,
                       state: state,
                       usuarioBloc: usuarioBloc,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
@@ -167,6 +168,7 @@ class SalaListTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final salasService = BlocProvider.of<RoomBloc>(context);
+    final membersBloc = BlocProvider.of<MembersBloc>(context);
     return ListTile(
       title: Text(sala.nombre),
       leading: Container(
@@ -197,7 +199,7 @@ class SalaListTitle extends StatelessWidget {
         ),
       ),
       onTap: () {
-        salasService.add(ChatInitEvent());
+        membersBloc.add(ChatInitEvent());
         salasService.add(SalaSelectEvent(sala));
         Navigator.pushNamed(context, ChatScreen.chatsalesroute);
       },

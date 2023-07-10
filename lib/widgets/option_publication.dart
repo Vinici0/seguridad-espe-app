@@ -8,14 +8,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class OptionNews extends StatefulWidget {
   const OptionNews({
     Key? key,
-    required this.publicationBloc,
     required this.publicaciones,
     required this.state,
     required this.usuarioBloc,
     required this.i,
   }) : super(key: key);
 
-  final PublicationBloc publicationBloc;
   final List<Publicacion> publicaciones;
   final PublicationState state;
   final AuthBloc usuarioBloc;
@@ -60,90 +58,89 @@ class _OptionNewsState extends State<OptionNews> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PublicationBloc, PublicationState>(
-        builder: (context, state) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: _handleLike, // Llamar al método de manejo del like
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 30.0,
-                      height: 35.0,
-                      margin: EdgeInsets.only(left: 28),
-                      child: isLiked
-                          ? Icon(
-                              Icons.favorite,
-                              color: Colors.red,
-                              size: 22.5,
-                            )
-                          : Icon(
-                              Icons.favorite_border,
-                              color: Colors.grey,
-                              size: 22.5,
-                            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: _handleLike, // Llamar al método de manejo del like
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 30.0,
+                    height: 35.0,
+                    margin: EdgeInsets.only(left: 28),
+                    child: isLiked
+                        ? Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                            size: 22.5,
+                          )
+                        : Icon(
+                            Icons.favorite_border,
+                            color: Colors.grey,
+                            size: 22.5,
+                          ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    widget.publicaciones[widget.i].likes!.length.toString(),
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey[600],
                     ),
-                    SizedBox(
-                      width: 5,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.zero,
+                    width: 30.0,
+                    height: 35.0,
+                    //TODO: solicionar el problema de los comentarios
+                    child: Icon(
+                      FontAwesomeIcons.comment,
+                      color: Colors.grey,
+                      size: 19.5,
                     ),
-                    Text(
+                  ),
+                  Text(
+                    widget.state.publicaciones[widget.i].comentarios!.length
+                        .toString(),
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          onTap: () {
+            Navigator.pushNamed(context, DetalleScreen.detalleroute,
+                arguments: {
+                  'publicacion': widget.publicaciones[widget.i],
+                  'likes':
                       widget.publicaciones[widget.i].likes!.length.toString(),
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.zero,
-                      width: 30.0,
-                      height: 35.0,
-                      child: Icon(
-                        FontAwesomeIcons.comment,
-                        color: Colors.grey,
-                        size: 19.5,
-                      ),
-                    ),
-                    Text(
-                      state.conuntComentarios.toString(),
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, DetalleScreen.detalleroute,
-                  arguments: {
-                    'publicacion': widget.publicaciones[widget.i],
-                    'likes':
-                        widget.publicaciones[widget.i].likes!.length.toString(),
-                  });
-            },
-          ),
-        ],
-      );
-    });
+                });
+          },
+        ),
+      ],
+    );
   }
 }

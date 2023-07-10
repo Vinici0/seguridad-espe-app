@@ -12,9 +12,10 @@ import 'package:http/http.dart' as http;
 class ChatProvider {
   Future<List<MensajesSala>> getChatSala(
       {required String salaID, int next = 0}) async {
+    print('nest: $next');
     try {
       final uri = Uri.parse(
-          '${Environment.apiUrl}/mensajes/get-mensaje-by-room/$salaID');
+          '${Environment.apiUrl}/mensajes/get-mensaje-by-room/$salaID?desde=$next');
       final resp = await http.get(uri, headers: {
         'Content-Type': 'application/json',
         'x-token': await AuthService.getToken() as String,

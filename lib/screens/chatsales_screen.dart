@@ -5,9 +5,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
-import 'package:flutter_maps_adv/models/salas_mensaje_response.dart';
 import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
 
@@ -21,27 +20,30 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
+  AuthBloc authService = AuthBloc();
+  MembersBloc chatProvider = MembersBloc();
+  RoomBloc roomBloc = RoomBloc();
+
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
   final ScrollController _firstController = ScrollController();
+
   final List<ChatMessage> _messages = [];
   bool _isLoading = false;
-
   bool _estaEscribiendo = false;
-
-  AuthBloc authService = AuthBloc();
-  RoomBloc chatProvider = RoomBloc();
+  bool _isStateLoaded = false;
 
   @override
   void initState() {
-    chatProvider = BlocProvider.of<RoomBloc>(context);
-    chatProvider.cargarMensajes(chatProvider.state.salaSeleccionada.uid);
+    chatProvider = BlocProvider.of<MembersBloc>(context);
+    roomBloc = BlocProvider.of<RoomBloc>(context);
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
-    // _caragrHistorial(chatProvider.state.salaSeleccionada.uid);
     authService.socketService.socket.emit('join-room', {
-      'codigo': chatProvider.state.salaSeleccionada.uid,
+      'codigo': roomBloc.state.salaSeleccionada.uid,
     });
+
+    _carregarMensajes();
 
     authService.socketService.socket.on('mensaje-grupal', _escucharMensaje);
 
@@ -50,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           _firstController.position.pixels >=
               _firstController.position.maxScrollExtent) {
         print('llego al final');
-        chatProvider.getNextChat().then((_) {
+        chatProvider.getNextChat(roomBloc.state.salaSeleccionada.uid).then((_) {
           _isLoading = false;
         });
         _isLoading = true;
@@ -59,35 +61,17 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  // void _caragrHistorial(String uid) async {
-  //   //isLoading != true
-  //   await chatProvider.cargarMensajes(uid);
-
-  //   List<MensajesSala>? chat = chatProvider.mensajesAll;
-
-  //   if (chat.isNotEmpty) {
-  //     final history = chat.map((m) => ChatMessage(
-  //         texto: m.mensaje,
-  //         uid: m.usuario,
-  //         nombre: m.nombre,
-  //         animationController: AnimationController(
-  //             vsync: this, duration: const Duration(milliseconds: 0))
-  //           ..forward()));
-
-  //     if (mounted) {
-  //       setState(() {
-  //         _messages.insertAll(0, history);
-  //       });
-  //     }
-  //   }
-  //   chatProvider.add(GetLoadedChatMessage(_messages));
-  // }
+  _carregarMensajes() async {
+    await chatProvider.cargarMensajes(
+        roomBloc.state.salaSeleccionada.uid); //carga los mensajes
+  }
 
   void _escucharMensaje(dynamic payload) {
     ChatMessage message = ChatMessage(
       nombre: payload['nombre'],
       texto: payload['mensaje'],
       uid: payload['de'],
+      createdAt: DateTime.now().toString(),
       animationController: AnimationController(
           vsync: this, duration: const Duration(milliseconds: 300)),
     );
@@ -111,9 +95,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 gradient: LinearGradient(
                   colors: [
                     Color(int.parse(
-                        '0xFF${chatProvider.state.salaSeleccionada.color.substring(0, 2)}DDBB${chatProvider.state.salaSeleccionada.color.substring(4)}')),
+                        '0xFF${roomBloc.state.salaSeleccionada.color.substring(0, 2)}DDBB${roomBloc.state.salaSeleccionada.color.substring(4)}')),
                     Color(int.parse(
-                        '0xFF${chatProvider.state.salaSeleccionada.color}')),
+                        '0xFF${roomBloc.state.salaSeleccionada.color}')),
                     const Color.fromARGB(255, 230, 116, 226),
                   ],
                   begin: Alignment.topLeft,
@@ -124,7 +108,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 child: Text(
-                  chatProvider.state.salaSeleccionada.nombre
+                  roomBloc.state.salaSeleccionada.nombre
                       .substring(0, 2)
                       .toUpperCase(),
                   style: const TextStyle(
@@ -138,7 +122,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             const SizedBox(
               width: 10,
             ),
-            Text(chatProvider.state.salaSeleccionada.nombre,
+            Text(roomBloc.state.salaSeleccionada.nombre,
                 style: const TextStyle(color: Colors.black87, fontSize: 18)),
           ],
         ),
@@ -156,13 +140,16 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           )
         ],
       ),
-      body: BlocBuilder<RoomBloc, RoomState>(
+      body: BlocBuilder<MembersBloc, MembersState>(
         builder: (context, state) {
-          // if (state.isLoading) {
-          //   return const Center(
-          //     child: CircularProgressIndicator(),
-          //   );
-          // }
+          //si esta cargando los mensajes muestra un indicador de carga, pero solo la primera vez
+
+          if (state.isLoading && !_isStateLoaded) {
+            _isStateLoaded = true;
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
           return Container(
             color: Colors.white,
@@ -177,7 +164,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                   itemBuilder: (_, i) => state.messages[i],
                   reverse: true,
                 )),
-                const Divider(height: 1),
                 Container(
                   color: Colors.white,
                   child: _inputChat(),
@@ -257,6 +243,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       uid: authService.state.usuario!.uid,
       texto: texto,
       nombre: authService.state.usuario!.nombre,
+      createdAt: DateTime.now().toString(),
       animationController: AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 200),
@@ -275,7 +262,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
       this.authService.socketService.socket.emit('mensaje-grupal', {
         'de': this.authService.state.usuario!.uid,
-        'para': this.chatProvider.state.salaSeleccionada.uid,
+        'para': this.roomBloc.state.salaSeleccionada.uid,
         'nombre': this.authService.state.usuario!.nombre,
         'mensaje': texto,
       });
@@ -287,9 +274,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     _textController.dispose();
     _focusNode.dispose();
     for (ChatMessage message in _messages) {
-      //ssss
       message.animationController?.dispose();
     }
+    chatProvider.closeList();
     authService.socketService.socket.off('mensaje-grupal');
     super.dispose();
   }

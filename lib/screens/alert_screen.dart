@@ -34,11 +34,15 @@ class _AlertScreenState extends State<AlertScreen> {
   bool isPressed = false;
   bool _estaEscribiendo = false;
   bool isButtonDisabled = false;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     isButtonDisabled = false;
+    Future.delayed(Duration.zero, () {
+      _focusNode.requestFocus();
+    });
     _getCurrentLocation();
   }
 
@@ -96,6 +100,7 @@ class _AlertScreenState extends State<AlertScreen> {
                   child: Container(
                     color: const Color(0xFF111b21),
                     child: TextField(
+                      focusNode: _focusNode,
                       controller:
                           _textController, //sirve para limpiar el texto del textfield cuando se envia el mensaje
                       style: const TextStyle(color: Colors.white, fontSize: 20),

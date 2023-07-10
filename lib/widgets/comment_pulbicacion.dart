@@ -50,27 +50,30 @@ class _CommentPublicationState extends State<CommentPublication> {
 
   @override
   void dispose() {
-    publicationBloc.comentarios.clear();
     _isLiked = false;
     super.dispose();
   }
 
   Future<void> initializeLikedStatus() async {
-    final comments = publicationBloc.comentarios;
-    //Si no hay comentarios no se hace nada
-    if (comments.isEmpty) return;
+    final comments = publicationBloc.state.comentarios;
+    // Si no hay comentarios no se hace nada
+    if (comments == null || comments.isEmpty) return;
 
-    final comment = comments.firstWhere((element) => element.uid == widget.uid);
-    final userLikes = comment.likes;
+    try {
+      final comment =
+          comments.firstWhere((element) => element.uid == widget.uid);
+      final userLikes = comment.likes;
 
-    setState(() {
-      _isLiked = userLikes!.contains(authBloc.state.usuario!.uid);
-    });
+      setState(() {
+        _isLiked = userLikes!.contains(authBloc.state.usuario!.uid);
+      });
+    } catch (e) {
+      print('Error al inicializar el estado de "Me gusta": $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -141,7 +144,10 @@ class _CommentPublicationState extends State<CommentPublication> {
                           : const Icon(FontAwesomeIcons.heart),
                       const SizedBox(width: 5),
                       Text(
-                        widget.likes.toString(),
+                        widget.likes.toString() == null ||
+                                widget.likes.toString() == 'null'
+                            ? '0'
+                            : widget.likes.toString(),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black54,

@@ -44,7 +44,7 @@ class Publicacion {
   List<String>? imagenes;
   double latitud;
   double longitud;
-  List<dynamic>? comentarios;
+  List<String>? comentarios;
   String imgAlerta;
   bool isLiked;
   String? createdAt;
@@ -91,7 +91,7 @@ class Publicacion {
         longitud: json["longitud"]?.toDouble(),
         comentarios: json["comentarios"] == null
             ? []
-            : List<dynamic>.from(json["comentarios"]!.map((x) => x)),
+            : List<String>.from(json["comentarios"]!.map((x) => x)),
         imgAlerta: json["imgAlerta"],
         isLiked: json["isLiked"],
         createdAt: json["createdAt"],
@@ -123,4 +123,46 @@ class Publicacion {
         "uid": uid,
         "usuarioNombre": usuarioNombre,
       };
+
+  Publicacion copyWith({
+    String? uid,
+    String? titulo,
+    String? contenido,
+    String? color,
+    String? ciudad,
+    String? barrio,
+    bool? isPublic,
+    String? usuario,
+    List<String>? likes,
+    List<String>? imagenes,
+    double? latitud,
+    double? longitud,
+    List<String>? comentarios,
+    String? imgAlerta,
+    bool? isLiked,
+    String? createdAt,
+    String? updatedAt,
+    String? usuarioNombre,
+  }) {
+    return Publicacion(
+      uid: uid ?? this.uid,
+      titulo: titulo ?? this.titulo,
+      contenido: contenido ?? this.contenido,
+      color: color ?? this.color,
+      ciudad: ciudad ?? this.ciudad,
+      barrio: barrio ?? this.barrio,
+      isPublic: isPublic ?? this.isPublic,
+      usuario: usuario ?? this.usuario,
+      likes: likes ?? this.likes,
+      imagenes: imagenes ?? this.imagenes,
+      latitud: latitud ?? this.latitud,
+      longitud: longitud ?? this.longitud,
+      comentarios: comentarios ?? this.comentarios,
+      imgAlerta: imgAlerta ?? this.imgAlerta,
+      isLiked: isLiked ?? this.isLiked,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      usuarioNombre: usuarioNombre ?? this.usuarioNombre,
+    );
+  }
 }
