@@ -7,28 +7,32 @@ Usuario usuarioFromJson(String str) => Usuario.fromJson(json.decode(str));
 String usuarioToJson(Usuario data) => json.encode(data.toJson());
 
 class Usuario {
-  bool online;
   bool google;
-  String nombre;
-  String email;
-  String telefono;
-  String tokenApp;
+  bool online;
+  List<String> telefonos;
   List<Ubicacion> ubicacion;
+  String email;
+  String nombre;
+  String? telefono;
+  String tokenApp;
   String uid;
   String? img;
-  List<String> telefonos;
+  String createdAt;
+  String updatedAt;
 
   Usuario({
     required this.online,
     required this.nombre,
     required this.email,
-    required this.telefono,
+    this.telefono,
     required this.tokenApp,
     required this.ubicacion,
     required this.uid,
     required this.google,
     this.img,
     required this.telefonos,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
@@ -38,6 +42,8 @@ class Usuario {
         email: json["email"],
         telefono: json["telefono"],
         img: json["img"],
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
         telefonos: List<String>.from(json["telefonos"].map((x) => x)),
         tokenApp: json["tokenApp"],
         ubicacion: List<Ubicacion>.from(
@@ -51,6 +57,8 @@ class Usuario {
         "nombre": nombre,
         "email": email,
         "telefono": telefono,
+        "createdAt": createdAt,
+        "updatedAt": updatedAt,
         "img": img,
         "telefonos": List<dynamic>.from(telefonos.map((x) => x)),
         "tokenApp": tokenApp,
@@ -81,10 +89,6 @@ class Usuario {
 
   void setEmail(String email) {
     this.email = email;
-  }
-
-  String getTelefono() {
-    return telefono;
   }
 
   void setTelefono(String telefono) {

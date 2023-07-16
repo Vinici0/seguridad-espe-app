@@ -14,8 +14,6 @@ class RoomsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final roonBloc = BlocProvider.of<RoomBloc>(context);
-    roonBloc.add(SalasInitEvent());
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
@@ -39,11 +37,55 @@ class RoomsScreen extends StatelessWidget {
               onRefresh: () async {
                 // roonBloc.add(SalasInitEvent());
               },
-              color: Color(0xFF6165FA),
+              color: const Color(0xFF6165FA),
               child: Column(
                 children: [
                   Expanded(
-                    child: _listSalesGroup(context),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 13),
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              Navigator.pushNamed(context,
+                                  CodigoCreateGrupoScreen.codigoGruporoute);
+                            },
+                            child: Row(
+                              children: const [
+                                //icon de add grupo
+                                Icon(
+                                  FontAwesomeIcons.plus,
+                                  color: Color(0xFF6165FA),
+                                  size: 20,
+                                ),
+
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                Text(
+                                  'Crear un nuevo grupo',
+                                  style: TextStyle(
+                                      color: Color(0xFF6165FA), fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: state.salas.length,
+                            itemBuilder: (context, index) {
+                              return SalaListTitle(sala: state.salas[index]);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -51,112 +93,6 @@ class RoomsScreen extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  Widget _listSalesGroup(BuildContext context) {
-    return BlocBuilder<RoomBloc, RoomState>(
-      builder: (context, state) {
-        //si no hay salas que salga un mensaje de que no hay salas
-        if (state.salas.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  FontAwesomeIcons.userFriends,
-                  color: Color(0xFF6165FA),
-                  size: 100,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'No hay grupos',
-                  style: TextStyle(
-                    color: Color(0xFF6165FA),
-                    fontSize: 20,
-                  ),
-                ),
-                //boton de crear grupo
-                const SizedBox(
-                  height: 20,
-                ),
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    Navigator.pushNamed(
-                        context, CodigoCreateGrupoScreen.codigoGruporoute);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        FontAwesomeIcons.plus,
-                        color: Color(0xFF6165FA),
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Crear un nuevo grupo',
-                        style: TextStyle(
-                          color: Color(0xFF6165FA),
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 13),
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: () {
-                  Navigator.pushNamed(
-                      context, CodigoCreateGrupoScreen.codigoGruporoute);
-                },
-                child: Row(
-                  children: const [
-                    //icon de add grupo
-                    Icon(
-                      FontAwesomeIcons.plus,
-                      color: Color(0xFF6165FA),
-                      size: 20,
-                    ),
-
-                    SizedBox(
-                      width: 30,
-                    ),
-                    Text(
-                      'Crear un nuevo grupo',
-                      style: TextStyle(color: Color(0xFF6165FA), fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: state.salas.length,
-                itemBuilder: (context, index) {
-                  return SalaListTitle(sala: state.salas[index]);
-                },
-              ),
-            )
-          ],
-        );
-      },
     );
   }
 }

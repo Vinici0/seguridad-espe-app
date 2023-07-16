@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_maps_adv/models/ubicacion.dart';
+import 'package:flutter_maps_adv/models/usuarios_response.dart';
 import 'package:flutter_maps_adv/resources/services/push_notifications_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -31,35 +33,32 @@ class AuthService {
   }
 
   Future<bool> login(String email, String password) async {
-    autenticando = true;
-    final data = {
-      'email': email,
-      'password': password,
-      'tokenApp': PushNotificationService.token
-    };
-    print(data);
+    try {
+      autenticando = true;
+      final data = {
+        'email': email,
+        'password': password,
+        'tokenApp': PushNotificationService.token
+      };
+      final uri = Uri.parse('${Environment.apiUrl}/login');
 
-    final uri = Uri.parse('${Environment.apiUrl}/login');
+      final resp = await http.post(uri,
+          body: jsonEncode(data),
+          headers: {'Content-Type': 'application/json'});
+      autenticando = false;
+      if (resp.statusCode == 200) {
+        final loginResponse = loginResponseFromJson(resp.body);
+        usuario = loginResponse.usuario;
+        ubicaciones = loginResponse.usuario.ubicacion;
+        await _guardarToken(loginResponse.token);
 
-    final resp = await http.post(uri,
-        body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
-
-    autenticando = false;
-
-    if (resp.statusCode == 200) {
-      final loginResponse = loginResponseFromJson(resp.body);
-      usuario = loginResponse.usuario;
-      ubicaciones = loginResponse.usuario.ubicacion;
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('online', usuario!.online);
-      await prefs.setString('email', usuario!.email);
-      await prefs.setString('nombre', usuario!.nombre);
-      await prefs.setString('uid', usuario!.uid);
-
-      await _guardarToken(loginResponse.token);
-
-      return true;
-    } else {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      // Aquí puedes manejar el error de la forma que desees
+      print('Error durante el inicio de sesiónn: $error');
       return false;
     }
   }
@@ -88,12 +87,6 @@ class AuthService {
         final loginResponse = loginResponseFromJson(resp.body);
         usuario = loginResponse.usuario;
         ubicaciones = loginResponse.usuario.ubicacion;
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('online', usuario!.online);
-        await prefs.setString('email', usuario!.email);
-        await prefs.setString('nombre', usuario!.nombre);
-        await prefs.setString('uid', usuario!.uid);
-
         await _guardarToken(loginResponse.token);
 
         return account;
@@ -165,11 +158,6 @@ class AuthService {
       final loginResponse = loginResponseFromJson(resp.body);
       usuario = loginResponse.usuario;
       ubicaciones = loginResponse.usuario.ubicacion;
-      prefs.setBool('online', loginResponse.usuario.online);
-      prefs.setString('email', loginResponse.usuario.email);
-      prefs.setString('nombre', loginResponse.usuario.nombre);
-      prefs.setString('uid', loginResponse.usuario.uid);
-      prefs.setString('token', loginResponse.token);
       await _guardarToken(loginResponse.token);
       return true;
     } else {
@@ -297,7 +285,51 @@ class AuthService {
     scopes: ['email'],
   );
 
-  // Future signOut() async {
-  //   await _googleSignIn.signOut();
-  // }
+  Future<Usuario?> updateUsuarioImage(String id, String imgPath) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/uploads/usuarios/$id');
+      final request = http.MultipartRequest('PUT', uri);
+
+      // Agregar el encabezado 'x-token'
+      final token = await AuthService.getToken();
+      request.headers['x-token'] = token as String;
+
+      // Agregar el campo 'archivo' con el archivo de imagen
+      final file = await http.MultipartFile.fromPath('archivo', imgPath);
+      request.files.add(file);
+
+      // Enviar la solicitud y obtener la respuesta
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+      final decodedData = json.decode(responseBody);
+      final usuarioResp = Usuario.fromJson(decodedData);
+      return usuarioResp;
+    } catch (e) {
+      print('Error en updateUsuarioImage: $e');
+      return null;
+    }
+  }
+
+  //update usuario
+  Future<bool?> updateUsuario(String nombre, String telefono) async {
+    final data = {
+      'nombre': nombre,
+      'telefono': telefono,
+    };
+
+    final uri = Uri.parse('${Environment.apiUrl}/usuarios/add-telefono-nombre');
+
+    final resp = await http.put(uri, body: jsonEncode(data), headers: {
+      'Content-Type': 'application/json',
+      'x-token': await getToken() as String,
+    });
+
+    if (resp.statusCode == 200) {
+      final usuarioResponse = loginResponseFromJson(resp.body);
+      usuario = usuarioResponse.usuario;
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

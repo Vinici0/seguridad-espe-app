@@ -130,58 +130,64 @@ class _ListNews extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.only(left: 10, right: 10),
                           child: Row(
-                            //centrar de arriva a abajo
                             children: [
-                              Container(
-                                margin: EdgeInsets.only(top: 20),
-                                child: CircleAvatar(
-                                  backgroundColor: Color(int.parse(
-                                      "0xFF${publicaciones[i].color}")), //Color(0xffFDCF09
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: SvgPicture.asset(
-                                      'assets/alertas/${publicaciones[i].imgAlerta}',
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Column(
+                              Row(
+                                //centrar de arriva a abajo
                                 children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.50,
-                                    child: Text(
-                                      publicaciones[i].titulo,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black87),
+                                  Container(
+                                    margin: EdgeInsets.only(top: 20),
+                                    child: CircleAvatar(
+                                      backgroundColor: Color(int.parse(
+                                          "0xFF${publicaciones[i].color}")), //Color(0xffFDCF09
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: SvgPicture.asset(
+                                          'assets/alertas/${publicaciones[i].imgAlerta}',
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.50,
-                                    child: Text(
-                                      timeago.format(
-                                        DateTime.parse(
-                                            publicaciones[i].createdAt!),
-                                        locale:
-                                            'es', // Opcional: establece el idioma en español
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.50,
+                                        child: Text(
+                                          publicaciones[i].titulo,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black87),
+                                        ),
                                       ),
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black54,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.50,
+                                        child: Text(
+                                          timeago.format(
+                                            DateTime.parse(
+                                                publicaciones[i].createdAt!),
+                                            locale:
+                                                'es', // Opcional: establece el idioma en español
+                                          ),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 10,
                                   ),
                                 ],
-                              ),
-                              SizedBox(
-                                width: 10,
                               ),
                             ],
                           ),
@@ -195,7 +201,6 @@ class _ListNews extends StatelessWidget {
                                 padding: EdgeInsets.only(bottom: 3),
                                 child: Text(publicaciones[i].contenido),
                               ),
-
                               publicaciones[i].imagenes != null &&
                                       publicaciones[i].imagenes!.isNotEmpty
                                   ? Container(
@@ -217,37 +222,7 @@ class _ListNews extends StatelessWidget {
                                         ),
                                       ),
                                     )
-                                  : Container(
-                                      // width: double.infinity,
-                                      height: size.height * 0.35,
-                                      decoration: BoxDecoration(
-                                        color: Color(int.parse(
-                                            '0xFF${publicaciones[i].color}')),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(9.0),
-                                        ),
-                                      ),
-                                      child: SizedBox(
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(9.0),
-                                          ),
-                                          child: SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.35,
-                                            width: double.infinity,
-                                            child: SvgPicture.asset(
-                                              'assets/alertas/${publicaciones[i].imgAlerta}',
-                                              color: Colors.white,
-                                              height: 20,
-                                              width: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                  : SizedBox(),
 
                               //texto pegado a la izquierda
                               Container(
@@ -268,10 +243,13 @@ class _ListNews extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
                                     children: [
-                                      //ciudad y sector
-
                                       Text(
-                                          '${publicaciones[i].ciudad} - ${publicaciones[i].barrio}'),
+                                        '${publicaciones[i].ciudad} - ${publicaciones[i].barrio}',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black54,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),

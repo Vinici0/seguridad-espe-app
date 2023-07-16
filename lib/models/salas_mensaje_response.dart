@@ -40,6 +40,8 @@ class MensajesSala {
   String updatedAt;
   int v;
   String nombre;
+  bool isGoogle;
+  String? img;
 
   MensajesSala({
     required this.id,
@@ -47,8 +49,10 @@ class MensajesSala {
     required this.usuario,
     required this.createdAt,
     required this.updatedAt,
+    required this.isGoogle,
     required this.v,
     required this.nombre,
+    this.img,
   });
 
   factory MensajesSala.fromMap(Map<String, dynamic> json) => MensajesSala(
@@ -57,8 +61,10 @@ class MensajesSala {
         usuario: json["usuario"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
+        isGoogle: json["isGoogle"],
         v: json["__v"],
         nombre: json["nombre"],
+        img: json["img"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -67,7 +73,9 @@ class MensajesSala {
         "usuario": usuario,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
+        "isGoogle": isGoogle,
         "__v": v,
         "nombre": nombre,
+        "img": img,
       };
 }

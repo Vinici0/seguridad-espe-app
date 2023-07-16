@@ -10,6 +10,7 @@ class GpsAccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: BlocBuilder<GpsBloc, GpsState>(
           builder: (context, state) {
@@ -34,18 +35,37 @@ class _AccessButton extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('Es necesario el acceso a GPS'),
-        MaterialButton(
-            color: Colors.black,
-            shape: const StadiumBorder(),
+        const Text(
+          'Es necesario permitir el acceso al GPS',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        const SizedBox(height: 16),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF6165FA),
+            shape: StadiumBorder(),
             elevation: 0,
-            splashColor: Colors.transparent,
-            onPressed: () {
-              final gpsBloc = BlocProvider.of<GpsBloc>(context);
-              gpsBloc.askGpsAccess();
-            },
-            child: const Text('Solicitar Acceso',
-                style: TextStyle(color: Colors.white)))
+          ),
+          onPressed: () {
+            final gpsBloc = BlocProvider.of<GpsBloc>(context);
+            gpsBloc.askGpsAccess();
+          },
+          child: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+            child: Text(
+              'Solicitar Acceso',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -61,7 +81,6 @@ class _EnableGpsMessage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        //cargar imagen svg
         Container(
           margin: const EdgeInsets.only(bottom: 20),
           width: MediaQuery.of(context).size.width * 0.5,
@@ -70,9 +89,13 @@ class _EnableGpsMessage extends StatelessWidget {
           ),
         ),
         const Text(
-          'Debe de habilitar el GPS',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        )
+          'Debe habilitar el GPS',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
       ],
     );
   }

@@ -5,8 +5,10 @@ import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/helpers/show_loading_message.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter_maps_adv/widgets/comments.dart';
 import 'package:flutter_maps_adv/widgets/comment_pulbicacion.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,12 +33,27 @@ class _DetalleScreenState extends State<DetalleScreen> {
   @override
   void initState() {
     publicationBloc = BlocProvider.of<PublicationBloc>(context);
-    publicationBloc.add(CountCommentEvent(publicationBloc.state.publicaciones
-        .where((element) =>
-            element.uid == publicationBloc.state.currentPublicacion!.uid)
-        .first
-        .comentarios!
-        .length));
+
+    if (publicationBloc.state.currentPublicacion != null &&
+        publicationBloc.state.publicaciones.isNotEmpty) {
+      final matchingPublication =
+          publicationBloc.state.publicaciones.firstWhere(
+        (element) =>
+            element.uid == publicationBloc.state.currentPublicacion!.uid,
+        orElse: () => publicationBloc.state.currentPublicacion!,
+      );
+
+      if (matchingPublication != null &&
+          matchingPublication.comentarios != null) {
+        final commentCount = matchingPublication.comentarios!.length;
+        publicationBloc.add(CountCommentEvent(commentCount));
+      } else {
+        final commentCount =
+            0; // Establecer un valor predeterminado para la cantidad de comentarios
+        publicationBloc.add(CountCommentEvent(commentCount));
+      }
+    }
+
     _caragrHistorial(publicationBloc.state.currentPublicacion!.uid!);
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
@@ -53,6 +70,9 @@ class _DetalleScreenState extends State<DetalleScreen> {
   void _caragrHistorial(String uid) async {
     await publicationBloc
         .getAllComments(publicationBloc.state.currentPublicacion!.uid!);
+    // final comments = publicationBloc.state.comentarios;
+    // final comment = comments!.firstWhere((element) => element.uid == auth.uid);
+    // final userLikes = comment.likes;
   }
 
   void _escucharComeentario(dynamic payload) {
@@ -62,14 +82,42 @@ class _DetalleScreenState extends State<DetalleScreen> {
       fotoPerfil: payload['fotoPerfil'],
       createdAt: payload['createdAt'],
       uid: payload['uid'],
-      likes: payload['likes'],
+      isGoogle: payload['isGoogle'],
+      likes: 0,
+      isLiked: false,
     );
+
+    final List<String> comentarios = [
+      ...publicationBloc.state.currentPublicacion!.comentarios ?? [],
+      comment.uid!
+    ];
+    publicationBloc.add(UpdatePublicationEvent(Publicacion(
+      titulo: publicationBloc.state.currentPublicacion!.titulo,
+      contenido: publicationBloc.state.currentPublicacion!.contenido,
+      color: publicationBloc.state.currentPublicacion!.color,
+      ciudad: publicationBloc.state.currentPublicacion!.ciudad,
+      barrio: publicationBloc.state.currentPublicacion!.barrio,
+      isPublic: publicationBloc.state.currentPublicacion!.isPublic,
+      usuario: publicationBloc.state.currentPublicacion!.usuario,
+      latitud: publicationBloc.state.currentPublicacion!.latitud,
+      longitud: publicationBloc.state.currentPublicacion!.longitud,
+      imgAlerta: publicationBloc.state.currentPublicacion!.imgAlerta,
+      isLiked: publicationBloc.state.currentPublicacion!.isLiked,
+      uid: publicationBloc.state.currentPublicacion!.uid,
+      comentarios: comentarios,
+      likes: publicationBloc.state.currentPublicacion!.likes,
+      imagenes: publicationBloc.state.currentPublicacion!.imagenes,
+      createdAt: publicationBloc.state.currentPublicacion!.createdAt,
+      updatedAt: publicationBloc.state.currentPublicacion!.updatedAt,
+      nombreUsuario: publicationBloc.state.currentPublicacion!.nombreUsuario,
+    )));
+
+    publicationBloc.add(CountCommentEvent(
+        publicationBloc.state.conuntComentarios + 1)); //aumenta el contador
 
     publicationBloc.add(AddCommentPublicationEvent(comment));
 
-    setState(() {
-      // publicationBloc.comentariosP.insert(0, comment);
-    });
+    setState(() {});
   }
 
   @override
@@ -97,7 +145,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
                       LikesCommentsDetails(
                           publicacion: publicacion, likes: likes!),
                       const Divider(),
-                      _ListComentario(),
+                      const _ListComentario(),
                       const SizedBox(
                         height: 80,
                       ),
@@ -109,7 +157,8 @@ class _DetalleScreenState extends State<DetalleScreen> {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: _inputComentario(),
+                child:
+                    Container(color: Colors.white, child: _inputComentario()),
               ),
             ],
           ),
@@ -119,85 +168,111 @@ class _DetalleScreenState extends State<DetalleScreen> {
   }
 
   Widget _inputComentario() {
-    final Map<String, dynamic> mapNews =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final publicacion = mapNews['publicacion'] as Publicacion;
     final publicationBloc = BlocProvider.of<PublicationBloc>(context);
-    return Opacity(
-      opacity: 1,
-      child: Container(
-        height: 50,
-        color: Colors.white,
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: TextField(
-                  controller: _textController,
-                  onSubmitted: _handleSubmit,
-                  onChanged: (comentario) {
-                    setState(() {
-                      if (comentario.isNotEmpty) {
-                        _estaEscribiendo = true;
-                      } else {
-                        _estaEscribiendo = false;
-                      }
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Escribe un comentario',
-                    filled: true,
-                    fillColor: Colors.white30,
-                    contentPadding: const EdgeInsets.only(
-                        left: 20.0, right: 20.0, top: 5.0, bottom: 5.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
+    return Container(
+      color: Color.fromARGB(95, 162, 158, 158),
+      child: Row(
+        children: [
+          Flexible(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                color: Colors.white,
+              ),
+              child: TextField(
+                maxLength: 700,
+                buildCounter: (BuildContext context,
+                        {required int currentLength,
+                        required bool isFocused,
+                        required int? maxLength}) =>
+                    null,
+                controller: _textController,
+                onSubmitted: _handleSubmit,
+                onChanged: (comentario) {
+                  setState(() {
+                    _estaEscribiendo = comentario.isNotEmpty;
+                  });
+                },
+
+                decoration: InputDecoration(
+                  hintText: 'Escribe un comentario',
+                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 20.0),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: const Color(0xFF6165FA).withOpacity(0.3),
                     ),
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  maxLines: null, // Permite múltiples líneas de texto
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 100, 100, 108),
+                    ),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+                maxLines: null, // <-- SEE HERE
+              ),
+            ),
+          ),
+          Center(
+            child: GestureDetector(
+              onTap: _estaEscribiendo
+                  ? () {
+                      _handleSubmit(_textController.text.trim());
+                      publicationBloc.add(CountCommentEvent(
+                          publicationBloc.state.conuntComentarios + 1));
+                    }
+                  : null,
+              child: Container(
+                height: 50,
+                alignment: Alignment.center,
+                width: 50,
+                margin: const EdgeInsets.symmetric(horizontal: 3.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _estaEscribiendo
+                      ? const Color(0xFF6165FA)
+                      : Colors.grey.withOpacity(0.3),
+                ),
+                child: const Icon(
+                  Icons.send,
+                  color: Colors.white,
                 ),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: IconTheme(
-                data: IconThemeData(
-                    color: Color(int.parse('0xFF${publicacion.color}'))),
-                child: IconButton(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  onPressed: _estaEscribiendo
-                      ? () => {
-                            _handleSubmit(_textController.text.trim()),
-                            publicationBloc.add(CountCommentEvent(
-                                publicationBloc.state.conuntComentarios + 1))
-                          }
-                      : null,
-                  icon: const Icon(Icons.send),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   _handleSubmit(String comentario) {
     if (comentario.isEmpty) return;
+
     _textController.clear();
     final createdAt = DateTime.now();
     final newComment = CommentPublication(
       comentario: comentario,
       nombre: authService.state.usuario!.nombre,
-      fotoPerfil: 'da',
+      fotoPerfil: authService.state.usuario!.img,
       createdAt: createdAt.toString(),
       uid: authService.state.usuario!.uid,
-      likes: publicationBloc.state.comentarios!.where((element) {
-        return element.uid == authService.state.usuario!.uid;
-      }).length,
+      isGoogle: authService.state.usuario!.google,
+      isLiked: false,
     );
+
+    authService.socketService.socket.emit('comentario-publicacion', {
+      'nombre': authService.state.usuario!.nombre,
+      'mensaje': newComment.comentario,
+      'fotoPerfil': authService.state.usuario!.img,
+      'createdAt': createdAt.toString(),
+      'para': publicationBloc.state.currentPublicacion!.uid!,
+      'de': authService.state.usuario!.uid,
+      'isGoogle': authService.state.usuario!.google,
+    });
 
     publicationBloc.add(AddCommentPublicationEvent(newComment));
 
@@ -224,22 +299,13 @@ class _DetalleScreenState extends State<DetalleScreen> {
       imagenes: publicationBloc.state.currentPublicacion!.imagenes,
       createdAt: publicationBloc.state.currentPublicacion!.createdAt,
       updatedAt: publicationBloc.state.currentPublicacion!.updatedAt,
-      usuarioNombre: publicationBloc.state.currentPublicacion!.usuarioNombre,
+      nombreUsuario: publicationBloc.state.currentPublicacion!.nombreUsuario,
     )));
 
     publicationBloc.add(CountCommentEvent(
         publicationBloc.state.conuntComentarios + 1)); //aumenta el contador
     setState(() {
       _estaEscribiendo = false;
-
-      this.authService.socketService.socket.emit('comentario-publicacion', {
-        'nombre': authService.state.usuario!.nombre,
-        'mensaje': newComment.comentario,
-        'fotoPerfil': authService.state.usuario!.img ?? 'S/N',
-        'createdAt': createdAt.toString(),
-        'para': publicationBloc.state.currentPublicacion!.uid!,
-        'de': authService.state.usuario!.uid,
-      });
     });
   }
 
@@ -261,7 +327,6 @@ class _ListComentario extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
     return BlocBuilder<PublicationBloc, PublicationState>(
       builder: (context, state) {
         if (state.isLoading) {
@@ -280,7 +345,6 @@ class _ListComentario extends StatelessWidget {
 
         return ListView.builder(
           shrinkWrap: true,
-          reverse: true,
 
           physics: const BouncingScrollPhysics(),
           itemCount: comentariosP.length,
@@ -322,6 +386,7 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
     final counterBloc = BlocProvider.of<NavigatorBloc>(context);
+    final gpsBloc = BlocProvider.of<GpsBloc>(context);
     LatLng? end;
     return Container(
       //aagregar un margen en el contenedor
@@ -421,6 +486,19 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
               ),
             ),
             onTap: () async {
+              if (!gpsBloc.state.isGpsEnabled ||
+                  !gpsBloc.state.isGpsPermissionGranted) {
+                Fluttertoast.showToast(
+                    msg: 'Activa el GPS para ver la ubicación',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: const Color(0xff6165FA),
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                return;
+              }
+
               final start = locationBloc.state.lastKnownLocation;
               if (start == null) return;
               end = LatLng(publicacion.latitud, publicacion.longitud);

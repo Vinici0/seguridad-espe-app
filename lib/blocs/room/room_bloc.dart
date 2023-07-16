@@ -47,21 +47,31 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     on<SalaJoinEvent>(_salaJoinEvent);
     on<SalaSelectEvent>(_salaSelectEvent);
     on<ObtenerUsuariosSalaEvent>(_obtenerUsuariosSalaEvent);
+    on<RoomLoadingEvent>((event, emit) {
+      emit(state.copyWith(isLoading: true));
+    });
     on<DeleteSalaEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
-      final salas = await _chatProvider.deleteSala(event.uid);
+      await _chatProvider.deleteSala(event.uid);
 
       final newSalas = [...state.salas];
       newSalas.removeWhere((element) => element.uid == event.uid);
+      emit(state.copyWith(salas: newSalas, isLoading: false));
+    });
+
+    on<AbandonarSalaEvent>((event, emit) async {
+      emit(state.copyWith(isLoading: true));
+      await _chatProvider.abandonarSala(state.salaSeleccionada.uid);
+      final newSalas = [...state.salas];
+      newSalas
+          .removeWhere((element) => element.uid == state.salaSeleccionada.uid);
       emit(state.copyWith(salas: newSalas, isLoading: false));
     });
   }
 
   FutureOr<void> _salasInitEvent(
       SalasInitEvent event, Emitter<RoomState> emit) async {
-    emit(state.copyWith(isLoading: true));
-    final salas = await _chatProvider.getSalesAll();
-    emit(state.copyWith(salas: salas, isLoading: false));
+    emit(state.copyWith(salas: event.salas, isLoading: false));
   }
 
   FutureOr<void> _salaCreateEvent(
@@ -78,6 +88,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
   FutureOr<void> _salaJoinEvent(
       SalaJoinEvent event, Emitter<RoomState> emit) async {
+    //si ya
     emit(state.copyWith(salas: event.salas, isLoading: false));
   }
 
@@ -91,23 +102,18 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     emit(state.copyWith(isLoading: true));
   }
 
-  FutureOr<void> _deleteSalaEvent(
-      DeleteSalaEvent event, Emitter<RoomState> emit) async {
-    emit(state.copyWith(isLoading: true));
-    final salas = await _chatProvider.deleteSala(event.uid);
-
-    final newSalas = [...state.salas];
-    newSalas.removeWhere((element) => element.uid == event.uid);
-    emit(state.copyWith(salas: newSalas, isLoading: false));
+  salasInitEvent() async {
+    add(RoomLoadingEvent());
+    final salas = await _chatProvider.getSalesAll();
+    add(SalasInitEvent(salas));
   }
 
   joinSala(String codigo) async {
-    add(CargandoEvent());
     final sala = await _chatProvider.joinSala(codigo);
     if (sala == null || sala.uid.isEmpty) {
-      add(CargandoEvent());
       return false;
     }
+    //si ys estoy en la sala no la agrego
     final newSalas = [...state.salas, sala];
     add(SalaJoinEvent(newSalas));
     return true;

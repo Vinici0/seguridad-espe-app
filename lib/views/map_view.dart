@@ -51,7 +51,12 @@ class _MapViewState extends State<MapView> {
               myLocationEnabled: true,
               zoomControlsEnabled: false,
               myLocationButtonEnabled: false,
-              polylines: state.displayManualMarker ? widget.polylines : {},
+              polylines: state.displayManualMarker
+                  ? widget.polylines.map((polyline) {
+                      return polyline.copyWith(
+                          colorParam: Color.fromARGB(255, 64, 70, 250));
+                    }).toSet()
+                  : Set<Polyline>(),
               markers: state.displayManualMarker ? widget.markers : {},
               onCameraMove: (position) => mapBloc.mapCenter = position.target,
               onMapCreated: (controller) {

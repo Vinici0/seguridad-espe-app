@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_maps_adv/helpers/debouncer.dart';
 import 'package:flutter_maps_adv/models/places_models.dart';
 import 'package:flutter_maps_adv/models/ubicacion.dart';
 import 'package:flutter_maps_adv/models/route_destination.dart';
@@ -83,5 +85,30 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   eliminarUbicacion(String id) async {
     await trafficService.deleteUbicacionByUser(id);
     // add(DeleteUbicacionByUserEvent(id));
+  }
+
+  final debouncer = Debouncer(
+    duration: const Duration(milliseconds: 500),
+  );
+
+  final StreamController<List<Ubicacion>> _listUbicacionController =
+      StreamController<List<Ubicacion>>.broadcast();
+
+  Stream<List<Ubicacion>> get listUbicacionStream =>
+      _listUbicacionController.stream;
+
+  void getSuggestionsByQuery(String searchTerm) {
+    debouncer.value = '';
+    debouncer.onValue = (value) async {
+      print('Tenemos valor a buscar: $value');
+      final results = await getResultsByQueryUbicacion(value);
+      _listUbicacionController.add(results);
+    };
+
+    final timer = Timer.periodic(Duration(milliseconds: 300), (_) {
+      debouncer.value = searchTerm;
+    });
+
+    Future.delayed(Duration(milliseconds: 301)).then((_) => timer.cancel());
   }
 }

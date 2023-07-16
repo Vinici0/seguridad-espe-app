@@ -12,24 +12,23 @@ part 'publication_state.dart';
 
 class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   final PublicacionService _publicacionService = PublicacionService();
-
   PublicationBloc()
       : super(PublicationState(
             publicacionesUsuario: const [],
             publicaciones: const [],
             currentPublicacion: Publicacion(
-              barrio: '',
-              ciudad: '',
-              color: '',
-              contenido: '',
-              imgAlerta: '',
-              isLiked: false,
-              isPublic: false,
-              latitud: 0,
-              longitud: 0,
-              titulo: '',
-              usuario: '',
-            ),
+                barrio: '',
+                ciudad: '',
+                color: '',
+                contenido: '',
+                imgAlerta: '',
+                isLiked: false,
+                isPublic: false,
+                latitud: 0,
+                longitud: 0,
+                titulo: '',
+                usuario: '',
+                nombreUsuario: ''),
             isLoading: false,
             isError: false)) {
     on<PublicacionesInitEvent>(_publicacionesInitEvent);
@@ -74,7 +73,7 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
 
     on<AddCommentPublicationEvent>((event, emit) {
       try {
-        final List<CommentPublication>? newComentarios = [
+        final List<CommentPublication> newComentarios = [
           event.commentPublication,
           ...state.comentariosP,
         ];
@@ -138,14 +137,37 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     add(PublicationGetMoreEvent(publicaciones));
   }
 
-  createpublication(String tipo, String descripcion, String color, String icon,
-      bool activo, bool visible, String uid, List<String>? path) async {
+  Future<void> createPublication(
+    String tipo,
+    String descripcion,
+    String color,
+    String icon,
+    bool isPublic,
+    bool visible,
+    String uid,
+    String nombreUsuario,
+    List<String>? path,
+  ) async {
     add(LoadingEvent());
-    final newPublicacion = await _publicacionService.createPublicacion(
-        tipo, descripcion, color, icon, activo, visible, uid, path);
-
-    final newPublicaciones = [newPublicacion, ...state.publicaciones];
-    add(PublicacionesCreateEvent(newPublicaciones));
+    try {
+      final newPublicacion = await _publicacionService.createPublicacion(
+        tipo,
+        descripcion,
+        color,
+        icon,
+        isPublic,
+        visible,
+        uid,
+        nombreUsuario,
+        path,
+      );
+      if (newPublicacion.uid != '' && newPublicacion.uid != null) {
+        final newPublicaciones = [newPublicacion, ...state.publicaciones];
+        add(PublicacionesCreateEvent(newPublicaciones));
+      }
+    } catch (e) {
+      print('Error al crear publicacion: $e');
+    }
   }
 
   cargarComentarios(String uid) async {
@@ -179,13 +201,14 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
 
     for (var element in comentariosL) {
       final comment = CommentPublication(
-        comentario: element.contenido,
-        nombre: "Vincio",
-        fotoPerfil: "assets/images/usuario.png",
-        createdAt: element.createdAt,
-        uid: element.uid,
-        likes: element.likes!.length,
-      );
+          comentario: element.contenido,
+          nombre: element.usuario.nombre,
+          fotoPerfil: element.usuario.img,
+          createdAt: element.createdAt,
+          uid: element.uid,
+          likes: element.likes!.length,
+          isGoogle: element.usuario.google,
+          isLiked: false);
       add(AddCommentPublicationEvent(comment));
     }
     add(CountCommentEvent(state.comentariosP.length));

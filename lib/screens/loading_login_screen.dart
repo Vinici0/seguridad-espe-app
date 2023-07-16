@@ -2,10 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
-import 'package:flutter_maps_adv/screens/information_family_screen.dart';
 import 'package:flutter_maps_adv/screens/information_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
 
@@ -30,17 +29,18 @@ class LoadingLoginScreen extends StatelessWidget {
 
   Future<void> checkLoginState(BuildContext context) async {
     final authService = BlocProvider.of<AuthBloc>(context);
-    final _publicationBloc = BlocProvider.of<PublicationBloc>(context);
-    await _publicationBloc.getAllPublicaciones();
-    await authService.init();
-    await Future.delayed(const Duration(milliseconds: 100));
-    final usuario = authService.state.usuario;
+    final roomBloc = BlocProvider.of<RoomBloc>(context);
+    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
+    BlocProvider.of<NavigatorBloc>(context)
+        .add(const NavigatorIndexEvent(index: 0));
+    final result = await authService.init();
+    await roomBloc.salasInitEvent();
+    await publicationBloc.getAllPublicaciones();
+    final usuario = authService.apiAuthRepository.usuario;
 
-    if (authService.isLoggedInTrue) {
+    if (result) {
       if (usuario?.telefono == null) {
         navigateToReplacement(context, const InformationScreen());
-      } else if ((usuario?.telefonos.length ?? 0) < 2) {
-        navigateToReplacement(context, const InformationFamily());
       } else {
         navigateToReplacement(context, const HomeScreen());
       }

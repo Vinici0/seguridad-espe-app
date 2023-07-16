@@ -1,4 +1,5 @@
 import 'package:flutter_maps_adv/models/ubicacion.dart';
+import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -42,6 +43,15 @@ class ApiUserRepository {
   //signInWithGoogle
   Future<GoogleSignInAccount?> signInWithGoogle() async {
     return await _authService.signInWithGoogle();
+  }
+
+  Future<Usuario?> updateUsuarioImage(String id, String imgPath) async {
+    return await _authService.updateUsuarioImage(id, imgPath);
+  }
+
+  //updateUsuario
+  Future<bool?> updateUsuario(String nombre, String telefono) async {
+    return await _authService.updateUsuario(nombre, telefono);
   }
 
   get usuario => _authService.usuario;

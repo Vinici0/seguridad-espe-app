@@ -72,24 +72,27 @@ class _OptionNewsState extends State<OptionNews> {
                   Container(
                     width: 30.0,
                     height: 35.0,
-                    margin: EdgeInsets.only(left: 28),
+                    margin: const EdgeInsets.only(left: 28),
                     child: isLiked
-                        ? Icon(
+                        ? const Icon(
                             Icons.favorite,
                             color: Colors.red,
                             size: 22.5,
                           )
-                        : Icon(
+                        : const Icon(
                             Icons.favorite_border,
                             color: Colors.grey,
                             size: 22.5,
                           ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5,
                   ),
                   Text(
-                    widget.publicaciones[widget.i].likes!.length.toString(),
+                    widget.publicaciones[widget.i].likes == null
+                        ? '0'
+                        : widget.publicaciones[widget.i].likes!.length
+                            .toString(),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -112,15 +115,18 @@ class _OptionNewsState extends State<OptionNews> {
                     width: 30.0,
                     height: 35.0,
                     //TODO: solicionar el problema de los comentarios
-                    child: Icon(
+                    child: const Icon(
                       FontAwesomeIcons.comment,
                       color: Colors.grey,
                       size: 19.5,
                     ),
                   ),
                   Text(
-                    widget.state.publicaciones[widget.i].comentarios!.length
-                        .toString(),
+                    widget.state.publicaciones[widget.i].comentarios == null
+                        ? '0'
+                        : widget
+                            .state.publicaciones[widget.i].comentarios!.length
+                            .toString(),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,

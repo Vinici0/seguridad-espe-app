@@ -50,7 +50,7 @@ class Publicacion {
   String? createdAt;
   String? updatedAt;
   String? uid;
-  String? usuarioNombre;
+  String nombreUsuario;
 
   Publicacion({
     required this.titulo,
@@ -70,7 +70,7 @@ class Publicacion {
     this.createdAt,
     this.updatedAt,
     this.uid,
-    this.usuarioNombre,
+    required this.nombreUsuario,
   });
 
   factory Publicacion.fromMap(Map<String, dynamic> json) => Publicacion(
@@ -97,7 +97,7 @@ class Publicacion {
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
         uid: json["uid"],
-        usuarioNombre: json["usuarioNombre"],
+        nombreUsuario: json["nombreUsuario"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -121,7 +121,7 @@ class Publicacion {
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "uid": uid,
-        "usuarioNombre": usuarioNombre,
+        "nombreUsuario": nombreUsuario,
       };
 
   Publicacion copyWith({
@@ -162,7 +162,7 @@ class Publicacion {
       isLiked: isLiked ?? this.isLiked,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      usuarioNombre: usuarioNombre ?? this.usuarioNombre,
+      nombreUsuario: usuarioNombre ?? this.nombreUsuario,
     );
   }
 }

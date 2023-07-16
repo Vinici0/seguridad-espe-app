@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/information_family_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -15,7 +16,8 @@ class InformationScreen extends StatefulWidget {
 }
 
 class _InformationScreenState extends State<InformationScreen> {
-  final TextEditingController telefonoController = TextEditingController();
+  final TextEditingController telefonoController =
+      TextEditingController(text: '09');
   bool areFieldsEmpty = true;
 
   @override
@@ -123,6 +125,15 @@ class _InformationScreenState extends State<InformationScreen> {
                     controller: telefonoController,
                     decoration: const InputDecoration(
                       labelText: 'Teléfono',
+                      labelStyle: TextStyle(
+                        color: Color(0xFF6165FA), // Color del texto del label
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(
+                              0xFF6165FA), // Color de la línea de abajo del TextField
+                        ),
+                      ),
                     ),
                     keyboardType: TextInputType.phone,
                     inputFormatters: [
@@ -145,9 +156,8 @@ class _InformationScreenState extends State<InformationScreen> {
                         await authBloc
                             .addTelefono(telefonoController.text.trim());
                         // ignore: use_build_context_synchronously
-                        Navigator.pushNamed(
-                            context, InformationFamily.informationFamily,
-                            arguments: false);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, HomeScreen.homeroute, (route) => false);
                       },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6165FA),

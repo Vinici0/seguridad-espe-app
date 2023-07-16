@@ -16,7 +16,7 @@ class CodigoAddGrupoScreen extends StatelessWidget {
         //color de la flecha de regreso
         iconTheme: const IconThemeData(color: Colors.black87),
         elevation: 0.5,
-        title: const Text('Unirse a un Grupo',
+        title: const Text('Únete a un grupo',
             //alinea a la izquierda
             style: TextStyle(color: Colors.black87, fontSize: 20)),
       ),
@@ -32,7 +32,7 @@ class CodigoAddGrupoScreen extends StatelessWidget {
                   //alineacion de los elementos a la izquierda
                   child: const GroupContenido(
                       textoHint: '000-000',
-                      textoButton: 'Unirme al Grupo',
+                      textoButton: 'Únete a un grupo',
                       textoTitulo: 'Código',
                       textoInfo:
                           'Ingresa el código del grupo que te compartieron para unirte al grupo que fuiste invitado.'),

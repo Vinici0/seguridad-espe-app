@@ -9,6 +9,7 @@ import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
+import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   static const String chatsalesroute = 'chatsales';
@@ -51,7 +52,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       if (!_isLoading &&
           _firstController.position.pixels >=
               _firstController.position.maxScrollExtent) {
-        print('llego al final');
         chatProvider.getNextChat(roomBloc.state.salaSeleccionada.uid).then((_) {
           _isLoading = false;
         });
@@ -71,6 +71,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       nombre: payload['nombre'],
       texto: payload['mensaje'],
       uid: payload['de'],
+      img: payload['img'],
+      isGoogle: payload['isGoogle'],
       createdAt: DateTime.now().toString(),
       animationController: AnimationController(
           vsync: this, duration: const Duration(milliseconds: 300)),
@@ -147,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
           if (state.isLoading && !_isStateLoaded) {
             _isStateLoaded = true;
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Color(0xFF6165FA)),
             );
           }
 
@@ -156,14 +158,35 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             child: Column(
               children: <Widget>[
                 Flexible(
-                    child: ListView.builder(
-                  physics:
-                      const BouncingScrollPhysics(), //sirve para que el scroll se vea mas real
-                  itemCount: state.messages.length,
-                  controller: _firstController,
-                  itemBuilder: (_, i) => state.messages[i],
-                  reverse: true,
-                )),
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.all(0.5),
+                    itemCount: state.messages.length,
+                    controller: _firstController,
+                    itemBuilder: (_, i) {
+                      final currentMessage = state.messages[i];
+                      final previousMessage =
+                          i > 0 ? state.messages[i - 1] : null;
+
+                      // Verificar si se debe mostrar la línea de fecha
+                      final showDateLine = previousMessage == null ||
+                          !isSameDay(
+                            DateTime.parse(previousMessage.createdAt),
+                            DateTime.parse(currentMessage.createdAt),
+                          );
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (showDateLine)
+                            _buildDateLine(context, currentMessage.createdAt),
+                          currentMessage,
+                        ],
+                      );
+                    },
+                    reverse: true,
+                  ),
+                ),
                 Container(
                   color: Colors.white,
                   child: _inputChat(),
@@ -244,6 +267,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       texto: texto,
       nombre: authService.state.usuario!.nombre,
       createdAt: DateTime.now().toString(),
+      img: authService.state.usuario!.img,
+      isGoogle: authService.state.usuario!.google,
       animationController: AnimationController(
         vsync: this,
         duration: const Duration(milliseconds: 200),
@@ -264,9 +289,45 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         'de': this.authService.state.usuario!.uid,
         'para': this.roomBloc.state.salaSeleccionada.uid,
         'nombre': this.authService.state.usuario!.nombre,
+        'isGoogle': this.authService.state.usuario!.google,
         'mensaje': texto,
+        'img': this.authService.state.usuario!.img,
       });
     }
+  }
+
+  Widget _buildDateLine(BuildContext context, String createdAt) {
+    final messageDate = DateTime.parse(createdAt);
+    final currentDate = DateTime.now();
+
+    if (isSameDay(messageDate, currentDate)) {
+      return Container();
+    } else {
+      final formattedDate = DateFormat('MMMM dd, yyyy').format(messageDate);
+
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              formattedDate,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 12.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
   }
 
   @override

@@ -38,7 +38,7 @@ class Ubicacion {
   String barrio;
   String ciudad;
   String pais;
-  bool? estado;
+  bool estado;
   String? createdAt;
   String? updatedAt;
   String? uid;
@@ -51,7 +51,7 @@ class Ubicacion {
     required this.barrio,
     required this.ciudad,
     required this.pais,
-    this.estado,
+    required this.estado,
     this.createdAt,
     this.updatedAt,
     this.uid,
@@ -61,16 +61,17 @@ class Ubicacion {
 
   factory Ubicacion.fromMap(Map<String, dynamic> json) {
     final uid = json.containsKey("uid") ? json["uid"] : json["_id"];
+    print("Estado en el mapa: ${json["estado"]}");
     return Ubicacion(
       latitud: json["latitud"]?.toDouble(),
       longitud: json["longitud"]?.toDouble(),
       barrio: json["barrio"],
       ciudad: json["ciudad"],
       pais: json["pais"],
-      estado: json["estado"],
+      estado: json["estado"] as bool? ?? false,
       createdAt: json["createdAt"],
       updatedAt: json["updatedAt"],
-      uid: uid.toString(),
+      uid: uid,
       parroquia: json["parroquia"],
       referencia: json["referencia"],
     );

@@ -111,3 +111,19 @@ class AuthNotificacionEvent extends AuthEvent {
   @override
   List<Object> get props => [lat, lng];
 }
+
+//updateUsuarioImage
+class AuthUpdateUsuarioImageNewUserEvent extends AuthEvent {
+  final Usuario usuario;
+  const AuthUpdateUsuarioImageNewUserEvent(this.usuario);
+  @override
+  List<Object> get props => [usuario];
+}
+
+class UpdateUsuarioNewTelefonoOrNombreEvent extends AuthEvent {
+  final String nombre;
+  final String telefono;
+  const UpdateUsuarioNewTelefonoOrNombreEvent(this.nombre, this.telefono);
+  @override
+  List<Object> get props => [nombre, telefono];
+}

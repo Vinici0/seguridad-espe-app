@@ -108,6 +108,7 @@ class ChatProvider {
         'Content-Type': 'application/json',
         'x-token': await AuthService.getToken() as String,
       });
+
       final decodedData = json.decode(resp.body);
       final salaResp = Sala.fromMap(decodedData['sala']);
       return salaResp.uid == salaID;
@@ -131,6 +132,41 @@ class ChatProvider {
       return salaResp.uid == uid;
     } catch (e) {
       print('Error en deleteUsuarioSala: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteUserById(String salaID, String usuarioID) async {
+    try {
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/salas/delete-user/$salaID/$usuarioID');
+      final resp = await http.delete(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+      final decodedData = json.decode(resp.body);
+      final salaResp = Sala.fromMap(decodedData['sala']);
+      return salaResp.uid == salaID;
+    } catch (e) {
+      print('Error en deleteUserById: $e');
+      return false;
+    }
+  }
+
+  //router.delete("/abandonar-sala/:salaId", validarJWT, abandonarSala);
+  Future<bool> abandonarSala(String salaID) async {
+    try {
+      final uri =
+          Uri.parse('${Environment.apiUrl}/salas/abandonar-sala/$salaID');
+      final resp = await http.delete(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+      final decodedData = json.decode(resp.body);
+      final salaResp = Sala.fromMap(decodedData['sala']);
+      return salaResp.uid == salaID;
+    } catch (e) {
+      print('Error en abandonarSala: $e');
       return false;
     }
   }

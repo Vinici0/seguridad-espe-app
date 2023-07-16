@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -8,18 +9,22 @@ class CommentPublication extends StatefulWidget {
   final String uid;
   final String comentario;
   final String nombre;
-  final String fotoPerfil;
+  final String? fotoPerfil;
   final String createdAt;
-  int likes;
+  final bool isGoogle;
+  int? likes;
+  bool isLiked;
 
   CommentPublication({
     Key? key,
     required this.uid,
     required this.comentario,
     required this.nombre,
-    required this.fotoPerfil,
+    this.fotoPerfil,
     required this.createdAt,
-    required this.likes,
+    required this.isGoogle,
+    required this.isLiked,
+    this.likes,
   }) : super(key: key);
 
   @override
@@ -27,7 +32,6 @@ class CommentPublication extends StatefulWidget {
 }
 
 class _CommentPublicationState extends State<CommentPublication> {
-  bool _isLiked = false;
   String userLikes = '';
   int likeCount = 0;
   AuthBloc authBloc = AuthBloc();
@@ -37,7 +41,7 @@ class _CommentPublicationState extends State<CommentPublication> {
     publicationBloc = BlocProvider.of<PublicationBloc>(context);
     likeCount = 0;
     authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
-    initializeLikedStatus();
+    // initializeLikedStatus();
     // socketService.socketService.socket.on('toggle-like-comentario', (data) {
     //   if (data['comentarioUid'] == widget.uid) {
     //     setState(() {
@@ -50,27 +54,27 @@ class _CommentPublicationState extends State<CommentPublication> {
 
   @override
   void dispose() {
-    _isLiked = false;
+    widget.isLiked = false;
     super.dispose();
   }
 
-  Future<void> initializeLikedStatus() async {
-    final comments = publicationBloc.state.comentarios;
-    // Si no hay comentarios no se hace nada
-    if (comments == null || comments.isEmpty) return;
+  // Future<void> initializeLikedStatus() async {
+  //   final comments = publicationBloc.state.comentarios;
+  //   // Si no hay comentarios no se hace nada
+  //   if (comments == null || comments.isEmpty) return;
 
-    try {
-      final comment =
-          comments.firstWhere((element) => element.uid == widget.uid);
-      final userLikes = comment.likes;
+  //   try {
+  //     final comment =
+  //         comments.firstWhere((element) => element.uid == widget.uid);
+  //     final userLikes = comment.likes;
 
-      setState(() {
-        _isLiked = userLikes!.contains(authBloc.state.usuario!.uid);
-      });
-    } catch (e) {
-      print('Error al inicializar el estado de "Me gusta": $e');
-    }
-  }
+  //     setState(() {
+  //       widget.isLiked = userLikes!.contains(authBloc.state.usuario!.uid);
+  //     });
+  //   } catch (e) {
+  //     print('Error al inicializar el estado de "Me gusta": $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +87,22 @@ class _CommentPublicationState extends State<CommentPublication> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: const Color(0xFF6165FA),
-                  child: Text(
-                    widget.nombre.substring(0, 2),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
+                widget.isGoogle == true
+                    ? CircleAvatar(
+                        radius: 15,
+                        backgroundImage: NetworkImage(widget.fotoPerfil!),
+                      )
+                    : widget.fotoPerfil == null
+                        ? const CircleAvatar(
+                            radius: 15,
+                            backgroundImage:
+                                AssetImage('assets/images/no-image.png'),
+                          )
+                        : CircleAvatar(
+                            radius: 15,
+                            backgroundImage: NetworkImage(
+                                '${Environment.apiUrl}/public/img/${widget.fotoPerfil}'),
+                          ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -117,19 +130,18 @@ class _CommentPublicationState extends State<CommentPublication> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    final isLikedNow = !_isLiked;
+                    final isLikedNow = !widget.isLiked!;
 
                     setState(() {
-                      _isLiked = isLikedNow;
+                      widget.isLiked = isLikedNow;
                     });
 
                     try {
                       if (isLikedNow) {
-                        widget.likes++;
+                        widget.likes = widget.likes! + 1;
                       } else {
-                        widget.likes--;
+                        widget.likes = widget.likes! - 1;
                       }
-
                       await publicationBloc.toggleLikeComentario(widget.uid);
                       // socketService.socketService.emit('toggle-like-comentario',
                       //     {'comentarioUid': widget.uid});
@@ -139,7 +151,7 @@ class _CommentPublicationState extends State<CommentPublication> {
                   },
                   child: Row(
                     children: [
-                      _isLiked
+                      widget.isLiked
                           ? const Icon(Icons.favorite, color: Colors.red)
                           : const Icon(FontAwesomeIcons.heart),
                       const SizedBox(width: 5),

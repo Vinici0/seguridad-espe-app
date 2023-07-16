@@ -27,6 +27,15 @@ class MembersBloc extends Bloc<MembersEvent, MembersState> {
     on<ChatLoadedEvent>(_chatLoadedEvent);
     on<ChatInitEvent>(_chatInitEvent);
     on<ResetChatEvent>(_chatResetEvent);
+
+    on<DeleteMemberByIdEvent>((event, emit) async {
+      emit(state.copyWith(isLoading: true));
+      await _chatProvider.deleteUserById(event.id_sala, event.id_usuario);
+      final newUsuarios = [...state.usuariosAll];
+      newUsuarios.removeWhere((element) => element.uid == event.id_usuario);
+      emit(state.copyWith(usuariosAll: newUsuarios, isLoading: false));
+    });
+
     on<GetLoadedChatMessage>((event, emit) async {
       emit(state.copyWith(isLoading: true));
       final newMensajes = [...state.messages, ...event.messages];
@@ -118,6 +127,8 @@ class MembersBloc extends Bloc<MembersEvent, MembersState> {
           texto: m.mensaje,
           uid: m.usuario,
           nombre: m.nombre,
+          img: m.img,
+          isGoogle: m.isGoogle,
           createdAt: m.createdAt,
         ));
 
@@ -135,7 +146,9 @@ class MembersBloc extends Bloc<MembersEvent, MembersState> {
           texto: m.mensaje,
           uid: m.usuario,
           nombre: m.nombre,
+          isGoogle: m.isGoogle,
           createdAt: m.createdAt,
+          img: m.img,
         ));
     add(GetLoadedChatMessage(history.toList()));
     add(ChatLoadedEvent(mensajes));

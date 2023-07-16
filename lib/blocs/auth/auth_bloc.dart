@@ -13,6 +13,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SocketService socketService = SocketService();
 
   bool isLoggedInTrue = false;
+  Usuario usuario = Usuario(
+      online: false,
+      nombre: '',
+      email: '',
+      telefono: '',
+      tokenApp: '',
+      ubicacion: [],
+      uid: '',
+      createdAt: '',
+      updatedAt: '',
+      telefonos: [],
+      google: false);
 
   AuthBloc() : super(const AuthState(ubicaciones: [])) {
     on<AuthConectEvent>(_onAuthConnectEvent);
@@ -27,6 +39,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthDeleteTeleFamilyEvent>(_onAuthDeleteTeleFamilyEvent);
     on<AuthAddTelefonFamilyEvent>(_aonAddTelefonoFamilyEvent);
     on<AuthNotificacionEvent>(_onAuthNotificacionEvent);
+    on<AuthUpdateUsuarioImageNewUserEvent>(_onAuthUpdateUsuarioImageEvent);
+    on<UpdateUsuarioNewTelefonoOrNombreEvent>(_onUpdateUsuarioImageEvent);
   }
 
   void _onAuthRegisterEvent(AuthRegisterEvent event, Emitter<AuthState> emit) {
@@ -51,7 +65,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onAuthLogoutEvent(
       AuthLogoutEvent event, Emitter<AuthState> emit) async {
-    await apiAuthRepository.logout();
     emit(state.copyWith(usuario: null));
   }
 
@@ -91,6 +104,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ubicacion: state.usuario!.ubicacion,
         uid: state.usuario!.uid,
         telefonos: state.usuario!.telefonos,
+        createdAt: state.usuario!.createdAt,
+        updatedAt: state.usuario!.updatedAt,
         google: state.usuario!.google);
 
     emit(state.copyWith(usuario: usuario));
@@ -106,6 +121,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         tokenApp: state.usuario!.tokenApp,
         ubicacion: state.usuario!.ubicacion,
         uid: state.usuario!.uid,
+        createdAt: state.usuario!.createdAt,
+        updatedAt: state.usuario!.updatedAt,
         google: state.usuario!.google,
         telefonos: [...state.usuario!.telefonos, event.telefono]);
 
@@ -122,6 +139,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         tokenApp: state.usuario!.tokenApp,
         ubicacion: state.usuario!.ubicacion,
         google: state.usuario!.google,
+        createdAt: state.usuario!.createdAt,
+        updatedAt: state.usuario!.updatedAt,
         uid: state.usuario!.uid,
         telefonos: state.usuario!.telefonos
             .where((telefono) => telefono != event.telefono)
@@ -130,33 +149,71 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(state.copyWith(usuario: usuario));
   }
 
+  void _onAuthUpdateUsuarioImageEvent(
+      AuthUpdateUsuarioImageNewUserEvent event, Emitter<AuthState> emit) {
+    emit(state.copyWith(usuario: event.usuario));
+  }
+
   void _onAuthNotificacionEvent(
       AuthNotificacionEvent event, Emitter<AuthState> emit) async {}
+
+  void _onUpdateUsuarioImageEvent(UpdateUsuarioNewTelefonoOrNombreEvent event,
+      Emitter<AuthState> emit) async {
+    final usuario = Usuario(
+        online: state.usuario!.online,
+        nombre: event.nombre,
+        email: state.usuario!.email,
+        telefono: event.telefono,
+        tokenApp: state.usuario!.tokenApp,
+        ubicacion: state.usuario!.ubicacion,
+        uid: state.usuario!.uid,
+        telefonos: state.usuario!.telefonos,
+        createdAt: state.usuario!.createdAt,
+        updatedAt: state.usuario!.updatedAt,
+        google: state.usuario!.google,
+        img: state.usuario!.img);
+
+    emit(state.copyWith(usuario: usuario));
+  }
 
   init() async {
     final isLoggedIn = await apiAuthRepository.isLoggedIn();
 
     add(const AuthInitEvent());
+
     isLoggedInTrue = isLoggedIn;
     if (isLoggedIn) {
       add(const AuthConectEvent());
     }
+    return isLoggedIn;
   }
 
   login(String email, String password) async {
+    if (email.isEmpty || password.isEmpty) {
+      // Campos vacíos, mostrar mensaje de error o realizar alguna acción adecuada
+      return false;
+    }
+
     final login = await apiAuthRepository.login(email, password);
-    isLoggedInTrue = login;
-    add(AuthLoginEvent(email: email, password: password));
-    add(const AuthConectEvent());
+    if (login) {
+      add(AuthLoginEvent(email: email, password: password));
+      add(const AuthConectEvent());
+      return true;
+    }
+
+    return false;
   }
 
   //authGoogle - signInWithGoogle
-  Future<Usuario?> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     final usuario = await apiAuthRepository.signInWithGoogle();
-    isLoggedInTrue = usuario != null;
-    add(AuthLoginEvent(email: usuario!.email, password: "@@@"));
-    add(const AuthConectEvent());
-    return null;
+    if (usuario != null) {
+      add(AuthLoginEvent(email: usuario.email, password: "@@@"));
+      add(const AuthConectEvent());
+      isLoggedInTrue = true;
+      return true;
+    }
+    return false;
   }
 
   register(String nombre, String email, String password) async {
@@ -166,10 +223,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     add(const AuthConectEvent());
   }
 
-  logout() {
+  updateUsuarioImage(String imagen) async {
+    final usuario =
+        await apiAuthRepository.updateUsuarioImage(state.usuario!.uid, imagen);
+    if (usuario != null) {
+      add(AuthUpdateUsuarioImageNewUserEvent(usuario));
+    }
+  }
+
+  logout() async {
     isLoggedInTrue = false;
-    add(const AuthLogoutEvent());
-    add(const AuthDisconnectEvent());
+    await apiAuthRepository.logout();
+    socketService.disconnect();
+  }
+
+  updateUsuario(String nombre, String telefono) async {
+    await apiAuthRepository.updateUsuario(nombre, telefono);
+    if (usuario != null) {
+      add(UpdateUsuarioNewTelefonoOrNombreEvent(nombre, telefono));
+    }
   }
 
   addTelefono(String telefono) async {

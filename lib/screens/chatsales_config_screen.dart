@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/screens/chatsales_miembros.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -210,11 +211,7 @@ class DetalleSalaScreen extends StatelessWidget {
                                 chatProvider.state.salaSeleccionada.propietario
                             ? GestureDetector(
                                 onTap: () {
-                                  chatProvider.add(CargandoEvent());
-                                  chatProvider.add(SalaSelectEvent(
-                                      chatProvider.state.salaSeleccionada));
-
-                                  Navigator.pop(context);
+                                  _showDialogEliminar(context, chatProvider);
                                 },
                                 child: const Text(
                                   'Salir y eliminar grupo',
@@ -224,11 +221,16 @@ class DetalleSalaScreen extends StatelessWidget {
                                   ),
                                 ),
                               )
-                            : const Text(
-                                'Salir del grupo',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 14,
+                            : GestureDetector(
+                                onTap: () {
+                                  _showDialog(context, chatProvider, auth);
+                                },
+                                child: const Text(
+                                  'Salir del grupo',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
                       )),
@@ -239,6 +241,93 @@ class DetalleSalaScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  //showDialog si esta seguro de salir
+  void _showDialog(BuildContext context, RoomBloc chatProvider, AuthBloc auth) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('¿Estás seguro de salir?'),
+          content: const Text(
+            'Si sales del grupo, no podrás ver los mensajes que se envíen en él.',
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'CANCELAR',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                chatProvider.add(AbandonarSalaEvent(auth.state.usuario!.uid));
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'SALIR',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 4.0,
+        );
+      },
+    );
+  }
+
+  //_showDialog si esta seguro de eliminar y salir
+  void _showDialogEliminar(BuildContext context, RoomBloc chatProvider) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('¿Estás seguro?'),
+          content: const Text(
+            'Al salir del grupo, se eliminará el grupo y ningún miembro tendrá acceso. Esta acción es irreversible.',
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'CANCELAR',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                chatProvider.add(
+                    DeleteSalaEvent(chatProvider.state.salaSeleccionada.uid));
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'SALIR Y ELIMINAR',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          backgroundColor: Colors.white,
+          elevation: 4.0,
+        );
+      },
     );
   }
 }

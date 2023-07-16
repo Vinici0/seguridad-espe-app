@@ -21,6 +21,7 @@ class PublicacionService {
     isPublic: false,
     usuario: '',
     imgAlerta: '',
+    nombreUsuario: '',
     isLiked: false,
     latitud: 0,
     longitud: 0,
@@ -83,9 +84,10 @@ class PublicacionService {
     String descripcion,
     String color,
     String imgAlerta,
-    bool isLiked,
     bool isPublic,
+    bool isLiked,
     String usuario,
+    String nombreUsuario,
     List<String>? imagePaths,
   ) async {
     try {
@@ -97,14 +99,23 @@ class PublicacionService {
         titulo: titulo,
         contenido: descripcion,
         color: color,
-        ciudad: placemarks.isNotEmpty ? placemarks[0].locality ?? 'S/N' : 'S/N',
-        barrio: placemarks.isNotEmpty ? placemarks[0].name ?? 'S/N' : 'S/N',
+        ciudad: placemarks[0].locality == null
+            ? 'S/N'
+            : placemarks[0].locality! == ""
+                ? 'S/N'
+                : placemarks[0].locality!,
+        barrio: placemarks[0].subLocality == null
+            ? 'S/N'
+            : placemarks[0].subLocality! == ""
+                ? 'S/N'
+                : placemarks[0].subLocality!,
         isPublic: isPublic,
         usuario: usuario,
         imgAlerta: imgAlerta,
         isLiked: isLiked,
         latitud: position.latitude,
         longitud: position.longitude,
+        nombreUsuario: nombreUsuario,
       );
 
       final uri = Uri.parse('${Environment.apiUrl}/publicacion');

@@ -64,13 +64,6 @@ class PlacesScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () async {
-                      if (!gpsBloc.state.isGpsEnabled ||
-                          !gpsBloc.state.isGpsPermissionGranted) {
-                        counterBloc.add(const NavigatorIndexEvent(index: 0));
-                        return;
-                      }
-
-                      // Navigator.pushNamed(context, PlaceAddScreen.placeddd);
                       final result = await showSearch(
                           context: context,
                           delegate: SearchDestinationDelegate());

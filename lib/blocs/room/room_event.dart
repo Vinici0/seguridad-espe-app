@@ -7,7 +7,14 @@ abstract class RoomEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SalasInitEvent extends RoomEvent {}
+class SalasInitEvent extends RoomEvent {
+  final List<Sala> salas;
+
+  const SalasInitEvent(this.salas);
+
+  @override
+  List<Object> get props => [salas];
+}
 
 class ChatLoadedEvent extends RoomEvent {
   final List<MensajesSala> mensajes;
@@ -63,13 +70,23 @@ class ObtenerUsuariosSalaEvent extends RoomEvent {
   List<Object> get props => [usuarioAll];
 }
 
-//esta cargando
 class CargandoEvent extends RoomEvent {}
 
 class DeleteSalaEvent extends RoomEvent {
   final String uid;
 
   const DeleteSalaEvent(this.uid);
+
+  @override
+  List<Object> get props => [uid];
+}
+
+class RoomLoadingEvent extends RoomEvent {}
+
+class AbandonarSalaEvent extends RoomEvent {
+  final String uid;
+
+  const AbandonarSalaEvent(this.uid);
 
   @override
   List<Object> get props => [uid];

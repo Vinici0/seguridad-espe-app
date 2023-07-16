@@ -66,7 +66,7 @@ class __FromState extends State<_From> {
       //Nombre
       CustonInput(
         icon: Icons.perm_identity,
-        placeholder: "Nombre",
+        placeholder: "Nombres",
         keyboardType: TextInputType.text,
         textController: nomController,
       ),
@@ -90,23 +90,51 @@ class __FromState extends State<_From> {
             : () async {
                 FocusScope.of(context).unfocus();
 
-                await authServiceBloc.register(
-                    nomController.text.trim(),
-                    emailController.text.trim(),
-                    passwordController.text.trim());
+                String nombre = nomController.text.trim();
+                String email = emailController.text.trim();
+                String password = passwordController.text.trim();
+
+                if (nombre.isEmpty || email.isEmpty || password.isEmpty) {
+                  // Mostrar alerta indicando que los campos son obligatorios
+                  mostrarAlerta(context, 'Campos vacíos',
+                      'Todos los campos son obligatorios');
+                  return;
+                }
+
+                if (!isValidEmail(email)) {
+                  // Mostrar alerta indicando que el formato del correo electrónico es incorrecto
+                  mostrarAlerta(context, 'Correo electrónico inválido',
+                      'Ingrese un correo electrónico válido');
+                  return;
+                }
+
+                if (password.length < 6) {
+                  // Mostrar alerta indicando que la contraseña debe tener al menos 6 caracteres
+                  mostrarAlerta(context, 'Contraseña inválida',
+                      'La contraseña debe tener al menos 6 caracteres');
+                  return;
+                }
+
+                await authServiceBloc.register(nombre, email, password);
 
                 if (authServiceBloc.isLoggedInTrue) {
                   // ignore: use_build_context_synchronously
                   Navigator.pushReplacementNamed(
                       context, LoadingLoginScreen.loadingroute);
                 } else {
-                  //mostrar alerta
                   // ignore: use_build_context_synchronously
-                  mostrarAlerta(context, 'Login incorrecto',
+                  mostrarAlerta(context, 'Registro incorrecto',
                       'Revise sus credenciales nuevamente');
                 }
               },
       )
     ]);
+  }
+
+  bool isValidEmail(String email) {
+    final RegExp emailRegex = RegExp(
+        r'^[\w-]+(\.[\w-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$');
+
+    return emailRegex.hasMatch(email);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BtnSOS extends StatelessWidget {
   const BtnSOS({Key? key}) : super(key: key);
@@ -87,6 +88,14 @@ class _SOSNotification extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                   MediaQuery.of(context).size.width * 0.3 / 2),
               onTap: () async {
+                Fluttertoast.showToast(
+                    msg: "Se ha enviado una notificación a tus contactos",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: const Color.fromRGBO(219, 31, 31, 1),
+                    textColor: Colors.white,
+                    fontSize: 16.0);
                 await authBloc.notificacion(lat, lng);
               },
               child: Container(

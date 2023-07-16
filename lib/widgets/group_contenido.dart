@@ -21,6 +21,8 @@ class GroupContenido extends StatelessWidget {
     final TextEditingController nomController = TextEditingController();
     final chatProvider = BlocProvider.of<RoomBloc>(context, listen: false);
     final blocRoom = BlocProvider.of<RoomBloc>(context);
+    final FocusNode _focusNode = FocusNode();
+    _focusNode.requestFocus();
     return Column(
       children: [
         Container(
@@ -35,6 +37,7 @@ class GroupContenido extends StatelessWidget {
           height: 40,
           child: TextField(
             cursorColor: Colors.black,
+            focusNode: _focusNode,
             decoration: InputDecoration(
               disabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFF6165FA)),
@@ -76,17 +79,25 @@ class GroupContenido extends StatelessWidget {
               Navigator.pop(context);
             } else {
               final res = await chatProvider.joinSala(nomController.text);
-              if (res) {
-                Navigator.pop(context);
-              } else {
+              if (!res) {
                 Fluttertoast.showToast(
-                    msg: "El código no es correcto",
+                    msg: 'No existe el grupo ${nomController.text}',
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
-                    backgroundColor: const Color(0xFF6165FA),
+                    backgroundColor: const Color(0xff6165FA),
                     textColor: Colors.white,
                     fontSize: 16.0);
+              } else {
+                Fluttertoast.showToast(
+                    msg: 'Te uniste al grupo ${nomController.text}',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: const Color(0xff6165FA),
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                Navigator.pop(context);
               }
             }
           },

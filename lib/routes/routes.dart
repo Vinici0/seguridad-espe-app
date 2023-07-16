@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
+import 'package:flutter_maps_adv/screens/perfil/edit_telefono.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 
 class Routes {
@@ -29,5 +31,7 @@ class Routes {
     SosScreen.sosroute: (_) => const SosScreen(),
     PerfilDetalleScreen.perfilDetalleroute: (_) => const PerfilDetalleScreen(),
     EditPerfilScreen.editPerfilroute: (_) => const EditPerfilScreen(),
+    EditNombreScreen.editNombreroute: (_) => const EditNombreScreen(),
+    EditTelefonoScreen.editTelefonoeroute: (_) => const EditTelefonoScreen(),
   };
 }

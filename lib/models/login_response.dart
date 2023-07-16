@@ -22,11 +22,16 @@ class LoginResponse {
     required this.token,
   });
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
-        ok: json["ok"],
-        usuario: Usuario.fromJson(json["usuario"]),
-        token: json["token"],
-      );
+  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+    final token = json["token"] as String? ?? '';
+    print('Token value: $token');
+
+    return LoginResponse(
+      ok: json["ok"],
+      usuario: Usuario.fromJson(json["usuario"]),
+      token: token,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "ok": ok,

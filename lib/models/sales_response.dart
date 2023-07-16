@@ -44,7 +44,7 @@ class Sala {
   String nombre;
   String codigo;
   String color;
-  String idUsuario;
+  String? idUsuario;
   String propietario;
   List<String>? usuarios;
   List<Mensaje>? mensajes;
@@ -54,7 +54,7 @@ class Sala {
     required this.codigo,
     required this.color,
     required this.uid,
-    required this.idUsuario,
+    this.idUsuario,
     required this.propietario,
     this.usuarios,
     this.mensajes,

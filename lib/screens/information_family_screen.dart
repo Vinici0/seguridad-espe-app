@@ -17,9 +17,10 @@ class InformationFamily extends StatefulWidget {
 }
 
 class _InformationFamilyState extends State<InformationFamily> {
-  final TextEditingController telefonoController = TextEditingController();
+  final TextEditingController telefonoController =
+      TextEditingController(text: '09');
   bool areFieldsEmpty = true;
-  bool routeActive = false;
+  // bool routeActive = false;
   List<String> telefonos = [];
   AuthBloc authBloc = AuthBloc();
   late SvgPicture image1;
@@ -31,6 +32,7 @@ class _InformationFamilyState extends State<InformationFamily> {
     authBloc = BlocProvider.of<AuthBloc>(context);
     telefonos = authBloc.state.usuario?.telefonos ?? [];
     telefonoController.addListener(updateFieldsState);
+
     image1 = SvgPicture.asset(
       "assets/info/numberfamily.svg",
       fit: BoxFit.cover,
@@ -62,41 +64,37 @@ class _InformationFamilyState extends State<InformationFamily> {
       context,
     );
 
-    routeActive = ModalRoute.of(context)?.settings.arguments as bool;
-    routeActive == null || routeActive == false
-        ? routeActive = false
-        : routeActive = true;
+    final routeActive = ModalRoute.of(context)?.settings.arguments as bool;
+    routeActive == null ? false : routeActive;
 
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
         centerTitle: false,
-        automaticallyImplyLeading: routeActive,
+        // automaticallyImplyLeading: routeActive,
         title: const Text(
           'Numeros de Familiares',
           style: TextStyle(color: Colors.black87),
         ),
         actions: [
-          !routeActive
-              ? Container()
-              : TextButton(
-                  onPressed: telefonos.length >= 2
-                      ? () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, HomeScreen.homeroute, (route) => false);
-                        }
-                      : null,
-                  child: Text(
-                    'Siguiente',
-                    style: TextStyle(
-                      color: telefonos.length >= 2
-                          ? const Color(0xFF6165FA)
-                          : Colors.grey,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
+          // TextButton(
+          //   onPressed: telefonos.length > 1
+          //       ? () {
+          //           Navigator.pushNamedAndRemoveUntil(
+          //               context, HomeScreen.homeroute, (route) => false);
+          //         }
+          //       : null,
+          //   child: Text(
+          //     'Siguiente',
+          //     style: TextStyle(
+          //       color: telefonos.length > 1
+          //           ? Color(0xFF6165FA)
+          //           : Color.fromARGB(255, 113, 113, 115),
+          //       fontSize: 16,
+          //       fontWeight: FontWeight.w500,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
       body: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
@@ -122,7 +120,7 @@ class _InformationFamilyState extends State<InformationFamily> {
                           child: image1),
                     ),
                     const Text(
-                      "Agregar números de familiares para que puedan recibir alertas de tus seres queridos.",
+                      "Agrega números de familiares para que puedan recibir alertas de tus seres queridos. Solo los números agregados serán notificados una vez que se presione el botón de SOS.",
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         color: Color.fromRGBO(0, 0, 0, 0.782),
@@ -159,10 +157,10 @@ class _InformationFamilyState extends State<InformationFamily> {
                                 telefonoController.clear();
                                 setState(() {
                                   //agregar al array de telefonos
+                                  telefonos.add(telefonoController.text.trim());
                                   telefonos =
                                       authService.state.usuario?.telefonos ??
                                           [];
-                                  routeActive = true;
                                 });
                               },
                         style: ElevatedButton.styleFrom(
@@ -280,6 +278,15 @@ class _TextFieldAddTelefono extends StatelessWidget {
             controller: telefonoController,
             decoration: const InputDecoration(
               labelText: 'Teléfono',
+              labelStyle: TextStyle(
+                color: Color(0xFF6165FA), // Color del texto del label
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(
+                      0xFF6165FA), // Color de la línea de abajo del TextField
+                ),
+              ),
             ),
             keyboardType: TextInputType.phone,
             inputFormatters: [

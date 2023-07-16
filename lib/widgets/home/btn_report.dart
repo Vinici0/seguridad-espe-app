@@ -78,7 +78,7 @@ class _BtnCancelar extends StatelessWidget {
           const SizedBox(height: 20),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 18),
-            width: width * 0.25,
+            width: 150,
             height: 40,
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(

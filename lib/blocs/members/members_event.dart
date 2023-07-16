@@ -77,3 +77,15 @@ class ChatGetMoreEvent extends MembersEvent {
   @override
   List<Object> get props => [mensajes];
 }
+
+class DeleteMemberByIdEvent extends MembersEvent {
+  // ignore: non_constant_identifier_names
+  final String id_usuario;
+  // ignore: non_constant_identifier_names
+  final String id_sala;
+
+  const DeleteMemberByIdEvent(this.id_sala, this.id_usuario);
+
+  @override
+  List<Object> get props => [id_usuario, id_sala];
+}

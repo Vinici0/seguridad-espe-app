@@ -13,6 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AlertScreen extends StatefulWidget {
   static const String routeName = 'reporte';
@@ -24,6 +25,9 @@ class AlertScreen extends StatefulWidget {
 }
 
 class _AlertScreenState extends State<AlertScreen> {
+  bool isIconicActivated = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   Position? currentPosition;
   String name = '';
   String ciudad = '';
@@ -61,6 +65,7 @@ class _AlertScreenState extends State<AlertScreen> {
     //controlar que reporte no sea null
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: const Color(0xFF111b21),
@@ -259,15 +264,30 @@ class _AlertScreenState extends State<AlertScreen> {
                     children: [
                       MaterialButton(
                         onPressed: () {
-                          // Acción de la galería
+                          setState(() {
+                            isIconicActivated = !isIconicActivated;
+                          });
+                          Fluttertoast.showToast(
+                            msg:
+                                'Modo icónico ${isIconicActivated ? 'activado' : 'desactivado'}',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 2,
+                            backgroundColor: const Color(0xFF6165FA),
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
                         },
                         child: Tooltip(
-                          message: tooltipText,
+                          message: isIconicActivated
+                              ? 'Modo icónico activado'
+                              : 'Modo icónico desactivado',
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: buttonColor,
+                              color:
+                                  isIconicActivated ? Colors.blue : Colors.grey,
                             ),
                             child: const Icon(
                               FontAwesomeIcons.userSecret,
@@ -316,14 +336,15 @@ class _AlertScreenState extends State<AlertScreen> {
                                     return;
                                   }
                                   try {
-                                    await publicaciones.createpublication(
+                                    await publicaciones.createPublication(
                                       reporte.tipo,
                                       _textController.text,
                                       reporte.color,
                                       reporte.icon,
-                                      false,
+                                      !isIconicActivated,
                                       true,
                                       authService.state.usuario!.uid,
+                                      authService.state.usuario!.nombre,
                                       imagePaths ?? [],
                                     );
                                   } catch (e) {

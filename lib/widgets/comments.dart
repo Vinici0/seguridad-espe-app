@@ -50,12 +50,19 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
                 //nombre de usuario que publico
                 children: [
                   Text(
-                    widget.publicacion.usuarioNombre != null
-                        ? widget.publicacion.usuarioNombre!
-                        : authBloc.state.usuario!.nombre,
-                    style: const TextStyle(fontSize: 16),
+                    widget.publicacion.isPublic
+                        ? widget.publicacion.nombreUsuario!
+                        : 'Anónimo',
                   ),
                 ],
+              ),
+            ),
+            const Divider(height: 2),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: Text(
+                'Si tienes información relevante, por favor, compártela comentando en esta publicación. La noticia todavía no ha sido finalizada por el usuario y cualquier novedad sería muy apreciada.',
+                style: TextStyle(fontSize: 12, color: Colors.black54),
               ),
             ),
             const Divider(height: 2),

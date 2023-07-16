@@ -83,7 +83,25 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-    - assets/alertas/
+    - assets/alertas/accidente.svg
+    - assets/alertas/actividad-sospechosa.svg
+    - assets/alertas/disturbios.svg
+    - assets/alertas/drogas.svg
+    - assets/alertas/drogas2.svg
+    - assets/alertas/emergencia-de-ambulancia.svg
+    - assets/alertas/emergencia-de-bomberos.svg
+    - assets/alertas/emergencia-de-seguridad.svg
+    - assets/alertas/logo.svg
+    - assets/alertas/problemas-alcantarillado.svg
+    - assets/alertas/problemas-de-basura.svg
+    - assets/alertas/problemas-de-energia.svg
+    - assets/alertas/problemas-de-telecomunicaciones.svg
+    - assets/alertas/problems-de-transporte-publico.svg
+    - assets/alertas/prueba.svg
+    - assets/alertas/robo-a-casa.svg
+    - assets/alertas/robo-a-persona.svg
+    - assets/alertas/robo-de-vehiculo.svg
+    - assets/alertas/user-usuario.svg
     - assets/info/
     - assets/icon/
   # An image asset can refer to one or more resolution-specific "variants", see

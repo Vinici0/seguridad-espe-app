@@ -13,7 +13,7 @@ class PerfilScreen extends StatelessWidget {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black),
         centerTitle: false,
-        title: const Text('Menu',
+        title: const Text('Menú',
             style: TextStyle(color: Colors.black, fontSize: 20)),
         elevation: 0.5,
       ),
@@ -42,7 +42,7 @@ class PerfilScreen extends StatelessWidget {
                       height: 10,
                     ),
                     _ListIconName(
-                      icon: Icons.person_outline,
+                      icon: Icons.person_2_rounded,
                       name: 'Mi perfil',
                       route: 'perfilDetalle',
                     ),
@@ -51,7 +51,7 @@ class PerfilScreen extends StatelessWidget {
                     ),
                     _ListIconName(
                       //icnoo de direccion, lugares sin fonodo negro
-                      icon: Icons.house_outlined,
+                      icon: Icons.house_sharp,
                       name: 'Mis Direcciones',
                       route: 'lugares',
                     ),
@@ -60,7 +60,7 @@ class PerfilScreen extends StatelessWidget {
                     ),
                     //mis contactos
                     _ListIconName(
-                      icon: Icons.quick_contacts_dialer_outlined,
+                      icon: Icons.quick_contacts_dialer_rounded,
                       name: "Mis contactos",
                       route: "information_family",
                     ),
@@ -68,7 +68,7 @@ class PerfilScreen extends StatelessWidget {
                       color: Colors.black45,
                     ),
                     _ListIconName(
-                      icon: Icons.group_add_outlined,
+                      icon: Icons.group_add_rounded,
                       name: "Mis Grupos",
                       route: "salas",
                     )

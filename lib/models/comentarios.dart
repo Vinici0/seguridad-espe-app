@@ -81,23 +81,26 @@ class Comentario {
 class Usuario {
   String id;
   String nombre;
-  String? img;
-
+  String img;
+  bool google;
   Usuario({
     required this.id,
     required this.nombre,
-    this.img,
+    required this.img,
+    this.google = false,
   });
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         id: json["_id"],
         nombre: json["nombre"],
         img: json["img"],
+        google: json["google"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "nombre": nombre,
         "img": img,
+        "google": google,
       };
 }

@@ -80,15 +80,23 @@ class __FromState extends State<_From> {
         text: "Ingrese",
         onPressed: () async {
           FocusScope.of(context).unfocus();
-          await authBloc.login(emailController.text, passwordController.text);
-          if (authBloc.isLoggedInTrue) {
-            // ignore: use_build_context_synchronously
-            Navigator.pushReplacementNamed(
-                context, LoadingLoginScreen.loadingroute);
+          if (emailController.text.isNotEmpty &&
+              passwordController.text.isNotEmpty) {
+            final result = await authBloc.login(
+                emailController.text, passwordController.text);
+            if (result) {
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacementNamed(
+                  context, LoadingLoginScreen.loadingroute);
+            } else {
+              // ignore: use_build_context_synchronously
+              mostrarAlerta(context, "Login incorrecto",
+                  "Revise sus credenciales nuevamente");
+            }
           } else {
-            // ignore: use_build_context_synchronously
-            mostrarAlerta(context, "Login incorrecto",
-                "Revise sus credenciales nuevamente");
+            // Si los campos están vacíos, muestra una alerta o realiza alguna otra acción apropiada.
+            mostrarAlerta(context, "Campos vacíos",
+                "Por favor, complete todos los campos");
           }
         },
       ),
@@ -101,8 +109,8 @@ class __FromState extends State<_From> {
         onPressed: () async {
           try {
             FocusScope.of(context).unfocus();
-            await authBloc.signInWithGoogle();
-            if (authBloc.isLoggedInTrue) {
+            final result = await authBloc.signInWithGoogle();
+            if (result) {
               // ignore: use_build_context_synchronously
               Navigator.pushReplacementNamed(
                   context, LoadingLoginScreen.loadingroute);
