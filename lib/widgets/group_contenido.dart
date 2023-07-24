@@ -76,6 +76,7 @@ class GroupContenido extends StatelessWidget {
           onPressed: () async {
             if (textoButton == 'Crear Grupo') {
               chatProvider.add(SalaCreateEvent(nomController.text));
+              _focusNode.unfocus();
               Navigator.pop(context);
             } else {
               final res = await chatProvider.joinSala(nomController.text);
@@ -89,6 +90,7 @@ class GroupContenido extends StatelessWidget {
                     textColor: Colors.white,
                     fontSize: 16.0);
               } else {
+                _focusNode.unfocus();
                 Fluttertoast.showToast(
                     msg: 'Te uniste al grupo ${nomController.text}',
                     toastLength: Toast.LENGTH_SHORT,

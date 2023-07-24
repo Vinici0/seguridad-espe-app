@@ -18,7 +18,7 @@ class RoomsScreen extends StatelessWidget {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
         centerTitle: false,
-        title: const Text('Gruposs',
+        title: const Text('Grupos',
             style: TextStyle(color: Colors.black, fontSize: 20)),
         elevation: 0.5,
         actions: const [IconModal()],
@@ -107,6 +107,25 @@ class SalaListTitle extends StatelessWidget {
     final membersBloc = BlocProvider.of<MembersBloc>(context);
     return ListTile(
       title: Text(sala.nombre),
+      //total mensaje no leidos
+      trailing: Container(
+        width: 20,
+        height: 20,
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(100.0),
+        ),
+        child: const Center(
+          child: Text(
+            "5",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+            ),
+          ),
+        ),
+      ),
+
       leading: Container(
         width: 50,
         height: 50,
@@ -137,7 +156,7 @@ class SalaListTitle extends StatelessWidget {
       onTap: () {
         membersBloc.add(ChatInitEvent());
         salasService.add(SalaSelectEvent(sala));
-        Navigator.pushNamed(context, ChatScreen.chatsalesroute);
+        Navigator.of(context).push(_createRoute(const ChatScreen()));
       },
     );
   }
@@ -211,4 +230,22 @@ class IconModal extends StatelessWidget {
       },
     );
   }
+}
+
+Route _createRoute(Widget screen) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => screen,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }

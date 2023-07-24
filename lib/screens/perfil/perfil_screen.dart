@@ -14,7 +14,7 @@ class PerfilScreen extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.black),
         centerTitle: false,
         title: const Text('Menú',
-            style: TextStyle(color: Colors.black, fontSize: 20)),
+            style: TextStyle(color: Colors.black87, fontSize: 20)),
         elevation: 0.5,
       ),
       body: Container(
@@ -139,7 +139,7 @@ class _ListIconName extends StatelessWidget {
         onTap: () async {
           if (name.contains('Cerrar sesión')) {
             await authServiceBloc.logout();
-            // ignore: use_build_context_synchronously
+
             Navigator.pushReplacementNamed(context, 'login');
             return;
           }
@@ -156,7 +156,7 @@ class _ListIconName extends StatelessWidget {
                   )
                 : Icon(
                     icon,
-                    color: Colors.black87,
+                    color: Colors.grey[800],
                     size: 30,
                   ),
             const SizedBox(

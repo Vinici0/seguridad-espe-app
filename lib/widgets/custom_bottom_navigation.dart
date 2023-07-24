@@ -8,6 +8,7 @@ class CustomBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mapBloc = BlocProvider.of<MapBloc>(context);
     return BlocBuilder<NavigatorBloc, NavigatorStateInit>(
       builder: (context, state) {
         return BottomNavigationBar(
@@ -22,26 +23,54 @@ class CustomBottomNavigation extends StatelessWidget {
           onTap: (int i) {
             BlocProvider.of<NavigatorBloc>(context)
                 .add(NavigatorIndexEvent(index: i));
+
+            mapBloc.add(OnMapMovedEvent());
+            BlocProvider.of<SearchBloc>(context)
+                .add(OnDeactivateManualMarkerEvent());
           },
-          items: const [
-            BottomNavigationBarItem(
+          items: [
+            const BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.mapLocationDot),
               label: 'Mapa',
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.newspaper),
+              icon: Stack(
+                children: [
+                  const Icon(FontAwesomeIcons.newspaper),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.only(
+                        left: 5, // Ajusta estos valores para mover el punto
+                        right: 5, // en la dirección deseada
+                        top: 2,
+                        bottom: 2,
+                      ),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors
+                            .red, // Puedes cambiar el color del punto aquí
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 9,
+                        minHeight: 9,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               label: 'Noticias',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.users),
               label: 'Grupos',
             ),
-            BottomNavigationBarItem(
-              //R
+            const BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.locationDot),
               label: 'Lugares',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.bars),
               label: 'Menú',
             ),
@@ -51,3 +80,8 @@ class CustomBottomNavigation extends StatelessWidget {
     );
   }
 }
+/*
+   mapBloc.add(OnMapMovedEvent());
+                BlocProvider.of<SearchBloc>(context)
+                    .add(OnDeactivateManualMarkerEvent());
+ */

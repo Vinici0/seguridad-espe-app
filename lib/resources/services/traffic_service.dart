@@ -74,8 +74,10 @@ class TrafficService {
       'x-token': await AuthService.getToken() as String,
     });
 
+    print("resp: ${resp.body}");
     final ubicacionesData = json.decode(resp.body);
     final ubicaciones = UbicacionResponse.fromMap(ubicacionesData);
+    print("ubicaciones1111111111: ${ubicaciones.ubicacion}");
     return ubicaciones.ubicacion;
   }
 

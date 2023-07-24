@@ -64,38 +64,15 @@ class _InformationFamilyState extends State<InformationFamily> {
       context,
     );
 
-    final routeActive = ModalRoute.of(context)?.settings.arguments as bool;
-    routeActive == null ? false : routeActive;
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
         centerTitle: false,
         // automaticallyImplyLeading: routeActive,
         title: const Text(
-          'Numeros de Familiares',
+          'Mis contactos de emergencia',
           style: TextStyle(color: Colors.black87),
         ),
-        actions: [
-          // TextButton(
-          //   onPressed: telefonos.length > 1
-          //       ? () {
-          //           Navigator.pushNamedAndRemoveUntil(
-          //               context, HomeScreen.homeroute, (route) => false);
-          //         }
-          //       : null,
-          //   child: Text(
-          //     'Siguiente',
-          //     style: TextStyle(
-          //       color: telefonos.length > 1
-          //           ? Color(0xFF6165FA)
-          //           : Color.fromARGB(255, 113, 113, 115),
-          //       fontSize: 16,
-          //       fontWeight: FontWeight.w500,
-          //     ),
-          //   ),
-          // ),
-        ],
       ),
       body: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
         return Padding(
@@ -120,7 +97,7 @@ class _InformationFamilyState extends State<InformationFamily> {
                           child: image1),
                     ),
                     const Text(
-                      "Agrega números de familiares para que puedan recibir alertas de tus seres queridos. Solo los números agregados serán notificados una vez que se presione el botón de SOS.",
+                      "Agrega los números de teléfono de tus contactos en caso de emergencia para que puedan recibir alertas de tus seres queridos. Solo los números que hayas añadido serán notificados una vez que presiones el botón de SOS.",
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         color: Color.fromRGBO(0, 0, 0, 0.782),
@@ -190,7 +167,7 @@ class _InformationFamilyState extends State<InformationFamily> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        if (!Platform.isIOS) {
+        if (Platform.isIOS) {
           return CupertinoAlertDialog(
             title: Text(titulo),
             content: Text(mensaje),
@@ -276,6 +253,7 @@ class _TextFieldAddTelefono extends StatelessWidget {
         Expanded(
           child: TextField(
             controller: telefonoController,
+            maxLength: 10,
             decoration: const InputDecoration(
               labelText: 'Teléfono',
               labelStyle: TextStyle(
@@ -305,12 +283,14 @@ class _ListContact extends StatelessWidget {
     required this.authService,
     required this.telefonos,
   }) : super(key: key);
+
   List<String> telefonos;
   final AuthBloc authService;
 
   @override
   Widget build(BuildContext context) {
     final state = authService.state;
+
     return ListView.builder(
       shrinkWrap: true,
       itemCount: state.usuario?.telefonos.length ?? 0,
@@ -343,11 +323,8 @@ class _ListContact extends StatelessWidget {
               ),
             ),
             trailing: IconButton(
-              onPressed: () async {
-                await authService.deleteTelefonoFamily(
-                    state.usuario?.telefonos[index] ?? '');
-                //eliminar del array de telefonos
-                telefonos = authService.state.usuario?.telefonos ?? [];
+              onPressed: () {
+                _showDeleteConfirmationDialog(context, index);
               },
               icon: const Icon(
                 Icons.delete,
@@ -355,6 +332,38 @@ class _ListContact extends StatelessWidget {
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, int index) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Confirmar Eliminación'),
+          content:
+              const Text('¿Estás seguro de que deseas eliminar este elemento?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Cerrar el diálogo
+              },
+              child: const Text('Cancelar',
+                  style: TextStyle(color: Color(0xFF6165FA))),
+            ),
+            TextButton(
+              onPressed: () {
+                // Eliminar el elemento de la lista y cerrar el diálogo
+                authService.deleteTelefonoFamily(telefonos[index]);
+                telefonos = authService.state.usuario?.telefonos ?? [];
+                Navigator.pop(context);
+              },
+              child: const Text('Eliminar',
+                  style: TextStyle(color: Color(0xFF6165FA))),
+            ),
+          ],
         );
       },
     );

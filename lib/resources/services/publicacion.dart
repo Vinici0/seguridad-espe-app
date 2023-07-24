@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_maps_adv/global/environment.dart';
+import 'package:flutter_maps_adv/models/comentarioPerson.dart';
 import 'package:flutter_maps_adv/models/comentarios.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:flutter_maps_adv/widgets/comment_pulbicacion.dart';
@@ -43,11 +44,10 @@ class PublicacionService {
       return publicacionesResp.publicacion;
     } catch (e) {
       print('Error: $e');
-      return []; // Return an empty list in case of an error
+      return []; 
     }
   }
 
-  // localhost:3000/api/publicacionUsuario
   Future<List<Publicacion>> getPublicacionesUsuario() async {
     final uri = Uri.parse('${Environment.apiUrl}/publicacion');
 
@@ -104,11 +104,11 @@ class PublicacionService {
             : placemarks[0].locality! == ""
                 ? 'S/N'
                 : placemarks[0].locality!,
-        barrio: placemarks[0].subLocality == null
+        barrio: placemarks[0].subAdministrativeArea == null
             ? 'S/N'
-            : placemarks[0].subLocality! == ""
+            : placemarks[0].subAdministrativeArea! == ""
                 ? 'S/N'
-                : placemarks[0].subLocality!,
+                : placemarks[0].subAdministrativeArea!,
         isPublic: isPublic,
         usuario: usuario,
         imgAlerta: imgAlerta,
@@ -208,6 +208,7 @@ class PublicacionService {
   }
 
   Future<List<Comentario>> getAllComments(String uid) async {
+    print(uid);
     try {
       final uri = Uri.parse('${Environment.apiUrl}/comentarios/${uid}');
 
@@ -220,6 +221,7 @@ class PublicacionService {
       );
 
       final decodedData = json.decode(resp.body);
+      print(decodedData);
       final commentResp = ComentarioResponse.fromJson(decodedData);
       return commentResp.comentarios;
     } catch (e) {
@@ -251,6 +253,30 @@ class PublicacionService {
       }
     } catch (e) {
       throw Exception('Error: Failed to toggle like on comentario.');
+    }
+  }
+
+  Future<ComentarioPerson> createComentario(
+      String contenido, String publicacionId) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/comentarios');
+
+      final resp = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken() as String,
+        },
+        body: json.encode({
+          'contenido': contenido,
+          'publicacionId': publicacionId,
+        }),
+      );
+      final decodedData = json.decode(resp.body);
+      final commentResp = ComentarioPersonResponse.fromJson(decodedData);
+      return commentResp.comentario;
+    } catch (e) {
+      throw Exception('Error: Failed to create comentario.');
     }
   }
 }

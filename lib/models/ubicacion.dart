@@ -11,23 +11,19 @@ String ubicacionResponseToMap(UbicacionResponse data) =>
     json.encode(data.toMap());
 
 class UbicacionResponse {
-  bool ok;
   List<Ubicacion> ubicacion;
 
   UbicacionResponse({
-    required this.ok,
     required this.ubicacion,
   });
 
   factory UbicacionResponse.fromMap(Map<String, dynamic> json) =>
       UbicacionResponse(
-        ok: json["ok"],
         ubicacion: List<Ubicacion>.from(
             json["ubicaciones"].map((x) => Ubicacion.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
-        "ok": ok,
         "ubicaciones": List<dynamic>.from(ubicacion.map((x) => x.toMap())),
       };
 }
@@ -39,11 +35,11 @@ class Ubicacion {
   String ciudad;
   String pais;
   bool estado;
-  String? createdAt;
-  String? updatedAt;
-  String? uid;
-  String? parroquia;
+  String createdAt;
+  String updatedAt;
+  String uid;
   String? referencia;
+  String? parroquia;
 
   Ubicacion({
     required this.latitud,
@@ -52,30 +48,26 @@ class Ubicacion {
     required this.ciudad,
     required this.pais,
     required this.estado,
-    this.createdAt,
-    this.updatedAt,
-    this.uid,
-    this.parroquia,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.uid,
     this.referencia,
+    this.parroquia,
   });
 
-  factory Ubicacion.fromMap(Map<String, dynamic> json) {
-    final uid = json.containsKey("uid") ? json["uid"] : json["_id"];
-    print("Estado en el mapa: ${json["estado"]}");
-    return Ubicacion(
-      latitud: json["latitud"]?.toDouble(),
-      longitud: json["longitud"]?.toDouble(),
-      barrio: json["barrio"],
-      ciudad: json["ciudad"],
-      pais: json["pais"],
-      estado: json["estado"] as bool? ?? false,
-      createdAt: json["createdAt"],
-      updatedAt: json["updatedAt"],
-      uid: uid,
-      parroquia: json["parroquia"],
-      referencia: json["referencia"],
-    );
-  }
+  factory Ubicacion.fromMap(Map<String, dynamic> json) => Ubicacion(
+        latitud: json["latitud"]?.toDouble(),
+        longitud: json["longitud"]?.toDouble(),
+        barrio: json["barrio"],
+        ciudad: json["ciudad"],
+        pais: json["pais"],
+        estado: json["estado"],
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
+        uid: json["uid"],
+        referencia: json["referencia"],
+        parroquia: json["parroquia"],
+      );
 
   Map<String, dynamic> toMap() => {
         "latitud": latitud,
@@ -87,7 +79,7 @@ class Ubicacion {
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "uid": uid,
-        "parroquia": parroquia,
         "referencia": referencia,
+        "parroquia": parroquia,
       };
 }

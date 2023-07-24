@@ -78,13 +78,13 @@ class TableAlertsSeguridad extends StatelessWidget {
                 behavior: HitTestBehavior.translucent,
                 child: const PhysicalModelCircleContainer(
                   icon: "emergencia-de-ambulancia.svg",
-                  text: "Emergencia de ambulancia",
+                  text: "Emergencia de salud",
                   color: Color(0xFFE74C3C),
                 ),
                 onTap: () => {
                       Navigator.pushNamed(context, 'reporte',
                           arguments: Reporte(
-                              tipo: "Emergencia de ambulancia",
+                              tipo: "Emergencia de salud",
                               icon: "emergencia-de-ambulancia.svg",
                               color: "E74C3C"))
                     }),

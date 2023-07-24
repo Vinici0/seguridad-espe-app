@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:flutter_maps_adv/screens/news_detalle.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -138,15 +139,32 @@ class _OptionNewsState extends State<OptionNews> {
             ],
           ),
           onTap: () {
-            Navigator.pushNamed(context, DetalleScreen.detalleroute,
-                arguments: {
-                  'publicacion': widget.publicaciones[widget.i],
-                  'likes':
-                      widget.publicaciones[widget.i].likes!.length.toString(),
-                });
+            publicationBloc
+                .add(PublicacionSelectEvent(widget.publicaciones[widget.i]));
+            Navigator.of(context)
+                .push(_createRoute(widget.publicaciones[widget.i]));
           },
         ),
       ],
     );
   }
+}
+
+Route _createRoute(Publicacion publicacion) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        const DetalleScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }

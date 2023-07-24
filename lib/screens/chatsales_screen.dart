@@ -137,7 +137,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             ),
             onPressed: () async {
               // ignore: use_build_context_synchronously
-              Navigator.pushNamed(context, DetalleSalaScreen.detalleSalaroute);
+              Navigator.of(context)
+                  .push(_createRoute(const DetalleSalaScreen()));
             },
           )
         ],
@@ -341,4 +342,22 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     authService.socketService.socket.off('mensaje-grupal');
     super.dispose();
   }
+}
+
+Route _createRoute(Widget screen) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => screen,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }

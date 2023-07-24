@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
+import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class BtnSOS extends StatelessWidget {
@@ -88,6 +89,11 @@ class _SOSNotification extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                   MediaQuery.of(context).size.width * 0.3 / 2),
               onTap: () async {
+                if (!authBloc.hasTelefonos()) {
+                  mostrarDialogoIngresarNumero(context);
+                  return;
+                }
+
                 Fluttertoast.showToast(
                     msg: "Se ha enviado una notificación a tus contactos",
                     toastLength: Toast.LENGTH_SHORT,
@@ -115,6 +121,76 @@ class _SOSNotification extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void mostrarDialogoIngresarNumero(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Números de teléfono no encontrados',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Color(0xFF6165FA),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Antes de utilizar la función SOS, asegúrate de ingresar al menos un número de teléfono de algún familiar.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // Navegar a la pantalla de agregar números de teléfono
+                  Navigator.pushNamed(
+                      context, InformationFamily.informationFamily);
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF6165FA),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Text(
+                    'Ingresar número',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Cerrar',
+                style: TextStyle(
+                  color: Color(0xFF6165FA),
+                  fontSize: 16,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

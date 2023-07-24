@@ -12,14 +12,23 @@ class EditNombreScreen extends StatefulWidget {
 
 class _EditNombreScreenState extends State<EditNombreScreen> {
   AuthBloc authBloc = AuthBloc();
+  bool _isEmpty = true; // Variable para controlar si el TextField está vacío
+
   @override
   void initState() {
     authBloc = BlocProvider.of<AuthBloc>(context);
     super.initState();
     _textController.text = authBloc.state.usuario!.nombre;
+
+    _textController.addListener(() {
+      setState(() {
+        _isEmpty = _textController.text.isEmpty;
+      });
+    });
   }
 
   final _textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +43,7 @@ class _EditNombreScreenState extends State<EditNombreScreen> {
         actions: [
           IconButton(
             onPressed: () {
+              if (_isEmpty) return;
               authBloc.updateUsuario(
                   _textController.text, authBloc.state.usuario!.telefono ?? '');
               Navigator.pop(context);
@@ -52,15 +62,20 @@ class _EditNombreScreenState extends State<EditNombreScreen> {
             padding: const EdgeInsets.all(20),
             child: TextField(
               controller: _textController,
-              decoration: const InputDecoration(
+              maxLength: 25,
+              onChanged: (value) {
+                setState(() {
+                  _isEmpty = value.isEmpty;
+                });
+              },
+              decoration: InputDecoration(
                 labelText: 'Nombres',
-                labelStyle: TextStyle(
-                  color: Color(0xFF6165FA), // Color del texto del label
+                labelStyle: const TextStyle(
+                  color: Color(0xFF6165FA),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: Color(
-                        0xFF6165FA), // Color de la línea de abajo del TextField
+                    color: _isEmpty ? Colors.red : const Color(0xFF6165FA),
                   ),
                 ),
               ),

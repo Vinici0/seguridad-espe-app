@@ -8,12 +8,15 @@ class EditTelefonoScreen extends StatefulWidget {
   const EditTelefonoScreen({Key? key}) : super(key: key);
 
   @override
-  State<EditTelefonoScreen> createState() => _EditNombreScreenState();
+  State<EditTelefonoScreen> createState() => _EditTelefonoScreenState();
 }
 
-class _EditNombreScreenState extends State<EditTelefonoScreen> {
+class _EditTelefonoScreenState extends State<EditTelefonoScreen> {
   bool isValido = false;
   AuthBloc authBloc = AuthBloc();
+  bool _isPhoneNumberValid =
+      true; // Variable para controlar si el número de teléfono es válido
+
   @override
   void initState() {
     authBloc = BlocProvider.of<AuthBloc>(context);
@@ -22,6 +25,7 @@ class _EditNombreScreenState extends State<EditTelefonoScreen> {
   }
 
   final _textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,11 +48,9 @@ class _EditNombreScreenState extends State<EditTelefonoScreen> {
                 );
                 Navigator.pop(context);
               } else {
-                mostrarAlerta(
-                  context,
-                  'Teléfono incorrecto',
-                  'El número de teléfono debe tener 10 dígitos y comenzar con "09"',
-                );
+                setState(() {
+                  _isPhoneNumberValid = false;
+                });
               }
             },
             icon: const Icon(
@@ -65,15 +67,20 @@ class _EditNombreScreenState extends State<EditTelefonoScreen> {
             child: TextField(
               keyboardType: TextInputType.number,
               controller: _textController,
-              decoration: const InputDecoration(
+              maxLength: 10,
+              onChanged: (value) {
+                setState(() {
+                  _isPhoneNumberValid = isValidPhoneNumber(value);
+                });
+              },
+              decoration: InputDecoration(
                 labelText: 'Telefono',
-                labelStyle: TextStyle(
-                  color: Color(0xFF6165FA), // Color del texto del label
+                labelStyle: const TextStyle(
+                  color: Color(0xFF6165FA),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: Color(
-                        0xFF6165FA), // Color de la línea de abajo del TextField
+                    color: _isPhoneNumberValid ? Color(0xFF6165FA) : Colors.red,
                   ),
                 ),
               ),

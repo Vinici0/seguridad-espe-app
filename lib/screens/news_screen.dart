@@ -51,13 +51,44 @@ class _NewsScreenState extends State<NewsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        //color de la flecha de regreso
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         centerTitle: false,
-        title: const Text('Tendencias',
-            style: TextStyle(color: Colors.black, fontSize: 20)),
-        // backgroundColor: Colors.white,
+        title: const Text(
+          'Tendencias',
+          style: TextStyle(color: Colors.black, fontSize: 20),
+        ),
         elevation: 0.5,
+        // actions: [
+        //   Stack(
+        //     children: [
+        //       IconButton(
+        //         icon: const Icon(
+        //           Icons.notifications_none,
+        //           color: Colors.black,
+        //         ),
+        //         onPressed: () {
+        //           // Lógica para manejar el evento al presionar el ícono de notificaciones
+        //           // Por ejemplo, abrir un cuadro de diálogo, mostrar una lista de notificaciones, etc.
+        //         },
+        //       ),
+        //       Positioned(
+        //         top: 8,
+        //         right: 12,
+        //         child: Container(
+        //           padding: const EdgeInsets.all(4),
+        //           decoration: BoxDecoration(
+        //             shape: BoxShape.circle,
+        //             color: Colors.red, // Puedes cambiar el color del punto aquí
+        //           ),
+        //           constraints: const BoxConstraints(
+        //             minWidth: 12,
+        //             minHeight: 12,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ],
       ),
       body: BlocBuilder<PublicationBloc, PublicationState>(
         builder: (context, state) {
@@ -233,11 +264,9 @@ class _ListNews extends StatelessWidget {
                                   onTap: () {
                                     _publicationBloc.add(PublicacionSelectEvent(
                                         publicaciones[i]));
-                                    Navigator.pushNamed(
-                                        context, DetalleScreen.detalleroute,
-                                        arguments: {
-                                          'publicacion': publicaciones[i],
-                                        });
+
+                                    Navigator.of(context)
+                                        .push(_createRoute(publicaciones[i]));
                                   },
                                   child: Column(
                                     crossAxisAlignment:
@@ -263,11 +292,8 @@ class _ListNews extends StatelessWidget {
                       _publicationBloc
                           .add(PublicacionSelectEvent(publicaciones[i]));
 
-                      Navigator.pushNamed(context, DetalleScreen.detalleroute,
-                          arguments: {
-                            'publicacion': publicaciones[i],
-                            'likes': publicaciones[i].likes!.length.toString(),
-                          });
+                      Navigator.of(context)
+                          .push(_createRoute(publicaciones[i]));
                     },
                   ),
                   OptionNews(
@@ -292,4 +318,22 @@ class _ListNews extends StatelessWidget {
       ],
     );
   }
+}
+
+Route _createRoute(Publicacion publicacion) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => DetalleScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      const curve = Curves.ease;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
 }

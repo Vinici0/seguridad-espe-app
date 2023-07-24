@@ -165,9 +165,7 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
         final newPublicaciones = [newPublicacion, ...state.publicaciones];
         add(PublicacionesCreateEvent(newPublicaciones));
       }
-    } catch (e) {
-      print('Error al crear publicacion: $e');
-    }
+    } catch (e) {}
   }
 
   cargarComentarios(String uid) async {
@@ -194,7 +192,7 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   }
 
   getAllComments(String uid) async {
-    add(ResetCommentPublicationEvent());
+    add(const ResetCommentPublicationEvent());
     add(LoadingEvent());
     final List<Comentario> comentariosL =
         await _publicacionService.getAllComments(uid);
@@ -205,13 +203,20 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
           nombre: element.usuario.nombre,
           fotoPerfil: element.usuario.img,
           createdAt: element.createdAt,
+          uidUsuario: element.usuario.id,
+          likes: element.likes!,
           uid: element.uid,
-          likes: element.likes!.length,
           isGoogle: element.usuario.google,
           isLiked: false);
       add(AddCommentPublicationEvent(comment));
     }
     add(CountCommentEvent(state.comentariosP.length));
     add(GetAllCommentsEvent(comentariosL));
+  }
+
+  createComentarioService(String contenido, String publicacionId) async {
+    final newComentario =
+        await _publicacionService.createComentario(contenido, publicacionId);
+    return newComentario;
   }
 }

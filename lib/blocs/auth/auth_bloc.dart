@@ -106,6 +106,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         telefonos: state.usuario!.telefonos,
         createdAt: state.usuario!.createdAt,
         updatedAt: state.usuario!.updatedAt,
+        img: state.usuario!.img,
         google: state.usuario!.google);
 
     emit(state.copyWith(usuario: usuario));
@@ -113,7 +114,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _aonAddTelefonoFamilyEvent(
       AuthAddTelefonFamilyEvent event, Emitter<AuthState> emit) {
-    final usuario = Usuario(
+    final telefono = event.telefono.trim();
+
+    final telefonos = state.usuario!.telefonos
+        .where((t) => t.isNotEmpty) // Eliminar los datos "" del arreglo
+        .toList();
+
+    if (telefono.isNotEmpty && !telefonos.contains(telefono)) {
+      telefonos.add(telefono);
+
+      final usuario = Usuario(
         online: state.usuario!.online,
         nombre: state.usuario!.nombre,
         email: state.usuario!.email,
@@ -123,10 +133,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         uid: state.usuario!.uid,
         createdAt: state.usuario!.createdAt,
         updatedAt: state.usuario!.updatedAt,
+        img: state.usuario!.img,
         google: state.usuario!.google,
-        telefonos: [...state.usuario!.telefonos, event.telefono]);
+        telefonos: telefonos,
+      );
 
-    emit(state.copyWith(usuario: usuario));
+      emit(state.copyWith(usuario: usuario));
+    }
   }
 
   void _onAuthDeleteTeleFamilyEvent(
@@ -142,6 +155,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         createdAt: state.usuario!.createdAt,
         updatedAt: state.usuario!.updatedAt,
         uid: state.usuario!.uid,
+        img: state.usuario!.img,
         telefonos: state.usuario!.telefonos
             .where((telefono) => telefono != event.telefono)
             .toList());
@@ -152,6 +166,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onAuthUpdateUsuarioImageEvent(
       AuthUpdateUsuarioImageNewUserEvent event, Emitter<AuthState> emit) {
     emit(state.copyWith(usuario: event.usuario));
+  }
+
+  bool hasTelefonos() {
+    return state.usuario!.telefonos.isNotEmpty;
+  }
+
+  bool hasTelefonosFamily(String telefono) {
+    return state.usuario!.telefonos.contains(telefono);
   }
 
   void _onAuthNotificacionEvent(
@@ -184,7 +206,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     isLoggedInTrue = isLoggedIn;
     if (isLoggedIn) {
       add(const AuthConectEvent());
+      return true;
     }
+
     return isLoggedIn;
   }
 

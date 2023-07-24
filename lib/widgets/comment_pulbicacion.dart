@@ -6,25 +6,27 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class CommentPublication extends StatefulWidget {
+  final String uidUsuario;
   final String uid;
   final String comentario;
   final String nombre;
-  final String? fotoPerfil;
+  final String fotoPerfil;
   final String createdAt;
   final bool isGoogle;
-  int? likes;
+  final List<String> likes;
   bool isLiked;
 
   CommentPublication({
     Key? key,
-    required this.uid,
+    required this.uidUsuario,
     required this.comentario,
     required this.nombre,
-    this.fotoPerfil,
+    required this.fotoPerfil,
     required this.createdAt,
     required this.isGoogle,
     required this.isLiked,
-    this.likes,
+    required this.uid,
+    required this.likes,
   }) : super(key: key);
 
   @override
@@ -36,20 +38,14 @@ class _CommentPublicationState extends State<CommentPublication> {
   int likeCount = 0;
   AuthBloc authBloc = AuthBloc();
   PublicationBloc publicationBloc = PublicationBloc();
+
   @override
   void initState() {
     publicationBloc = BlocProvider.of<PublicationBloc>(context);
-    likeCount = 0;
     authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
-    // initializeLikedStatus();
-    // socketService.socketService.socket.on('toggle-like-comentario', (data) {
-    //   if (data['comentarioUid'] == widget.uid) {
-    //     setState(() {
+    // Actualizar el estado de widget.isLiked en función de widget.likes
+    widget.isLiked = widget.likes.contains(authBloc.state.usuario!.uid);
     super.initState();
-    //       likeCount = data['likeCount'];
-    //     });
-    //   }
-    // });
   }
 
   @override
@@ -57,24 +53,6 @@ class _CommentPublicationState extends State<CommentPublication> {
     widget.isLiked = false;
     super.dispose();
   }
-
-  // Future<void> initializeLikedStatus() async {
-  //   final comments = publicationBloc.state.comentarios;
-  //   // Si no hay comentarios no se hace nada
-  //   if (comments == null || comments.isEmpty) return;
-
-  //   try {
-  //     final comment =
-  //         comments.firstWhere((element) => element.uid == widget.uid);
-  //     final userLikes = comment.likes;
-
-  //     setState(() {
-  //       widget.isLiked = userLikes!.contains(authBloc.state.usuario!.uid);
-  //     });
-  //   } catch (e) {
-  //     print('Error al inicializar el estado de "Me gusta": $e');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -90,18 +68,17 @@ class _CommentPublicationState extends State<CommentPublication> {
                 widget.isGoogle == true
                     ? CircleAvatar(
                         radius: 15,
-                        backgroundImage: NetworkImage(widget.fotoPerfil!),
+                        backgroundImage: NetworkImage(widget.fotoPerfil),
                       )
                     : widget.fotoPerfil == null
                         ? const CircleAvatar(
                             radius: 15,
-                            backgroundImage:
-                                AssetImage('assets/images/no-image.png'),
+                            backgroundImage: AssetImage('assets/no-image.png'),
                           )
                         : CircleAvatar(
                             radius: 15,
                             backgroundImage: NetworkImage(
-                                '${Environment.apiUrl}/public/img/${widget.fotoPerfil}'),
+                                '${Environment.apiUrl}/uploads/usuario/usuarios/${widget.uidUsuario}'),
                           ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -129,37 +106,35 @@ class _CommentPublicationState extends State<CommentPublication> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () async {
-                    final isLikedNow = !widget.isLiked!;
-
+                  onTap: () {
+                    final isLikedNow = !widget.isLiked;
                     setState(() {
                       widget.isLiked = isLikedNow;
                     });
 
                     try {
                       if (isLikedNow) {
-                        widget.likes = widget.likes! + 1;
+                        if (!widget.likes
+                            .contains(authBloc.state.usuario!.uid)) {
+                          widget.likes.add(authBloc.state.usuario!.uid);
+                        }
+                        publicationBloc.toggleLikeComentario(widget.uid);
                       } else {
-                        widget.likes = widget.likes! - 1;
+                        widget.likes.remove(authBloc.state.usuario!.uid);
+                        publicationBloc.toggleLikeComentario(widget.uid);
                       }
-                      await publicationBloc.toggleLikeComentario(widget.uid);
-                      // socketService.socketService.emit('toggle-like-comentario',
-                      //     {'comentarioUid': widget.uid});
                     } catch (e) {
                       print('Error: $e');
                     }
                   },
                   child: Row(
                     children: [
-                      widget.isLiked
+                      widget.likes.contains(authBloc.state.usuario!.uid)
                           ? const Icon(Icons.favorite, color: Colors.red)
                           : const Icon(FontAwesomeIcons.heart),
                       const SizedBox(width: 5),
                       Text(
-                        widget.likes.toString() == null ||
-                                widget.likes.toString() == 'null'
-                            ? '0'
-                            : widget.likes.toString(),
+                        widget.likes.length.toString(),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.black54,

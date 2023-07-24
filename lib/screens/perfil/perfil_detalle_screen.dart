@@ -5,6 +5,7 @@ import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:timeago/timeago.dart' as timeago;
 
 class PerfilDetalleScreen extends StatelessWidget {
@@ -35,61 +36,15 @@ class PerfilDetalleScreen extends StatelessWidget {
           builder: (context, state) {
             return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: BlocBuilder<AuthBloc, AuthState>(
-                    builder: (context, state) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          //un circulo con la foto
-                          authBloc.state.usuario!.img == null
-                              ? const CircleAvatar(
-                                  radius: 50,
-                                  backgroundImage:
-                                      AssetImage('assets/no-image.png'),
-                                )
-                              : authBloc.state.usuario!.google
-                                  ? CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage: NetworkImage(
-                                          authBloc.state.usuario!.img!),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage: NetworkImage(
-                                          '${Environment.apiUrl}/uploads/usuario/usuarios/${authBloc.state.usuario!.uid}'),
-                                    ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          //un texto con el nombre
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                authBloc.state.usuario!.nombre.length > 15
-                                    ? '${authBloc.state.usuario!.nombre.substring(0, 18)}...'
-                                    : authBloc.state.usuario!.nombre,
-                                style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                authBloc.state.usuario!.email,
-                                style: const TextStyle(fontSize: 15),
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: _PerfilCicle(),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: MaterialButton(
                     onPressed: () {
-                      Navigator.pushNamed(
+                      Navigator.pushReplacementNamed(
                           context, EditPerfilScreen.editPerfilroute);
                     },
                     //color del boton
@@ -115,7 +70,7 @@ class PerfilDetalleScreen extends StatelessWidget {
                         width: 15,
                       ),
                       Text(
-                          'Miembro desde ${timeago.format(DateTime.parse(authBloc.state.usuario!.createdAt), locale: 'es')}'),
+                          'Miembro desde hace ${timeago.format(DateTime.parse(authBloc.state.usuario!.createdAt))}'),
                     ],
                   ),
                 ),
@@ -153,6 +108,61 @@ class PerfilDetalleScreen extends StatelessWidget {
           },
         );
       }),
+    );
+  }
+}
+
+class _PerfilCicle extends StatelessWidget {
+  const _PerfilCicle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            //un circulo con la foto
+            state.usuario!.img == null
+                ? const CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage('assets/no-image.png'),
+                  )
+                : state.usuario!.google
+                    ? CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(state.usuario!.img!),
+                      )
+                    : CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(
+                            '${Environment.apiUrl}/uploads/usuario/usuarios/${state.usuario!.uid}'),
+                      ),
+            const SizedBox(
+              width: 10,
+            ),
+            //un texto con el nombre
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  state.usuario!.nombre.length > 15
+                      ? '${state.usuario!.nombre.substring(0, 18)}...'
+                      : state.usuario!.nombre,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  state.usuario!.email,
+                  style: const TextStyle(fontSize: 15),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

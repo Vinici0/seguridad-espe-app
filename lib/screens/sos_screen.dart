@@ -16,7 +16,10 @@ class SosScreen extends StatelessWidget {
     //recupera el argumentos
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    print(args);
+    String nombre = args['nombre'];
+    String nombreLimitado =
+        nombre.length <= 10 ? nombre : '${nombre.substring(0, 12)}...';
+
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
@@ -52,11 +55,12 @@ class SosScreen extends StatelessWidget {
               height: 20,
             ),
             Text(
-              '${args['nombre']} necesitas ayuda',
+              '$nombreLimitado necesitas ayuda',
               style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(
               height: 20,

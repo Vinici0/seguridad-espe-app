@@ -14,7 +14,7 @@ class BtnReport extends StatelessWidget {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return state.displayManualMarker
-            ? const _BtnCancelar()
+            ? const SizedBox()
             : FadeInUp(
                 duration: const Duration(milliseconds: 300),
                 child: const _BtnReport());

@@ -36,18 +36,27 @@ class _AlertScreenState extends State<AlertScreen> {
   List<String>? imagePaths;
   List<XFile>? imagefiles;
   bool isPressed = false;
-  bool _estaEscribiendo = false;
   bool isButtonDisabled = false;
   final FocusNode _focusNode = FocusNode();
+
+  bool isErrorMessageShown = false; // New flag to track error dialog
 
   @override
   void initState() {
     super.initState();
     isButtonDisabled = false;
+
     Future.delayed(Duration.zero, () {
       _focusNode.requestFocus();
     });
     _getCurrentLocation();
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -58,9 +67,6 @@ class _AlertScreenState extends State<AlertScreen> {
     final size = MediaQuery.of(context).size;
     final publicaciones = BlocProvider.of<PublicationBloc>(context);
     final authService = BlocProvider.of<AuthBloc>(context, listen: false);
-    Color buttonColor = isPressed ? Colors.blue : Colors.grey;
-    String tooltipText =
-        isPressed ? 'Inconicto activado' : 'Inconicto desactivado';
 
     //controlar que reporte no sea null
 
@@ -106,6 +112,7 @@ class _AlertScreenState extends State<AlertScreen> {
                     color: const Color(0xFF111b21),
                     child: TextField(
                       focusNode: _focusNode,
+                      maxLength: 500,
                       controller:
                           _textController, //sirve para limpiar el texto del textfield cuando se envia el mensaje
                       style: const TextStyle(color: Colors.white, fontSize: 20),
@@ -304,57 +311,70 @@ class _AlertScreenState extends State<AlertScreen> {
                           color: const Color(0xFF6165FA),
                         ),
                         child: MaterialButton(
-                          onPressed: isButtonDisabled
-                              ? null
-                              : () async {
-                                  setState(() {
-                                    isButtonDisabled = true;
-                                  });
-                                  if (_textController.text.isEmpty) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('Campo vacío'),
-                                          content: const Text(
-                                              'Por favor, escriba qué sucedió.'),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text(
-                                                'Aceptar',
-                                                style: TextStyle(
-                                                    color: Color(0xFF6165FA)),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                    return;
-                                  }
-                                  try {
-                                    await publicaciones.createPublication(
-                                      reporte.tipo,
-                                      _textController.text,
-                                      reporte.color,
-                                      reporte.icon,
-                                      !isIconicActivated,
-                                      true,
-                                      authService.state.usuario!.uid,
-                                      authService.state.usuario!.nombre,
-                                      imagePaths ?? [],
-                                    );
-                                  } catch (e) {
-                                    print('Error: $e');
-                                    return;
-                                  }
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
+                          onPressed: () async {
+                            _focusNode.unfocus(); // Hide the keyboard
+                            final text = _textController.text.trim();
+
+                            if (text.isEmpty && !isErrorMessageShown) {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Campo vacío'),
+                                    content: const Text(
+                                      'Por favor, escriba qué sucedió.',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text(
+                                          'Aceptar',
+                                          style: TextStyle(
+                                            color: Color(0xFF6165FA),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
                                 },
+                              );
+
+                              setState(() {
+                                isErrorMessageShown = true;
+                              });
+                            } else if (text.isNotEmpty) {
+                              try {
+                                await publicaciones.createPublication(
+                                  reporte.tipo,
+                                  text,
+                                  reporte.color,
+                                  reporte.icon,
+                                  !isIconicActivated,
+                                  true,
+                                  authService.state.usuario!.uid,
+                                  authService.state.usuario!.nombre,
+                                  imagePaths ?? [],
+                                );
+                                Fluttertoast.showToast(
+                                  msg: 'Reporte publicado en noticias',
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 2,
+                                  backgroundColor: const Color(0xFF6165FA),
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              } catch (e) {
+                                print('Error: $e');
+                                return;
+                              }
+                            }
+                          },
                           child: Row(
                             children: const [
                               Icon(

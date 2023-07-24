@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/members/members_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -92,19 +93,19 @@ class _MienbrosChatScreenState extends State<MienbrosChatScreen> {
                 ),
           leading: CircleAvatar(
             backgroundColor: Colors.grey,
-            backgroundImage:
-                miembro.img != null ? NetworkImage(miembro.img!) : null,
-            child: miembro.img == null
-                ? const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  )
-                : null,
+            backgroundImage: miembro.google
+                ? NetworkImage(miembro.img!)
+                : miembro.img == null
+                    ? const AssetImage('assets/no-image.png') as ImageProvider
+                    : NetworkImage(
+                        '${Environment.apiUrl}/uploads/usuario/usuarios/${miembro.uid}'),
           ),
           title: Row(
             children: [
               Text(
-                miembro.nombre,
+                miembro.nombre.length <= 15
+                    ? miembro.nombre
+                    : miembro.nombre.substring(0, 15),
                 style: const TextStyle(
                   color: Colors.black87,
                   fontWeight: FontWeight.bold,
@@ -115,7 +116,7 @@ class _MienbrosChatScreenState extends State<MienbrosChatScreen> {
               ),
               roomBloc.state.salaSeleccionada.propietario == miembro.uid
                   ? const Text(
-                      '(Administador)',
+                      '(Administrador)',
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: 12,

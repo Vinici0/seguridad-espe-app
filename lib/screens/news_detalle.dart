@@ -79,11 +79,12 @@ class _DetalleScreenState extends State<DetalleScreen> {
     CommentPublication comment = CommentPublication(
       comentario: payload['mensaje'],
       nombre: payload['nombre'],
-      fotoPerfil: payload['fotoPerfil'],
       createdAt: payload['createdAt'],
       uid: payload['uid'],
       isGoogle: payload['isGoogle'],
-      likes: 0,
+      fotoPerfil: payload['fotoPerfil'],
+      uidUsuario: payload['uidUsuario'],
+      likes: [],
       isLiked: false,
     );
 
@@ -122,11 +123,8 @@ class _DetalleScreenState extends State<DetalleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> mapNews =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final publicacion = mapNews['publicacion'] as Publicacion;
     final List<String>? likes = publicationBloc.state.currentPublicacion!.likes;
-
+    final publicacion = publicationBloc.state.currentPublicacion;
     return Container(
       color: Colors.white,
       child: SafeArea(
@@ -136,7 +134,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
             children: [
               CustomScrollView(
                 slivers: [
-                  _CustonAppBarDetalle(publicacion: publicacion),
+                  _CustonAppBarDetalle(publicacion: publicacion!),
                   SliverList(
                     delegate: SliverChildListDelegate([
                       _DescripcionDetalle(publicacion: publicacion),
@@ -153,12 +151,17 @@ class _DetalleScreenState extends State<DetalleScreen> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 40,
+              ),
               Positioned(
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child:
-                    Container(color: Colors.white, child: _inputComentario()),
+                child: Container(
+                  color: Colors.white,
+                  child: _inputComentario(),
+                ),
               ),
             ],
           ),
@@ -249,29 +252,36 @@ class _DetalleScreenState extends State<DetalleScreen> {
     );
   }
 
-  _handleSubmit(String comentario) {
+  _handleSubmit(String comentario) async {
     if (comentario.isEmpty) return;
 
     _textController.clear();
     final createdAt = DateTime.now();
+
+    final resultadoComentario = await publicationBloc.createComentarioService(
+        comentario, publicationBloc.state.currentPublicacion!.uid!);
+
     final newComment = CommentPublication(
       comentario: comentario,
       nombre: authService.state.usuario!.nombre,
-      fotoPerfil: authService.state.usuario!.img,
       createdAt: createdAt.toString(),
-      uid: authService.state.usuario!.uid,
+      uid: resultadoComentario.uid,
       isGoogle: authService.state.usuario!.google,
+      fotoPerfil: authService.state.usuario!.img!,
       isLiked: false,
+      uidUsuario: authService.state.usuario!.uid,
+      likes: [],
     );
 
     authService.socketService.socket.emit('comentario-publicacion', {
       'nombre': authService.state.usuario!.nombre,
       'mensaje': newComment.comentario,
-      'fotoPerfil': authService.state.usuario!.img,
+      'fotoPerfil': authService.state.usuario!.uid,
       'createdAt': createdAt.toString(),
       'para': publicationBloc.state.currentPublicacion!.uid!,
       'de': authService.state.usuario!.uid,
       'isGoogle': authService.state.usuario!.google,
+      'uid': resultadoComentario.uid,
     });
 
     publicationBloc.add(AddCommentPublicationEvent(newComment));
@@ -380,9 +390,7 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
   @override
   Widget build(BuildContext context) {
     final locationBloc = BlocProvider.of<LocationBloc>(context);
-    final Map<String, dynamic> mapNews =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final publicacion = mapNews['publicacion'] as Publicacion;
+    final publicacion = widget.publicacion;
     final searchBloc = BlocProvider.of<SearchBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
     final counterBloc = BlocProvider.of<NavigatorBloc>(context);

@@ -34,17 +34,23 @@ class CustonInput extends StatelessWidget {
         child: TextField(
           controller: this.textController,
           autocorrect: false,
+          maxLength: 30,
           obscureText: this.isPassword,
           keyboardType: this.keyboardType,
           decoration: InputDecoration(
-              prefixIcon: Icon(this.icon, color: Colors.indigo),
-              focusedBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  borderSide: BorderSide(color: Colors.indigo)),
-              enabledBorder: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  borderSide: BorderSide(color: Colors.indigo)),
-              hintText: this.placeholder),
+            prefixIcon: Icon(this.icon, color: Colors.indigo),
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderSide: BorderSide(color: Colors.indigo),
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderSide: BorderSide(color: Colors.indigo),
+            ),
+            hintText: this.placeholder,
+            counterText:
+                '', // Establecer el contador de caracteres como una cadena vacía
+          ),
         ),
       ),
     ]);
