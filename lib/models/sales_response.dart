@@ -10,12 +10,10 @@ class SalesResponse {
   SalesResponse({
     required this.ok,
     required this.salas,
-    required this.totalUsuarios,
   });
 
   bool ok;
   List<Sala> salas;
-  int totalUsuarios;
 
   factory SalesResponse.fromJson(String str) =>
       SalesResponse.fromMap(json.decode(str));
@@ -25,13 +23,11 @@ class SalesResponse {
   factory SalesResponse.fromMap(Map<String, dynamic> json) => SalesResponse(
         ok: json["ok"],
         salas: List<Sala>.from(json["salas"].map((x) => Sala.fromMap(x))),
-        totalUsuarios: json["totalUsuarios"],
       );
 
   Map<String, dynamic> toMap() => {
         "ok": ok,
         "salas": List<dynamic>.from(salas.map((x) => x.toMap())),
-        "totalUsuarios": totalUsuarios,
       };
 }
 
@@ -48,6 +44,8 @@ class Sala {
   String propietario;
   List<String>? usuarios;
   List<Mensaje>? mensajes;
+  int mensajesNoLeidos;
+  int totalUsuarios;
 
   Sala({
     required this.nombre,
@@ -56,14 +54,17 @@ class Sala {
     required this.uid,
     this.idUsuario,
     required this.propietario,
+    required this.mensajesNoLeidos,
     this.usuarios,
     this.mensajes,
+    required this.totalUsuarios,
   });
 
   factory Sala.fromMap(Map<String, dynamic> json) => Sala(
         nombre: json["nombre"],
         uid: json.containsKey("uid") ? json["uid"] : json["_id"],
         codigo: json["codigo"],
+        totalUsuarios: json["totalUsuarios"],
         color: json["color"],
         idUsuario: json["idUsuario"],
         mensajes: json["mensajes"] == null
@@ -73,6 +74,7 @@ class Sala {
             ? []
             : List<String>.from(json["usuarios"]!.map((x) => x)),
         propietario: json["propietario"],
+        mensajesNoLeidos: json["mensajesNoLeidos"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -86,5 +88,7 @@ class Sala {
         "usuarios":
             usuarios == null ? [] : List<dynamic>.from(usuarios!.map((x) => x)),
         "propietario": propietario,
+        "mensajesNoLeidos": mensajesNoLeidos,
+        "totalUsuarios": totalUsuarios,
       };
 }

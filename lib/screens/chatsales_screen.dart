@@ -39,13 +39,15 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     chatProvider = BlocProvider.of<MembersBloc>(context);
     roomBloc = BlocProvider.of<RoomBloc>(context);
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
-
+    authService.actualizarIsOpenRoom(true);
     authService.socketService.socket.emit('join-room', {
       'codigo': roomBloc.state.salaSeleccionada.uid,
     });
 
     _carregarMensajes();
 
+    roomBloc.add(
+        ResetTotalMensajesNoLeidosEvent(roomBloc.state.salaSeleccionada.uid));
     authService.socketService.socket.on('mensaje-grupal', _escucharMensaje);
 
     _firstController.addListener(() {

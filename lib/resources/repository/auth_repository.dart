@@ -40,6 +40,11 @@ class ApiUserRepository {
     // }
   }
 
+  //actualizarIsOpenRoom
+  Future<bool?> actualizarIsOpenRoom(bool isOpenRoom) async {
+    return await _authService.actualizarIsOpenRoom(isOpenRoom);
+  }
+
   //signInWithGoogle
   Future<GoogleSignInAccount?> signInWithGoogle() async {
     return await _authService.signInWithGoogle();

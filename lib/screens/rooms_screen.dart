@@ -108,23 +108,26 @@ class SalaListTitle extends StatelessWidget {
     return ListTile(
       title: Text(sala.nombre),
       //total mensaje no leidos
-      trailing: Container(
-        width: 20,
-        height: 20,
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(100.0),
-        ),
-        child: const Center(
-          child: Text(
-            "5",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 10,
+      trailing: sala.mensajesNoLeidos == 0
+          ? const SizedBox()
+          : Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: Colors.red[500],
+                borderRadius: BorderRadius.circular(100.0),
+              ),
+              child: Center(
+                child: Text(
+                  sala.mensajesNoLeidos.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
+      subtitle: Text(sala.totalUsuarios.toString() + ' miembros'),
 
       leading: Container(
         width: 50,

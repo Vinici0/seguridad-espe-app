@@ -31,12 +31,13 @@ class ChatProvider {
 
   Future<List<Sala>> getSalesAll() async {
     try {
-      final uri =
-          Uri.parse('${Environment.apiUrl}/salas/obtener-salas-usuario');
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/salas/obtener-salas-mensajes-usuario');
       final resp = await http.get(uri, headers: {
         'Content-Type': 'application/json',
         'x-token': await AuthService.getToken() as String,
       });
+      print('resp: ${resp.body}');
       final salesResp = SalesResponse.fromJson(resp.body);
       return salesResp.salas;
     } catch (e) {
@@ -47,6 +48,7 @@ class ChatProvider {
 
   Future<List<Usuario>> getUsuariosSala(String salaID) async {
     try {
+      print(await AuthService.getToken() as String);
       final uri = Uri.parse(
           '${Environment.apiUrl}/salas/obtener-usuarios-sala/$salaID');
       final resp = await http.get(uri, headers: {
@@ -54,6 +56,7 @@ class ChatProvider {
         'x-token': await AuthService.getToken() as String,
       });
       final decodedData = json.decode(resp.body);
+      print('decodedData: $decodedData');
       final usuarios = UsuariosResponse.fromJson(decodedData);
       return usuarios.usuarios;
     } catch (e) {

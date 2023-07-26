@@ -21,7 +21,9 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
         nombre: '',
         codigo: '',
         color: '',
+        totalUsuarios: 0,
         idUsuario: '',
+        mensajesNoLeidos: 0,
         propietario: '',
         uid: ''),
     isLoading: false,
@@ -34,7 +36,9 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
                 nombre: '',
                 codigo: '',
                 color: '',
+                totalUsuarios: 0,
                 idUsuario: '',
+                mensajesNoLeidos: 0,
                 propietario: '',
                 uid: ''),
             isLoading: false,
@@ -47,6 +51,17 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     on<SalaJoinEvent>(_salaJoinEvent);
     on<SalaSelectEvent>(_salaSelectEvent);
     on<ObtenerUsuariosSalaEvent>(_obtenerUsuariosSalaEvent);
+
+    on<ResetTotalMensajesNoLeidosEvent>((event, emit) {
+      final newSalas = [...state.salas];
+      final index = newSalas
+          .indexWhere((element) => element.uid == state.salaSeleccionada.uid);
+      if (index >= 0) {
+        newSalas[index].mensajesNoLeidos = 0;
+      }
+      emit(state.copyWith(salas: newSalas));
+    });
+
     on<RoomLoadingEvent>((event, emit) {
       emit(state.copyWith(isLoading: true));
     });

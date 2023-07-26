@@ -63,6 +63,36 @@ class AuthService {
     }
   }
 
+// router.put("/actualizar-is-open-room", validarJWT, actualizarIsOpenRoom);
+  Future<bool> actualizarIsOpenRoom(bool isOpenRoom) async {
+    try {
+      final data = {
+        'isOpenRoom': isOpenRoom,
+      };
+      final uri =
+          Uri.parse('${Environment.apiUrl}/usuarios/actualizar-is-open-room');
+
+      final resp = await http.put(uri, body: jsonEncode(data), headers: {
+        'Content-Type': 'application/json',
+        'x-token': await getToken() as String,
+      });
+      if (resp.statusCode == 200) {
+        final loginResponse = loginResponseFromJson(resp.body);
+        usuario = loginResponse.usuario;
+        ubicaciones = loginResponse.usuario.ubicacion;
+        await _guardarToken(loginResponse.token);
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      // Aquí puedes manejar el error de la forma que desees
+      print('Error durante el inicio de sesiónn: $error');
+      return false;
+    }
+  }
+
   Future<GoogleSignInAccount?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? account = await _googleSignIn.signIn();
@@ -167,9 +197,8 @@ class AuthService {
   }
 
   Future<void> _guardarToken(String token) async {
-    await _storage.write(key: 'token', value: token);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', token);
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.setString('token', token);
     return await _storage.write(key: 'token', value: token);
   }
 

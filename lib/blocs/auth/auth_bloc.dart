@@ -292,4 +292,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await apiAuthRepository.notificacion(lat, lng);
     add(AuthNotificacionEvent(lat, lng));
   }
+
+  actualizarIsOpenRoom(bool isOpenRoom) async {
+    await apiAuthRepository.actualizarIsOpenRoom(isOpenRoom);
+  }
 }

@@ -19,6 +19,7 @@ class Usuario {
   String? img;
   String createdAt;
   String updatedAt;
+  bool? isOpenRoom;
 
   Usuario({
     required this.online,
@@ -30,6 +31,7 @@ class Usuario {
     required this.uid,
     required this.google,
     this.img,
+    this.isOpenRoom,
     required this.telefonos,
     required this.createdAt,
     required this.updatedAt,
@@ -44,6 +46,7 @@ class Usuario {
         img: json["img"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
+        isOpenRoom: json["isOpenRoom"],
         telefonos: List<String>.from(json["telefonos"].map((x) => x)),
         tokenApp: json["tokenApp"],
         ubicacion: List<Ubicacion>.from(
@@ -59,6 +62,7 @@ class Usuario {
         "telefono": telefono,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
+        "isOpenRoom": isOpenRoom,
         "img": img,
         "telefonos": List<dynamic>.from(telefonos.map((x) => x)),
         "tokenApp": tokenApp,

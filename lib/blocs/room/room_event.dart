@@ -91,3 +91,10 @@ class AbandonarSalaEvent extends RoomEvent {
   @override
   List<Object> get props => [uid];
 }
+
+class ResetTotalMensajesNoLeidosEvent extends RoomEvent {
+  final String uid;
+  const ResetTotalMensajesNoLeidosEvent(this.uid);
+  @override
+  List<Object> get props => [uid];
+}
