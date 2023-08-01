@@ -16,7 +16,6 @@ class SocketService {
   void connect() async {
     final token = await AuthService.getToken();
 
-    // Dart client
     _socket = IO.io(Environment.socketUrl, {
       'transports': ['websocket'],
       'autoConnect': true,

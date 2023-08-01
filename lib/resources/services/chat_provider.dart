@@ -165,11 +165,33 @@ class ChatProvider {
         'Content-Type': 'application/json',
         'x-token': await AuthService.getToken() as String,
       });
+
       final decodedData = json.decode(resp.body);
       final salaResp = Sala.fromMap(decodedData['sala']);
       return salaResp.uid == salaID;
     } catch (e) {
       print('Error en abandonarSala: $e');
+      return false;
+    }
+  }
+
+  Future<bool> cambiarEstadoSala(String salaID, bool estado) async {
+    try {
+      final body = json.encode({
+        'isRoomOpen': estado,
+      });
+
+      final uri =
+          Uri.parse('${Environment.apiUrl}/salas/cambiar-estado-sala/$salaID');
+      final resp = await http.put(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': await AuthService.getToken() as String,
+          },
+          body: body);
+      return resp.statusCode == 200;
+    } catch (e) {
+      print('Error en cambiarEstadoSala: $e');
       return false;
     }
   }

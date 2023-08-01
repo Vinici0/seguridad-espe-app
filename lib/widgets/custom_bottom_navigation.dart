@@ -9,6 +9,7 @@ class CustomBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mapBloc = BlocProvider.of<MapBloc>(context);
+    final authService = BlocProvider.of<AuthBloc>(context);
     return BlocBuilder<NavigatorBloc, NavigatorStateInit>(
       builder: (context, state) {
         return BottomNavigationBar(
@@ -27,6 +28,10 @@ class CustomBottomNavigation extends StatelessWidget {
             mapBloc.add(OnMapMovedEvent());
             BlocProvider.of<SearchBloc>(context)
                 .add(OnDeactivateManualMarkerEvent());
+
+            if (i == 1) {
+              authService.add(const MarcarPublicacionPendienteFalse());
+            }
           },
           items: [
             const BottomNavigationBarItem(
@@ -34,31 +39,38 @@ class CustomBottomNavigation extends StatelessWidget {
               label: 'Mapa',
             ),
             BottomNavigationBarItem(
-              icon: Stack(
-                children: [
-                  const Icon(FontAwesomeIcons.newspaper),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                        left: 5, // Ajusta estos valores para mover el punto
-                        right: 5, // en la dirección deseada
-                        top: 2,
-                        bottom: 2,
+              icon: BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, states) {
+                  return Stack(
+                    children: [
+                      const Icon(FontAwesomeIcons.newspaper),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: states.usuario!.isPublicacionPendiente == true
+                            ? Container(
+                                padding: const EdgeInsets.only(
+                                  left:
+                                      5, // Ajusta estos valores para mover el punto
+                                  right: 5, // en la dirección deseada
+                                  top: 2,
+                                  bottom: 2,
+                                ),
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors
+                                      .red, // Puedes cambiar el color del punto aquí
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 9,
+                                  minHeight: 9,
+                                ),
+                              )
+                            : const SizedBox(),
                       ),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors
-                            .red, // Puedes cambiar el color del punto aquí
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 9,
-                        minHeight: 9,
-                      ),
-                    ),
-                  ),
-                ],
+                    ],
+                  );
+                },
               ),
               label: 'Noticias',
             ),

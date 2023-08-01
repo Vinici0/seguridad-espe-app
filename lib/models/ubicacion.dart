@@ -54,20 +54,39 @@ class Ubicacion {
     this.referencia,
     this.parroquia,
   });
+  factory Ubicacion.fromMap(Map<String, dynamic> json) {
+    print('Ubicacion.fromMap: $json');
+    try {
+      final latitud = json["latitud"];
+      final longitud = json["longitud"];
 
-  factory Ubicacion.fromMap(Map<String, dynamic> json) => Ubicacion(
-        latitud: json["latitud"]?.toDouble(),
-        longitud: json["longitud"]?.toDouble(),
+      return Ubicacion(
+        latitud: (latitud is double)
+            ? latitud
+            : (latitud is int)
+                ? latitud.toDouble()
+                : 0.0,
+        longitud: (longitud is double)
+            ? longitud
+            : (longitud is int)
+                ? longitud.toDouble()
+                : 0.0,
         barrio: json["barrio"],
         ciudad: json["ciudad"],
         pais: json["pais"],
         estado: json["estado"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
-        uid: json["uid"],
+        uid: json.containsKey("uid") ? json["uid"] : json["_id"],
         referencia: json["referencia"],
         parroquia: json["parroquia"],
       );
+    } catch (e) {
+      print(
+          'Error durante el parsing del JSON en Ubicacion.fromMap: $e'); // Agregar este print para ver el error
+      rethrow;
+    }
+  }
 
   Map<String, dynamic> toMap() => {
         "latitud": latitud,
@@ -78,7 +97,7 @@ class Ubicacion {
         "estado": estado,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
-        "uid": uid,
+        "_id": uid,
         "referencia": referencia,
         "parroquia": parroquia,
       };

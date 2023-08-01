@@ -11,6 +11,8 @@ import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
 import 'package:intl/intl.dart';
 
+enum ServerStatus { Online, Offline, Connecting }
+
 class ChatScreen extends StatefulWidget {
   static const String chatsalesroute = 'chatsales';
 
@@ -38,16 +40,14 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   void initState() {
     chatProvider = BlocProvider.of<MembersBloc>(context);
     roomBloc = BlocProvider.of<RoomBloc>(context);
+
     authService = BlocProvider.of<AuthBloc>(context, listen: false);
-    authService.actualizarIsOpenRoom(true);
     authService.socketService.socket.emit('join-room', {
       'codigo': roomBloc.state.salaSeleccionada.uid,
     });
 
     _carregarMensajes();
 
-    roomBloc.add(
-        ResetTotalMensajesNoLeidosEvent(roomBloc.state.salaSeleccionada.uid));
     authService.socketService.socket.on('mensaje-grupal', _escucharMensaje);
 
     _firstController.addListener(() {
@@ -66,6 +66,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   _carregarMensajes() async {
     await chatProvider.cargarMensajes(
         roomBloc.state.salaSeleccionada.uid); //carga los mensajes
+
+    await roomBloc.cambiarEstadoSala(true);
+
+    //Si el socket esta desconectado, lo conecta
+    if (authService.socketService.serverStatus == ServerStatus.Offline) {
+      authService.socketService.connect();
+    }
   }
 
   void _escucharMensaje(dynamic payload) {
@@ -342,7 +349,13 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
     chatProvider.closeList();
     authService.socketService.socket.off('mensaje-grupal');
+    _executeAsyncProcessOnExit();
+
     super.dispose();
+  }
+
+  Future<void> _executeAsyncProcessOnExit() async {
+    await roomBloc.cambiarEstadoSala(false);
   }
 }
 

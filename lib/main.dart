@@ -9,25 +9,37 @@ import 'package:flutter_maps_adv/resources/services/traffic_service.dart';
 import 'package:flutter_maps_adv/routes/routes.dart';
 import 'package:flutter_maps_adv/screens/loading_login_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //Lo primero que se ejecuta en la app
+
+  // Solicitar permisos de notificación si es la primera vez que se abre la app
+  final status = await Permission.notification.request();
+  if (status.isGranted) {
+    print('Permisos de notificación concedidos');
+  }
+
+  // Inicializar el servicio de notificaciones
   await PushNotificationService.initializeApp();
-  runApp(MultiBlocProvider(providers: [
-    BlocProvider(create: (context) => AuthBloc()),
-    BlocProvider(create: (context) => GpsBloc()),
-    BlocProvider(create: (context) => LocationBloc()),
-    BlocProvider(create: (context) => PublicationBloc()),
-    BlocProvider(create: (context) => MembersBloc()),
-    BlocProvider(create: (context) => RoomBloc()),
-    BlocProvider(create: (context) => NavigatorBloc()),
-    BlocProvider(
-        create: (context) => SearchBloc(trafficService: TrafficService())),
-    BlocProvider(
-        create: (context) =>
-            MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
-  ], child: const MyApp()));
+
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (context) => AuthBloc()),
+      BlocProvider(create: (context) => GpsBloc()),
+      BlocProvider(create: (context) => LocationBloc()),
+      BlocProvider(create: (context) => PublicationBloc()),
+      BlocProvider(create: (context) => MembersBloc()),
+      BlocProvider(create: (context) => RoomBloc()),
+      BlocProvider(create: (context) => NavigatorBloc()),
+      BlocProvider(
+          create: (context) => SearchBloc(trafficService: TrafficService())),
+      BlocProvider(
+          create: (context) =>
+              MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context))),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {

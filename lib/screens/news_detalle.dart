@@ -267,7 +267,9 @@ class _DetalleScreenState extends State<DetalleScreen> {
       createdAt: createdAt.toString(),
       uid: resultadoComentario.uid,
       isGoogle: authService.state.usuario!.google,
-      fotoPerfil: authService.state.usuario!.img!,
+      fotoPerfil: authService.state.usuario!.img == null
+          ? null
+          : authService.state.usuario!.img!,
       isLiked: false,
       uidUsuario: authService.state.usuario!.uid,
       likes: [],
@@ -435,8 +437,11 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
                         width: 5,
                       ),
                       Text(
-                        DateFormat('HH:mm').format(DateTime.parse(
-                            widget.publicacion.createdAt.toString())),
+                        //hora conn import 'timeago; HH:mm
+                        timeago.format(
+                            DateTime.parse(
+                                widget.publicacion.createdAt.toString()),
+                            locale: 'es_short'),
                         style: const TextStyle(color: Colors.white),
                       )
                     ],

@@ -127,3 +127,17 @@ class UpdateUsuarioNewTelefonoOrNombreEvent extends AuthEvent {
   @override
   List<Object> get props => [nombre, telefono];
 }
+
+class IsPublicacionPendiente extends AuthEvent {
+  final bool isPublicacionPendiente;
+  const IsPublicacionPendiente(this.isPublicacionPendiente);
+  @override
+  List<Object> get props => [isPublicacionPendiente];
+}
+
+//marcarPublicacionPendienteFalse
+class MarcarPublicacionPendienteFalse extends AuthEvent {
+  const MarcarPublicacionPendienteFalse();
+  @override
+  List<Object> get props => [];
+}

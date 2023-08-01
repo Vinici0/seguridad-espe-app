@@ -42,16 +42,20 @@ class AuthService {
       };
       final uri = Uri.parse('${Environment.apiUrl}/login');
 
+      print('usuario:  todo bien1 ');
       final resp = await http.post(uri,
           body: jsonEncode(data),
           headers: {'Content-Type': 'application/json'});
       autenticando = false;
+      // print(resp.body);
       if (resp.statusCode == 200) {
+        print('usuario:  todo bien2 ');
         final loginResponse = loginResponseFromJson(resp.body);
+        print('usuario:  todo bien3 ');
         usuario = loginResponse.usuario;
         ubicaciones = loginResponse.usuario.ubicacion;
         await _guardarToken(loginResponse.token);
-
+        print('usuario:  todo bien4 ');
         return true;
       } else {
         return false;
@@ -76,12 +80,8 @@ class AuthService {
         'Content-Type': 'application/json',
         'x-token': await getToken() as String,
       });
-      if (resp.statusCode == 200) {
-        final loginResponse = loginResponseFromJson(resp.body);
-        usuario = loginResponse.usuario;
-        ubicaciones = loginResponse.usuario.ubicacion;
-        await _guardarToken(loginResponse.token);
 
+      if (resp.statusCode == 200) {
         return true;
       } else {
         return false;
@@ -114,17 +114,22 @@ class AuthService {
       print(resp.body);
 
       if (resp.statusCode == 200) {
+        print('ok login google');
+        print(resp.body);
         final loginResponse = loginResponseFromJson(resp.body);
+
         usuario = loginResponse.usuario;
         ubicaciones = loginResponse.usuario.ubicacion;
         await _guardarToken(loginResponse.token);
 
         return account;
       } else {
+        print('ok login google false');
         return null;
       }
     } catch (e) {
       print(e);
+      print('ok login error');
       return null;
     }
   }
@@ -188,6 +193,7 @@ class AuthService {
       final loginResponse = loginResponseFromJson(resp.body);
       usuario = loginResponse.usuario;
       ubicaciones = loginResponse.usuario.ubicacion;
+      print('token: ${loginResponse.token}');
       await _guardarToken(loginResponse.token);
       return true;
     } else {
@@ -223,8 +229,6 @@ class AuthService {
     });
 
     if (resp.statusCode == 200) {
-      final ubicacionResponse = ubicacionResponseFromMap(resp.body);
-      ubicaciones = ubicacionResponse.ubicacion;
       return true;
     } else {
       return false;
@@ -358,6 +362,27 @@ class AuthService {
       usuario = usuarioResponse.usuario;
       return true;
     } else {
+      return false;
+    }
+  }
+
+  //router.put("/marcar-publicacion-pendiente-false", validarJWT, marcarPublicacionPendienteFalse );
+  Future<bool> marcarPublicacionPendienteFalse() async {
+    try {
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/usuarios/marcar-publicacion-pendiente-false');
+      final resp = await http.put(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await getToken() as String,
+      });
+
+      if (resp.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en marcarPublicacionPendienteFalse: $e');
       return false;
     }
   }

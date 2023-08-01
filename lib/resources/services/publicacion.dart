@@ -44,7 +44,7 @@ class PublicacionService {
       return publicacionesResp.publicacion;
     } catch (e) {
       print('Error: $e');
-      return []; 
+      return [];
     }
   }
 
@@ -104,11 +104,11 @@ class PublicacionService {
             : placemarks[0].locality! == ""
                 ? 'S/N'
                 : placemarks[0].locality!,
-        barrio: placemarks[0].subAdministrativeArea == null
+        barrio: placemarks[0].street == null
             ? 'S/N'
-            : placemarks[0].subAdministrativeArea! == ""
+            : placemarks[0].street! == ""
                 ? 'S/N'
-                : placemarks[0].subAdministrativeArea!,
+                : placemarks[0].street!,
         isPublic: isPublic,
         usuario: usuario,
         imgAlerta: imgAlerta,

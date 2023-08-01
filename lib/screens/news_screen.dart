@@ -238,7 +238,6 @@ class _ListNews extends StatelessWidget {
                                       width: double.infinity,
                                       height: size.height * 0.35,
                                       decoration: BoxDecoration(
-                                        color: Colors.red,
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(9.0),
                                         ),
@@ -247,8 +246,11 @@ class _ListNews extends StatelessWidget {
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(9.0),
                                         ),
-                                        child: Image.network(
-                                          "${Environment.apiUrl}/uploads/publicaciones/${publicaciones[i].uid!}?imagenIndex=${publicaciones[i].imagenes!.first}",
+                                        child: FadeInImage(
+                                          placeholder: AssetImage(
+                                              'assets/jar-loading.gif'),
+                                          image: NetworkImage(
+                                              "${Environment.apiUrl}/uploads/publicaciones/${publicaciones[i].uid!}?imagenIndex=${publicaciones[i].imagenes!.first}"),
                                           fit: BoxFit.cover,
                                         ),
                                       ),

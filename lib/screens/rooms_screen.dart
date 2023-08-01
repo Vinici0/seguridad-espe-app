@@ -14,6 +14,7 @@ class RoomsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final roonBloc = BlocProvider.of<RoomBloc>(context);
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
@@ -35,7 +36,7 @@ class RoomsScreen extends StatelessWidget {
             color: Colors.white,
             child: RefreshIndicator(
               onRefresh: () async {
-                // roonBloc.add(SalasInitEvent());
+                roonBloc.salasInitEvent();
               },
               color: const Color(0xFF6165FA),
               child: Column(
@@ -108,7 +109,7 @@ class SalaListTitle extends StatelessWidget {
     return ListTile(
       title: Text(sala.nombre),
       //total mensaje no leidos
-      trailing: sala.mensajesNoLeidos == 0
+      trailing: sala.mensajesNoLeidos == 0 || sala.mensajesNoLeidos == null
           ? const SizedBox()
           : Container(
               width: 20,
@@ -127,7 +128,7 @@ class SalaListTitle extends StatelessWidget {
                 ),
               ),
             ),
-      subtitle: Text(sala.totalUsuarios.toString() + ' miembros'),
+      subtitle: Text('${sala.totalUsuarios} miembros'),
 
       leading: Container(
         width: 50,
@@ -157,8 +158,10 @@ class SalaListTitle extends StatelessWidget {
         ),
       ),
       onTap: () {
+        print("sala seleccionada ${sala.nombre}");
         membersBloc.add(ChatInitEvent());
         salasService.add(SalaSelectEvent(sala));
+        salasService.add(ResetTotalMensajesNoLeidosEvent(sala.uid));
         Navigator.of(context).push(_createRoute(const ChatScreen()));
       },
     );

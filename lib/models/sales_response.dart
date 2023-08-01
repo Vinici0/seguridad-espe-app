@@ -36,16 +36,16 @@ Sala salaFromMap(String str) => Sala.fromMap(json.decode(str));
 String salaToMap(Sala data) => json.encode(data.toMap());
 
 class Sala {
-  String uid;
-  String nombre;
+  int totalUsuarios;
+  int? mensajesNoLeidos;
+  List<Mensaje>? mensajes;
+  List<String>? usuarios;
   String codigo;
   String color;
-  String? idUsuario;
+  String nombre;
   String propietario;
-  List<String>? usuarios;
-  List<Mensaje>? mensajes;
-  int mensajesNoLeidos;
-  int totalUsuarios;
+  String uid;
+  String? idUsuario;
 
   Sala({
     required this.nombre,
@@ -54,13 +54,16 @@ class Sala {
     required this.uid,
     this.idUsuario,
     required this.propietario,
-    required this.mensajesNoLeidos,
+    this.mensajesNoLeidos,
     this.usuarios,
     this.mensajes,
     required this.totalUsuarios,
   });
 
-  factory Sala.fromMap(Map<String, dynamic> json) => Sala(
+  factory Sala.fromMap(Map<String, dynamic> json) {
+    print('Sala.fromMap: $json');
+    try {
+      return Sala(
         nombre: json["nombre"],
         uid: json.containsKey("uid") ? json["uid"] : json["_id"],
         codigo: json["codigo"],
@@ -72,10 +75,23 @@ class Sala {
             : List<Mensaje>.from(json["mensajes"]!.map((x) => x)),
         usuarios: json["usuarios"] == null
             ? []
-            : List<String>.from(json["usuarios"]!.map((x) => x)),
+            : List<String>.from(json["usuarios"].map((x) => x)),
         propietario: json["propietario"],
         mensajesNoLeidos: json["mensajesNoLeidos"],
       );
+    } catch (e) {
+      // Manejo de excepciones aquí, si es necesario
+      print("Error al convertir el JSON a Sala: $e");
+      return Sala(
+        nombre: '',
+        codigo: '',
+        color: '',
+        uid: '',
+        propietario: '',
+        totalUsuarios: 0,
+      );
+    }
+  }
 
   Map<String, dynamic> toMap() => {
         "nombre": nombre,

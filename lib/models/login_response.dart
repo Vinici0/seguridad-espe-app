@@ -24,10 +24,9 @@ class LoginResponse {
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     final token = json["token"] as String? ?? '';
-    print('Token value: $token');
 
     return LoginResponse(
-      ok: json["ok"],
+      ok: json["ok"] ?? false, // Use the default value (false) if ok is null
       usuario: Usuario.fromJson(json["usuario"]),
       token: token,
     );

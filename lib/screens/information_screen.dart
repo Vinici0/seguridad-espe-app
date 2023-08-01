@@ -69,7 +69,7 @@ class _InformationScreenState extends State<InformationScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              "Por favor complete su perfil de información de emergencia",
+              "Para brindar una respuesta rápida en situaciones de emergencia, le solicitamos que ingrese su número de teléfono.",
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 color: Color.fromRGBO(0, 0, 0, 0.782),
@@ -123,6 +123,7 @@ class _InformationScreenState extends State<InformationScreen> {
                 Expanded(
                   child: TextField(
                     controller: telefonoController,
+                    maxLength: 10,
                     decoration: const InputDecoration(
                       labelText: 'Teléfono',
                       labelStyle: TextStyle(

@@ -65,6 +65,7 @@ class _InformationFamilyState extends State<InformationFamily> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
         centerTitle: false,
@@ -97,7 +98,7 @@ class _InformationFamilyState extends State<InformationFamily> {
                           child: image1),
                     ),
                     const Text(
-                      "Agrega los números de teléfono de tus contactos en caso de emergencia para que puedan recibir alertas de tus seres queridos. Solo los números que hayas añadido serán notificados una vez que presiones el botón de SOS.",
+                      "Agrega los números de teléfono de tus contactos en caso de emergencia, para que puedan recibir alertas de tus seres queridos. Solo los números que hayas añadido serán notificados una vez que presiones el botón de SOS.",
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         color: Color.fromRGBO(0, 0, 0, 0.782),
@@ -125,20 +126,24 @@ class _InformationFamilyState extends State<InformationFamily> {
                                   mostrarAlerta(
                                     context,
                                     'Número ya registrado',
-                                    'El número que intenta registrar ya se encuentra registrado.',
+                                    'El número que estás intentando ingresar ya se encuentra registrado.',
                                   );
                                   return;
                                 }
+
+                                if (authService.state.usuario?.telefono ==
+                                    telefonoController.text.trim()) {
+                                  mostrarAlerta(
+                                    context,
+                                    'Número ya registrado',
+                                    'No puedes agregar tu propio número de teléfono.',
+                                  );
+                                  return;
+                                }
+
                                 authService.addTelefonoFamily(
                                     telefonoController.text.trim());
                                 telefonoController.clear();
-                                setState(() {
-                                  //agregar al array de telefonos
-                                  telefonos.add(telefonoController.text.trim());
-                                  telefonos =
-                                      authService.state.usuario?.telefonos ??
-                                          [];
-                                });
                               },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF6165FA),
@@ -167,34 +172,35 @@ class _InformationFamilyState extends State<InformationFamily> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        if (Platform.isIOS) {
-          return CupertinoAlertDialog(
-            title: Text(titulo),
-            content: Text(mensaje),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                child: const Text('Cerrar'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+        return AlertDialog(
+          title: Text(
+            titulo,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF6165FA), // Un color atractivo
+            ),
+          ),
+          content: Text(
+            mensaje,
+            style: const TextStyle(fontSize: 16),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Cerrar',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(
+                      0xFF6165FA), // Mismo color que el título para coherencia
+                ),
               ),
-            ],
-          );
-        } else {
-          return AlertDialog(
-            title: Text(titulo),
-            content: Text(mensaje),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Cerrar',
-                    style: TextStyle(color: Color(0xFF6165FA))),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        }
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
       },
     );
   }
@@ -209,7 +215,6 @@ class _TextFieldAddTelefono extends StatelessWidget {
   final TextEditingController telefonoController;
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context).size.width;
     return Row(
       children: [
         Row(
@@ -277,6 +282,7 @@ class _TextFieldAddTelefono extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class _ListContact extends StatelessWidget {
   _ListContact({
     Key? key,
@@ -324,7 +330,8 @@ class _ListContact extends StatelessWidget {
             ),
             trailing: IconButton(
               onPressed: () {
-                _showDeleteConfirmationDialog(context, index);
+                _showDeleteConfirmationDialog(
+                    context, state.usuario?.telefonos[index] ?? '');
               },
               icon: const Icon(
                 Icons.delete,
@@ -337,31 +344,57 @@ class _ListContact extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context, int index) {
+  void _showDeleteConfirmationDialog(BuildContext context, String telefono) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Confirmar Eliminación'),
-          content:
-              const Text('¿Estás seguro de que deseas eliminar este elemento?'),
+          title: const Text(
+            'Confirmar Eliminación',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.black87,
+            ),
+          ),
+          content: const Text(
+            '¿Estás seguro de que deseas eliminar este número de teléfono?',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black54,
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // Cerrar el diálogo
+                Navigator.pop(context); // Cerrar el diálogo sin eliminar
               },
-              child: const Text('Cancelar',
-                  style: TextStyle(color: Color(0xFF6165FA))),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.grey,
+              ),
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             TextButton(
               onPressed: () {
-                // Eliminar el elemento de la lista y cerrar el diálogo
-                authService.deleteTelefonoFamily(telefonos[index]);
-                telefonos = authService.state.usuario?.telefonos ?? [];
-                Navigator.pop(context);
+                authService.deleteTelefonoFamily(telefono);
+                Navigator.pop(context); // Cerrar el diálogo después de eliminar
               },
-              child: const Text('Eliminar',
-                  style: TextStyle(color: Color(0xFF6165FA))),
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFF6165FA),
+              ),
+              child: const Text(
+                'Eliminar',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         );

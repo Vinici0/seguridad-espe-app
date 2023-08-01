@@ -52,15 +52,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     on<SalaSelectEvent>(_salaSelectEvent);
     on<ObtenerUsuariosSalaEvent>(_obtenerUsuariosSalaEvent);
 
-    on<ResetTotalMensajesNoLeidosEvent>((event, emit) {
-      final newSalas = [...state.salas];
-      final index = newSalas
-          .indexWhere((element) => element.uid == state.salaSeleccionada.uid);
-      if (index >= 0) {
-        newSalas[index].mensajesNoLeidos = 0;
-      }
-      emit(state.copyWith(salas: newSalas));
-    });
+    on<ResetTotalMensajesNoLeidosEvent>(_resetTotalMensajesNoLeidosEvent);
 
     on<RoomLoadingEvent>((event, emit) {
       emit(state.copyWith(isLoading: true));
@@ -117,6 +109,17 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     emit(state.copyWith(isLoading: true));
   }
 
+  FutureOr<void> _resetTotalMensajesNoLeidosEvent(
+      ResetTotalMensajesNoLeidosEvent event, Emitter<RoomState> emit) async {
+    emit(state.copyWith(isLoading: true));
+    final newSalas = [...state.salas];
+    final index = newSalas.indexWhere((element) => element.uid == event.uid);
+    if (index >= 0) {
+      newSalas[index].mensajesNoLeidos = 0;
+    }
+    emit(state.copyWith(salas: newSalas, isLoading: false));
+  }
+
   salasInitEvent() async {
     add(RoomLoadingEvent());
     final salas = await _chatProvider.getSalesAll();
@@ -132,5 +135,15 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     final newSalas = [...state.salas, sala];
     add(SalaJoinEvent(newSalas));
     return true;
+  }
+
+  // Future<bool> cambiarEstadoSala(String salaID, bool estado)
+  cambiarEstadoSala(bool estado) async {
+    try {
+      await _chatProvider.cambiarEstadoSala(state.salaSeleccionada.uid, estado);
+    } catch (e) {
+      print('Error en cambiarEstadoSala: $e');
+      return false;
+    }
   }
 }

@@ -8,18 +8,21 @@ String usuarioToJson(Usuario data) => json.encode(data.toJson());
 
 class Usuario {
   bool google;
+  bool isActivo;
+  bool isPublicacionPendiente;
   bool online;
+  bool? isOpenRoom;
   List<String> telefonos;
   List<Ubicacion> ubicacion;
+  List<Salas>? salas;
+  String createdAt;
   String email;
   String nombre;
-  String? telefono;
   String tokenApp;
   String uid;
-  String? img;
-  String createdAt;
   String updatedAt;
-  bool? isOpenRoom;
+  String? img;
+  String? telefono;
 
   Usuario({
     required this.online,
@@ -32,9 +35,12 @@ class Usuario {
     required this.google,
     this.img,
     this.isOpenRoom,
+    this.salas,
+    required this.isActivo,
     required this.telefonos,
     required this.createdAt,
     required this.updatedAt,
+    required this.isPublicacionPendiente,
   });
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
@@ -45,8 +51,14 @@ class Usuario {
         telefono: json["telefono"],
         img: json["img"],
         createdAt: json["createdAt"],
+        isActivo: json["isActivo"],
         updatedAt: json["updatedAt"],
-        isOpenRoom: json["isOpenRoom"],
+        salas: json["salas"] == null
+            ? []
+            : List<Salas>.from(json["salas"]!.map((x) => Salas.fromMap(x))),
+        isOpenRoom:
+            json["isOpenRoom"] != null ? json["isOpenRoom"] as bool : false,
+        isPublicacionPendiente: json["isPublicacionPendiente"],
         telefonos: List<String>.from(json["telefonos"].map((x) => x)),
         tokenApp: json["tokenApp"],
         ubicacion: List<Ubicacion>.from(
@@ -55,84 +67,55 @@ class Usuario {
       );
 
   Map<String, dynamic> toJson() => {
-        "online": online,
-        "google": google,
+        "online": online ?? false,
+        "google": google ?? false,
         "nombre": nombre,
         "email": email,
         "telefono": telefono,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
-        "isOpenRoom": isOpenRoom,
+        "isOpenRoom": isOpenRoom ?? false,
+        "salas": salas == null
+            ? []
+            : List<dynamic>.from(salas!.map((x) => x.toMap())),
+        "isPublicacionPendiente": isPublicacionPendiente ?? false,
         "img": img,
+        "isActivo": isActivo ?? false,
         "telefonos": List<dynamic>.from(telefonos.map((x) => x)),
         "tokenApp": tokenApp,
         "ubicaciones": List<dynamic>.from(ubicacion.map((x) => x.toMap())),
         "uid": uid,
       };
+}
 
-  //getters y setters
-  bool getOnline() {
-    return online;
-  }
+class Salas {
+  String salaId;
+  int mensajesNoLeidos;
+  dynamic ultimaVezActivo;
+  bool isRoomOpen;
+  String id;
 
-  void setOnline(bool online) {
-    this.online = online;
-  }
+  Salas({
+    required this.salaId,
+    required this.mensajesNoLeidos,
+    this.ultimaVezActivo,
+    required this.isRoomOpen,
+    required this.id,
+  });
 
-  String getNombre() {
-    return nombre;
-  }
+  factory Salas.fromMap(Map<String, dynamic> json) => Salas(
+        salaId: json["salaId"],
+        mensajesNoLeidos: json["mensajesNoLeidos"],
+        ultimaVezActivo: json["ultimaVezActivo"],
+        isRoomOpen: json["isRoomOpen"],
+        id: json["_id"],
+      );
 
-  void setNombre(String nombre) {
-    this.nombre = nombre;
-  }
-
-  String getEmail() {
-    return email;
-  }
-
-  void setEmail(String email) {
-    this.email = email;
-  }
-
-  void setTelefono(String telefono) {
-    this.telefono = telefono;
-  }
-
-  String getTokenApp() {
-    return tokenApp;
-  }
-
-  void setTokenApp(String tokenApp) {
-    this.tokenApp = tokenApp;
-  }
-
-  List<Ubicacion> getUbicacion() {
-    return ubicacion;
-  }
-
-  void setUbicacion(List<Ubicacion> ubicacion) {
-    this.ubicacion = ubicacion;
-  }
-
-  String getUid() {
-    return uid;
-  }
-
-  void setUid(String uid) {
-    this.uid = uid;
-  }
-
-  List<String> getTelefonos() {
-    return telefonos;
-  }
-
-  void setTelefonos(List<String> telefonos) {
-    this.telefonos = telefonos;
-  }
-
-  @override
-  String toString() {
-    return 'Usuario{online: $online, nombre: $nombre, email: $email, uid: $uid}';
-  }
+  Map<String, dynamic> toMap() => {
+        "salaId": salaId,
+        "mensajesNoLeidos": mensajesNoLeidos,
+        "ultimaVezActivo": ultimaVezActivo,
+        "isRoomOpen": isRoomOpen,
+        "_id": id,
+      };
 }

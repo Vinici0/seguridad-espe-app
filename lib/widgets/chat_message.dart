@@ -4,6 +4,7 @@ import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/resources/services/socket_service.dart';
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChatMessage extends StatelessWidget {
   final String texto;
@@ -160,8 +161,21 @@ class ChatMessage extends StatelessWidget {
   }
 
   String _getFormattedTime() {
-    final messageDate = DateTime.parse(createdAt);
-    final formattedTime = DateFormat('h:mm a').format(messageDate);
-    return formattedTime;
+    //fecha type es
+    final date = DateTime.parse(createdAt);
+    final formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(date);
+
+    //fecha timeago
+    final timeAgo = timeago.format(date, locale: 'es');
+
+    //si es hoy
+    final today = DateTime.now();
+    final difference = today.difference(date);
+
+    if (difference.inDays == 0) {
+      return timeAgo;
+    } else {
+      return formattedDate;
+    }
   }
 }

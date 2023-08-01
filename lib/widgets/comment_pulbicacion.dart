@@ -10,7 +10,7 @@ class CommentPublication extends StatefulWidget {
   final String uid;
   final String comentario;
   final String nombre;
-  final String fotoPerfil;
+  final String? fotoPerfil;
   final String createdAt;
   final bool isGoogle;
   final List<String> likes;
@@ -21,7 +21,7 @@ class CommentPublication extends StatefulWidget {
     required this.uidUsuario,
     required this.comentario,
     required this.nombre,
-    required this.fotoPerfil,
+    this.fotoPerfil,
     required this.createdAt,
     required this.isGoogle,
     required this.isLiked,
@@ -68,8 +68,7 @@ class _CommentPublicationState extends State<CommentPublication> {
                 widget.isGoogle == true
                     ? CircleAvatar(
                         radius: 15,
-                        backgroundImage: NetworkImage(widget.fotoPerfil),
-                      )
+                        backgroundImage: NetworkImage(widget.fotoPerfil!))
                     : widget.fotoPerfil == null
                         ? const CircleAvatar(
                             radius: 15,

@@ -7,6 +7,7 @@ import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/information_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoadingLoginScreen extends StatelessWidget {
   static const String loadingroute = 'loadingLogin';
@@ -28,24 +29,44 @@ class LoadingLoginScreen extends StatelessWidget {
   }
 
   Future<void> checkLoginState(BuildContext context) async {
-    final authService = BlocProvider.of<AuthBloc>(context);
-    final roomBloc = BlocProvider.of<RoomBloc>(context);
-    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
-    BlocProvider.of<NavigatorBloc>(context)
-        .add(const NavigatorIndexEvent(index: 0));
-    final result = await authService.init();
-    await roomBloc.salasInitEvent();
-    await publicationBloc.getAllPublicaciones();
-    final usuario = authService.apiAuthRepository.usuario;
+    final sharedPreferences = await SharedPreferences.getInstance();
 
-    if (result) {
-      if (usuario?.telefono == null) {
-        navigateToReplacement(context, const InformationScreen());
-      } else {
-        navigateToReplacement(context, const HomeScreen());
-      }
-    } else {
+    // Verificar si es el primer lanzamiento almacenando un valor en SharedPreferences
+    bool isFirstLaunch = sharedPreferences.getBool('isFirstLaunch') ?? true;
+
+    if (isFirstLaunch) {
+      // Si es el primer lanzamiento, enviar al usuario a la pantalla de inicio de sesión
       navigateToReplacement(context, const LoginScreen());
+
+      // Actualizar el valor para indicar que la aplicación ya ha sido lanzada antes
+      await sharedPreferences.setBool('isFirstLaunch', false);
+    } else {
+      // Si no es el primer lanzamiento, continuar con la lógica original
+      print("LoadingLoginScreen");
+      final authService = BlocProvider.of<AuthBloc>(context, listen: false);
+      final roomBloc = BlocProvider.of<RoomBloc>(context, listen: false);
+      final publicationBloc =
+          BlocProvider.of<PublicationBloc>(context, listen: false);
+      final result = await authService.init();
+      print('Resultado11:');
+      print('Usuario11:');
+      BlocProvider.of<NavigatorBloc>(context)
+          .add(const NavigatorIndexEvent(index: 0));
+      if (result) {
+        print("Usuario");
+        if (authService.getUsuario() != null &&
+            authService.getUsuario()!.telefono == null) {
+          navigateToReplacement(context, const InformationScreen());
+        } else {
+          await roomBloc.salasInitEvent();
+          await publicationBloc.getAllPublicaciones();
+          navigateToReplacement(context, const HomeScreen());
+        }
+      } else {
+        print("Usuario: false false");
+        await authService.logout();
+        navigateToReplacement(context, const LoginScreen());
+      }
     }
   }
 

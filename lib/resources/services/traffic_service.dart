@@ -57,7 +57,6 @@ class TrafficService {
           '/geocoding/v5/mapbox.places/mapbox.places/$query.json', queryParams);
 
       final response = await http.get(url);
-      // final decodedData = json.decode(response.body);
       final placesResponse = PlacesResponse.fromJson(response.body);
       return placesResponse.features;
     } catch (error) {
@@ -77,7 +76,6 @@ class TrafficService {
     print("resp: ${resp.body}");
     final ubicacionesData = json.decode(resp.body);
     final ubicaciones = UbicacionResponse.fromMap(ubicacionesData);
-    print("ubicaciones1111111111: ${ubicaciones.ubicacion}");
     return ubicaciones.ubicacion;
   }
 
@@ -110,8 +108,6 @@ class TrafficService {
         'x-token': await AuthService.getToken() as String,
       });
 
-      final ubicacionData = json.decode(resp.body);
-      final ubicacion = Ubicacion.fromMap(ubicacionData);
       return true;
     } catch (e) {
       print('Error adding ubicacion: $e');
