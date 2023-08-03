@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/navigator/navigator_bloc.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_maps_adv/widgets/custom_bottom_navigation.dart';
 
@@ -21,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final publicationBloc = BlocProvider.of<PublicationBloc>(context);
     final counterBlocUser = BlocProvider.of<AuthBloc>(context);
     // counterBlocUser.add(AuthInitEvent());
-
     return Scaffold(
       body: Stack(
         children: [

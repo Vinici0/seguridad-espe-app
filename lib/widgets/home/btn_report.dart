@@ -51,9 +51,8 @@ class _BtnReport extends StatelessWidget {
                 // AlertasScreen.routeName
                 Navigator.pushNamed(context, AlertsScreen.routeName);
               },
-              //icono de una campana de aleerta
-              icon: const Icon(FontAwesomeIcons.fire,
-                  size: 16, color: Colors.white),
+              //icono de aleta de emergencia
+              icon: const Icon(Icons.add_alert, size: 16, color: Colors.white),
               label: const Text("REPORTAR",
                   style: TextStyle(fontSize: 16, color: Colors.white)),
             ),

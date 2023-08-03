@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/helpers/mostrar_alerta.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_maps_adv/widgets/boton_login.dart';
@@ -62,7 +64,8 @@ class __FromState extends State<_From> {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-
+    final roomBloc = BlocProvider.of<RoomBloc>(context);
+    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
     return Column(children: [
       CustonInput(
         icon: Icons.mail_outline,
@@ -85,7 +88,8 @@ class __FromState extends State<_From> {
             final result = await authBloc.login(
                 emailController.text, passwordController.text);
             if (result) {
-              // ignore: use_build_context_synchronously
+              await roomBloc.salasInitEvent();
+              await publicationBloc.getAllPublicaciones();
               Navigator.pushReplacementNamed(
                   context, LoadingLoginScreen.loadingroute);
             } else {

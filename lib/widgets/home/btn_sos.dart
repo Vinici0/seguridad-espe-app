@@ -23,7 +23,7 @@ class BtnSOS extends StatelessWidget {
                     lat: lat,
                     lng: lng,
                   )
-                : SizedBox()
+                : const SizedBox()
             : const PositionedBtnSOS();
       },
     );
@@ -61,10 +61,10 @@ class _SOSNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: MediaQuery.of(context).size.height * 0.09,
-      right: 16.0,
+      top: MediaQuery.of(context).size.height * 0.03,
+      right: 2.0,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5.0),
         child: MaterialButton(
           onPressed: () {},
           child: Ink(
@@ -105,14 +105,14 @@ class _SOSNotification extends StatelessWidget {
                 await authBloc.notificacion(lat, lng);
               },
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.25,
+                width: MediaQuery.of(context).size.width * 0.20,
                 height: MediaQuery.of(context).size.width * 0.30,
                 alignment: Alignment.center,
                 child: Text(
                   'SOS',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: MediaQuery.of(context).size.width * 0.1,
+                    fontSize: MediaQuery.of(context).size.width * 0.07,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
