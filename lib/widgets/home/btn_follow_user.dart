@@ -9,6 +9,7 @@ class BtnFollowUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mapBloc = BlocProvider.of<MapBloc>(context);
+    final searchBloc = BlocProvider.of<SearchBloc>(context);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -18,14 +19,10 @@ class BtnFollowUser extends StatelessWidget {
         child: BlocBuilder<MapBloc, MapState>(
           builder: (context, state) {
             return IconButton(
-                icon: Icon(
-                    state.isFollowUser
-                        ? FontAwesomeIcons.solidCompass
-                        : FontAwesomeIcons.compass,
-                    color: Colors.grey[800]),
+                icon:
+                    Icon(FontAwesomeIcons.layerGroup, color: Colors.grey[800]),
                 onPressed: () {
-                  print("Boton presionado");
-                  mapBloc.add(OnStartFollowingUserEvent());
+                  searchBloc.add(const ToggloUpdateTypeMapEvent());
                 });
           },
         ),

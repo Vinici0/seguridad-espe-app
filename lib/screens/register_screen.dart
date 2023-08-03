@@ -115,7 +115,16 @@ class __FromState extends State<_From> {
                   return;
                 }
 
-                await authServiceBloc.register(nombre, email, password);
+                final resulta =
+                    await authServiceBloc.register(nombre, email, password);
+
+                if (!resulta) {
+                  // Mostrar alerta indicando que el correo electrónico ya está en uso
+                  // ignore: use_build_context_synchronously
+                  mostrarAlerta(context, 'Correo electrónico en uso',
+                      'El correo electrónico ya está en uso');
+                  return;
+                }
 
                 if (authServiceBloc.isLoggedInTrue) {
                   // ignore: use_build_context_synchronously

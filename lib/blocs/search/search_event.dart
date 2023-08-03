@@ -57,3 +57,15 @@ class IsActiveNotification extends SearchEvent {
         isActive,
       ];
 }
+
+class IsTogglePolylineEvent extends SearchEvent {
+  const IsTogglePolylineEvent();
+  @override
+  List<Object> get props => [];
+}
+
+class ToggloUpdateTypeMapEvent extends SearchEvent {
+  const ToggloUpdateTypeMapEvent();
+  @override
+  List<Object> get props => [];
+}

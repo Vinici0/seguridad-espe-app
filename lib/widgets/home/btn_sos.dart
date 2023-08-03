@@ -63,63 +63,126 @@ class _SOSNotification extends StatelessWidget {
     return Positioned(
       top: MediaQuery.of(context).size.height * 0.03,
       right: 2.0,
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: MaterialButton(
-          onPressed: () {},
-          child: Ink(
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color.fromRGBO(219, 31, 31, 1), // Rojo transparente
-                  Color.fromRGBO(220, 34, 34, 0.893), // Rojo más transparente
-                ],
-              ),
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(255, 255, 0, 0).withOpacity(0.5),
-                  spreadRadius: 9,
-                  blurRadius: 5,
-                  // offset: Offset(0, 3),
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0, top: 10.0),
+                child: GestureDetector(
+                  onTap: () {
+                    print("Notificaciones");
+                    // Navigator.pushNamed(context, AlertsScreen.routeName);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Color de fondo
+                      borderRadius:
+                          BorderRadius.circular(20), // Bordes redondeados
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3), // Sombra suave
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3), // Desplazamiento de la sombra
+                        ),
+                      ],
+                    ),
+                    padding: const EdgeInsets.all(8), // Espaciado interior
+                    child: const Icon(
+                      Icons.notifications_none,
+                      color: Colors.black,
+                      size: 30,
+                    ),
+                  ),
                 ),
-              ],
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.width * 0.3 / 2),
-              onTap: () async {
-                if (!authBloc.hasTelefonos()) {
-                  mostrarDialogoIngresarNumero(context);
-                  return;
-                }
+              ),
+              Positioned(
+                top: 18,
+                right: 19,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red, // Color del punto
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Sombra del punto
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset:
+                            const Offset(0, 1), // Desplazamiento de la sombra
+                      ),
+                    ],
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 10,
+                    minHeight: 10,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 5.0, top: 10.0),
+            child: MaterialButton(
+              onPressed: () {},
+              child: Ink(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color.fromRGBO(219, 31, 31, 1), // Rojo transparente
+                      Color.fromRGBO(
+                          220, 34, 34, 0.893), // Rojo más transparente
+                    ],
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          const Color.fromARGB(255, 255, 0, 0).withOpacity(0.5),
+                      spreadRadius: 4,
+                      blurRadius: 5,
+                      // offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(
+                      MediaQuery.of(context).size.width * 0.3 / 2),
+                  onTap: () async {
+                    if (!authBloc.hasTelefonos()) {
+                      mostrarDialogoIngresarNumero(context);
+                      return;
+                    }
 
-                Fluttertoast.showToast(
-                    msg: "Se ha enviado una notificación a tus contactos",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: const Color.fromRGBO(219, 31, 31, 1),
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-                await authBloc.notificacion(lat, lng);
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.20,
-                height: MediaQuery.of(context).size.width * 0.30,
-                alignment: Alignment.center,
-                child: Text(
-                  'SOS',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: MediaQuery.of(context).size.width * 0.07,
-                    fontWeight: FontWeight.bold,
+                    Fluttertoast.showToast(
+                        msg: "Se ha enviado una notificación a tus contactos",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: const Color.fromRGBO(219, 31, 31, 1),
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    await authBloc.notificacion(lat, lng);
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.20,
+                    height: MediaQuery.of(context).size.width * 0.25,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'SOS',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.width * 0.07,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

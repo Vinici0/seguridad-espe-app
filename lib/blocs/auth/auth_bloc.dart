@@ -318,6 +318,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     isLoggedInTrue = register;
     add(AuthRegisterEvent(nombre: nombre, email: email, password: password));
     add(const AuthConectEvent());
+    return register;
   }
 
   updateUsuarioImage(String imagen) async {

@@ -48,19 +48,29 @@ class _MapViewState extends State<MapView> {
             child: GoogleMap(
               initialCameraPosition: initialCameraPosition,
               compassEnabled: false,
+              mapType: state.updateTypeMap ? MapType.satellite : MapType.normal,
               myLocationEnabled: true,
               zoomControlsEnabled: false,
               myLocationButtonEnabled: false,
+              /* 
+                   on<OpToggleUserRouteEvent>((event, emit) => emit(state.copyWith(
+                  showRoutePreview: !state.showRoutePreview,
+                  activePolylineUser: !state.activePolylineUser)));
+              */
               polylines: state.displayManualMarker
                   ? widget.polylines.map((polyline) {
                       return polyline.copyWith(
-                          colorParam: Color.fromARGB(255, 64, 70, 250));
+                          colorParam: const Color.fromARGB(255, 64, 70, 250));
                     }).toSet()
-                  : Set<Polyline>(),
+                  : state.isActivePolyline
+                      ? widget.polylines
+                      : {},
               markers: state.displayManualMarker ? widget.markers : {},
               onCameraMove: (position) => mapBloc.mapCenter = position.target,
               onMapCreated: (controller) {
                 mapController = controller;
+
+                searchBloc.add(const IsTogglePolylineEvent());
                 mapBloc.add(OnMapInitialzedEvent(controller));
               },
             ),

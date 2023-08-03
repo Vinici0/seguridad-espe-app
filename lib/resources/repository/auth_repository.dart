@@ -11,7 +11,7 @@ class ApiUserRepository {
     return await _authService.login(email, password);
   }
 
-  Future register(String nombre, String email, String password) async {
+  Future<bool> register(String nombre, String email, String password) async {
     return await _authService.register(nombre, email, password);
   }
 

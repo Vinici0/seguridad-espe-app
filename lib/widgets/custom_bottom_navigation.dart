@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
@@ -10,6 +11,8 @@ class CustomBottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     final mapBloc = BlocProvider.of<MapBloc>(context);
     final authService = BlocProvider.of<AuthBloc>(context);
+    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
+    final roomBloc = BlocProvider.of<RoomBloc>(context);
     return BlocBuilder<NavigatorBloc, NavigatorStateInit>(
       builder: (context, state) {
         return BottomNavigationBar(
@@ -21,7 +24,7 @@ class CustomBottomNavigation extends StatelessWidget {
           elevation: 0.5,
           unselectedItemColor: Colors.grey[800],
           currentIndex: state.index,
-          onTap: (int i) {
+          onTap: (int i) async {
             BlocProvider.of<NavigatorBloc>(context)
                 .add(NavigatorIndexEvent(index: i));
 
@@ -31,6 +34,11 @@ class CustomBottomNavigation extends StatelessWidget {
 
             if (i == 1) {
               authService.add(const MarcarPublicacionPendienteFalse());
+              await publicationBloc.getAllPublicaciones();
+            }
+
+            if (i == 2) {
+              await roomBloc.salasInitEvent();
             }
           },
           items: [

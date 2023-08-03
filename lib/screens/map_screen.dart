@@ -126,39 +126,39 @@ class _MapScreenState extends State<MapScreen> {
           // ),
 
           //notificaciones
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Stack(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    // Lógica para manejar el evento al presionar el ícono de notificaciones
-                    // Por ejemplo, abrir un cuadro de diálogo, mostrar una lista de notificaciones, etc.
-                  },
-                ),
-                Positioned(
-                  top: 8,
-                  right: 12,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color:
-                          Colors.red, // Puedes cambiar el color del punto aquí
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 12,
-                      minHeight: 12,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 50),
+          //   child: Stack(
+          //     children: [
+          //       IconButton(
+          //         icon: const Icon(
+          //           Icons.notifications_none,
+          //           color: Colors.black,
+          //         ),
+          //         onPressed: () {
+          //           // Lógica para manejar el evento al presionar el ícono de notificaciones
+          //           // Por ejemplo, abrir un cuadro de diálogo, mostrar una lista de notificaciones, etc.
+          //         },
+          //       ),
+          //       Positioned(
+          //         top: 8,
+          //         right: 12,
+          //         child: Container(
+          //           padding: const EdgeInsets.all(4),
+          //           decoration: const BoxDecoration(
+          //             shape: BoxShape.circle,
+          //             color:
+          //                 Colors.red, // Puedes cambiar el color del punto aquí
+          //           ),
+          //           constraints: const BoxConstraints(
+          //             minWidth: 12,
+          //             minHeight: 12,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
         // elevation: 0.5,
       ),

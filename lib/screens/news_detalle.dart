@@ -5,7 +5,6 @@ import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/helpers/show_loading_message.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter_maps_adv/widgets/comments.dart';
 import 'package:flutter_maps_adv/widgets/comment_pulbicacion.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -151,7 +150,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               Positioned(

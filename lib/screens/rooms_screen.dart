@@ -26,11 +26,11 @@ class RoomsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<RoomBloc, RoomState>(
         builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+          // if (state.isLoading) {
+          //   return const Center(
+          //     child: CircularProgressIndicator(),
+          //   );
+          // }
 
           return Container(
             color: Colors.white,
@@ -41,6 +41,17 @@ class RoomsScreen extends StatelessWidget {
               color: const Color(0xFF6165FA),
               child: Column(
                 children: [
+                  //Si esta cargando un pequeño circulo de carga
+                  // if (state.isLoading)
+                  //   const Padding(
+                  //     padding: EdgeInsets.only(top: 10),
+                  //     child: SizedBox(
+                  //       height: 3,
+                  //       child: LinearProgressIndicator(
+                  //         color: Color(0xFF6165FA),
+                  //       ),
+                  //     ),
+                  //   ),
                   Expanded(
                     child: Column(
                       children: [

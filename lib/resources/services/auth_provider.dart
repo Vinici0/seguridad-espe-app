@@ -168,7 +168,7 @@ class AuthService {
       return true;
     } else {
       final respBody = jsonDecode(resp.body);
-      throw Exception(respBody['msg']);
+      return false;
     }
   }
 

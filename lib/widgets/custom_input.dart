@@ -32,22 +32,22 @@ class CustonInput extends StatelessWidget {
                   blurRadius: 5)
             ]),
         child: TextField(
-          controller: this.textController,
+          controller: textController,
           autocorrect: false,
           maxLength: 30,
-          obscureText: this.isPassword,
-          keyboardType: this.keyboardType,
+          obscureText: isPassword,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
-            prefixIcon: Icon(this.icon, color: Colors.indigo),
+            prefixIcon: Icon(icon, color: const Color(0xFF6165FA)),
             focusedBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(30)),
-              borderSide: BorderSide(color: Colors.indigo),
+              borderSide: BorderSide(color: Color(0xFF6165FA)),
             ),
             enabledBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(30)),
-              borderSide: BorderSide(color: Colors.indigo),
+              borderSide: BorderSide(color: Color(0xFF6165FA)),
             ),
-            hintText: this.placeholder,
+            hintText: placeholder,
             counterText:
                 '', // Establecer el contador de caracteres como una cadena vacía
           ),

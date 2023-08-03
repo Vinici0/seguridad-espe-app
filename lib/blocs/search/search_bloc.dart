@@ -34,6 +34,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<AddToHistoryEvent>((event, emit) {
       emit(state.copyWith(history: [event.history, ...state.history]));
     });
+    on<IsTogglePolylineEvent>((event, emit) {
+      emit(state.copyWith(isActivePolyline: !state.isActivePolyline));
+    });
 
     on<DeleteUbicacionByUserEvent>(deleteUbicacionByUserEvent);
 
@@ -45,6 +48,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     on<IsActiveNotification>((event, emit) {
       emit(state.copyWith(isActiveNotification: event.isActive));
+    });
+
+    on<ToggloUpdateTypeMapEvent>((event, emit) {
+      emit(state.copyWith(updateTypeMap: !state.updateTypeMap));
     });
   }
 

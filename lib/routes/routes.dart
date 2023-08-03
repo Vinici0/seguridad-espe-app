@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_maps_adv/screens/notification_screen.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_telefono.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
@@ -14,6 +15,9 @@ class Routes {
     ConfigScreen.configroute: (_) => const ConfigScreen(),
     DetalleSalaScreen.detalleSalaroute: (_) => const DetalleSalaScreen(),
     DetalleScreen.detalleroute: (_) => const DetalleScreen(),
+    EditNombreScreen.editNombreroute: (_) => const EditNombreScreen(),
+    EditPerfilScreen.editPerfilroute: (_) => const EditPerfilScreen(),
+    EditTelefonoScreen.editTelefonoeroute: (_) => const EditTelefonoScreen(),
     HomeScreen.homeroute: (_) => const HomeScreen(),
     InformationFamily.informationFamily: (_) => const InformationFamily(),
     InformationScreen.information: (_) => const InformationScreen(),
@@ -23,15 +27,13 @@ class Routes {
     MapScreen.routemap: (_) => const MapScreen(),
     MienbrosChatScreen.mienbrosChatroute: (_) => MienbrosChatScreen(),
     ModalBottomSheet.modalBottomSheetRoute: (_) => const ModalBottomSheet(),
+    NotificationsScreen.routeName: (_) => const NotificationsScreen(),
+    PerfilDetalleScreen.perfilDetalleroute: (_) => const PerfilDetalleScreen(),
     PerfilScreen.salesroute: (_) => const PerfilScreen(),
     PlaceDetailScreen.place: (_) => const PlaceDetailScreen(),
     PlacesScreen.salesroute: (_) => const PlacesScreen(),
     RegisterScreen.registerroute: (_) => const RegisterScreen(),
     RoomsScreen.salasroute: (_) => const RoomsScreen(),
     SosScreen.sosroute: (_) => const SosScreen(),
-    PerfilDetalleScreen.perfilDetalleroute: (_) => const PerfilDetalleScreen(),
-    EditPerfilScreen.editPerfilroute: (_) => const EditPerfilScreen(),
-    EditNombreScreen.editNombreroute: (_) => const EditNombreScreen(),
-    EditTelefonoScreen.editTelefonoeroute: (_) => const EditTelefonoScreen(),
   };
 }
