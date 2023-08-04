@@ -123,6 +123,7 @@ class _CommentPublicationState extends State<CommentPublication> {
                         publicationBloc.toggleLikeComentario(widget.uid);
                       }
                     } catch (e) {
+                      // ignore: avoid_print
                       print('Error: $e');
                     }
                   },

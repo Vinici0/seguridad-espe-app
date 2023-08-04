@@ -70,7 +70,7 @@ class PerfilDetalleScreen extends StatelessWidget {
                         width: 15,
                       ),
                       Text(
-                          'Miembro desde hace ${timeago.format(DateTime.parse(authBloc.state.usuario!.createdAt))}'),
+                          'Miembro desde ${timeago.format(DateTime.parse(authBloc.state.usuario!.createdAt), locale: 'es')}'),
                     ],
                   ),
                 ),
@@ -169,7 +169,6 @@ class _PerfilCicle extends StatelessWidget {
 
 class _ListNews extends StatelessWidget {
   const _ListNews({
-    super.key,
     required this.publicaciones,
     required ScrollController firstController,
     required this.size,
@@ -270,7 +269,7 @@ class _ListNews extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.only(left: 62, right: 5),
+                          padding: const EdgeInsets.only(left: 62, right: 5),
                           child: Column(
                             children: [
                               Container(

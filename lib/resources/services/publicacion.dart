@@ -166,8 +166,6 @@ class PublicacionService {
         final resp = await http.Response.fromStream(streamResponse);
 
         if (resp.statusCode != 200 && resp.statusCode != 201) {
-          print('Something went wrong');
-          print(resp.body);
           throw Exception('Error uploading images: ${resp.body}');
         }
 
@@ -208,7 +206,6 @@ class PublicacionService {
   }
 
   Future<List<Comentario>> getAllComments(String uid) async {
-    print(uid);
     try {
       final uri = Uri.parse('${Environment.apiUrl}/comentarios/${uid}');
 
@@ -221,7 +218,6 @@ class PublicacionService {
       );
 
       final decodedData = json.decode(resp.body);
-      print(decodedData);
       final commentResp = ComentarioResponse.fromJson(decodedData);
       return commentResp.comentarios;
     } catch (e) {

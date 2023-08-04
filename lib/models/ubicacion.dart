@@ -55,7 +55,6 @@ class Ubicacion {
     this.parroquia,
   });
   factory Ubicacion.fromMap(Map<String, dynamic> json) {
-    print('Ubicacion.fromMap: $json');
     try {
       final latitud = json["latitud"];
       final longitud = json["longitud"];

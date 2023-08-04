@@ -6,7 +6,7 @@ class RoomState extends Equatable {
   final List<Sala> salas;
   final Sala salaSeleccionada;
 
-  RoomState({
+  const RoomState({
     required this.isError,
     required this.isLoading,
     required this.salas,

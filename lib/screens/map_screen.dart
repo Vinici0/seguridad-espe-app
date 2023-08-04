@@ -97,6 +97,64 @@ class _MapScreenState extends State<MapScreen> {
         //             ),
         //           ),
         actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 75, top: 10),
+            child: Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'notifications_screen');
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Color de fondo
+                      borderRadius:
+                          BorderRadius.circular(20), // Bordes redondeados
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: Colors.grey.withOpacity(0.3), // Sombra suave
+                      //     spreadRadius: 2,
+                      //     blurRadius: 5,
+                      //     offset:
+                      //         const Offset(0, 5), // Desplazamiento de la sombra
+                      //   ),
+                      // ],
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: const Icon(
+                      Icons.notifications_none,
+                      color: Colors.black,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 15,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red, // Color del punto
+                      boxShadow: [
+                        BoxShadow(
+                          color:
+                              Colors.grey.withOpacity(0.5), // Sombra del punto
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset:
+                              const Offset(0, 1), // Desplazamiento de la sombra
+                        ),
+                      ],
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 10,
+                      minHeight: 10,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           //mensaje
           // Stack(
           //   children: [
@@ -236,6 +294,7 @@ class _MapScreenState extends State<MapScreen> {
                         ],
                       ),
                     ),
+
                     const BtnSOS(),
                     const BtnReport(),
                   ],

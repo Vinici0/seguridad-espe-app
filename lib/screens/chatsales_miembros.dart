@@ -4,18 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/members/members_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/usuario.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MienbrosChatScreen extends StatefulWidget {
   static const String mienbrosChatroute = 'miembrosChat';
 
-  MienbrosChatScreen({Key? key}) : super(key: key);
+  const MienbrosChatScreen({Key? key}) : super(key: key);
 
   @override
   State<MienbrosChatScreen> createState() => _MienbrosChatScreenState();
@@ -74,6 +71,7 @@ class _MienbrosChatScreenState extends State<MienbrosChatScreen> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   ListView _ListViewUsuarios(List<Usuario> miembros) {
     return ListView.separated(
       itemCount: miembros.length,

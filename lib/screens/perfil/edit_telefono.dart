@@ -80,7 +80,9 @@ class _EditTelefonoScreenState extends State<EditTelefonoScreen> {
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: _isPhoneNumberValid ? Color(0xFF6165FA) : Colors.red,
+                    color: _isPhoneNumberValid
+                        ? const Color(0xFF6165FA)
+                        : Colors.red,
                   ),
                 ),
               ),

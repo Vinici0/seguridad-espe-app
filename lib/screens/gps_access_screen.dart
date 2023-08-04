@@ -47,7 +47,7 @@ class _AccessButton extends StatelessWidget {
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF6165FA),
-            shape: StadiumBorder(),
+            shape: const StadiumBorder(),
             elevation: 0,
           ),
           onPressed: () {

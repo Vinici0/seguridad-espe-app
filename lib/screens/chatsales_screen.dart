@@ -11,6 +11,7 @@ import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
 import 'package:intl/intl.dart';
 
+// ignore: constant_identifier_names
 enum ServerStatus { Online, Offline, Connecting }
 
 class ChatScreen extends StatefulWidget {
@@ -80,7 +81,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       nombre: payload['nombre'],
       texto: payload['mensaje'],
       uid: payload['de'],
-      img: payload['img'],
+      img: payload['de'],
       isGoogle: payload['isGoogle'],
       createdAt: DateTime.now().toString(),
       animationController: AnimationController(
@@ -267,8 +268,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   void _handleSubmit(String texto) {
     if (texto.length == 0) return;
-
-    print(texto);
     _textController.clear();
     _focusNode.requestFocus();
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/resources/services/push_notifications_service.dart';
 import 'package:flutter_maps_adv/resources/services/traffic_service.dart';
@@ -31,6 +32,7 @@ void main() async {
       BlocProvider(create: (context) => PublicationBloc()),
       BlocProvider(create: (context) => MembersBloc()),
       BlocProvider(create: (context) => RoomBloc()),
+      BlocProvider(create: (context) => NotificationBloc()),
       BlocProvider(create: (context) => NavigatorBloc()),
       BlocProvider(
           create: (context) => SearchBloc(trafficService: TrafficService())),

@@ -127,6 +127,7 @@ class _ListIconName extends StatelessWidget {
       : super(key: key);
   final IconData icon;
   final String name;
+  // ignore: prefer_typing_uninitialized_variables
   final route;
   @override
   Widget build(BuildContext context) {
@@ -140,6 +141,7 @@ class _ListIconName extends StatelessWidget {
           if (name.contains('Cerrar sesión')) {
             await authServiceBloc.logout();
 
+            // ignore: use_build_context_synchronously
             Navigator.pushReplacementNamed(context, 'login');
             return;
           }

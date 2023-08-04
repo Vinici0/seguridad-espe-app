@@ -52,7 +52,11 @@ class _BtnReport extends StatelessWidget {
                 Navigator.pushNamed(context, AlertsScreen.routeName);
               },
               //icono de aleta de emergencia
-              icon: const Icon(Icons.add_alert, size: 16, color: Colors.white),
+              icon: Image.asset(
+                'assets/altoparlante.png',
+                width: 30,
+                height: 25,
+              ),
               label: const Text("REPORTAR",
                   style: TextStyle(fontSize: 16, color: Colors.white)),
             ),

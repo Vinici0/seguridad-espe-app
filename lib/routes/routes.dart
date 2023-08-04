@@ -3,6 +3,7 @@ import 'package:flutter_maps_adv/screens/notification_screen.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_telefono.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
+import 'package:flutter_maps_adv/screens/sosnotification_screen.dart';
 
 class Routes {
   static final Map<String, Widget Function(BuildContext)> routes = {
@@ -25,7 +26,7 @@ class Routes {
     LoadingMapScreen.loadingroute: (_) => const LoadingMapScreen(),
     LoginScreen.loginroute: (_) => const LoginScreen(),
     MapScreen.routemap: (_) => const MapScreen(),
-    MienbrosChatScreen.mienbrosChatroute: (_) => MienbrosChatScreen(),
+    MienbrosChatScreen.mienbrosChatroute: (_) => const MienbrosChatScreen(),
     ModalBottomSheet.modalBottomSheetRoute: (_) => const ModalBottomSheet(),
     NotificationsScreen.routeName: (_) => const NotificationsScreen(),
     PerfilDetalleScreen.perfilDetalleroute: (_) => const PerfilDetalleScreen(),
@@ -34,6 +35,7 @@ class Routes {
     PlacesScreen.salesroute: (_) => const PlacesScreen(),
     RegisterScreen.registerroute: (_) => const RegisterScreen(),
     RoomsScreen.salasroute: (_) => const RoomsScreen(),
+    SosNotificationScreen.sosroute: (_) => const SosNotificationScreen(),
     SosScreen.sosroute: (_) => const SosScreen(),
   };
 }

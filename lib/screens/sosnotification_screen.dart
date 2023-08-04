@@ -6,9 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class SosScreen extends StatelessWidget {
-  static const String sosroute = 'sos';
-  const SosScreen({Key? key}) : super(key: key);
+class SosNotificationScreen extends StatelessWidget {
+  static const String sosroute = 'sos_notification';
+  const SosNotificationScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -219,6 +219,8 @@ class AuthService {
     await prefs.remove('uid');
   }
 
+  //TODO: Eliminar el token del dispositivo
+
   //delete ubicacion
   Future<bool> deleteUbicacion(String id) async {
     final uri = Uri.parse('${Environment.apiUrl}/ubicacion/$id');

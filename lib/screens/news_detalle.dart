@@ -47,9 +47,9 @@ class _DetalleScreenState extends State<DetalleScreen> {
         final commentCount = matchingPublication.comentarios!.length;
         publicationBloc.add(CountCommentEvent(commentCount));
       } else {
-        final commentCount =
+        const commentCount =
             0; // Establecer un valor predeterminado para la cantidad de comentarios
-        publicationBloc.add(CountCommentEvent(commentCount));
+        publicationBloc.add(const CountCommentEvent(commentCount));
       }
     }
 
@@ -83,7 +83,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
       isGoogle: payload['isGoogle'],
       fotoPerfil: payload['fotoPerfil'],
       uidUsuario: payload['uidUsuario'],
-      likes: [],
+      likes: const [],
       isLiked: false,
     );
 
@@ -172,7 +172,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
   Widget _inputComentario() {
     final publicationBloc = BlocProvider.of<PublicationBloc>(context);
     return Container(
-      color: Color.fromARGB(95, 162, 158, 158),
+      color: const Color.fromARGB(95, 162, 158, 158),
       child: Row(
         children: [
           Flexible(
@@ -271,7 +271,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
           : authService.state.usuario!.img!,
       isLiked: false,
       uidUsuario: authService.state.usuario!.uid,
-      likes: [],
+      likes: const [],
     );
 
     authService.socketService.socket.emit('comentario-publicacion', {
@@ -471,61 +471,126 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
               ),
             ),
           ),
-          GestureDetector(
-            child: Container(
-              height: 50,
-              margin: const EdgeInsets.only(right: 10),
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black26,
-                  width: 1.0,
+          Row(
+            children: [
+              GestureDetector(
+                child: Container(
+                  height: 50,
+                  margin: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black26,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //Icno que represente noticia finalizada ya atendida
+                      Icon(
+                        Icons.check_circle,
+                        size: 20,
+                        color: Color(int.parse('0xFF${publicacion.color}')),
+                      ),
+                      const Text(
+                        'Atendida',
+                        style: TextStyle(color: Colors.black, fontSize: 12),
+                      ),
+                    ],
+                  ),
                 ),
+                onTap: () async {},
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.mapLocationDot,
-                    size: 20,
-                    color: Color(int.parse('0xFF${publicacion.color}')),
+              GestureDetector(
+                child: Container(
+                  height: 50,
+                  margin: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black26,
+                      width: 1.0,
+                    ),
                   ),
-                  const Text(
-                    'Ver mapa',
-                    style: TextStyle(color: Colors.black, fontSize: 12),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        //mapa icono
+                        // Icons.map_outlined,
+                        FontAwesomeIcons.mapMarkedAlt,
+                        size: 20,
+                        color: Color(int.parse('0xFF${publicacion.color}')),
+                      ),
+                      const Text(
+                        'Ver mapa',
+                        style: TextStyle(color: Colors.black, fontSize: 12),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            onTap: () async {
-              if (!gpsBloc.state.isGpsEnabled ||
-                  !gpsBloc.state.isGpsPermissionGranted) {
-                Fluttertoast.showToast(
-                    msg: 'Activa el GPS para ver la ubicación',
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: const Color(0xff6165FA),
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-                return;
-              }
+                ),
+                onTap: () async {
+                  if (!gpsBloc.state.isGpsEnabled ||
+                      !gpsBloc.state.isGpsPermissionGranted) {
+                    Fluttertoast.showToast(
+                        msg: 'Activa el GPS para ver la ubicación',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: const Color(0xff6165FA),
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    return;
+                  }
 
-              final start = locationBloc.state.lastKnownLocation;
-              if (start == null) return;
-              end = LatLng(publicacion.latitud, publicacion.longitud);
-              if (end == null) return;
-              searchBloc.add(OnActivateManualMarkerEvent());
-              showLoadingMessage(context);
-              final destination =
-                  await searchBloc.getCoorsStartToEnd(start, end!);
-              await mapBloc.drawRoutePolyline(destination);
-              // ignore: use_build_context_synchronously
-              Navigator.pop(context);
-              // ignore: use_build_context_synchronously
-              Navigator.pop(context);
-              counterBloc.add(const NavigatorIndexEvent(index: 0));
-            },
+                  final start = locationBloc.state.lastKnownLocation;
+                  if (start == null) return;
+                  end = LatLng(publicacion.latitud, publicacion.longitud);
+                  if (end == null) return;
+                  searchBloc.add(OnActivateManualMarkerEvent());
+                  showLoadingMessage(context);
+                  final destination =
+                      await searchBloc.getCoorsStartToEnd(start, end!);
+                  await mapBloc.drawRoutePolyline(destination);
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context);
+                  counterBloc.add(const NavigatorIndexEvent(index: 0));
+                },
+              ),
+              GestureDetector(
+                child: Container(
+                  height: 50,
+                  margin: const EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black26,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        //denuncias icono
+                        // FontAwesomeIcons.flag,
+                        Icons.flag_rounded,
+                        size: 25,
+                        color: Color(int.parse('0xFF${publicacion.color}')),
+                      ),
+                      const Text(
+                        'Denunciar',
+                        style: TextStyle(color: Colors.black, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () async {},
+              ),
+            ],
           )
         ],
       ),

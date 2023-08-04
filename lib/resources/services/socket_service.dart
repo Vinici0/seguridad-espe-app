@@ -2,6 +2,7 @@ import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+// ignore: constant_identifier_names
 enum ServerStatus { Online, Offline, Connecting }
 
 class SocketService {
