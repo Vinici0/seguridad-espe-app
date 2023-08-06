@@ -96,7 +96,8 @@ class Publicacion {
         isLiked: json["isLiked"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
-        uid: json["uid"],
+        // json.containsKey("uid") ? json["uid"] : json["_id"],
+        uid: json.containsKey("uid") ? json["uid"] : json["_id"],
         nombreUsuario: json["nombreUsuario"],
       );
 

@@ -112,7 +112,7 @@ class ChatMessage extends StatelessWidget {
                     : CircleAvatar(
                         radius: 15,
                         backgroundImage: NetworkImage(
-                            '${Environment.apiUrl}/uploads/usuario/usuarios/$img'),
+                            '${Environment.apiUrl}/uploads/usuario/usuarios/$uid'),
                       ),
             Expanded(
               child: Column(

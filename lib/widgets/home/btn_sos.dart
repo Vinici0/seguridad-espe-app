@@ -5,6 +5,7 @@ import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BtnSOS extends StatelessWidget {
   const BtnSOS({Key? key}) : super(key: key);
@@ -251,6 +252,10 @@ class _SOSNumber extends StatelessWidget {
                   scheme: 'tel',
                   path: '911',
                 );
+
+                await canLaunchUrl(smsLaunchUri)
+                    ? launchUrl(smsLaunchUri)
+                    : throw 'Could not launch $smsLaunchUri';
               },
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.20,

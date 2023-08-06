@@ -148,7 +148,7 @@ class MembersBloc extends Bloc<MembersEvent, MembersState> {
           nombre: m.nombre,
           isGoogle: m.isGoogle,
           createdAt: m.createdAt,
-          img: m.usuario,
+          img: m.img,
         ));
     add(GetLoadedChatMessage(history.toList()));
     add(ChatLoadedEvent(mensajes));

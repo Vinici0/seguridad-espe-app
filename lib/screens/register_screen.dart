@@ -115,6 +115,20 @@ class __FromState extends State<_From> {
                   return;
                 }
 
+                if (!containsNumber(password)) {
+                  // Mostrar alerta indicando que la contraseña debe contener al menos un número
+                  mostrarAlerta(context, 'Contraseña inválida',
+                      'La contraseña debe contener al menos un número');
+                  return;
+                }
+
+                if (!containsUppercaseLetter(password)) {
+                  // Mostrar alerta indicando que la contraseña debe contener al menos una letra en mayúscula
+                  mostrarAlerta(context, 'Contraseña inválida',
+                      'La contraseña debe contener al menos una letra en mayúscula');
+                  return;
+                }
+
                 final resulta =
                     await authServiceBloc.register(nombre, email, password);
 
@@ -145,5 +159,13 @@ class __FromState extends State<_From> {
         r'^[\w-]+(\.[\w-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$');
 
     return emailRegex.hasMatch(email);
+  }
+
+  bool containsNumber(String password) {
+    return password.contains(RegExp(r'\d'));
+  }
+
+  bool containsUppercaseLetter(String password) {
+    return password.contains(RegExp(r'[A-Z]'));
   }
 }

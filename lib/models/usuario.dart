@@ -10,6 +10,7 @@ class Usuario {
   bool google;
   bool isActivo;
   bool isPublicacionPendiente;
+  bool isSalasPendiente;
   bool online;
   bool? isOpenRoom;
   List<String> telefonos;
@@ -41,6 +42,7 @@ class Usuario {
     required this.createdAt,
     required this.updatedAt,
     required this.isPublicacionPendiente,
+    required this.isSalasPendiente,
   });
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
@@ -53,6 +55,7 @@ class Usuario {
         createdAt: json["createdAt"],
         isActivo: json["isActivo"],
         updatedAt: json["updatedAt"],
+        isSalasPendiente: json["isSalasPendiente"],
         salas: json["salas"] == null
             ? []
             : List<Salas>.from(json["salas"]!.map((x) => Salas.fromMap(x))),
@@ -85,6 +88,7 @@ class Usuario {
         "tokenApp": tokenApp,
         "ubicaciones": List<dynamic>.from(ubicacion.map((x) => x.toMap())),
         "uid": uid,
+        "isSalasPendiente": isSalasPendiente,
       };
 }
 

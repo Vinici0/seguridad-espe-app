@@ -36,7 +36,6 @@ class ChatProvider {
         'Content-Type': 'application/json',
         'x-token': await AuthService.getToken() as String,
       });
-      print('resp: ${resp.body}');
       final salesResp = SalesResponse.fromJson(resp.body);
       return salesResp.salas;
     } catch (e) {

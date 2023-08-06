@@ -16,6 +16,21 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       emit(
           state.copyWith(notificaciones: event.notificaciones, loading: false));
     });
+
+    on<MarcarNotificacionComoLeidaEvent>((event, emit) async {
+      final updatedNotificaciones = state.notificaciones.map((notificacion) {
+        if (notificacion.uid == event.id) {
+          return notificacion.copyWith(isLeida: true);
+        } else {
+          return notificacion;
+        }
+      }).toList(); // Cast the List<dynamic> to List<Notificacione>
+
+      emit(state.copyWith(
+          notificaciones: updatedNotificaciones.cast<Notificacione>()));
+
+      await _notificationService.marcarNotificacionComoLeida(event.id);
+    });
   }
 
   loadNotification() async {

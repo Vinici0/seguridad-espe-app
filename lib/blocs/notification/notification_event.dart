@@ -24,3 +24,13 @@ class UpdateNotificationEvent extends NotificationEvent {
   @override
   List<Object> get props => [isActive];
 }
+
+// marcarNotificacionComoLeida
+class MarcarNotificacionComoLeidaEvent extends NotificationEvent {
+  final String id;
+
+  const MarcarNotificacionComoLeidaEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}

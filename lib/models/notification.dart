@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter_maps_adv/models/publication.dart';
+
 NotificacionReponse notificacionReponseFromJson(String str) =>
     NotificacionReponse.fromJson(json.decode(str));
 
@@ -35,160 +37,113 @@ class NotificacionReponse {
 
 class Notificacione {
   String tipo;
-  Usuario usuario;
+  UsuarioRemitente usuarioRemitente;
   Publicacion? publicacion;
   String mensaje;
-  List<LeidaPorUsuario> leidaPorUsuario;
   DateTime createdAt;
   DateTime updatedAt;
   String uid;
+  double latitud;
+  double longitud;
+  String usuario;
+  bool isLeida;
 
   Notificacione({
     required this.tipo,
-    required this.usuario,
+    required this.usuarioRemitente,
     this.publicacion,
+    required this.usuario,
     required this.mensaje,
-    required this.leidaPorUsuario,
+    required this.latitud,
+    required this.longitud,
     required this.createdAt,
     required this.updatedAt,
     required this.uid,
+    required this.isLeida,
   });
 
   factory Notificacione.fromJson(Map<String, dynamic> json) => Notificacione(
         tipo: json["tipo"],
-        usuario: Usuario.fromJson(json["usuario"]),
+        usuario: json["usuario"],
+        usuarioRemitente: UsuarioRemitente.fromJson(json["usuarioRemitente"]),
         publicacion: json["publicacion"] == null
             ? null
-            : Publicacion.fromJson(json["publicacion"]),
+            : Publicacion.fromMap(json["publicacion"]),
         mensaje: json["mensaje"],
-        leidaPorUsuario: List<LeidaPorUsuario>.from(
-            json["leidaPorUsuario"].map((x) => LeidaPorUsuario.fromJson(x))),
         createdAt: DateTime.parse(json["createdAt"]),
+        latitud: json["latitud"]?.toDouble(),
+        longitud: json["longitud"]?.toDouble(),
         updatedAt: DateTime.parse(json["updatedAt"]),
+        isLeida: json["isLeida"],
         uid: json["uid"],
       );
 
   Map<String, dynamic> toJson() => {
         "tipo": tipo,
-        "usuario": usuario.toJson(),
-        "publicacion": publicacion?.toJson(),
+        "usuarioRemitente": usuarioRemitente.toJson(),
+        "publicacion": publicacion?.toMap(),
         "mensaje": mensaje,
-        "leidaPorUsuario":
-            List<dynamic>.from(leidaPorUsuario.map((x) => x.toJson())),
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "uid": uid,
-      };
-}
-
-class LeidaPorUsuario {
-  String usuario;
-  bool leida;
-  String id;
-
-  LeidaPorUsuario({
-    required this.usuario,
-    required this.leida,
-    required this.id,
-  });
-
-  factory LeidaPorUsuario.fromJson(Map<String, dynamic> json) =>
-      LeidaPorUsuario(
-        usuario: json["usuario"],
-        leida: json["leida"],
-        id: json["_id"],
-      );
-
-  Map<String, dynamic> toJson() => {
         "usuario": usuario,
-        "leida": leida,
-        "_id": id,
-      };
-}
-
-class Publicacion {
-  String id;
-  String titulo;
-  String contenido;
-  String color;
-  String ciudad;
-  String barrio;
-  bool isPublic;
-  String usuario;
-  String nombreUsuario;
-  List<dynamic> imagenes;
-  double latitud;
-  double longitud;
-  String imgAlerta;
-
-  Publicacion({
-    required this.id,
-    required this.titulo,
-    required this.contenido,
-    required this.color,
-    required this.ciudad,
-    required this.barrio,
-    required this.isPublic,
-    required this.usuario,
-    required this.nombreUsuario,
-    required this.imagenes,
-    required this.latitud,
-    required this.longitud,
-    required this.imgAlerta,
-  });
-
-  factory Publicacion.fromJson(Map<String, dynamic> json) => Publicacion(
-        id: json["_id"],
-        titulo: json["titulo"],
-        contenido: json["contenido"],
-        color: json["color"],
-        ciudad: json["ciudad"],
-        barrio: json["barrio"],
-        isPublic: json["isPublic"],
-        usuario: json["usuario"],
-        nombreUsuario: json["nombreUsuario"],
-        imagenes: List<dynamic>.from(json["imagenes"].map((x) => x)),
-        latitud: json["latitud"]?.toDouble(),
-        longitud: json["longitud"]?.toDouble(),
-        imgAlerta: json["imgAlerta"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "titulo": titulo,
-        "contenido": contenido,
-        "color": color,
-        "ciudad": ciudad,
-        "barrio": barrio,
-        "isPublic": isPublic,
-        "usuario": usuario,
-        "nombreUsuario": nombreUsuario,
-        "imagenes": List<dynamic>.from(imagenes.map((x) => x)),
         "latitud": latitud,
         "longitud": longitud,
-        "imgAlerta": imgAlerta,
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt.toIso8601String(),
+        "isLeida": isLeida,
+        "uid": uid,
       };
+
+  copyWith({
+    String? tipo,
+    UsuarioRemitente? usuarioRemitente,
+    Publicacion? publicacion,
+    String? mensaje,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? uid,
+    double? latitud,
+    double? longitud,
+    String? usuario,
+    bool? isLeida,
+  }) {
+    return Notificacione(
+      tipo: tipo ?? this.tipo,
+      usuarioRemitente: usuarioRemitente ?? this.usuarioRemitente,
+      publicacion: publicacion ?? this.publicacion,
+      mensaje: mensaje ?? this.mensaje,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      uid: uid ?? this.uid,
+      latitud: latitud ?? this.latitud,
+      longitud: longitud ?? this.longitud,
+      usuario: usuario ?? this.usuario,
+      isLeida: isLeida ?? this.isLeida,
+    );
+  }
 }
 
-class Usuario {
+class UsuarioRemitente {
   String id;
   String nombre;
   String email;
   String telefono;
   String? img;
+  bool google;
 
-  Usuario({
+  UsuarioRemitente({
     required this.id,
     required this.nombre,
     required this.email,
     required this.telefono,
+    required this.google,
     this.img,
   });
 
-  factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
+  factory UsuarioRemitente.fromJson(Map<String, dynamic> json) =>
+      UsuarioRemitente(
         id: json["_id"],
         nombre: json["nombre"],
         email: json["email"],
+        google: json["google"],
         telefono: json["telefono"],
         img: json["img"],
       );
@@ -197,6 +152,7 @@ class Usuario {
         "_id": id,
         "nombre": nombre,
         "email": email,
+        "google": google,
         "telefono": telefono,
         "img": img,
       };

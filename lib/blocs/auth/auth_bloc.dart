@@ -25,6 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       isActivo: false,
       salas: [],
       isOpenRoom: false,
+      isSalasPendiente: false,
       createdAt: '',
       updatedAt: '',
       telefonos: [],
@@ -46,6 +47,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthUpdateUsuarioImageNewUserEvent>(_onAuthUpdateUsuarioImageEvent);
     on<UpdateUsuarioNewTelefonoOrNombreEvent>(_onUpdateUsuarioImageEvent);
     on<MarcarPublicacionPendienteFalse>(_onMarcarPublicacionPendienteFalse);
+    on<MarcarSalasPendienteFalse>(_onMarcarSalasPendienteFalse);
+    on<MarcarSalasPendienteTrue>(_onMarcarSalasPendienteTrue);
   }
 
   void _onAuthRegisterEvent(AuthRegisterEvent event, Emitter<AuthState> emit) {
@@ -72,6 +75,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             isActivo: false,
             salas: [],
             isOpenRoom: false,
+            isSalasPendiente: false,
             createdAt: '',
             updatedAt: '',
             telefonos: [],
@@ -134,11 +138,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         updatedAt: state.usuario!.updatedAt,
         img: state.usuario!.img,
         isPublicacionPendiente: false,
+        isSalasPendiente: state.usuario!.isSalasPendiente,
         google: state.usuario!.google);
 
     emit(state.copyWith(usuario: usuario));
 
     await apiAuthRepository.marcarPublicacionPendienteFalse();
+  }
+
+  void _onMarcarSalasPendienteFalse(
+      MarcarSalasPendienteFalse event, Emitter<AuthState> emit) async {
+    final usuario = Usuario(
+        online: state.usuario!.online,
+        nombre: state.usuario!.nombre,
+        email: state.usuario!.email,
+        telefono: state.usuario!.telefono,
+        tokenApp: state.usuario!.tokenApp,
+        ubicacion: state.usuario!.ubicacion,
+        uid: state.usuario!.uid,
+        isActivo: state.usuario!.isActivo,
+        salas: state.usuario!.salas,
+        isOpenRoom: state.usuario!.isOpenRoom,
+        telefonos: state.usuario!.telefonos,
+        createdAt: state.usuario!.createdAt,
+        updatedAt: state.usuario!.updatedAt,
+        img: state.usuario!.img,
+        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
+        isSalasPendiente: false,
+        google: state.usuario!.google);
+
+    emit(state.copyWith(usuario: usuario));
+
+    await apiAuthRepository.marcarSalaPendienteFalse();
   }
 
   void _onAuthAddTelefonoEvent(
@@ -157,11 +188,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         telefonos: state.usuario!.telefonos,
         createdAt: state.usuario!.createdAt,
         updatedAt: state.usuario!.updatedAt,
+        isSalasPendiente: state.usuario!.isSalasPendiente,
         img: state.usuario!.img,
         isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
         google: state.usuario!.google);
 
     emit(state.copyWith(usuario: usuario));
+  }
+
+  void _onMarcarSalasPendienteTrue(
+      MarcarSalasPendienteTrue event, Emitter<AuthState> emit) async {
+    final usuario = Usuario(
+        online: state.usuario!.online,
+        nombre: state.usuario!.nombre,
+        email: state.usuario!.email,
+        telefono: state.usuario!.telefono,
+        tokenApp: state.usuario!.tokenApp,
+        ubicacion: state.usuario!.ubicacion,
+        uid: state.usuario!.uid,
+        isActivo: state.usuario!.isActivo,
+        salas: state.usuario!.salas,
+        isOpenRoom: state.usuario!.isOpenRoom,
+        telefonos: state.usuario!.telefonos,
+        createdAt: state.usuario!.createdAt,
+        updatedAt: state.usuario!.updatedAt,
+        img: state.usuario!.img,
+        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
+        isSalasPendiente: true,
+        google: state.usuario!.google);
+
+    emit(state.copyWith(usuario: usuario));
+
+    // await apiAuthRepository.marcarSalasPendienteTrue();
   }
 
   void _aonAddTelefonoFamilyEvent(
@@ -183,6 +241,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         tokenApp: state.usuario!.tokenApp,
         ubicacion: state.usuario!.ubicacion,
         uid: state.usuario!.uid,
+        isSalasPendiente: state.usuario!.isSalasPendiente,
         isActivo: state.usuario!.isActivo,
         salas: state.usuario!.salas,
         isOpenRoom: state.usuario!.isOpenRoom,
@@ -209,6 +268,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       nombre: state.usuario!.nombre,
       email: state.usuario!.email,
       telefono: state.usuario!.telefono,
+      isSalasPendiente: state.usuario!.isSalasPendiente,
       tokenApp: state.usuario!.tokenApp,
       ubicacion: state.usuario!.ubicacion,
       google: state.usuario!.google,
@@ -255,6 +315,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         telefonos: state.usuario!.telefonos,
         createdAt: state.usuario!.createdAt,
         updatedAt: state.usuario!.updatedAt,
+        isSalasPendiente: state.usuario!.isSalasPendiente,
         isActivo: state.usuario!.isActivo,
         salas: state.usuario!.salas,
         isOpenRoom: state.usuario!.isOpenRoom,

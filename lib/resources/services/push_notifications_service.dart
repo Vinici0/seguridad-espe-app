@@ -15,6 +15,7 @@ class PushNotificationService {
 
   static Future<void> _backgroundHandler(RemoteMessage message) async {
     final Map<String, dynamic> messageData = message.data;
+    print('onBackgroundHandler: $messageData');
     final String dataString = messageData['usuario'] ?? 'No data';
     final Map<String, dynamic> userData = jsonDecode(dataString);
     _messageStream.add(userData);
@@ -30,23 +31,29 @@ class PushNotificationService {
   }
 
   static Future initializeApp() async {
-    // Push Notifications
-    await Firebase.initializeApp();
-    // await requestPermission();
+    try {
+      // Push Notifications
+      await Firebase.initializeApp();
+      // await requestPermission();
 
-    // Token: Token de la app en el dispositivo
-    token = await FirebaseMessaging.instance.getToken(); //
-    print('Token1: $token');
+      // Token: Token de la app en el dispositivo
+      token = await FirebaseMessaging.instance.getToken(); //
+      print('Token1: $token');
 
-    // Handlers
-    FirebaseMessaging.onBackgroundMessage(
-        _backgroundHandler); //Cuando la app está en segundo plano
-    FirebaseMessaging.onMessage
-        .listen(_onMessageHandler); //Cuando la app está en primer plano
-    FirebaseMessaging.onMessageOpenedApp
-        .listen(_onMessageOpenApp); // Cuando la app está cerrada
+      // Handlers
+      FirebaseMessaging.onBackgroundMessage(
+          _backgroundHandler); //Cuando la app está en segundo plano
+      FirebaseMessaging.onMessage
+          .listen(_onMessageHandler); //Cuando la app está en primer plano
+      FirebaseMessaging.onMessageOpenedApp
+          .listen(_onMessageOpenApp); // Cuando la app está cerrada
 
-    // Local Notifications
+      // Local Notifications
+    } catch (e) {
+      // Manejo de la excepción aquí
+      print('Error en la inicialización de FCM: $e');
+      // Puedes mostrar un mensaje al usuario o realizar otras acciones aquí
+    }
   }
 
   // Apple / Web

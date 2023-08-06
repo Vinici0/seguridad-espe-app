@@ -98,7 +98,7 @@ class _MapScreenState extends State<MapScreen> {
         //           ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 75, top: 10),
+            padding: const EdgeInsets.only(right: 50, top: 10),
             child: Stack(
               children: [
                 GestureDetector(

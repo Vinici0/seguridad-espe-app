@@ -360,8 +360,6 @@ class AuthService {
     });
 
     if (resp.statusCode == 200) {
-      final usuarioResponse = loginResponseFromJson(resp.body);
-      usuario = usuarioResponse.usuario;
       return true;
     } else {
       return false;
@@ -385,6 +383,27 @@ class AuthService {
       }
     } catch (e) {
       print('Error en marcarPublicacionPendienteFalse: $e');
+      return false;
+    }
+  }
+
+  //router.put("/marcar-sala-pendiente-false", validarJWT, marcarSalaPendienteFalse );
+  Future<bool> marcarSalaPendienteFalse() async {
+    try {
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/usuarios/marcar-sala-pendiente-false');
+      final resp = await http.put(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await getToken() as String,
+      });
+
+      if (resp.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en marcarSalaPendienteFalse: $e');
       return false;
     }
   }

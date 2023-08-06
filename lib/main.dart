@@ -17,12 +17,11 @@ void main() async {
 
   // Solicitar permisos de notificación si es la primera vez que se abre la app
   final status = await Permission.notification.request();
+  // Inicializar el servicio de notificaciones
+  await PushNotificationService.initializeApp();
   if (status.isGranted) {
     print('Permisos de notificación concedidos');
   }
-
-  // Inicializar el servicio de notificaciones
-  await PushNotificationService.initializeApp();
 
   runApp(MultiBlocProvider(
     providers: [
@@ -69,6 +68,8 @@ class _MyAppState extends State<MyApp> {
       String nombre = usuarioData['nombre'];
       double latitud = usuarioData['latitud'];
       double longitud = usuarioData['longitud'];
+      bool google = usuarioData['google'];
+      String img = usuarioData['img'];
 
       if (latitud == null || longitud == null || isSosScreenOpen) return;
 
@@ -77,6 +78,8 @@ class _MyAppState extends State<MyApp> {
         'nombre': nombre,
         'latitud': latitud,
         'longitud': longitud,
+        'google': google,
+        'img': img,
       }).then((value) {
         // Este bloque de código se ejecutará cuando la pantalla 'sos' se cierre.
         isSosScreenOpen = false;

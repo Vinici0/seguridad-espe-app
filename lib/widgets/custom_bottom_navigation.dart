@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -10,9 +11,12 @@ class CustomBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mapBloc = BlocProvider.of<MapBloc>(context);
-    final authService = BlocProvider.of<AuthBloc>(context);
-    final publicationBloc = BlocProvider.of<PublicationBloc>(context);
-    final roomBloc = BlocProvider.of<RoomBloc>(context);
+    final authService = BlocProvider.of<AuthBloc>(context, listen: false);
+    final publicationBloc =
+        BlocProvider.of<PublicationBloc>(context, listen: false);
+    final roomBloc = BlocProvider.of<RoomBloc>(context, listen: false);
+    final notificationBloc =
+        BlocProvider.of<NotificationBloc>(context, listen: false);
     return BlocBuilder<NavigatorBloc, NavigatorStateInit>(
       builder: (context, state) {
         return BottomNavigationBar(
@@ -38,7 +42,12 @@ class CustomBottomNavigation extends StatelessWidget {
             }
 
             if (i == 2) {
+              authService.add(const MarcarSalasPendienteFalse());
               await roomBloc.salasInitEvent();
+            }
+
+            if (i == 0) {
+              await notificationBloc.loadNotification();
             }
           },
           items: [
@@ -82,8 +91,42 @@ class CustomBottomNavigation extends StatelessWidget {
               ),
               label: 'Noticias',
             ),
-            const BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.users),
+            BottomNavigationBarItem(
+              icon: BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, states) {
+                  return Stack(
+                    children: [
+                      const Icon(FontAwesomeIcons.users),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        //mover a la derecha
+
+                        child: states.usuario!.isSalasPendiente == true
+                            ? Container(
+                                padding: const EdgeInsets.only(
+                                  left:
+                                      1, // Ajusta estos valores para mover el punto
+                                  right: 5, // en la dirección deseada
+                                  top: 2,
+                                  bottom: 2,
+                                ),
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors
+                                      .red, // Puedes cambiar el color del punto aquí
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 9,
+                                  minHeight: 9,
+                                ),
+                              )
+                            : const SizedBox(),
+                      ),
+                    ],
+                  );
+                },
+              ),
               label: 'Grupos',
             ),
             const BottomNavigationBarItem(

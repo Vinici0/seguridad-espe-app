@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_maps_adv/screens/notification_screen.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_telefono.dart';
+import 'package:flutter_maps_adv/screens/report_detalle_screen.dart';
+import 'package:flutter_maps_adv/screens/report_finish_screen.dart';
+import 'package:flutter_maps_adv/screens/report_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_maps_adv/screens/sosnotification_screen.dart';
 
@@ -37,5 +40,8 @@ class Routes {
     RoomsScreen.salasroute: (_) => const RoomsScreen(),
     SosNotificationScreen.sosroute: (_) => const SosNotificationScreen(),
     SosScreen.sosroute: (_) => const SosScreen(),
+    ReportScreen.reportRoute: (_) => const ReportScreen(),
+    ReportDetalleScreen.reportDetalleRoute: (_) => const ReportDetalleScreen(),
+    ReportFinishScreen.routeName: (_) => const ReportFinishScreen(),
   };
 }

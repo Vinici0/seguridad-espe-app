@@ -149,3 +149,10 @@ class ResetCommentPublicationEvent extends PublicationEvent {
   @override
   List<Object> get props => [];
 }
+
+class ReportPublicationEvent extends PublicationEvent {
+  const ReportPublicationEvent();
+
+  @override
+  List<Object> get props => [];
+}

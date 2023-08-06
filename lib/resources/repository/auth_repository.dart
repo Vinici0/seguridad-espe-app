@@ -45,6 +45,11 @@ class ApiUserRepository {
     return await _authService.marcarPublicacionPendienteFalse();
   }
 
+  // marcarSalaPendienteFalse
+  Future<bool> marcarSalaPendienteFalse() async {
+    return await _authService.marcarSalaPendienteFalse();
+  }
+
   //actualizarIsOpenRoom
   Future<bool?> actualizarIsOpenRoom(bool isOpenRoom) async {
     return await _authService.actualizarIsOpenRoom(isOpenRoom);

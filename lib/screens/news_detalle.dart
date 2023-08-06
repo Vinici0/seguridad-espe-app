@@ -459,14 +459,14 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    barrio,
-                    style: const TextStyle(color: Colors.black, fontSize: 12),
-                  ),
-                  Text(
-                    ciudad,
-                    style: const TextStyle(color: Colors.black, fontSize: 12),
-                  ),
+                  // Text(
+                  //   barrio,
+                  //   style: const TextStyle(color: Colors.black, fontSize: 12),
+                  // ),
+                  // Text(
+                  //   ciudad,
+                  //   style: const TextStyle(color: Colors.black, fontSize: 12),
+                  // ),
                 ],
               ),
             ),
@@ -588,7 +588,9 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
                     ],
                   ),
                 ),
-                onTap: () async {},
+                onTap: () async {
+                  Navigator.pushNamed(context, 'denunciar');
+                },
               ),
             ],
           )

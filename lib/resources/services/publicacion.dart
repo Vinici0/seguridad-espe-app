@@ -275,4 +275,31 @@ class PublicacionService {
       throw Exception('Error: Failed to create comentario.');
     }
   }
+
+  Future<bool> guardarDenuncia(
+    String publicacion,
+    String motivo,
+  ) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/denuncias');
+      final resp = await http.post(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': await AuthService.getToken() as String,
+          },
+          body: jsonEncode({
+            'publicacionId': publicacion,
+            'motivo': motivo,
+          }));
+      final decodedData = json.decode(resp.body);
+      if (decodedData['ok'] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en guardarDenuncia: $e');
+      return false;
+    }
+  }
 }

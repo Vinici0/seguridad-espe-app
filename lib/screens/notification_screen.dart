@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class NotificationsScreen extends StatelessWidget {
   static const routeName = 'notifications_screen';
@@ -12,6 +11,11 @@ class NotificationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final publicationBloc =
+        BlocProvider.of<PublicationBloc>(context, listen: false);
+    final notificationBloc =
+        BlocProvider.of<NotificationBloc>(context, listen: false);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -29,7 +33,6 @@ class NotificationsScreen extends StatelessWidget {
        */
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
-          final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
           return SingleChildScrollView(
             child: ListView.builder(
               shrinkWrap: true,
@@ -57,7 +60,7 @@ class NotificationsScreen extends StatelessWidget {
                   title: Text(
                     // state.notificaciones[index].usuario.nombre,
                     state.notificaciones[index].tipo == NotificationsScreen.sos
-                        ? state.notificaciones[index].usuario.nombre
+                        ? state.notificaciones[index].usuarioRemitente.nombre
                         : state.notificaciones[index].publicacion!.titulo,
                     style: const TextStyle(
                       color: Colors.black,
@@ -76,10 +79,9 @@ class NotificationsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        timeago.format(
-                          state.notificaciones[index].createdAt,
-                          locale: 'es',
-                        ),
+                        state.notificaciones[index].createdAt
+                            .toString()
+                            .substring(0, 10),
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 12,
@@ -89,10 +91,7 @@ class NotificationsScreen extends StatelessWidget {
                         height: 5,
                       ),
                       // ignore: unrelated_type_equality_checks
-                      state.notificaciones[index].leidaPorUsuario
-                              .map((e) => e.leida == true)
-                              .toList()
-                              .isEmpty
+                      state.notificaciones[index].isLeida
                           ? const SizedBox()
                           : const CircleAvatar(
                               radius: 10,
@@ -101,10 +100,18 @@ class NotificationsScreen extends StatelessWidget {
                     ],
                   ),
                   onTap: () {
+                    notificationBloc.add(MarcarNotificacionComoLeidaEvent(
+                        state.notificaciones[index].uid));
+
                     state.notificaciones[index].tipo == NotificationsScreen.sos
-                        ? Navigator.pushNamed(context, 'sos_detalle',
-                            arguments: state.notificaciones[index].uid)
-                        : Navigator.pushNamed(context, 'publicacion_detalle',
+                        ? null
+                        : publicationBloc.add(PublicacionSelectEvent(
+                            state.notificaciones[index].publicacion!));
+
+                    state.notificaciones[index].tipo == NotificationsScreen.sos
+                        ? Navigator.pushNamed(context, 'sos_notification',
+                            arguments: state.notificaciones[index])
+                        : Navigator.pushNamed(context, 'detalle',
                             arguments: state.notificaciones[index].publicacion);
                   },
                 );
@@ -116,3 +123,21 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 }
+
+// Route _createRoute(Widget screen) {
+//   return PageRouteBuilder(
+//     pageBuilder: (context, animation, secondaryAnimation) => screen,
+//     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+//       const begin = Offset(0.0, 1.0);
+//       const end = Offset.zero;
+//       const curve = Curves.ease;
+
+//       var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+//       return SlideTransition(
+//         position: animation.drive(tween),
+//         child: child,
+//       );
+//     },
+//   );
+// }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/notification.dart';
@@ -26,6 +27,26 @@ class NotificationService {
     } catch (e) {
       print('Error: $e');
       return []; // Return an empty list in case of an error
+    }
+  }
+
+  //router.put("/:id", validarJWT, marcarNotificacionComoLeida);
+  Future<bool> marcarNotificacionComoLeida(String id) async {
+    try {
+      print('id: $id');
+      final uri = Uri.parse('${Environment.apiUrl}/notificacion/$id');
+
+      final resp = await http.put(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken() as String,
+        },
+      );
+      return true;
+    } catch (e) {
+      print('Error: $e');
+      return false; // Return an empty list in case of an error
     }
   }
 }

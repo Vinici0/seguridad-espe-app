@@ -119,6 +119,11 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     emit(state.copyWith(publicaciones: event.publicacion, isLoading: false));
   }
 
+  reportPublicationEvent(String uid, String motivo) async {
+    final result = await _publicacionService.guardarDenuncia(uid, motivo);
+    return result;
+  }
+
   getAllPublicaciones() async {
     add(LoadingEvent());
     final publicaciones = await _publicacionService.getPublicacionesAll();
@@ -169,7 +174,7 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   }
 
   cargarComentarios(String uid) async {
-    final publicaciones = await _publicacionService.getAllComments(uid);
+    await _publicacionService.getAllComments(uid);
   }
 
   getPublicacionesUsuario() async {

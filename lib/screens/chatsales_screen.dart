@@ -355,6 +355,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   Future<void> _executeAsyncProcessOnExit() async {
     await roomBloc.cambiarEstadoSala(false);
+    await roomBloc.salasInitEvent();
   }
 }
 
