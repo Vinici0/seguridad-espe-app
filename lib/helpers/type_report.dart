@@ -1,5 +1,6 @@
 class TypeReport {
-  Map<String, List<String>> reportSpecifications = {
+  // ignore: non_constant_identifier_names
+  Map<String, List<String>> REPORT_SPECIFICATIONS = {
     'Violencia, abuso y explotación criminal': [
       'Demostración, promoción o amenazas con violencia física, incluida la tortura en el mundo real, violencia explícita y lucha física extrema',
       'Promoción y apoyo material a organizaciones violentas o que promuevan el odio, incluidos los extremistas violentos y las organizaciones criminales',

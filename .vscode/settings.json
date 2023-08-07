@@ -1,3 +1,4 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "cmake.sourceDirectory": "D:/FlutterProyectos/FlutterAvanzadoProyectos/mapas/flutter_maps_adv/linux"
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/delegates/search_destination_delegate.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
 import 'package:flutter_maps_adv/models/search_result.dart';
+import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/place_details_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,8 +24,7 @@ class PlacesScreen extends StatelessWidget {
       }
     }
 
-    final gpsBloc = BlocProvider.of<GpsBloc>(context);
-    final counterBloc = BlocProvider.of<NavigatorBloc>(context);
+    final navigatorBloc = BlocProvider.of<NavigatorBloc>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -34,6 +34,25 @@ class PlacesScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black, fontSize: 20)),
         // backgroundColor: Colors.white,
         elevation: 0.5,
+        actions: [
+          //boton texto de siguiente
+          !navigatorBloc.state.isNumberFamilySelected
+              ? const SizedBox()
+              : TextButton(
+                  onPressed: () {
+                    navigatorBloc.add(
+                        const NavigatorIsNumberFamilySelectedEvent(
+                            isNumberFamilySelected: false));
+
+                    Navigator.pushReplacementNamed(
+                        context, HomeScreen.homeroute);
+                  },
+                  child: const Text(
+                    'Siguiente',
+                    style: TextStyle(color: Color(0xFF6165FA), fontSize: 16),
+                  ),
+                ),
+        ],
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
@@ -55,7 +74,7 @@ class PlacesScreen extends StatelessWidget {
                     margin: const EdgeInsets.only(top: 20, left: 20),
                     width: MediaQuery.of(context).size.width * 0.95,
                     child: const Text(
-                      "Agrega direcciones para mantenerte informado de lo que sucede alrededor de tus seres queridos y protegelos.",
+                      "Agrega direcciones para mantenerte informado de lo que sucede alrededor de tu comunidad y recibir alertas de emergencia.",
                       style: TextStyle(
                         color: Colors.black45,
                         fontSize: 14,
@@ -68,6 +87,7 @@ class PlacesScreen extends StatelessWidget {
                           context: context,
                           delegate: SearchDestinationDelegate());
                       if (result == null) return;
+                      // ignore: use_build_context_synchronously
                       onSearchResults(context, result);
                     },
                     child: Container(

@@ -33,6 +33,44 @@ class NotificationsScreen extends StatelessWidget {
        */
       body: BlocBuilder<NotificationBloc, NotificationState>(
         builder: (context, state) {
+          //no tienes notificaciones
+          if (state.notificaciones.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  //icono de notificaciones
+                  Icon(
+                    Icons.notifications,
+                    color: Colors.black54,
+                    size: 100,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'No tienes nada pendiente',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    'Cuando tengas notificaciones pendientes, las verás aquí.',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
           return SingleChildScrollView(
             child: ListView.builder(
               shrinkWrap: true,

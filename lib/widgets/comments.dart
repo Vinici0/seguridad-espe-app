@@ -58,12 +58,27 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
               ),
             ),
             const Divider(height: 2),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-              child: Text(
-                'Si tienes información relevante, por favor, compártela comentando en esta publicación. La noticia todavía no ha sido finalizada por el usuario y cualquier novedad sería muy apreciada.',
-                style: TextStyle(fontSize: 12, color: Colors.black54),
-              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: state.currentPublicacion!.isPublicacionPendiente!
+                  ? Row(
+                      children: const [
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.red,
+                          size: 16,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          'La publicación ha sido finalizada por el usuario. ¡Gracias por tu colaboración!',
+                          style: TextStyle(fontSize: 12, color: Colors.black54),
+                        ),
+                      ],
+                    )
+                  : const Text(
+                      'Si tienes información relevante, por favor, compártela comentando en esta publicación. La noticia todavía no ha sido finalizada por el usuario y cualquier novedad sería muy apreciada.',
+                      style: TextStyle(fontSize: 12, color: Colors.black54),
+                    ),
             ),
             const Divider(height: 2),
             Padding(

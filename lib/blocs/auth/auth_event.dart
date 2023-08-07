@@ -153,3 +153,9 @@ class MarcarSalasPendienteTrue extends AuthEvent {
   @override
   List<Object> get props => [];
 }
+
+class MarcarNotificacionesPendienteFalse extends AuthEvent {
+  const MarcarNotificacionesPendienteFalse();
+  @override
+  List<Object> get props => [];
+}

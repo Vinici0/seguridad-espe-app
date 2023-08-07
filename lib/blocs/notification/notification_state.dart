@@ -4,10 +4,12 @@ class NotificationState extends Equatable {
   final bool isActive;
   final List<Notificacione> notificaciones;
   final bool loading;
+  final String currentText;
 
   const NotificationState(
       {this.isActive = false,
       this.notificaciones = const [],
+      this.currentText = '',
       this.loading = false});
 
   //copyWith
@@ -15,11 +17,13 @@ class NotificationState extends Equatable {
     bool? isActive,
     List<Notificacione>? notificaciones,
     bool? loading,
+    String? currentText,
   }) {
     return NotificationState(
       isActive: isActive ?? this.isActive,
       notificaciones: notificaciones ?? this.notificaciones,
       loading: loading ?? this.loading,
+      currentText: currentText ?? this.currentText,
     );
   }
 
@@ -28,5 +32,6 @@ class NotificationState extends Equatable {
         isActive,
         notificaciones,
         loading,
+        currentText,
       ];
 }

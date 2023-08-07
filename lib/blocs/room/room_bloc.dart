@@ -55,6 +55,10 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     on<ResetTotalMensajesNoLeidosEvent>(_resetTotalMensajesNoLeidosEvent);
 
     on<RoomLoadingEvent>((event, emit) {
+      // emit(state.copyWith(isLoading: true));
+    });
+
+    on<RoomLoadingEvent2>((event, emit) {
       emit(state.copyWith(isLoading: true));
     });
     on<DeleteSalaEvent>((event, emit) async {
@@ -127,6 +131,8 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   }
 
   joinSala(String codigo) async {
+    //loading
+    add(RoomLoadingEvent2());
     final sala = await _chatProvider.joinSala(codigo);
     if (sala == null || sala.uid.isEmpty) {
       return false;

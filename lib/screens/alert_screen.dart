@@ -82,11 +82,17 @@ class _AlertScreenState extends State<AlertScreen> {
             CircleAvatar(
               radius: 20,
               backgroundColor: Color(int.parse('0xFF${reporte.color}')),
-              child: SvgPicture.asset(
-                'assets/alertas/${reporte.icon}',
-                width: 30,
-                color: Colors.white,
-              ),
+              child: reporte.isSvg == true
+                  ? SvgPicture.asset(
+                      'assets/alertas/${reporte.icon}',
+                      width: 30,
+                      color: Colors.white,
+                    )
+                  : Image.asset(
+                      'assets/alertas/${reporte.icon}',
+                      width: 30,
+                      color: Colors.white,
+                    ),
             ),
             const SizedBox(width: 10),
             SizedBox(

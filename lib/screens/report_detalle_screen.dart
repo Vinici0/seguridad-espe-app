@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
 import 'package:flutter_maps_adv/helpers/type_report.dart';
+import 'package:flutter_maps_adv/screens/report_finish_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ReportDetalleScreen extends StatelessWidget {
@@ -10,8 +13,8 @@ class ReportDetalleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<String, List<String>> reportSpecifications =
-        TypeReport().reportSpecifications;
-    final args = ModalRoute.of(context)!.settings.arguments as String;
+        TypeReport().REPORT_SPECIFICATIONS;
+    final notificationBloc = BlocProvider.of<NotificationBloc>(context);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -33,7 +36,7 @@ class ReportDetalleScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      args,
+                      notificationBloc.state.currentText,
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20,
@@ -59,7 +62,9 @@ class ReportDetalleScreen extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       children: List.generate(
-                          reportSpecifications[args]!.length, (index) {
+                          reportSpecifications[
+                                  notificationBloc.state.currentText]!
+                              .length, (index) {
                         return Column(
                           children: [
                             Row(
@@ -75,7 +80,8 @@ class ReportDetalleScreen extends StatelessWidget {
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
                                   child: Text(
-                                    reportSpecifications[args]![index],
+                                    reportSpecifications[notificationBloc
+                                        .state.currentText]![index],
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
@@ -93,7 +99,7 @@ class ReportDetalleScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                _BtnReport(args: args),
+                _BtnReport(args: notificationBloc.state.currentText),
               ],
             )));
   }
@@ -141,16 +147,19 @@ class __BtnReportState extends State<_BtnReport> {
                           _isLoading = true;
                         });
 
-                        await publicationBloc.reportPublicationEvent(
-                            publicationBloc.state.currentPublicacion!.uid!,
-                            widget.args);
+                        final result =
+                            await publicationBloc.reportPublicationEvent(
+                                publicationBloc.state.currentPublicacion!.uid!,
+                                widget.args);
+
+                        //si ya se envio la denuncia que muestra el mensaje
 
                         setState(() {
                           _isLoading = false;
                         });
-
                         // ignore: use_build_context_synchronously
-                        Navigator.pushNamed(context, 'report_finish');
+                        Navigator.of(context).push(CreateRoute.createRoute(
+                            const ReportFinishScreen()));
                       },
                       child: const Text(
                         'Enviar',

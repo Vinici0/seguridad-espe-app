@@ -61,7 +61,6 @@ class Sala {
   });
 
   factory Sala.fromMap(Map<String, dynamic> json) {
-    print('Sala.fromMap: $json');
     try {
       return Sala(
         nombre: json["nombre"],

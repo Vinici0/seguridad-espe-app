@@ -34,3 +34,12 @@ class MarcarNotificacionComoLeidaEvent extends NotificationEvent {
   @override
   List<Object> get props => [id];
 }
+
+class CurrentTextReportEvent extends NotificationEvent {
+  final String currentText;
+
+  const CurrentTextReportEvent(this.currentText);
+
+  @override
+  List<Object> get props => [currentText];
+}

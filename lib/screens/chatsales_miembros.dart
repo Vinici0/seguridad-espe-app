@@ -27,8 +27,8 @@ class _MienbrosChatScreenState extends State<MienbrosChatScreen> {
 
   @override
   void initState() {
-    membersBloc = BlocProvider.of<MembersBloc>(context);
-    roomBloc = BlocProvider.of<RoomBloc>(context);
+    membersBloc = BlocProvider.of<MembersBloc>(context, listen: false);
+    roomBloc = BlocProvider.of<RoomBloc>(context, listen: false);
     authBloc = BlocProvider.of<AuthBloc>(context);
     _cargarUsuarios();
     super.initState();
@@ -57,7 +57,9 @@ class _MienbrosChatScreenState extends State<MienbrosChatScreen> {
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: Color(0xFF6165FA),
+              ),
             );
           }
 

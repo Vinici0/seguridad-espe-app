@@ -97,6 +97,28 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     on<ResetCommentPublicationEvent>((event, emit) {
       emit(state.copyWith(comentariosP: [], isLoading: false));
     });
+
+    on<MarcarPublicacionPendienteTrueEvent>((event, emit) async {
+      final newPublicaciones = state.publicaciones.map((publicacion) {
+        if (publicacion.uid == event.uid) {
+          publicacion.isPublicacionPendiente = true;
+          return publicacion;
+        } else {
+          return publicacion;
+        }
+      }).toList();
+
+      //cambiar el currentPublicacion
+      final newCurrentPublicacion =
+          state.currentPublicacion!.copyWith(isPublicacionPendiente: true);
+
+      emit(state.copyWith(
+          publicaciones: newPublicaciones,
+          isLoading: false,
+          currentPublicacion: newCurrentPublicacion));
+
+      await _publicacionService.marcarPublicacionPendienteTrue(event.uid);
+    });
   }
 
   FutureOr<void> _publicacionesInitEvent(

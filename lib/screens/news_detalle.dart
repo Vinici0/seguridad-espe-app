@@ -1,10 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
 import 'package:flutter_maps_adv/helpers/show_loading_message.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter_maps_adv/screens/report_screen.dart';
 import 'package:flutter_maps_adv/widgets/comments.dart';
 import 'package:flutter_maps_adv/widgets/comment_pulbicacion.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -174,6 +178,8 @@ class _DetalleScreenState extends State<DetalleScreen> {
     return Container(
       color: const Color.fromARGB(95, 162, 158, 158),
       child: Row(
+        //spacebetween para que el icono de enviar quede a la derecha
+
         children: [
           Flexible(
             child: Container(
@@ -392,208 +398,231 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
   Widget build(BuildContext context) {
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final publicacion = widget.publicacion;
-    final searchBloc = BlocProvider.of<SearchBloc>(context);
+    final searchBloc = BlocProvider.of<SearchBloc>(context, listen: false);
     final mapBloc = BlocProvider.of<MapBloc>(context);
-    final counterBloc = BlocProvider.of<NavigatorBloc>(context);
+    final counterBloc = BlocProvider.of<NavigatorBloc>(context, listen: false);
     final gpsBloc = BlocProvider.of<GpsBloc>(context);
+    final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+    final publicationBloc =
+        BlocProvider.of<PublicationBloc>(context, listen: false);
+    final navigatorBloc = BlocProvider.of<NavigatorBloc>(context);
     LatLng? end;
     return Container(
       //aagregar un margen en el contenedor
       margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
       // color: Color(0xFF6165FA),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 50,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.black26,
-                width: 1.0,
-                //color de fondo del contenedor
-              ),
-            ),
-            child: Container(
-              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-              color: Color(int.parse('0xFF${publicacion.color}')),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //mes y dia con icno de reloj y la de publicacion
-                  Text(
-                    DateFormat('MMMM d').format(DateTime.parse(
-                        widget.publicacion.createdAt.toString())),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      const Icon(FontAwesomeIcons.clock,
-                          size: 20, color: Colors.white),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        //hora conn import 'timeago; HH:mm
-                        timeago.format(
-                            DateTime.parse(
-                                widget.publicacion.createdAt.toString()),
-                            locale: 'es_short'),
-                        style: const TextStyle(color: Colors.white),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 6.5),
-              decoration: const BoxDecoration(),
-
-              // color: Color.fromARGB(255, 252, 81, 81),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Text(
-                  //   barrio,
-                  //   style: const TextStyle(color: Colors.black, fontSize: 12),
-                  // ),
-                  // Text(
-                  //   ciudad,
-                  //   style: const TextStyle(color: Colors.black, fontSize: 12),
-                  // ),
-                ],
-              ),
-            ),
-          ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                child: Container(
-                  height: 50,
-                  margin: const EdgeInsets.only(right: 10),
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black26,
-                      width: 1.0,
-                    ),
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black26,
+                    width: 1.0,
+                    //color de fondo del contenedor
                   ),
+                ),
+                child: Container(
+                  padding:
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                  color: Color(int.parse('0xFF${publicacion.color}')),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //Icno que represente noticia finalizada ya atendida
-                      Icon(
-                        Icons.check_circle,
-                        size: 20,
-                        color: Color(int.parse('0xFF${publicacion.color}')),
+                      //mes y dia con icno de reloj y la de publicacion
+                      Text(
+                        DateFormat('MMMM d').format(DateTime.parse(
+                            widget.publicacion.createdAt.toString())),
+                        style: const TextStyle(color: Colors.white),
                       ),
-                      const Text(
-                        'Atendida',
-                        style: TextStyle(color: Colors.black, fontSize: 12),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        children: [
+                          const Icon(FontAwesomeIcons.clock,
+                              size: 20, color: Colors.white),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            //hora conn import 'timeago; HH:mm
+                            timeago.format(
+                                DateTime.parse(
+                                    widget.publicacion.createdAt.toString()),
+                                locale: 'es_short'),
+                            style: const TextStyle(color: Colors.white),
+                          )
+                        ],
                       ),
                     ],
                   ),
                 ),
-                onTap: () async {},
               ),
-              GestureDetector(
-                child: Container(
-                  height: 50,
-                  margin: const EdgeInsets.only(right: 10),
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black26,
-                      width: 1.0,
+              Row(
+                children: [
+                  publicacion.usuario == authBloc.state.usuario!.uid
+                      ? GestureDetector(
+                          child: Container(
+                            height: 50,
+                            margin: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black26,
+                                width: 1.0,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  size: 20,
+                                  color: Color(
+                                      int.parse('0xFF${publicacion.color}')),
+                                ),
+                                const Text(
+                                  'Atendida',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                          onTap: () {
+                            _showDialog(publicacion.uid!, publicationBloc);
+                          },
+                        )
+                      : const SizedBox(),
+                  GestureDetector(
+                    child: Container(
+                      height: 50,
+                      margin: const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black26,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            //mapa icono
+                            // Icons.map_outlined,
+                            FontAwesomeIcons.mapMarkedAlt,
+                            size: 20,
+                            color: Color(int.parse('0xFF${publicacion.color}')),
+                          ),
+                          const Text(
+                            'Ver mapa',
+                            style: TextStyle(color: Colors.black, fontSize: 12),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        //mapa icono
-                        // Icons.map_outlined,
-                        FontAwesomeIcons.mapMarkedAlt,
-                        size: 20,
-                        color: Color(int.parse('0xFF${publicacion.color}')),
-                      ),
-                      const Text(
-                        'Ver mapa',
-                        style: TextStyle(color: Colors.black, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () async {
-                  if (!gpsBloc.state.isGpsEnabled ||
-                      !gpsBloc.state.isGpsPermissionGranted) {
-                    Fluttertoast.showToast(
-                        msg: 'Activa el GPS para ver la ubicación',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: const Color(0xff6165FA),
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                    return;
-                  }
+                    onTap: () async {
+                      if (!gpsBloc.state.isGpsEnabled ||
+                          !gpsBloc.state.isGpsPermissionGranted) {
+                        Fluttertoast.showToast(
+                            msg: 'Activa el GPS para ver la ubicación',
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: const Color(0xff6165FA),
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        return;
+                      }
 
-                  final start = locationBloc.state.lastKnownLocation;
-                  if (start == null) return;
-                  end = LatLng(publicacion.latitud, publicacion.longitud);
-                  if (end == null) return;
-                  searchBloc.add(OnActivateManualMarkerEvent());
-                  showLoadingMessage(context);
-                  final destination =
-                      await searchBloc.getCoorsStartToEnd(start, end!);
-                  await mapBloc.drawRoutePolyline(destination);
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
-                  counterBloc.add(const NavigatorIndexEvent(index: 0));
-                },
-              ),
-              GestureDetector(
-                child: Container(
-                  height: 50,
-                  margin: const EdgeInsets.only(right: 10),
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black26,
-                      width: 1.0,
+                      final start = locationBloc.state.lastKnownLocation;
+                      if (start == null) return;
+                      end = LatLng(publicacion.latitud, publicacion.longitud);
+                      if (end == null) return;
+                      searchBloc.add(OnActivateManualMarkerEvent());
+                      showLoadingMessage(context);
+                      final destination =
+                          await searchBloc.getCoorsStartToEnd(start, end!);
+                      await mapBloc.drawRoutePolyline(destination);
+                      if (navigatorBloc.state.isNewSelected) {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        navigatorBloc.add(const NavigatorIsNewSelectedEvent(
+                            isNewSelected: false));
+                        counterBloc.add(const NavigatorIndexEvent(index: 0));
+                      } else {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        counterBloc.add(const NavigatorIndexEvent(index: 0));
+                      }
+                    },
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      height: 50,
+                      margin: const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black26,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            //denuncias icono
+                            // FontAwesomeIcons.flag,
+                            Icons.flag_rounded,
+                            size: 25,
+                            color: Color(int.parse('0xFF${publicacion.color}')),
+                          ),
+                          const Text(
+                            'Denunciar',
+                            style: TextStyle(color: Colors.black, fontSize: 12),
+                          ),
+                        ],
+                      ),
                     ),
+                    onTap: () {
+                      Navigator.of(context)
+                          .push(CreateRoute.createRoute(const ReportScreen()));
+                    },
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        //denuncias icono
-                        // FontAwesomeIcons.flag,
-                        Icons.flag_rounded,
-                        size: 25,
-                        color: Color(int.parse('0xFF${publicacion.color}')),
-                      ),
-                      const Text(
-                        'Denunciar',
-                        style: TextStyle(color: Colors.black, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
-                onTap: () async {
-                  Navigator.pushNamed(context, 'denunciar');
-                },
-              ),
+                ],
+              )
             ],
-          )
+          ),
+          Container(
+            padding:
+                const EdgeInsets.only(left: 0, right: 10, bottom: 5, top: 8),
+            decoration: const BoxDecoration(),
+
+            // color: Color.fromARGB(255, 252, 81, 81),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  publicacion.barrio,
+                  style: const TextStyle(color: Colors.black, fontSize: 12),
+                ),
+                Text(
+                  publicacion.ciudad,
+                  style: const TextStyle(color: Colors.black, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -603,7 +632,6 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
     final double lat = widget.publicacion.latitud;
     final double lon = widget.publicacion.longitud;
     final List<Placemark> placemarks = await placemarkFromCoordinates(lat, lon);
-    // print(placemarks);
     if (placemarks.isNotEmpty) {
       final Placemark place = placemarks.first;
       barrio = place.locality ?? '';
@@ -612,6 +640,59 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
     }
 
     setState(() {});
+  }
+
+  //dialog que pregunte si esta seguro de marcar como atendida
+  _showDialog(String uid, PublicationBloc publicationBloc) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('¿Marcar como Atendida?'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Al marcar esta alerta como atendida, indicas que el problema ha sido resuelto por las autoridades o la comunidad.',
+              ),
+              const SizedBox(height: 12), // Espacio entre texto y botones
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    child: const Text(
+                      'Cancelar',
+                      style: TextStyle(
+                        color: Colors.grey, // Color de texto más suave
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: const Text(
+                      'Marcar como Atendida',
+                      style: TextStyle(
+                        color: Color(0xFF6165FA), // Color de texto resaltado
+                        fontWeight:
+                            FontWeight.bold, // Texto en negrita para destacar
+                      ),
+                    ),
+                    onPressed: () {
+                      publicationBloc
+                          .add(MarcarPublicacionPendienteTrueEvent(uid));
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -634,8 +715,6 @@ class _CustonAppBarDetalle extends StatelessWidget {
     }
 
     return SliverAppBar(
-      //color del appbar al regresar sobre negrea transparencia
-
       iconTheme: const IconThemeData(
         color: Colors.white,
         shadows: [

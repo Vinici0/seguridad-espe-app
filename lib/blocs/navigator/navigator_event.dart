@@ -15,3 +15,22 @@ class NavigatorIndexEvent extends NavigatorEvent {
   @override
   List<Object> get props => [index];
 }
+
+class NavigatorIsNewSelectedEvent extends NavigatorEvent {
+  final bool isNewSelected;
+
+  const NavigatorIsNewSelectedEvent({required this.isNewSelected});
+
+  @override
+  List<Object> get props => [isNewSelected];
+}
+
+class NavigatorIsNumberFamilySelectedEvent extends NavigatorEvent {
+  final bool isNumberFamilySelected;
+
+  const NavigatorIsNumberFamilySelectedEvent(
+      {required this.isNumberFamilySelected});
+
+  @override
+  List<Object> get props => [isNumberFamilySelected];
+}

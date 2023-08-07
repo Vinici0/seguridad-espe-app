@@ -24,6 +24,7 @@ class Usuario {
   String updatedAt;
   String? img;
   String? telefono;
+  bool isNotificacionesPendiente;
 
   Usuario({
     required this.online,
@@ -43,6 +44,7 @@ class Usuario {
     required this.updatedAt,
     required this.isPublicacionPendiente,
     required this.isSalasPendiente,
+    required this.isNotificacionesPendiente,
   });
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
@@ -55,6 +57,7 @@ class Usuario {
         createdAt: json["createdAt"],
         isActivo: json["isActivo"],
         updatedAt: json["updatedAt"],
+        isNotificacionesPendiente: json["isNotificacionesPendiente"],
         isSalasPendiente: json["isSalasPendiente"],
         salas: json["salas"] == null
             ? []
@@ -78,6 +81,7 @@ class Usuario {
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "isOpenRoom": isOpenRoom ?? false,
+        "isNotificacionesPendiente": isNotificacionesPendiente,
         "salas": salas == null
             ? []
             : List<dynamic>.from(salas!.map((x) => x.toMap())),

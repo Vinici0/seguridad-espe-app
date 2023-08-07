@@ -156,3 +156,12 @@ class ReportPublicationEvent extends PublicationEvent {
   @override
   List<Object> get props => [];
 }
+
+//marcar-publicacion-pendiente-false
+class MarcarPublicacionPendienteTrueEvent extends PublicationEvent {
+  final String uid;
+  const MarcarPublicacionPendienteTrueEvent(this.uid);
+
+  @override
+  List<Object> get props => [uid];
+}

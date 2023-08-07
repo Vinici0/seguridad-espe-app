@@ -41,21 +41,16 @@ class AuthService {
         'tokenApp': PushNotificationService.token
       };
       final uri = Uri.parse('${Environment.apiUrl}/login');
-
-      print('usuario:  todo bien1 ');
       final resp = await http.post(uri,
           body: jsonEncode(data),
           headers: {'Content-Type': 'application/json'});
       autenticando = false;
       // print(resp.body);
       if (resp.statusCode == 200) {
-        print('usuario:  todo bien2 ');
         final loginResponse = loginResponseFromJson(resp.body);
-        print('usuario:  todo bien3 ');
         usuario = loginResponse.usuario;
         ubicaciones = loginResponse.usuario.ubicacion;
         await _guardarToken(loginResponse.token);
-        print('usuario:  todo bien4 ');
         return true;
       } else {
         return false;
@@ -111,11 +106,8 @@ class AuthService {
       final resp = await http.post(uri,
           body: jsonEncode(data),
           headers: {'Content-Type': 'application/json'});
-      print(resp.body);
 
       if (resp.statusCode == 200) {
-        print('ok login google');
-        print(resp.body);
         final loginResponse = loginResponseFromJson(resp.body);
 
         usuario = loginResponse.usuario;
@@ -124,7 +116,6 @@ class AuthService {
 
         return account;
       } else {
-        print('ok login google false');
         return null;
       }
     } catch (e) {
@@ -404,6 +395,27 @@ class AuthService {
       }
     } catch (e) {
       print('Error en marcarSalaPendienteFalse: $e');
+      return false;
+    }
+  }
+
+  //marcar-notificaciones-pendiente-false
+  Future<bool> marcarNotificacionesPendienteFalse() async {
+    try {
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/usuarios/marcar-notificaciones-pendiente-false');
+      final resp = await http.put(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await getToken() as String,
+      });
+
+      if (resp.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en marcarNotificacionesPendienteFalse: $e');
       return false;
     }
   }

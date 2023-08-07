@@ -10,6 +10,7 @@ import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/screens/chatsales_config_screen.dart';
 import 'package:flutter_maps_adv/widgets/chat_message.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
 
 // ignore: constant_identifier_names
 enum ServerStatus { Online, Offline, Connecting }
@@ -148,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             onPressed: () async {
               // ignore: use_build_context_synchronously
               Navigator.of(context)
-                  .push(_createRoute(const DetalleSalaScreen()));
+                  .push(CreateRoute.createRoute(const DetalleSalaScreen()));
             },
           )
         ],
@@ -357,22 +358,4 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     await roomBloc.cambiarEstadoSala(false);
     await roomBloc.salasInitEvent();
   }
-}
-
-Route _createRoute(Widget screen) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => screen,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
 }

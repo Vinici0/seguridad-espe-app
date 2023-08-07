@@ -10,6 +10,7 @@ class CustomBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigatorBloc = BlocProvider.of<NavigatorBloc>(context);
     final mapBloc = BlocProvider.of<MapBloc>(context);
     final authService = BlocProvider.of<AuthBloc>(context, listen: false);
     final publicationBloc =
@@ -48,6 +49,11 @@ class CustomBottomNavigation extends StatelessWidget {
 
             if (i == 0) {
               await notificationBloc.loadNotification();
+            }
+
+            if (i == 3) {
+              navigatorBloc.add(const NavigatorIsNumberFamilySelectedEvent(
+                  isNumberFamilySelected: false));
             }
           },
           items: [

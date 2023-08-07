@@ -9,5 +9,14 @@ class NavigatorBloc extends Bloc<NavigatorEvent, NavigatorStateInit> {
     on<NavigatorIndexEvent>((event, emit) {
       emit(state.copyWith(index: event.index));
     });
+
+    on<NavigatorIsNewSelectedEvent>((event, emit) {
+      emit(state.copyWith(isNewSelected: event.isNewSelected));
+    });
+
+    on<NavigatorIsNumberFamilySelectedEvent>((event, emit) {
+      emit(
+          state.copyWith(isNumberFamilySelected: event.isNumberFamilySelected));
+    });
   }
 }

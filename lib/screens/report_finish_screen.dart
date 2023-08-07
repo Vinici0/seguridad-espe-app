@@ -22,12 +22,12 @@ class ReportFinishScreen extends StatelessWidget {
                 children: const [
                   Icon(
                     Icons.check_circle,
-                    color: Color(0xFF4CAF50),
+                    color: Color(0xFF08df9a),
                     size: 100,
                   ),
                   SizedBox(height: 20),
                   Text(
-                    'Gracias por tu denunciar',
+                    'Gracias por denunciar',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

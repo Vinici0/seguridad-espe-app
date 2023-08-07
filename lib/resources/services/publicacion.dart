@@ -302,4 +302,29 @@ class PublicacionService {
       return false;
     }
   }
+
+  //localhost:3000/api/publicacion/marcar-publicacion-pendiente-false/64c34fa32c081b4111c5ada9
+  Future<bool> marcarPublicacionPendienteTrue(String uid) async {
+    try {
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/publicacion/marcar-publicacion-pendiente-false/${uid}');
+      final resp = await http.put(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': await AuthService.getToken() as String,
+          },
+          body: jsonEncode({}));
+
+      final decodedData = json.decode(resp.body);
+      print('decodedData: $decodedData');
+      if (decodedData['ok'] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en marcarPublicacionPendienteFalse: $e');
+      return false;
+    }
+  }
 }

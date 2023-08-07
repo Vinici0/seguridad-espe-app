@@ -13,20 +13,22 @@ class OptionNews extends StatefulWidget {
     required this.state,
     required this.usuarioBloc,
     required this.i,
+    required this.likes,
   }) : super(key: key);
 
   final List<Publicacion> publicaciones;
   final PublicationState state;
   final AuthBloc usuarioBloc;
   final int i;
+  final List<String> likes;
 
   @override
   _OptionNewsState createState() => _OptionNewsState();
 }
 
 class _OptionNewsState extends State<OptionNews> {
-  bool isLiked = false;
   PublicationBloc publicationBloc = PublicationBloc();
+  AuthBloc usuarioBloc = AuthBloc();
 
   @override
   void initState() {
@@ -34,8 +36,7 @@ class _OptionNewsState extends State<OptionNews> {
     // Verificar si el usuario actual ya ha dado like en la publicación
     final currentUserUid = widget.usuarioBloc.state.usuario!.uid;
     publicationBloc = BlocProvider.of<PublicationBloc>(context);
-    isLiked =
-        widget.publicaciones[widget.i].likes?.contains(currentUserUid) ?? false;
+    usuarioBloc = BlocProvider.of<AuthBloc>(context);
   }
 
   Future<void> _handleLike() async {
@@ -47,13 +48,13 @@ class _OptionNewsState extends State<OptionNews> {
     } catch (e) {
       print('Error: $e');
     }
+
     setState(() {
-      if (isLiked) {
-        widget.publicaciones[widget.i].likes?.remove(currentUserUid);
+      if (widget.likes.contains(currentUserUid)) {
+        widget.likes.remove(currentUserUid);
       } else {
-        widget.publicaciones[widget.i].likes?.add(currentUserUid);
+        widget.likes.add(currentUserUid);
       }
-      isLiked = !isLiked;
     });
   }
 
@@ -74,26 +75,24 @@ class _OptionNewsState extends State<OptionNews> {
                     width: 30.0,
                     height: 35.0,
                     margin: const EdgeInsets.only(left: 28),
-                    child: isLiked
+                    child: widget.likes.contains(usuarioBloc.state.usuario!.uid)
                         ? const Icon(
-                            Icons.favorite,
+                            FontAwesomeIcons.solidHeart,
                             color: Colors.red,
-                            size: 22.5,
+                            size: 19.5,
                           )
                         : const Icon(
-                            Icons.favorite_border,
+                            FontAwesomeIcons.heart,
                             color: Colors.grey,
-                            size: 22.5,
+                            size: 19.5,
                           ),
                   ),
                   const SizedBox(
                     width: 5,
                   ),
                   Text(
-                    widget.publicaciones[widget.i].likes == null
-                        ? '0'
-                        : widget.publicaciones[widget.i].likes!.length
-                            .toString(),
+                    widget.likes.length
+                        .toString(), // Usar la lista "likes" actualizada
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -115,7 +114,7 @@ class _OptionNewsState extends State<OptionNews> {
                     margin: EdgeInsets.zero,
                     width: 30.0,
                     height: 35.0,
-                    //TODO: solicionar el problema de los comentarios
+                    // TODO: solucionar el problema de los comentarios
                     child: const Icon(
                       FontAwesomeIcons.comment,
                       color: Colors.grey,

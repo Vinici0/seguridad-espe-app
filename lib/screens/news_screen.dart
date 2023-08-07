@@ -174,6 +174,7 @@ class _ListNews extends StatelessWidget {
                                         padding: const EdgeInsets.all(5.0),
                                         child: SvgPicture.asset(
                                           'assets/alertas/${publicaciones[i].imgAlerta}',
+                                          // ignore: deprecated_member_use
                                           color: Colors.white,
                                         ),
                                       ),
@@ -302,7 +303,8 @@ class _ListNews extends StatelessWidget {
                       publicaciones: publicaciones,
                       state: state,
                       usuarioBloc: usuarioBloc,
-                      i: i),
+                      i: i,
+                      likes: publicaciones[i].likes!),
                 ],
               ),
             ),

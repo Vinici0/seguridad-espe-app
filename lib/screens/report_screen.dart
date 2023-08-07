@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
 
 import 'package:flutter_maps_adv/screens/report_detalle_screen.dart';
 
@@ -64,16 +67,20 @@ class _CardReport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final notificationBloc = BlocProvider.of<NotificationBloc>(context);
     return Card(
       elevation: 0,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ListTile(
         title: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.black87),
         onTap: () {
+          notificationBloc.add(
+            CurrentTextReportEvent(title),
+          );
           _navigateToReport(context, title);
         },
       ),
@@ -81,7 +88,7 @@ class _CardReport extends StatelessWidget {
   }
 
   void _navigateToReport(BuildContext context, String title) {
-    Navigator.pushNamed(context, ReportDetalleScreen.reportDetalleRoute,
-        arguments: title);
+    Navigator.of(context)
+        .push(CreateRoute.createRoute(const ReportDetalleScreen()));
   }
 }

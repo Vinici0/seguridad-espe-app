@@ -31,6 +31,10 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
       await _notificationService.marcarNotificacionComoLeida(event.id);
     });
+
+    on<CurrentTextReportEvent>((event, emit) async {
+      emit(state.copyWith(currentText: event.currentText));
+    });
   }
 
   loadNotification() async {

@@ -83,6 +83,8 @@ class DeleteSalaEvent extends RoomEvent {
 
 class RoomLoadingEvent extends RoomEvent {}
 
+class RoomLoadingEvent2 extends RoomEvent {}
+
 class AbandonarSalaEvent extends RoomEvent {
   final String uid;
 

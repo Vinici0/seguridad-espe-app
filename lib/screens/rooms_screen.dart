@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
 import 'package:flutter_maps_adv/models/sales_response.dart';
 import 'package:flutter_maps_adv/screens/chatsales_screen.dart';
 import 'package:flutter_maps_adv/screens/code_add_sreen.dart';
 import 'package:flutter_maps_adv/screens/code_create_sreen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RoomsScreen extends StatelessWidget {
@@ -16,6 +18,7 @@ class RoomsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final roonBloc = BlocProvider.of<RoomBloc>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.black87),
         centerTitle: false,
@@ -26,11 +29,72 @@ class RoomsScreen extends StatelessWidget {
       ),
       body: BlocBuilder<RoomBloc, RoomState>(
         builder: (context, state) {
-          // if (state.isLoading) {
-          //   return const Center(
-          //     child: CircularProgressIndicator(),
-          //   );
-          // }
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFF6165FA),
+              ),
+            );
+          }
+          if (state.salas.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  //svg image de grupo
+                  SvgPicture.asset(
+                    'assets/info/charicons.svg',
+                    width: 200,
+                    height: 250,
+                  ),
+                  const Text('!Más seguro en grupo!',
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                      'Cree o únase a un grupo para puedas estar informado de lo que reportan tus amigos y cuidarse entre mutuamente.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      )),
+                  //Material boton para uniirse a un grupo
+                  MaterialButton(
+                    //todo el ancho posible
+                    minWidth: MediaQuery.of(context).size.width * 0.95,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                          CreateRoute.createRoute(CodigoAddGrupoScreen()));
+                    },
+                    color: Colors.white,
+                    textColor: Colors.black87,
+                    child: const Text('Unirse a un grupo'),
+                  ),
+                  //Material boton para crear un grupo
+                  MaterialButton(
+                    //todo el ancho posible
+                    minWidth: MediaQuery.of(context).size.width * 0.95,
+                    //borde redondeado
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    onPressed: () {
+                      Navigator.of(context).push(CreateRoute.createRoute(
+                          const CodigoCreateGrupoScreen()));
+                    },
+                    color: const Color(0xFF6165FA),
+                    textColor: Colors.white,
+                    child: const Text('Crear un grupo'),
+                  ),
+                ],
+              ),
+            );
+          }
 
           return Container(
             color: Colors.white,
@@ -173,7 +237,7 @@ class SalaListTitle extends StatelessWidget {
         membersBloc.add(ChatInitEvent());
         salasService.add(SalaSelectEvent(sala));
         salasService.add(ResetTotalMensajesNoLeidosEvent(sala.uid));
-        Navigator.of(context).push(_createRoute(const ChatScreen()));
+        Navigator.of(context).push(CreateRoute.createRoute(const ChatScreen()));
       },
     );
   }
@@ -247,22 +311,4 @@ class IconModal extends StatelessWidget {
       },
     );
   }
-}
-
-Route _createRoute(Widget screen) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => screen,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
 }

@@ -51,6 +51,7 @@ class Publicacion {
   String? updatedAt;
   String? uid;
   String nombreUsuario;
+  bool? isPublicacionPendiente;
 
   Publicacion({
     required this.titulo,
@@ -70,6 +71,7 @@ class Publicacion {
     this.createdAt,
     this.updatedAt,
     this.uid,
+    this.isPublicacionPendiente,
     required this.nombreUsuario,
   });
 
@@ -78,6 +80,7 @@ class Publicacion {
         contenido: json["contenido"],
         color: json["color"],
         ciudad: json["ciudad"],
+        isPublicacionPendiente: json["isPublicacionPendiente"],
         barrio: json["barrio"],
         isPublic: json["isPublic"],
         usuario: json["usuario"],
@@ -121,6 +124,7 @@ class Publicacion {
         "isLiked": isLiked,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
+        "isPublicacionPendiente": isPublicacionPendiente,
         "uid": uid,
         "nombreUsuario": nombreUsuario,
       };
@@ -142,6 +146,7 @@ class Publicacion {
     String? imgAlerta,
     bool? isLiked,
     String? createdAt,
+    bool? isPublicacionPendiente,
     String? updatedAt,
     String? usuarioNombre,
   }) {
@@ -157,6 +162,8 @@ class Publicacion {
       likes: likes ?? this.likes,
       imagenes: imagenes ?? this.imagenes,
       latitud: latitud ?? this.latitud,
+      isPublicacionPendiente:
+          isPublicacionPendiente ?? this.isPublicacionPendiente,
       longitud: longitud ?? this.longitud,
       comentarios: comentarios ?? this.comentarios,
       imgAlerta: imgAlerta ?? this.imgAlerta,

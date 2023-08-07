@@ -26,7 +26,7 @@ class TableAlertsCompunidad extends StatelessWidget {
                     arguments: Reporte(
                         tipo: "Problemas de agua",
                         icon: "problemas-alcantarillado.svg",
-                        color: "00FF00"))
+                        color: "8EB582"))
               },
               child: PhysicalModelCircleContainer(
                 icon: "problemas-alcantarillado.svg",
@@ -41,7 +41,7 @@ class TableAlertsCompunidad extends StatelessWidget {
                     arguments: Reporte(
                         tipo: "Problemas de basura",
                         icon: "problemas-de-basura.svg",
-                        color: "FFC0CB"))
+                        color: "ff2e74"))
               },
               child: PhysicalModelCircleContainer(
                 icon: "problemas-de-basura.svg",
@@ -56,7 +56,7 @@ class TableAlertsCompunidad extends StatelessWidget {
                     arguments: Reporte(
                         tipo: "Problemas de energia",
                         icon: "problemas-de-energia.svg",
-                        color: "800080")),
+                        color: "7f66ff")),
               },
               child: PhysicalModelCircleContainer(
                 icon: "problemas-de-energia.svg",
@@ -75,7 +75,7 @@ class TableAlertsCompunidad extends StatelessWidget {
                     arguments: Reporte(
                         tipo: "Problemas de telecomunicaciones",
                         icon: "problemas-de-telecomunicaciones.svg",
-                        color: "0000FF"))
+                        color: "43abcd"))
               },
               child: PhysicalModelCircleContainer(
                 icon: "problemas-de-telecomunicaciones.svg",
@@ -98,9 +98,22 @@ class TableAlertsCompunidad extends StatelessWidget {
                               icon: "problems-de-transporte-publico.svg",
                               color: "414073"))
                     }),
-            const TableCell(
-              child: SizedBox(),
-            ),
+            GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child: const PhysicalModelCircleContainer(
+                  icon: "corazon.png",
+                  text: "Buena acción",
+                  color: Color(0xFF414073),
+                  isSvg: false,
+                ),
+                onTap: () => {
+                      Navigator.pushNamed(context, 'reporte',
+                          arguments: Reporte(
+                              tipo: "Buena acción",
+                              icon: "corazon.png",
+                              color: "414073",
+                              isSvg: false))
+                    }),
           ],
         ),
       ],
@@ -112,12 +125,14 @@ class PhysicalModelCircleContainer extends StatelessWidget {
   final String icon;
   final String text;
   final Color color;
+  final bool isSvg;
 
   const PhysicalModelCircleContainer({
     super.key,
     required this.icon,
     required this.text,
     required this.color,
+    this.isSvg = true,
   });
 
   @override
@@ -139,13 +154,20 @@ class PhysicalModelCircleContainer extends StatelessWidget {
                 border: Border.all(color: Colors.white, width: 4),
                 shape: BoxShape.circle,
               ),
-              child: SvgPicture.asset(
-                "assets/alertas/$icon",
-                fit: BoxFit.cover,
-                width: 50,
-                colorFilter:
-                    const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              ),
+              child: isSvg
+                  ? SvgPicture.asset(
+                      "assets/alertas/$icon",
+                      fit: BoxFit.cover,
+                      width: 50,
+                      colorFilter:
+                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    )
+                  : Image.asset(
+                      "assets/alertas/$icon",
+                      fit: BoxFit.cover,
+                      width: 50,
+                      color: Colors.white,
+                    ),
             ),
           ),
           const SizedBox(height: 8),

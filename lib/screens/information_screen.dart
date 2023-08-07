@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/information_family_screen.dart';
+import 'package:flutter_maps_adv/screens/places_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class InformationScreen extends StatefulWidget {
@@ -19,11 +22,12 @@ class _InformationScreenState extends State<InformationScreen> {
   final TextEditingController telefonoController =
       TextEditingController(text: '09');
   bool areFieldsEmpty = true;
-
+  NavigatorBloc navigatorBloc = NavigatorBloc();
   @override
   void initState() {
     super.initState();
     telefonoController.addListener(updateFieldsState);
+    navigatorBloc = BlocProvider.of<NavigatorBloc>(context);
   }
 
   @override
@@ -51,7 +55,6 @@ class _InformationScreenState extends State<InformationScreen> {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -147,18 +150,26 @@ class _InformationScreenState extends State<InformationScreen> {
             const SizedBox(
               height: 20,
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 38,
               child: ElevatedButton(
                 onPressed: areFieldsEmpty
                     ? null
                     : () async {
+                        //cerrar el teclado
+                        FocusScope.of(context).unfocus();
                         await authBloc
                             .addTelefono(telefonoController.text.trim());
+
+                        navigatorBloc.add(
+                            const NavigatorIsNumberFamilySelectedEvent(
+                                isNumberFamilySelected: true));
                         // ignore: use_build_context_synchronously
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, HomeScreen.homeroute, (route) => false);
+                        Navigator.of(context).push(
+                            CreateRoute.createRoute(const PlacesScreen()));
+                        // Navigator.pushNamedAndRemoveUntil(
+                        //     context, HomeScreen.homeroute, (route) => false);
                       },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6165FA),
