@@ -44,7 +44,7 @@ class CustomBottomNavigation extends StatelessWidget {
 
             if (i == 2) {
               authService.add(const MarcarSalasPendienteFalse());
-              await roomBloc.salasInitEvent();
+              roomBloc.salasInitEvent();
             }
 
             if (i == 0) {

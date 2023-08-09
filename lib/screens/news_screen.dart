@@ -172,11 +172,21 @@ class _ListNews extends StatelessWidget {
                                           "0xFF${publicaciones[i].color}")), //Color(0xffFDCF09
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
-                                        child: SvgPicture.asset(
-                                          'assets/alertas/${publicaciones[i].imgAlerta}',
-                                          // ignore: deprecated_member_use
-                                          color: Colors.white,
-                                        ),
+
+                                        //si ternmina despues del punto en .png muestra la imagen
+                                        child: publicaciones[i]
+                                                .imgAlerta
+                                                .endsWith('.png')
+                                            ? Image.asset(
+                                                'assets/alertas/${publicaciones[i].imgAlerta}',
+                                                // ignore: deprecated_member_use
+                                                color: Colors.white,
+                                              )
+                                            : SvgPicture.asset(
+                                                'assets/alertas/${publicaciones[i].imgAlerta}',
+                                                // ignore: deprecated_member_use
+                                                color: Colors.white,
+                                              ),
                                       ),
                                     ),
                                   ),

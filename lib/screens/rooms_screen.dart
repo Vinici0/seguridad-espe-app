@@ -56,7 +56,7 @@ class RoomsScreen extends StatelessWidget {
                     height: 10,
                   ),
                   const Text(
-                      'Cree o únase a un grupo para puedas estar informado de lo que reportan tus amigos y cuidarse entre mutuamente.',
+                      'Cree o únase a un grupo para que puedas estar informado de lo que reportan tus amigos y cuidarse entre mutuamente.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black87,

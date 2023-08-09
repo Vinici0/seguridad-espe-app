@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/models/notification.dart';
@@ -10,6 +9,7 @@ import 'package:http/http.dart' as http;
 class NotificationService {
   //localhost:3000/api/notificacion
   Future<List<Notificacione>> getNotificaciones() async {
+    print("body");
     try {
       final uri = Uri.parse('${Environment.apiUrl}/notificacion');
 
@@ -21,8 +21,12 @@ class NotificationService {
         },
       );
 
+      print('resp: ${resp.body}');
+
       final decodedData = json.decode(resp.body);
+      print(decodedData);
       final notificacionResp = NotificacionReponse.fromJson(decodedData);
+      print(notificacionResp.notificaciones);
       return notificacionResp.notificaciones;
     } catch (e) {
       print('Error: $e');

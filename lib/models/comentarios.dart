@@ -81,12 +81,12 @@ class Comentario {
 class Usuario {
   String id;
   String nombre;
-  String img;
+  String? img;
   bool google;
   Usuario({
     required this.id,
     required this.nombre,
-    required this.img,
+    this.img,
     this.google = false,
   });
 

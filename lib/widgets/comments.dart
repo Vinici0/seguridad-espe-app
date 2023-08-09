@@ -51,7 +51,7 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
                 children: [
                   Text(
                     widget.publicacion.isPublic
-                        ? widget.publicacion.nombreUsuario!
+                        ? widget.publicacion.nombreUsuario
                         : 'Anónimo',
                   ),
                 ],
@@ -60,7 +60,7 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
             const Divider(height: 2),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-              child: state.currentPublicacion!.isPublicacionPendiente!
+              child: state.currentPublicacion?.isPublicacionPendiente == true
                   ? Row(
                       children: const [
                         Icon(

@@ -53,9 +53,9 @@ class _BtnReport extends StatelessWidget {
               },
               //icono de aleta de emergencia
               icon: Image.asset(
-                'assets/altoparlante.png',
-                width: 30,
-                height: 25,
+                'assets/alertaIcon.png',
+                width: 23,
+                height: 23,
               ),
               label: const Text("REPORTAR",
                   style: TextStyle(fontSize: 16, color: Colors.white)),

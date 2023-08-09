@@ -28,6 +28,7 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
                 longitud: 0,
                 titulo: '',
                 usuario: '',
+                isPublicacionPendiente: false,
                 nombreUsuario: ''),
             isLoading: false,
             isError: false)) {
@@ -44,6 +45,8 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     });
 
     on<PublicacionSelectEvent>((event, emit) {
+      print("aaaaaaaaaaaaaaaaaa");
+      print(event.publicacion);
       emit(state.copyWith(currentPublicacion: event.publicacion));
     });
 
@@ -223,18 +226,19 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     add(LoadingEvent());
     final List<Comentario> comentariosL =
         await _publicacionService.getAllComments(uid);
-
     for (var element in comentariosL) {
       final comment = CommentPublication(
           comentario: element.contenido,
           nombre: element.usuario.nombre,
-          fotoPerfil: element.usuario.img,
+          fotoPerfil:
+              element.usuario.google ? element.usuario.img : element.usuario.id,
           createdAt: element.createdAt,
           uidUsuario: element.usuario.id,
           likes: element.likes!,
           uid: element.uid,
           isGoogle: element.usuario.google,
           isLiked: false);
+
       add(AddCommentPublicationEvent(comment));
     }
     add(CountCommentEvent(state.comentariosP.length));

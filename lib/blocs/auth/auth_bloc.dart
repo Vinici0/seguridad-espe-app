@@ -430,6 +430,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   logout() async {
     isLoggedInTrue = false;
+    await apiAuthRepository.eliminarTokenApp();
     await apiAuthRepository.logout();
     socketService.disconnect();
   }

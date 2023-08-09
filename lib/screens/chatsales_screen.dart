@@ -78,11 +78,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   }
 
   void _escucharMensaje(dynamic payload) {
+    print(payload);
     ChatMessage message = ChatMessage(
       nombre: payload['nombre'],
       texto: payload['mensaje'],
       uid: payload['de'],
-      img: payload['de'],
+      img: payload['isGoogle'] == true ? payload['img'] : payload['de'],
       isGoogle: payload['isGoogle'],
       createdAt: DateTime.now().toString(),
       animationController: AnimationController(

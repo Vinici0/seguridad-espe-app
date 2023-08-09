@@ -51,7 +51,7 @@ class Publicacion {
   String? updatedAt;
   String? uid;
   String nombreUsuario;
-  bool? isPublicacionPendiente;
+  bool isPublicacionPendiente;
 
   Publicacion({
     required this.titulo,
@@ -71,7 +71,7 @@ class Publicacion {
     this.createdAt,
     this.updatedAt,
     this.uid,
-    this.isPublicacionPendiente,
+    required this.isPublicacionPendiente,
     required this.nombreUsuario,
   });
 

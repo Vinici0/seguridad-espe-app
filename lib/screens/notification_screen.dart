@@ -65,6 +65,7 @@ class NotificationsScreen extends StatelessWidget {
                       color: Colors.black54,
                       fontSize: 16,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
@@ -89,11 +90,19 @@ class NotificationsScreen extends StatelessWidget {
                     child: state.notificaciones[index].tipo ==
                             NotificationsScreen.sos
                         ? Image.asset('assets/sos.png')
-                        : SvgPicture.asset(
-                            'assets/alertas/${state.notificaciones[index].publicacion!.imgAlerta}',
-                            width: 25,
-                            color: Colors.white,
-                          ),
+                        //si ternmina despues del punto en .png muestra la imagen
+                        : state.notificaciones[index].publicacion!.imgAlerta
+                                .endsWith('.png')
+                            ? Image.asset(
+                                'assets/alertas/${state.notificaciones[index].publicacion!.imgAlerta}',
+                                // ignore: deprecated_member_use
+                                color: Colors.white,
+                              )
+                            : SvgPicture.asset(
+                                'assets/alertas/${state.notificaciones[index].publicacion!.imgAlerta}',
+                                width: 25,
+                                color: Colors.white,
+                              ),
                   ),
                   title: Text(
                     // state.notificaciones[index].usuario.nombre,

@@ -79,6 +79,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
   }
 
   void _escucharComeentario(dynamic payload) {
+    print(payload);
     CommentPublication comment = CommentPublication(
       comentario: payload['mensaje'],
       nombre: payload['nombre'],
@@ -107,6 +108,8 @@ class _DetalleScreenState extends State<DetalleScreen> {
       longitud: publicationBloc.state.currentPublicacion!.longitud,
       imgAlerta: publicationBloc.state.currentPublicacion!.imgAlerta,
       isLiked: publicationBloc.state.currentPublicacion!.isLiked,
+      isPublicacionPendiente:
+          publicationBloc.state.currentPublicacion!.isPublicacionPendiente,
       uid: publicationBloc.state.currentPublicacion!.uid,
       comentarios: comentarios,
       likes: publicationBloc.state.currentPublicacion!.likes,
@@ -266,24 +269,29 @@ class _DetalleScreenState extends State<DetalleScreen> {
     final resultadoComentario = await publicationBloc.createComentarioService(
         comentario, publicationBloc.state.currentPublicacion!.uid!);
 
+    print(resultadoComentario);
+
     final newComment = CommentPublication(
       comentario: comentario,
       nombre: authService.state.usuario!.nombre,
       createdAt: createdAt.toString(),
       uid: resultadoComentario.uid,
       isGoogle: authService.state.usuario!.google,
-      fotoPerfil: authService.state.usuario!.img == null
-          ? null
-          : authService.state.usuario!.img!,
+      fotoPerfil: authService.state.usuario!.google == true
+          ? authService.state.usuario!.img
+          : authService.state.usuario!.uid,
       isLiked: false,
       uidUsuario: authService.state.usuario!.uid,
       likes: const [],
     );
 
+    print(newComment);
     authService.socketService.socket.emit('comentario-publicacion', {
       'nombre': authService.state.usuario!.nombre,
       'mensaje': newComment.comentario,
-      'fotoPerfil': authService.state.usuario!.uid,
+      'fotoPerfil': authService.state.usuario!.google == true
+          ? authService.state.usuario!.img
+          : authService.state.usuario!.uid,
       'createdAt': createdAt.toString(),
       'para': publicationBloc.state.currentPublicacion!.uid!,
       'de': authService.state.usuario!.uid,
@@ -311,6 +319,8 @@ class _DetalleScreenState extends State<DetalleScreen> {
       imgAlerta: publicationBloc.state.currentPublicacion!.imgAlerta,
       isLiked: publicationBloc.state.currentPublicacion!.isLiked,
       uid: publicationBloc.state.currentPublicacion!.uid,
+      isPublicacionPendiente:
+          publicationBloc.state.currentPublicacion!.isPublicacionPendiente,
       comentarios: comentarios,
       likes: publicationBloc.state.currentPublicacion!.likes,
       imagenes: publicationBloc.state.currentPublicacion!.imagenes,

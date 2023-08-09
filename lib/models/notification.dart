@@ -62,7 +62,9 @@ class Notificacione {
     required this.isLeida,
   });
 
-  factory Notificacione.fromJson(Map<String, dynamic> json) => Notificacione(
+  factory Notificacione.fromJson(Map<String, dynamic> json) {
+    try {
+      return Notificacione(
         tipo: json["tipo"],
         usuario: json["usuario"],
         usuarioRemitente: UsuarioRemitente.fromJson(json["usuarioRemitente"]),
@@ -77,6 +79,11 @@ class Notificacione {
         isLeida: json["isLeida"],
         uid: json["uid"],
       );
+    } catch (e) {
+      print("Error en la decodificación de Notificacione: $e");
+      rethrow; // Relanza la excepción para que se propague más arriba
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "tipo": tipo,
@@ -138,8 +145,9 @@ class UsuarioRemitente {
     this.img,
   });
 
-  factory UsuarioRemitente.fromJson(Map<String, dynamic> json) =>
-      UsuarioRemitente(
+  factory UsuarioRemitente.fromJson(Map<String, dynamic> json) {
+    try {
+      return UsuarioRemitente(
         id: json["_id"],
         nombre: json["nombre"],
         email: json["email"],
@@ -147,6 +155,11 @@ class UsuarioRemitente {
         telefono: json["telefono"],
         img: json["img"],
       );
+    } catch (e) {
+      print("Error en la decodificación de UsuarioRemitente: $e");
+      rethrow; // Relanza la excepción para que se propague más arriba
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "_id": id,

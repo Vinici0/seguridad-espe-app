@@ -103,7 +103,7 @@ class TableAlertsCompunidad extends StatelessWidget {
                 child: const PhysicalModelCircleContainer(
                   icon: "corazon.png",
                   text: "Buena acción",
-                  color: Color(0xFF414073),
+                  color: Color(0xFFeea15f),
                   isSvg: false,
                 ),
                 onTap: () => {
@@ -111,11 +111,51 @@ class TableAlertsCompunidad extends StatelessWidget {
                           arguments: Reporte(
                               tipo: "Buena acción",
                               icon: "corazon.png",
-                              color: "414073",
+                              color: "eea15f",
                               isSvg: false))
                     }),
           ],
         ),
+        TableRow(children: [
+          // No quiero ubicar más columnas en esta fila
+          GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              child: const PhysicalModelCircleContainer(
+                icon: "comunicar.png",
+                text: "Aviso comunitario",
+                color: Color(0xFFff2e74),
+                isSvg: false,
+              ),
+              onTap: () => {
+                    Navigator.pushNamed(context, 'reporte',
+                        arguments: Reporte(
+                            tipo: "Aviso comunitario",
+                            icon: "comunicar.png",
+                            color: "ff2e74",
+                            isSvg: false))
+                  }),
+          GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              child: const PhysicalModelCircleContainer(
+                icon: "mascotas.png",
+                text: "Mascota perdida",
+                color: Color(0xFFFC9032),
+                isSvg: false,
+              ),
+              onTap: () => {
+                    Navigator.pushNamed(context, 'reporte',
+                        arguments: Reporte(
+                            tipo: "Mascota perdida",
+                            icon: "mascotas.png",
+                            color: "FC9032",
+                            isSvg: false))
+                  }),
+          //agrega un espacio vacio
+          const TableCell(
+            child: SizedBox(),
+          ),
+        ]),
+        // vacio
       ],
     );
   }

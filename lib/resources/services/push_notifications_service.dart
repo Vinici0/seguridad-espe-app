@@ -23,6 +23,9 @@ class PushNotificationService {
 
   static Future<void> _onMessageHandler(RemoteMessage message) async {
     _messageStream.add(message.data);
+
+    //cuando abra la app se borra la notificación de la barra de notificaciones
+    // Android
   }
 
   static Future<void> _onMessageOpenApp(RemoteMessage message) async {

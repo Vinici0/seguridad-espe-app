@@ -419,4 +419,25 @@ class AuthService {
       return false;
     }
   }
+
+  Future<bool> eliminarTokenApp() async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/usuarios/delete-token-app');
+      final resp = await http.delete(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await getToken() as String,
+      });
+
+      print('resp.statusCode: ${resp.statusCode}');
+
+      if (resp.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en eliminarTokenApp: $e');
+      return false;
+    }
+  }
 }

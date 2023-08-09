@@ -40,6 +40,11 @@ class ApiUserRepository {
     // }
   }
 
+  //eliminarTokenApp
+  Future<bool> eliminarTokenApp() async {
+    return await _authService.eliminarTokenApp();
+  }
+
   //marcarPublicacionPendienteFalse
   Future<bool> marcarPublicacionPendienteFalse() async {
     return await _authService.marcarPublicacionPendienteFalse();

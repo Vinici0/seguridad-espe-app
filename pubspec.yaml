@@ -103,6 +103,9 @@ flutter:
     - assets/alertas/robo-a-persona.svg
     - assets/alertas/robo-de-vehiculo.svg
     - assets/alertas/user-usuario.svg
+    - assets/alertas/corazon.png
+    - assets/alertas/mascotas.png
+    - assets/alertas/comunicar.png
     - assets/info/
     - assets/icon/
   # An image asset can refer to one or more resolution-specific "variants", see

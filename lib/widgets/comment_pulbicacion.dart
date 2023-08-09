@@ -17,7 +17,7 @@ class CommentPublication extends StatefulWidget {
   bool isLiked;
 
   CommentPublication({
-    Key? key,
+    super.key,
     required this.uidUsuario,
     required this.comentario,
     required this.nombre,
@@ -27,7 +27,7 @@ class CommentPublication extends StatefulWidget {
     required this.isLiked,
     required this.uid,
     required this.likes,
-  }) : super(key: key);
+  });
 
   @override
   _CommentPublicationState createState() => _CommentPublicationState();

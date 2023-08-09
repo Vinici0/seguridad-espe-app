@@ -21,6 +21,7 @@ class PublicacionService {
     barrio: '',
     isPublic: false,
     usuario: '',
+    isPublicacionPendiente: false,
     imgAlerta: '',
     nombreUsuario: '',
     isLiked: false,
@@ -98,6 +99,7 @@ class PublicacionService {
       final publicacion = Publicacion(
         titulo: titulo,
         contenido: descripcion,
+        isPublicacionPendiente: false,
         color: color,
         ciudad: placemarks[0].locality == null
             ? 'S/N'
@@ -219,6 +221,7 @@ class PublicacionService {
 
       final decodedData = json.decode(resp.body);
       final commentResp = ComentarioResponse.fromJson(decodedData);
+      print(commentResp.comentarios);
       return commentResp.comentarios;
     } catch (e) {
       print('Error: $e');
@@ -270,6 +273,9 @@ class PublicacionService {
       );
       final decodedData = json.decode(resp.body);
       final commentResp = ComentarioPersonResponse.fromJson(decodedData);
+      print(commentResp.comentario.uid +
+          ' lllllllllllllllll' +
+          commentResp.comentario.contenido);
       return commentResp.comentario;
     } catch (e) {
       throw Exception('Error: Failed to create comentario.');

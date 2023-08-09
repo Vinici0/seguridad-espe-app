@@ -15,6 +15,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
       emit(
           state.copyWith(notificaciones: event.notificaciones, loading: false));
+      print('notificaciones22222222222');
     });
 
     on<MarcarNotificacionComoLeidaEvent>((event, emit) async {
@@ -38,7 +39,10 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }
 
   loadNotification() async {
-    final notificaciones = await _notificationService.getNotificaciones();
+    final List<Notificacione> notificaciones =
+        await _notificationService.getNotificaciones();
+    print(notificaciones);
+    print('notificaciones111111111');
     add(LoadNotificationEvent(notificaciones));
   }
 }
