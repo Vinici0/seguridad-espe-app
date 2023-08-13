@@ -45,7 +45,7 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
                 //nombre de usuario que publico
                 children: [
@@ -59,19 +59,23 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
             ),
             const Divider(height: 2),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: state.currentPublicacion?.isPublicacionPendiente == true
                   ? Row(
                       children: const [
                         Icon(
-                          Icons.check_circle,
-                          color: Colors.red,
-                          size: 16,
+                          //icono de una comunidad feliz
+                          FontAwesomeIcons.faceSmileBeam,
+                          color: Colors.green,
+                          size: 20,
                         ),
                         SizedBox(width: 5),
-                        Text(
-                          'La publicación ha sido finalizada por el usuario. ¡Gracias por tu colaboración!',
-                          style: TextStyle(fontSize: 12, color: Colors.black54),
+                        Expanded(
+                          child: Text(
+                            'La publicación ha sido finalizada por el usuario. ¡Gracias por tu colaboración!',
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.black54),
+                          ),
                         ),
                       ],
                     )
@@ -82,7 +86,7 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
             ),
             const Divider(height: 2),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 children: [
                   //TODO: Cambiar el icono

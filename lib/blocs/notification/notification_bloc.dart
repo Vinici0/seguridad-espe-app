@@ -41,8 +41,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   loadNotification() async {
     final List<Notificacione> notificaciones =
         await _notificationService.getNotificaciones();
-    print(notificaciones);
-    print('notificaciones111111111');
     add(LoadNotificationEvent(notificaciones));
   }
 }

@@ -16,6 +16,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
+
+import 'package:timezone/timezone.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class DetalleScreen extends StatefulWidget {
@@ -444,16 +447,20 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      //mes y dia con icno de reloj y la de publicacion
+                      //mes y dia con icno de reloj y la de publicacion pero en español
                       Text(
-                        DateFormat('MMMM d').format(DateTime.parse(
-                            widget.publicacion.createdAt.toString())),
+                        //timeago solo el mes que se publico
+                        //mes que fue publicado en español
+                        _getFechaCreacion(publicacion.createdAt.toString()),
+
                         style: const TextStyle(color: Colors.white),
                       ),
                       const SizedBox(
                         height: 5,
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const Icon(FontAwesomeIcons.clock,
                               size: 20, color: Colors.white),
@@ -461,12 +468,13 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
                             width: 5,
                           ),
                           Text(
-                            //hora conn import 'timeago; HH:mm
+                            //llamar a la funcion que me devuelve el dia y la hora
                             timeago.format(
                                 DateTime.parse(
-                                    widget.publicacion.createdAt.toString()),
-                                locale: 'es_short'),
+                                    publicacion.createdAt.toString()),
+                                locale: 'en_short'),
                             style: const TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
                           )
                         ],
                       ),
@@ -636,6 +644,46 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
         ],
       ),
     );
+  }
+
+  String _getFechaCreacion(String fecha) {
+    final data = DateFormat('yyyy-MM-dd').parse(fecha);
+    final List<String> fechaSplit = fecha.split(' ');
+    final String fechaFinal = fechaSplit[0];
+    final List<String> fechaFinalSplit = fechaFinal.split('-');
+    final String mesNumero = fechaFinalSplit[1];
+    final List<String> nombresMeses = [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre'
+    ];
+    final String nombreMes = nombresMeses[int.parse(mesNumero)];
+    return '${data.day} de $nombreMes';
+  }
+
+  String getEcuadorianTimeOfDay(DateTime mongoTime) {
+    final ecuadorianOffset = Duration(hours: -5);
+    final deviceOffset = DateTime.now().timeZoneOffset;
+    final diff = deviceOffset - ecuadorianOffset;
+
+    DateTime ecuadorianTime = mongoTime.add(diff);
+
+    if (ecuadorianTime.hour >= 0 && ecuadorianTime.hour < 12) {
+      // Si es de 12:00 AM a 11:59 AM, muestra la hora en formato AM
+      return DateFormat('h:mm a').format(ecuadorianTime);
+    } else {
+      // Si es de 12:00 PM en adelante, muestra la hora en formato PM
+      return DateFormat('h:mm a').format(ecuadorianTime);
+    }
   }
 
   void _getCurrentLocation() async {

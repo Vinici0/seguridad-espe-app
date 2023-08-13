@@ -45,7 +45,7 @@ class PositionedBtnSOS extends StatelessWidget {
   }
 }
 
-class _SOSNotification extends StatelessWidget {
+class _SOSNotification extends StatefulWidget {
   const _SOSNotification({
     Key? key,
     required this.authBloc,
@@ -56,6 +56,48 @@ class _SOSNotification extends StatelessWidget {
   final AuthBloc authBloc;
   final double lat;
   final double lng;
+
+  @override
+  State<_SOSNotification> createState() => _SOSNotificationState();
+}
+
+class _SOSNotificationState extends State<_SOSNotification> {
+  bool isRequesting = false;
+  DateTime lastRequestTime = DateTime.now();
+
+  Future<void> _sendNotification(double lat, double lng) async {
+    if (isRequesting) {
+      return; // Si ya se está realizando una petición, no hacer nada.
+    }
+
+    if (lastRequestTime != null &&
+        DateTime.now().difference(lastRequestTime) <
+            const Duration(seconds: 5)) {
+      return; // Si el tiempo entre peticiones es menor a 5 segundos, no hacer nada.
+    }
+
+    setState(() {
+      isRequesting = true;
+      lastRequestTime = DateTime.now();
+    });
+
+    // Simular un proceso asíncrono, reemplaza esto con tu lógica real
+
+    Fluttertoast.showToast(
+        msg: "Se ha enviado una notificación a tus contactos",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: const Color.fromRGBO(219, 31, 31, 1),
+        textColor: Colors.white,
+        fontSize: 16.0);
+
+    await widget.authBloc.notificacion(widget.lat, widget.lng);
+
+    setState(() {
+      isRequesting = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +111,8 @@ class _SOSNotification extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  authBloc.add(const MarcarNotificacionesPendienteFalse());
+                  widget.authBloc
+                      .add(const MarcarNotificacionesPendienteFalse());
                   navigatorBloc.add(
                       const NavigatorIsNewSelectedEvent(isNewSelected: true));
                   Navigator.pushNamed(context, 'notifications_screen');
@@ -158,22 +201,14 @@ class _SOSNotification extends StatelessWidget {
                       borderRadius: BorderRadius.circular(
                           MediaQuery.of(context).size.width * 0.3 / 2),
                       onTap: () async {
-                        if (!authBloc.hasTelefonos()) {
+                        if (!widget.authBloc.hasTelefonos()) {
                           mostrarDialogoIngresarNumero(context);
                           return;
                         }
 
-                        Fluttertoast.showToast(
-                            msg:
-                                "Se ha enviado una notificación a tus contactos",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor:
-                                const Color.fromRGBO(219, 31, 31, 1),
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                        await authBloc.notificacion(lat, lng);
+                        if (!isRequesting) {
+                          await _sendNotification(widget.lat, widget.lng);
+                        }
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.20,

@@ -152,7 +152,6 @@ class ChatProvider {
     }
   }
 
-  //router.delete("/abandonar-sala/:salaId", validarJWT, abandonarSala);
   Future<bool> abandonarSala(String salaID) async {
     try {
       final uri =

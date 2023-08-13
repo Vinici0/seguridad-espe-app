@@ -60,8 +60,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     /*
-    Notificaciones
-  */
+      Notificaciones
+    */
     PushNotificationService.messagesStream.listen((message) {
       print('MyApp: $message');
       final usuarioData = jsonDecode(message['usuario']);

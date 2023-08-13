@@ -14,6 +14,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class AlertScreen extends StatefulWidget {
   static const String routeName = 'reporte';
@@ -28,13 +29,17 @@ class _AlertScreenState extends State<AlertScreen> {
   bool isIconicActivated = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  List<XFile> imagefiles =
+      []; // Lista para almacenar las imágenes seleccionadas
+  List<String> imagePaths =
+      []; // Lista para almacenar las rutas de las imágenes
+
   Position? currentPosition;
   String name = '';
   String ciudad = '';
   final _textController = TextEditingController();
   final ImagePicker imgpicker = ImagePicker();
-  List<String>? imagePaths;
-  List<XFile>? imagefiles;
+
   bool isPressed = false;
   bool isButtonDisabled = false;
   bool isLoading = false;
@@ -57,6 +62,8 @@ class _AlertScreenState extends State<AlertScreen> {
   void dispose() {
     _textController.dispose();
     _focusNode.dispose();
+    imagefiles.clear();
+    imagePaths.clear();
     super.dispose();
   }
 
@@ -180,6 +187,42 @@ class _AlertScreenState extends State<AlertScreen> {
                                   },
                                 ),
                               ),
+                              Container(
+                                margin: const EdgeInsets.only(left: 15),
+                                alignment: Alignment.center,
+                                // width: MediaQuery.of(context).size.width * 0.1,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(255, 49, 67, 78),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: IconButton(
+                                  alignment: Alignment.center,
+                                  icon: const Icon(
+                                    FontAwesomeIcons.camera,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                  onPressed: () async {
+                                    //TODO: abrir camara  y tomar foto
+                                    var image = await imgpicker.pickImage(
+                                        source: ImageSource.camera);
+
+                                    if (image != null) {
+                                      setState(() {
+                                        //agergar imagen a la lista pero que no pase de 3
+                                        if (imagefiles.length < 3) {
+                                          imagefiles.addAll([image]);
+                                          imagePaths.add(image.path);
+                                        } else {
+                                          _showDialog();
+                                        }
+                                      });
+                                    }
+                                    // openImages();
+                                  },
+                                ),
+                              ),
                               Expanded(
                                   child: Row(
                                 children: [
@@ -240,27 +283,56 @@ class _AlertScreenState extends State<AlertScreen> {
 
                         //Lista de imagenes selccinoadas de la galeria
 
-                        imagefiles != null
+                        imagefiles != null && imagefiles!.isNotEmpty
                             ? SizedBox(
                                 height: 80,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
                                   itemCount: imagefiles!.length,
                                   itemBuilder: (context, index) {
-                                    return Container(
-                                      //bordes redondeados
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white,
+                                    return Stack(children: [
+                                      //Una x para eliminar la imagen
+                                      Container(
+                                        //bordes redondeados
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                        ),
+                                        margin: const EdgeInsets.all(5),
+                                        width: 100,
+                                        height: 100,
+                                        child: Image.file(
+                                          File(imagefiles![index].path),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
-                                      margin: const EdgeInsets.all(5),
-                                      width: 100,
-                                      height: 100,
-                                      child: Image.file(
-                                        File(imagefiles![index].path),
-                                        fit: BoxFit.cover,
+
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              imagefiles!.removeAt(index);
+                                            });
+                                          },
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                            ),
+                                            child: const Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              size: 17,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    );
+                                    ]);
                                   },
                                 ),
                               )
@@ -480,59 +552,16 @@ class _AlertScreenState extends State<AlertScreen> {
       var pickedFiles = await ImagePicker().pickMultiImage();
 
       if (pickedFiles != null) {
-        if (pickedFiles.length <= 3) {
-          imagefiles = pickedFiles;
-          imagePaths = pickedFiles.map((e) => e.path).toList();
+        if (pickedFiles.length <= 3 && imagefiles.length <= 3) {
+          imagefiles.addAll(
+              pickedFiles); // Agregar las nuevas imágenes a la lista existente
+          imagePaths.addAll(pickedFiles
+              .map((e) => e.path)); // Agregar las rutas de las nuevas imágenes
+
+          setState(
+              () {}); // Actualizar el widget para mostrar las imágenes seleccionadas
         } else {
-          if (Platform.isIOS) {
-            // ignore: use_build_context_synchronously
-            showCupertinoDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return CupertinoAlertDialog(
-                  title: const Text('Máximo 3 fotos'),
-                  content: const Text(
-                    'Por favor, seleccione máximo 3 fotos para su reporte.',
-                  ),
-                  actions: [
-                    CupertinoDialogAction(
-                      child: const Text(
-                        'Aceptar',
-                        style: TextStyle(color: CupertinoColors.activeBlue),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          } else {
-            // ignore: use_build_context_synchronously
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Máximo 3 fotos'),
-                  content: const Text(
-                    'Por favor, seleccione máximo 3 fotos para su reporte.',
-                  ),
-                  actions: [
-                    TextButton(
-                      child: const Text(
-                        'Aceptar',
-                        style: TextStyle(color: Color(0xFF6165FA)),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          }
+          _showDialog();
         }
 
         setState(() {});
@@ -541,6 +570,59 @@ class _AlertScreenState extends State<AlertScreen> {
       }
     } catch (e) {
       print("Error while picking file.");
+    }
+  }
+
+  //showDailog de superaste el limite de imagenes
+  Future<void> _showDialog() async {
+    if (Platform.isIOS) {
+      // ignore: use_build_context_synchronously
+      showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: const Text('Máximo 3 fotos'),
+            content: const Text(
+              'Por favor, seleccione máximo 3 fotos para su reporte.',
+            ),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text(
+                  'Aceptar',
+                  style: TextStyle(color: CupertinoColors.activeBlue),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Máximo 3 fotos'),
+            content: const Text(
+              'Por favor, seleccione máximo 3 fotos para su reporte.',
+            ),
+            actions: [
+              TextButton(
+                child: const Text(
+                  'Aceptar',
+                  style: TextStyle(color: Color(0xFF6165FA)),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 }
