@@ -49,6 +49,12 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
               child: Row(
                 //nombre de usuario que publico
                 children: [
+                  //icono de usuario
+                  const Icon(
+                    Icons.account_circle,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 5),
                   Text(
                     widget.publicacion.isPublic
                         ? widget.publicacion.nombreUsuario
@@ -96,33 +102,35 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
                     },
                     icon: isLiked
                         ? const Icon(
-                            FontAwesomeIcons.solidHeart,
-                            color: Colors.red,
+                            FontAwesomeIcons.solidThumbsUp,
+                            color: Color(0xFF6165FA),
                           )
                         : const Icon(
-                            FontAwesomeIcons.heart,
-                            color: Colors.black,
+                            FontAwesomeIcons.thumbsUp,
+                            color: Colors.black54,
                           ),
                   ),
                   const SizedBox(width: 5),
                   Text(
                     widget.publicacion.likes!.length.toString(),
-                    style: const TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20, color: Colors.black54),
                   ),
                   const SizedBox(width: 28),
                   const Icon(
                     FontAwesomeIcons.comment,
-                    size: 16,
+                    size: 18,
+                    color: Colors.black54,
                   ),
                   const SizedBox(width: 5),
                   state.comentariosP.length > 0
                       ? Text(
                           state.comentariosP.length.toString(),
-                          style: const TextStyle(fontSize: 20),
+                          style: const TextStyle(
+                              fontSize: 20, color: Colors.black54),
                         )
                       : const Text(
                           '0',
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 20, color: Colors.black54),
                         ),
                 ],
               ),
@@ -137,6 +145,7 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
     final publicationUid = widget.publicacion.uid!;
     final currentUserUid = authService.state.usuario!.uid;
 
+    // final newPublication = widget.publicacion.copyWith(countLikes:
     try {
       BlocProvider.of<PublicationBloc>(context)
           .add(PublicacionesUpdateEvent(publicationUid));
@@ -146,8 +155,16 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
     setState(() {
       if (isLiked) {
         widget.publicacion.likes!.remove(currentUserUid);
+        final newPublication = widget.publicacion
+            .copyWith(countLikes: widget.publicacion.countLikes! - 1);
+        BlocProvider.of<PublicationBloc>(context)
+            .add(UpdatePublicationEvent(newPublication));
       } else {
         widget.publicacion.likes!.add(currentUserUid);
+        final newPublication = widget.publicacion
+            .copyWith(countLikes: widget.publicacion.countLikes! + 1);
+        BlocProvider.of<PublicationBloc>(context)
+            .add(UpdatePublicationEvent(newPublication));
       }
       isLiked = !isLiked;
     });

@@ -21,15 +21,16 @@ import 'package:intl/intl.dart';
 import 'package:timezone/timezone.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class DetalleScreen extends StatefulWidget {
-  static const String detalleroute = 'detalle';
-  const DetalleScreen({Key? key}) : super(key: key);
+class PublicacionNoticacionScreen extends StatefulWidget {
+  static const String routeName = 'publicacion_notificacion';
+  const PublicacionNoticacionScreen({Key? key}) : super(key: key);
 
   @override
-  State<DetalleScreen> createState() => _DetalleScreenState();
+  State<PublicacionNoticacionScreen> createState() =>
+      _PublicacionNoticacionScreen();
 }
 
-class _DetalleScreenState extends State<DetalleScreen> {
+class _PublicacionNoticacionScreen extends State<PublicacionNoticacionScreen> {
   PublicationBloc publicationBloc = PublicationBloc();
   bool _estaEscribiendo = false;
   AuthBloc authService = AuthBloc();

@@ -17,19 +17,20 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
             publicacionesUsuario: const [],
             publicaciones: const [],
             currentPublicacion: Publicacion(
-                barrio: '',
-                ciudad: '',
-                color: '',
-                contenido: '',
-                imgAlerta: '',
-                isLiked: false,
-                isPublic: false,
-                latitud: 0,
-                longitud: 0,
-                titulo: '',
-                usuario: '',
-                isPublicacionPendiente: false,
-                nombreUsuario: ''),
+              barrio: '',
+              ciudad: '',
+              color: '',
+              contenido: '',
+              imgAlerta: '',
+              isLiked: false,
+              isPublic: false,
+              latitud: 0,
+              longitud: 0,
+              titulo: '',
+              usuario: '',
+              isPublicacionPendiente: false,
+              nombreUsuario: '',
+            ),
             isLoading: false,
             isError: false)) {
     on<PublicacionesInitEvent>(_publicacionesInitEvent);
@@ -39,6 +40,8 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     on<ToggleLikeComentarioEvent>(_toggleLikeComentario);
 
     on<PublicacionesCreateEvent>(_publicacionesCreateEvent);
+
+    on<UpdateLikesPublicationEvent>(_updateLikesPublicationEvent);
 
     on<LoadingEventFalse>((event, emit) {
       emit(state.copyWith(isLoading: false));
@@ -144,6 +147,18 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     emit(state.copyWith(publicaciones: event.publicacion, isLoading: false));
   }
 
+  FutureOr<void> _updateLikesPublicationEvent(
+      UpdateLikesPublicationEvent event, Emitter<PublicationState> emit) {
+    final newPublicaciones = state.publicaciones.map((publicacion) {
+      if (publicacion.uid == event.publicacion.uid) {
+        return event.publicacion;
+      } else {
+        return publicacion;
+      }
+    }).toList();
+    emit(state.copyWith(publicaciones: newPublicaciones, isLoading: false));
+  }
+
   reportPublicationEvent(String uid, String motivo) async {
     final result = await _publicacionService.guardarDenuncia(uid, motivo);
     return result;
@@ -152,7 +167,6 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   getAllPublicaciones() async {
     add(LoadingEvent());
     final publicaciones = await _publicacionService.getPublicacionesAll();
-
     add(PublicacionesInitEvent(publicaciones));
   }
 
@@ -244,6 +258,8 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     add(CountCommentEvent(state.comentariosP.length));
     add(GetAllCommentsEvent(comentariosL));
   }
+
+  get currentPublicacion => state.currentPublicacion;
 
   createComentarioService(String contenido, String publicacionId) async {
     final newComentario =

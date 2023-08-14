@@ -96,6 +96,8 @@ class PublicacionService {
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
 
+      print('placemarks: $placemarks');
+
       final publicacion = Publicacion(
         titulo: titulo,
         contenido: descripcion,

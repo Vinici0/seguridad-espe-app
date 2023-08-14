@@ -51,9 +51,17 @@ class _OptionNewsState extends State<OptionNews> {
 
     setState(() {
       if (widget.likes.contains(currentUserUid)) {
+        final newPublication = widget.publicaciones[widget.i].copyWith(
+          countLikes: widget.likes.length - 1,
+        );
         widget.likes.remove(currentUserUid);
       } else {
+        final newPublication = widget.publicaciones[widget.i].copyWith(
+          countLikes: widget.likes.length + 1,
+        );
         widget.likes.add(currentUserUid);
+        BlocProvider.of<PublicationBloc>(context)
+            .add(UpdatePublicationEvent(newPublication));
       }
     });
   }
@@ -76,13 +84,14 @@ class _OptionNewsState extends State<OptionNews> {
                     height: 35.0,
                     margin: const EdgeInsets.only(left: 28),
                     child: widget.likes.contains(usuarioBloc.state.usuario!.uid)
+                        //Icono del dedo pulgar hacia arriba Icons.thumb_up
                         ? const Icon(
-                            FontAwesomeIcons.solidHeart,
-                            color: Colors.red,
+                            FontAwesomeIcons.solidThumbsUp,
+                            color: Color(0xFF6165FA),
                             size: 19.5,
                           )
                         : const Icon(
-                            FontAwesomeIcons.heart,
+                            FontAwesomeIcons.thumbsUp,
                             color: Colors.grey,
                             size: 19.5,
                           ),
@@ -91,8 +100,8 @@ class _OptionNewsState extends State<OptionNews> {
                     width: 5,
                   ),
                   Text(
-                    widget.likes.length
-                        .toString(), // Usar la lista "likes" actualizada
+                    widget.state.publicaciones[widget.i].likes!.length
+                        .toString(),
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -124,8 +133,7 @@ class _OptionNewsState extends State<OptionNews> {
                   Text(
                     widget.state.publicaciones[widget.i].comentarios == null
                         ? '0'
-                        : widget
-                            .state.publicaciones[widget.i].comentarios!.length
+                        : widget.state.publicaciones[widget.i].countComentarios
                             .toString(),
                     style: TextStyle(
                       fontSize: 14,

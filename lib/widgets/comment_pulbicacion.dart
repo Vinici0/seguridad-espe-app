@@ -5,6 +5,7 @@ import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+// ignore: must_be_immutable
 class CommentPublication extends StatefulWidget {
   final String uidUsuario;
   final String uid;
@@ -13,7 +14,7 @@ class CommentPublication extends StatefulWidget {
   final String? fotoPerfil;
   final String createdAt;
   final bool isGoogle;
-  final List<String> likes;
+  List<String> likes = [];
   bool isLiked;
 
   CommentPublication({
@@ -26,8 +27,8 @@ class CommentPublication extends StatefulWidget {
     required this.isGoogle,
     required this.isLiked,
     required this.uid,
-    required this.likes,
-  });
+    List<String>? likes,
+  }) : likes = likes ?? [];
 
   @override
   _CommentPublicationState createState() => _CommentPublicationState();
@@ -106,6 +107,8 @@ class _CommentPublicationState extends State<CommentPublication> {
                 ),
                 GestureDetector(
                   onTap: () {
+                    print('Eliminar comentario');
+                    print(widget.uid);
                     final isLikedNow = !widget.isLiked;
                     setState(() {
                       widget.isLiked = isLikedNow;
@@ -115,8 +118,14 @@ class _CommentPublicationState extends State<CommentPublication> {
                       if (isLikedNow) {
                         if (!widget.likes
                             .contains(authBloc.state.usuario!.uid)) {
+                          print('Agregando like');
+                          print(authBloc.state.usuario!.uid);
+                          print('Usuario');
+                          print(widget.likes);
                           widget.likes.add(authBloc.state.usuario!.uid);
+                          print(widget.likes);
                         }
+
                         publicationBloc.toggleLikeComentario(widget.uid);
                       } else {
                         widget.likes.remove(authBloc.state.usuario!.uid);
@@ -130,8 +139,10 @@ class _CommentPublicationState extends State<CommentPublication> {
                   child: Row(
                     children: [
                       widget.likes.contains(authBloc.state.usuario!.uid)
-                          ? const Icon(Icons.favorite, color: Colors.red)
-                          : const Icon(FontAwesomeIcons.heart),
+                          ? const Icon(FontAwesomeIcons.solidThumbsUp,
+                              color: Color(0xFF6165FA), size: 20)
+                          : const Icon(FontAwesomeIcons.thumbsUp,
+                              color: Colors.black54, size: 20),
                       const SizedBox(width: 5),
                       Text(
                         widget.likes.length.toString(),

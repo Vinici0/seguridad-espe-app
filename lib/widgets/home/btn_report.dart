@@ -49,7 +49,8 @@ class _BtnReport extends StatelessWidget {
               ),
               onPressed: () {
                 // AlertasScreen.routeName
-                Navigator.pushNamed(context, AlertsScreen.routeName);
+                Navigator.pushNamed(context, "publicacion_notificacion");
+                // Navigator.pushNamed(context, AlertsScreen.routeName);
               },
               //icono de aleta de emergencia
               icon: Image.asset(

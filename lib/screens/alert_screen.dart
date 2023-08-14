@@ -14,7 +14,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class AlertScreen extends StatefulWidget {
   static const String routeName = 'reporte';
@@ -127,6 +126,7 @@ class _AlertScreenState extends State<AlertScreen> {
                         child: Container(
                           color: const Color(0xFF111b21),
                           child: TextField(
+                            textCapitalization: TextCapitalization.sentences,
                             focusNode: _focusNode,
                             maxLength: 500,
                             controller:
@@ -206,7 +206,8 @@ class _AlertScreenState extends State<AlertScreen> {
                                   onPressed: () async {
                                     //TODO: abrir camara  y tomar foto
                                     var image = await imgpicker.pickImage(
-                                        source: ImageSource.camera);
+                                        source: ImageSource.camera,
+                                        imageQuality: 5);
 
                                     if (image != null) {
                                       setState(() {
@@ -549,7 +550,7 @@ class _AlertScreenState extends State<AlertScreen> {
 
   openImages() async {
     try {
-      var pickedFiles = await ImagePicker().pickMultiImage();
+      var pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 5);
 
       if (pickedFiles != null) {
         if (pickedFiles.length <= 3 && imagefiles.length <= 3) {

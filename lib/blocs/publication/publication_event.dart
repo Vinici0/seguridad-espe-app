@@ -165,3 +165,12 @@ class MarcarPublicacionPendienteTrueEvent extends PublicationEvent {
   @override
   List<Object> get props => [uid];
 }
+
+class UpdateLikesPublicationEvent extends PublicationEvent {
+  final Publicacion publicacion;
+
+  const UpdateLikesPublicationEvent(this.publicacion);
+
+  @override
+  List<Object> get props => [publicacion];
+}

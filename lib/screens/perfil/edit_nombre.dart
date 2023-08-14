@@ -61,8 +61,9 @@ class _EditNombreScreenState extends State<EditNombreScreen> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: TextField(
+              textCapitalization: TextCapitalization.sentences,
               controller: _textController,
-              maxLength: 25,
+              maxLength: 50,
               onChanged: (value) {
                 setState(() {
                   _isEmpty = value.isEmpty;

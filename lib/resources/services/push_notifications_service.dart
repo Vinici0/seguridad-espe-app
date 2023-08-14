@@ -13,24 +13,30 @@ class PushNotificationService {
   static Stream<Map<String, dynamic>> get messagesStream =>
       _messageStream.stream;
 
+  //_backgroundHandler - Cuando la app está en segundo plano
   static Future<void> _backgroundHandler(RemoteMessage message) async {
     final Map<String, dynamic> messageData = message.data;
-    print('onBackgroundHandler: $messageData');
-    final String dataString = messageData['usuario'] ?? 'No data';
-    final Map<String, dynamic> userData = jsonDecode(dataString);
-    _messageStream.add(userData);
+    _messageStream.add(messageData);
+    // final Map<String, dynamic> messageData = message.data;
+    // final String dataString = messageData['usuario'] ?? 'No data';
+    // final Map<String, dynamic> userData = jsonDecode(dataString);
+    // _messageStream.add(userData);
   }
 
+  //_onMessageHandler - Cuando la app está en primer plano
   static Future<void> _onMessageHandler(RemoteMessage message) async {
-    _messageStream.add(message.data);
-
-    //cuando abra la app se borra la notificación de la barra de notificaciones
-    // Android
+    final Map<String, dynamic> messageData = message.data;
+    final dataNotification = jsonDecode(messageData['data']);
+    print(dataNotification);
+    if (dataNotification['type'] == 'sos') {
+      _messageStream.add(messageData);
+    }
   }
 
+  //_onMessageOpenApp - Cuando la app está cerrada
   static Future<void> _onMessageOpenApp(RemoteMessage message) async {
-    print(message.data);
-    _messageStream.add(message.data);
+    final Map<String, dynamic> messageData = message.data;
+    _messageStream.add(messageData);
   }
 
   static Future initializeApp() async {
@@ -58,24 +64,6 @@ class PushNotificationService {
       // Puedes mostrar un mensaje al usuario o realizar otras acciones aquí
     }
   }
-
-  // Apple / Web
-  /*
-  static requestPermission() async {
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true
-    );
-
-    print('User push notification status ${ settings.authorizationStatus }');
-
-  }
-  */
 
   static closeStreams() {
     _messageStream.close();

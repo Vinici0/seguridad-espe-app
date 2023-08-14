@@ -52,6 +52,8 @@ class Publicacion {
   String? uid;
   String nombreUsuario;
   bool isPublicacionPendiente;
+  int? countComentarios;
+  int? countLikes;
 
   Publicacion({
     required this.titulo,
@@ -71,6 +73,8 @@ class Publicacion {
     this.createdAt,
     this.updatedAt,
     this.uid,
+    this.countComentarios,
+    this.countLikes,
     required this.isPublicacionPendiente,
     required this.nombreUsuario,
   });
@@ -99,6 +103,9 @@ class Publicacion {
         isLiked: json["isLiked"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
+        countComentarios:
+            json["comentarios"] != null ? json["comentarios"].length : 0,
+        countLikes: json["likes"] != null ? json["likes"].length : 0,
         // json.containsKey("uid") ? json["uid"] : json["_id"],
         uid: json.containsKey("uid") ? json["uid"] : json["_id"],
         nombreUsuario: json["nombreUsuario"],
@@ -148,6 +155,8 @@ class Publicacion {
     String? createdAt,
     bool? isPublicacionPendiente,
     String? updatedAt,
+    int? countLikes,
+    int? countComentarios,
     String? usuarioNombre,
   }) {
     return Publicacion(
@@ -169,6 +178,8 @@ class Publicacion {
       imgAlerta: imgAlerta ?? this.imgAlerta,
       isLiked: isLiked ?? this.isLiked,
       createdAt: createdAt ?? this.createdAt,
+      countComentarios: countComentarios ?? this.countComentarios,
+      countLikes: countLikes ?? this.countLikes,
       updatedAt: updatedAt ?? this.updatedAt,
       nombreUsuario: usuarioNombre ?? this.nombreUsuario,
     );

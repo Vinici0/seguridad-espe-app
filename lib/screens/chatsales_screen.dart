@@ -221,6 +221,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         children: [
           Flexible(
               child: TextField(
+            textCapitalization: TextCapitalization.sentences,
             controller: _textController,
             onSubmitted: _handleSubmit,
             onChanged: (texto) {

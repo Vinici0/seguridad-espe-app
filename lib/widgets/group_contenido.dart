@@ -36,9 +36,15 @@ class GroupContenido extends StatelessWidget {
         SizedBox(
           height: 40,
           child: TextField(
+            textCapitalization: TextCapitalization.sentences,
             cursorColor: Colors.black,
             focusNode: _focusNode,
+            maxLength: 35,
+            //ocultar el maximo de caracteres
+            obscureText: false,
             decoration: InputDecoration(
+              //ocultar el contador de caracteres
+              counterText: '',
               disabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFF6165FA)),
               ),

@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:flutter_maps_adv/resources/services/push_notifications_service.dart';
 import 'package:flutter_maps_adv/resources/services/traffic_service.dart';
 import 'package:flutter_maps_adv/routes/routes.dart';
@@ -58,37 +60,48 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    super.initState();
     /*
       Notificaciones
     */
     PushNotificationService.messagesStream.listen((message) {
       print('MyApp: $message');
-      final usuarioData = jsonDecode(message['usuario']);
-      String nombre = usuarioData['nombre'];
-      double latitud = usuarioData['latitud'];
-      double longitud = usuarioData['longitud'];
-      bool google = usuarioData['google'];
-      String img = usuarioData['img'];
+      final dataNotification = jsonDecode(message['data']);
+      print(dataNotification);
+      if (dataNotification['type'] == 'sos') {
+        if (isSosScreenOpen) {
+          return;
+        }
 
-      if (latitud == null || longitud == null || isSosScreenOpen) return;
+        navigatorKey.currentState
+            ?.pushNamed('sos', arguments: dataNotification);
+        return;
+      }
+
+      if (dataNotification['type'] == 'publication') {
+        final newPublications = Publicacion.fromMap(dataNotification);
+        BlocProvider.of<PublicationBloc>(context)
+            .add(PublicacionSelectEvent(newPublications));
+
+        navigatorKey.currentState
+            ?.pushNamed('publicacion_notificacion', arguments: newPublications);
+        return;
+      }
+
+      // navigatorKey.currentState?.pushNamed('product', arguments: message);
 
       isSosScreenOpen = true;
-      navigatorKey.currentState?.pushNamed('sos', arguments: {
-        'nombre': nombre,
-        'latitud': latitud,
-        'longitud': longitud,
-        'google': google,
-        'img': img,
-      }).then((value) {
-        // Este bloque de código se ejecutará cuando la pantalla 'sos' se cierre.
-        isSosScreenOpen = false;
-      });
+
+      super.initState();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp, // Solo vertical hacia arriba
+      DeviceOrientation.portraitDown, // Solo vertical hacia abajo
+    ]);
+
     Color myPurpleColor = const Color(0xFF6165FA);
     return MaterialApp(
       debugShowCheckedModeBanner: false,

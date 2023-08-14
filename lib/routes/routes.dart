@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_maps_adv/helpers/notificacion_publicacion.dart';
+import 'package:flutter_maps_adv/screens/image_screen.dart';
 import 'package:flutter_maps_adv/screens/notification_screen.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_telefono.dart';
+import 'package:flutter_maps_adv/screens/product.dart';
 import 'package:flutter_maps_adv/screens/report_detalle_screen.dart';
 import 'package:flutter_maps_adv/screens/report_finish_screen.dart';
 import 'package:flutter_maps_adv/screens/report_screen.dart';
@@ -23,6 +26,7 @@ class Routes {
     EditPerfilScreen.editPerfilroute: (_) => const EditPerfilScreen(),
     EditTelefonoScreen.editTelefonoeroute: (_) => const EditTelefonoScreen(),
     HomeScreen.homeroute: (_) => const HomeScreen(),
+    ImageScreen.routeName: (_) => const ImageScreen(),
     InformationFamily.informationFamily: (_) => const InformationFamily(),
     InformationScreen.information: (_) => const InformationScreen(),
     LoadingLoginScreen.loadingroute: (_) => const LoadingLoginScreen(),
@@ -37,11 +41,14 @@ class Routes {
     PlaceDetailScreen.place: (_) => const PlaceDetailScreen(),
     PlacesScreen.salesroute: (_) => const PlacesScreen(),
     RegisterScreen.registerroute: (_) => const RegisterScreen(),
+    ReportDetalleScreen.reportDetalleRoute: (_) => const ReportDetalleScreen(),
+    ReportFinishScreen.routeName: (_) => const ReportFinishScreen(),
+    ReportScreen.reportRoute: (_) => const ReportScreen(),
     RoomsScreen.salasroute: (_) => const RoomsScreen(),
     SosNotificationScreen.sosroute: (_) => const SosNotificationScreen(),
     SosScreen.sosroute: (_) => const SosScreen(),
-    ReportScreen.reportRoute: (_) => const ReportScreen(),
-    ReportDetalleScreen.reportDetalleRoute: (_) => const ReportDetalleScreen(),
-    ReportFinishScreen.routeName: (_) => const ReportFinishScreen(),
+    PruductScreen.routeName: (_) => const PruductScreen(),
+    PublicacionNoticacionScreen.routeName: (_) =>
+        const PublicacionNoticacionScreen(),
   };
 }

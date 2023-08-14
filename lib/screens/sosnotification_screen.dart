@@ -68,6 +68,7 @@ class SosNotificationScreen extends StatelessWidget {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   const Text(
                     '¡Urgente! Contacto necesita ayuda',

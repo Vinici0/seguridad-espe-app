@@ -32,9 +32,10 @@ class CustonInput extends StatelessWidget {
                   blurRadius: 5)
             ]),
         child: TextField(
+          textCapitalization: TextCapitalization.sentences,
           controller: textController,
           autocorrect: false,
-          maxLength: 30,
+          maxLength: 50,
           obscureText: isPassword,
           keyboardType: keyboardType,
           decoration: InputDecoration(

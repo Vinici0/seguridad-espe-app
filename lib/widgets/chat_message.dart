@@ -49,7 +49,7 @@ class ChatMessage extends StatelessWidget {
 
   Widget _buildMessage(AuthBloc authService) {
     return Container(
-      child: this.uid == authService.state.usuario!.uid
+      child: uid == authService.state.usuario!.uid
           ? _myMessage()
           : _notMyMessage(),
     );
@@ -121,7 +121,7 @@ class ChatMessage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: Text(
-                      this.nombre,
+                      nombre,
                       style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 10,
@@ -163,7 +163,7 @@ class ChatMessage extends StatelessWidget {
   String _getFormattedTime() {
     //fecha type es
     final date = DateTime.parse(createdAt);
-    final formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(date);
+    final formattedDate = DateFormat('kk:mm').format(date);
 
     //fecha timeago
     final timeAgo = timeago.format(date, locale: 'es');

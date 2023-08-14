@@ -78,7 +78,7 @@ class ReportDetalleScreen extends StatelessWidget {
                                 ),
                                 SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.9,
+                                      MediaQuery.of(context).size.width * 0.8,
                                   child: Text(
                                     reportSpecifications[notificationBloc
                                         .state.currentText]![index],
