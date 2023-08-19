@@ -33,8 +33,23 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       await _notificationService.marcarNotificacionComoLeida(event.id);
     });
 
+    on<DeleteAllNotificationsEvent>((event, emit) async {
+      await _notificationService.deleteAllNotifications();
+      emit(state.copyWith(notificaciones: []));
+    });
+
     on<CurrentTextReportEvent>((event, emit) async {
       emit(state.copyWith(currentText: event.currentText));
+    });
+
+    on<DeleteNotificationByIdEvent>((event, emit) async {
+      final updatedNotificaciones = state.notificaciones
+          .where((notificacion) => notificacion.uid != event.id)
+          .toList();
+
+      emit(state.copyWith(notificaciones: updatedNotificaciones));
+
+      await _notificationService.deleteNotificationById(event.id);
     });
   }
 

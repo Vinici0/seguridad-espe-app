@@ -190,7 +190,7 @@ class _EditPerfilScreenState extends State<EditPerfilScreen> {
                   const Padding(
                     padding: EdgeInsets.all(20),
                     child: Text(
-                      'Esta informacion es privada y no sera compartida con nadie',
+                      'Esta informacion es privada y no sera compartida con nadie.',
                       style: TextStyle(color: Colors.black45),
                     ),
                   ),

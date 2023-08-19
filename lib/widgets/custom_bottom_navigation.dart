@@ -37,9 +37,12 @@ class CustomBottomNavigation extends StatelessWidget {
             BlocProvider.of<SearchBloc>(context)
                 .add(OnDeactivateManualMarkerEvent());
 
+            if (i == 0) {
+              await notificationBloc.loadNotification();
+            }
             if (i == 1) {
-              authService.add(const MarcarPublicacionPendienteFalse());
-              await publicationBloc.getAllPublicaciones();
+              authService.add(const MarcarPublicacionPendienteFalse(false));
+              // await publicationBloc.getAllPublicaciones();
             }
 
             if (i == 2) {
@@ -47,13 +50,9 @@ class CustomBottomNavigation extends StatelessWidget {
               roomBloc.salasInitEvent();
             }
 
-            if (i == 0) {
-              await notificationBloc.loadNotification();
-            }
-
             if (i == 3) {
-              navigatorBloc.add(const NavigatorIsNumberFamilySelectedEvent(
-                  isNumberFamilySelected: false));
+              navigatorBloc.add(
+                  const NavigatorIsPlaceSelectedEvent(isPlaceSelected: false));
             }
           },
           items: [

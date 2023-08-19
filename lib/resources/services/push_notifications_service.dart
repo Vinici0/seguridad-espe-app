@@ -28,7 +28,23 @@ class PushNotificationService {
     final Map<String, dynamic> messageData = message.data;
     final dataNotification = jsonDecode(messageData['data']);
     print(dataNotification);
+
     if (dataNotification['type'] == 'sos') {
+      _messageStream.add(messageData);
+    }
+
+    if (dataNotification['type'] == 'sala') {
+      _messageStream.add(messageData);
+    }
+
+    if (dataNotification['type'] == 'publication') {
+      dataNotification['primerPlano'] = true;
+      print(dataNotification);
+
+      // Update the messageData with the modified dataNotification map
+      messageData['data'] = jsonEncode(dataNotification);
+
+      // Now _messageStream will contain the modified messageData
       _messageStream.add(messageData);
     }
   }

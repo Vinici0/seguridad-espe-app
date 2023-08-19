@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
 import 'package:flutter_maps_adv/models/comentarios.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:flutter_maps_adv/resources/services/publicacion.dart';
@@ -12,6 +13,7 @@ part 'publication_state.dart';
 
 class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
   final PublicacionService _publicacionService = PublicacionService();
+
   PublicationBloc()
       : super(PublicationState(
             publicacionesUsuario: const [],
@@ -43,13 +45,18 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
 
     on<UpdateLikesPublicationEvent>(_updateLikesPublicationEvent);
 
+    on<GoToStartListEvent>((event, emit) async {
+      emit(state.copyWith(firstController: event.firstController));
+      //despues de 1 se cambia a false
+      await Future.delayed(const Duration(seconds: 1));
+      emit(state.copyWith(firstController: false));
+    });
+
     on<LoadingEventFalse>((event, emit) {
       emit(state.copyWith(isLoading: false));
     });
 
     on<PublicacionSelectEvent>((event, emit) {
-      print("aaaaaaaaaaaaaaaaaa");
-      print(event.publicacion);
       emit(state.copyWith(currentPublicacion: event.publicacion));
     });
 
@@ -75,6 +82,10 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
       //agrega las nuevas publicaciones a la lista
       final newPublicaciones = [...state.publicaciones, ...event.publicaciones];
       emit(state.copyWith(publicaciones: newPublicaciones, isLoading: false));
+    });
+
+    on<ShowNewPostsButtonEvent>((event, emit) {
+      emit(state.copyWith(showNewPostsButton: event.showNewPostsButton));
     });
 
     on<AddCommentPublicationEvent>((event, emit) {
@@ -124,6 +135,36 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
           currentPublicacion: newCurrentPublicacion));
 
       await _publicacionService.marcarPublicacionPendienteTrue(event.uid);
+    });
+
+    on<DeletePublicacionEvent>((event, emit) async {
+      final newPublicaciones = state.publicaciones
+          .where((publicacion) => publicacion.uid != event.uid)
+          .toList();
+      emit(state.copyWith(publicaciones: newPublicaciones, isLoading: false));
+      await _publicacionService.deletePublicacion(event.uid);
+    });
+
+    on<UpdatePublicationDescriptionEvent>((event, emit) async {
+      final newPublicaciones = state.publicaciones.map((publicacion) {
+        if (publicacion.uid == event.uid) {
+          publicacion.contenido = event.description;
+          return publicacion;
+        } else {
+          return publicacion;
+        }
+      }).toList();
+
+      //cambiar el currentPublicacion
+      final newCurrentPublicacion =
+          state.currentPublicacion!.copyWith(contenido: event.description);
+
+      emit(state.copyWith(
+          publicaciones: newPublicaciones,
+          isLoading: false,
+          currentPublicacion: newCurrentPublicacion));
+
+      await _publicacionService.updatePublicacion(event.uid, event.description);
     });
   }
 

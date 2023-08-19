@@ -43,3 +43,20 @@ class CurrentTextReportEvent extends NotificationEvent {
   @override
   List<Object> get props => [currentText];
 }
+
+class DeleteAllNotificationsEvent extends NotificationEvent {
+  const DeleteAllNotificationsEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+//deleteNotificationById
+class DeleteNotificationByIdEvent extends NotificationEvent {
+  final String id;
+
+  const DeleteNotificationByIdEvent(this.id);
+
+  @override
+  List<Object> get props => [id];
+}

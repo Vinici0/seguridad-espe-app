@@ -30,6 +30,7 @@ environment:
 dependencies:
   animate_do: ^3.0.2
   bloc: ^8.1.1
+  cached_network_image: ^3.2.3
   card_swiper: ^2.0.4
   connectivity_plus: ^3.0.6
   cupertino_icons: ^1.0.2
@@ -101,6 +102,7 @@ flutter:
     - assets/alertas/problems-de-transporte-publico.svg
     - assets/alertas/prueba.svg
     - assets/alertas/robo-a-casa.svg
+    - assets/alertas/newPost.png
     - assets/alertas/robo-a-persona.svg
     - assets/alertas/robo-de-vehiculo.svg
     - assets/alertas/user-usuario.svg

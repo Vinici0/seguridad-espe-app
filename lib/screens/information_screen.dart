@@ -162,12 +162,12 @@ class _InformationScreenState extends State<InformationScreen> {
                         await authBloc
                             .addTelefono(telefonoController.text.trim());
 
-                        navigatorBloc.add(
-                            const NavigatorIsNumberFamilySelectedEvent(
-                                isNumberFamilySelected: true));
+                        // NavigatorIsNumberFamilyEvent
+                        navigatorBloc.add(const NavigatorIsNumberFamilyEvent(
+                            isNumberFamily: true));
                         // ignore: use_build_context_synchronously
                         Navigator.of(context).push(
-                            CreateRoute.createRoute(const PlacesScreen()));
+                            CreateRoute.createRoute(const InformationFamily()));
                         // Navigator.pushNamedAndRemoveUntil(
                         //     context, HomeScreen.homeroute, (route) => false);
                       },

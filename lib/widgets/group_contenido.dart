@@ -39,6 +39,18 @@ class GroupContenido extends StatelessWidget {
             textCapitalization: TextCapitalization.sentences,
             cursorColor: Colors.black,
             focusNode: _focusNode,
+            // textoHint == 000-000'
+            //   onChanged: textoHint == '000-000'
+            // ? (value) {
+            //     if (value.length == 3) {
+            //       nomController.text =
+            //           '$value-'; // Agregar guion después de los primeros tres caracteres
+            //       nomController.selection = TextSelection.fromPosition(
+            //         TextPosition(offset: nomController.text.length),
+            //       );
+            //     }
+            //   }
+            // : null,
             maxLength: 35,
             //ocultar el maximo de caracteres
             obscureText: false,

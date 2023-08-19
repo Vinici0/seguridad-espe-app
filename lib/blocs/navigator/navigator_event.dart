@@ -25,12 +25,21 @@ class NavigatorIsNewSelectedEvent extends NavigatorEvent {
   List<Object> get props => [isNewSelected];
 }
 
-class NavigatorIsNumberFamilySelectedEvent extends NavigatorEvent {
-  final bool isNumberFamilySelected;
+class NavigatorIsPlaceSelectedEvent extends NavigatorEvent {
+  final bool isPlaceSelected;
 
-  const NavigatorIsNumberFamilySelectedEvent(
-      {required this.isNumberFamilySelected});
+  const NavigatorIsPlaceSelectedEvent({required this.isPlaceSelected});
 
   @override
-  List<Object> get props => [isNumberFamilySelected];
+  List<Object> get props => [isPlaceSelected];
+}
+
+//isNumberFamily
+class NavigatorIsNumberFamilyEvent extends NavigatorEvent {
+  final bool isNumberFamily;
+
+  const NavigatorIsNumberFamilyEvent({required this.isNumberFamily});
+
+  @override
+  List<Object> get props => [isNumberFamily];
 }

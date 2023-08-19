@@ -63,22 +63,23 @@ class PublicacionService {
   }
 
   //update publicacion
-  Future<Publicacion> updatePublicacion(String uid, bool isLiked) async {
-    final uri = Uri.parse('${Environment.apiUrl}/publicacion/${uid}');
+  // Future<Publicacion> updatePublicationDescription(
+  //     String uid, String descripcion, List<String>? imagePaths) async {
+  //   final uri = Uri.parse('${Environment.apiUrl}/publicacion/${uid}');
 
-    final resp = await http.put(uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'x-token': await AuthService.getToken() as String,
-        },
-        body: json.encode({
-          'isLiked': isLiked,
-        }));
+  //   final resp = await http.put(uri,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'x-token': await AuthService.getToken() as String,
+  //       },
+  //       body: json.encode({
+  //         'isLiked': isLiked,
+  //       }));
 
-    final decodedData = json.decode(resp.body);
-    final publicacionResp = Publicacion.fromMap(decodedData['publicacion']);
-    return publicacionResp;
-  }
+  //   final decodedData = json.decode(resp.body);
+  //   final publicacionResp = Publicacion.fromMap(decodedData['publicacion']);
+  //   return publicacionResp;
+  // }
 
   Future<Publicacion> createPublicacion(
     String titulo,
@@ -103,11 +104,12 @@ class PublicacionService {
         contenido: descripcion,
         isPublicacionPendiente: false,
         color: color,
-        ciudad: placemarks[0].locality == null
-            ? 'S/N'
-            : placemarks[0].locality! == ""
-                ? 'S/N'
-                : placemarks[0].locality!,
+        ciudad: "Santo Domingo",
+        // placemarks[0].locality == null
+        //     ? 'S/N'
+        //     : placemarks[0].locality! == ""
+        //         ? 'S/N'
+        //         : placemarks[0].locality!,
         barrio: placemarks[0].street == null
             ? 'S/N'
             : placemarks[0].street! == ""
@@ -275,9 +277,7 @@ class PublicacionService {
       );
       final decodedData = json.decode(resp.body);
       final commentResp = ComentarioPersonResponse.fromJson(decodedData);
-      print(commentResp.comentario.uid +
-          ' lllllllllllllllll' +
-          commentResp.comentario.contenido);
+
       return commentResp.comentario;
     } catch (e) {
       throw Exception('Error: Failed to create comentario.');
@@ -332,6 +332,70 @@ class PublicacionService {
       }
     } catch (e) {
       print('Error en marcarPublicacionPendienteFalse: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deletePublicacion(String uid) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/publicacion/${uid}');
+      final resp = await http.delete(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': await AuthService.getToken() as String,
+          },
+          body: jsonEncode({}));
+
+      final decodedData = json.decode(resp.body);
+      print('decodedData: $decodedData');
+      if (decodedData['ok'] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en deletePublicacion: $e');
+      return false;
+    }
+  }
+
+  //router.put("/actualizarDescripcion/:id", validarJWT, updatePublicacion);
+  Future<bool> updatePublicacion(
+    String uid,
+    String descripcion,
+    /*List<String>? imagePaths*/
+  ) async {
+    try {
+      final uri = Uri.parse(
+          '${Environment.apiUrl}/publicacion/actualizarDescripcion/${uid}');
+
+      final resp = await http.put(uri,
+          headers: {
+            'Content-Type': 'application/json',
+            'x-token': await AuthService.getToken() as String,
+          },
+          body: jsonEncode({
+            'descripcion': descripcion,
+          }));
+
+      final decodedData = json.decode(resp.body);
+      print('decodedData: $decodedData');
+      if (decodedData['ok'] == true) {
+        // if (imagePaths!.isNotEmpty) {
+        //   final publicacionResp2 = await uploadImages(
+        //       uid, publicacionSeleccionada.titulo, imagePaths);
+        //   if (publicacionResp2.uid != null) {
+        //     return true;
+        //   } else {
+        //     return false;
+        //   }
+        // }
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en updatePublicacion: $e');
       return false;
     }
   }

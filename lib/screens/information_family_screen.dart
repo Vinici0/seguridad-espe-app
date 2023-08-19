@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/helpers/mostrar_alerta.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -23,13 +26,16 @@ class _InformationFamilyState extends State<InformationFamily> {
   // bool routeActive = false;
   List<String> telefonos = [];
   AuthBloc authBloc = AuthBloc();
+  NavigatorBloc navigatorBloc = NavigatorBloc();
   late SvgPicture image1;
   final ScrollController _scrollController = ScrollController();
+  bool isNumberAdd = false;
 
   @override
   void initState() {
     super.initState();
     authBloc = BlocProvider.of<AuthBloc>(context);
+    navigatorBloc = BlocProvider.of<NavigatorBloc>(context);
     telefonos = authBloc.state.usuario?.telefonos ?? [];
     telefonoController.addListener(updateFieldsState);
 
@@ -74,6 +80,28 @@ class _InformationFamilyState extends State<InformationFamily> {
           'Mis contactos de emergencia',
           style: TextStyle(color: Colors.black87),
         ),
+
+        //TODO: Modificaciones
+        actions: [
+          //boton texto de siguiente
+          authService.state.usuario?.telefonos != null && isNumberAdd == false
+              ? const SizedBox()
+              : TextButton(
+                  onPressed: () {
+                    //TODO: actulizar el estado de navigator
+                    navigatorBloc.add(const NavigatorIsPlaceSelectedEvent(
+                        isPlaceSelected: true));
+
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context)
+                        .push(CreateRoute.createRoute(const PlacesScreen()));
+                  },
+                  child: const Text(
+                    'Siguiente',
+                    style: TextStyle(color: Color(0xFF6165FA), fontSize: 16),
+                  ),
+                ),
+        ],
       ),
       body: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
         return Padding(
@@ -143,6 +171,11 @@ class _InformationFamilyState extends State<InformationFamily> {
 
                                 authService.addTelefonoFamily(
                                     telefonoController.text.trim());
+
+                                setState(() {
+                                  isNumberAdd = true;
+                                });
+
                                 telefonoController.clear();
                               },
                         style: ElevatedButton.styleFrom(
@@ -382,6 +415,51 @@ class _ListContact extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
+                //solo que pueda eliminar cuando sea mayor a 1
+                if (authService.state.usuario?.telefonos.length == 1) {
+                  Navigator.pop(context);
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text(
+                          'No se puede eliminar',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        content: const Text(
+                          'No se puede eliminar el número de teléfono, debe tener al menos un número de teléfono.',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(
+                                  context); // Cerrar el diálogo sin eliminar
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.grey,
+                            ),
+                            child: const Text(
+                              'Aceptar',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  return;
+                }
                 authService.deleteTelefonoFamily(telefono);
                 Navigator.pop(context); // Cerrar el diálogo después de eliminar
               },

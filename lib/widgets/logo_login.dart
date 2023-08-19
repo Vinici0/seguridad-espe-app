@@ -17,7 +17,7 @@ class Logo extends StatelessWidget {
               child: SvgPicture.asset(
                 'assets/logo.svg',
               )),
-          Text(this.text,
+          Text(text,
               style: const TextStyle(
                   color: Colors.indigo,
                   fontSize: 25,

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
@@ -8,8 +9,12 @@ import 'package:flutter_maps_adv/screens/news_detalle.dart';
 import 'package:flutter_maps_adv/widgets/option_publication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:uni_links/uni_links.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsScreen extends StatefulWidget {
   static const String newsroute = 'news';
@@ -25,6 +30,7 @@ class NewsScreen extends StatefulWidget {
 class _NewsScreenState extends State<NewsScreen> {
   late PublicationBloc _publicationBloc;
   bool _isLoading = false;
+
   final ScrollController _firstController = ScrollController();
   @override
   void initState() {
@@ -58,55 +64,97 @@ class _NewsScreenState extends State<NewsScreen> {
           style: TextStyle(color: Colors.black, fontSize: 20),
         ),
         elevation: 0.5,
-        // actions: [
-        //   Stack(
-        //     children: [
-        //       IconButton(
-        //         icon: const Icon(
-        //           Icons.notifications_none,
-        //           color: Colors.black,
-        //         ),
-        //         onPressed: () {
-        //           // Lógica para manejar el evento al presionar el ícono de notificaciones
-        //           // Por ejemplo, abrir un cuadro de diálogo, mostrar una lista de notificaciones, etc.
-        //         },
-        //       ),
-        //       Positioned(
-        //         top: 8,
-        //         right: 12,
-        //         child: Container(
-        //           padding: const EdgeInsets.all(4),
-        //           decoration: BoxDecoration(
-        //             shape: BoxShape.circle,
-        //             color: Colors.red, // Puedes cambiar el color del punto aquí
-        //           ),
-        //           constraints: const BoxConstraints(
-        //             minWidth: 12,
-        //             minHeight: 12,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ],
       ),
       body: BlocBuilder<PublicationBloc, PublicationState>(
         builder: (context, state) {
+          if (state.firstController == true) {
+            _firstController.animateTo(
+              0.0,
+              curve: Curves.easeOut,
+              duration: const Duration(milliseconds: 300),
+            );
+          }
           return RefreshIndicator(
             onRefresh: () async {
               await _publicationBloc.getAllPublicaciones();
             },
             color: Color(0xFF6165FA),
-            child: Scrollbar(
-              thumbVisibility: true,
-              controller: _firstController,
-              child: _ListNews(
-                  publicaciones: state.publicaciones,
-                  firstController: _firstController,
-                  size: size,
-                  publicationBloc: _publicationBloc,
-                  usuarioBloc: usuarioBloc,
-                  state: state),
+            child: Stack(
+              children: [
+                Scrollbar(
+                  thumbVisibility: true,
+                  controller: _firstController,
+                  child: _ListNews(
+                      publicaciones: state.publicaciones,
+                      firstController: _firstController,
+                      size: size,
+                      publicationBloc: _publicationBloc,
+                      usuarioBloc: usuarioBloc,
+                      state: state),
+                ),
+                Positioned(
+                  top: size.height * 0.3 -
+                      (size.height * 0.57 / 2), // Centrar verticalmente
+                  left: size.width / 2 - 112.5, // Centrar horizontalmente
+                  child: AnimatedOpacity(
+                    opacity: state.showNewPostsButton ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Container(
+                      width: 225,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF6165FA),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: GestureDetector(
+                        onTap: () async {
+                          await _publicationBloc.getAllPublicaciones();
+
+                          _publicationBloc
+                              .add(const ShowNewPostsButtonEvent(false));
+                          _publicationBloc.add(const GoToStartListEvent(true));
+                          // Aquí puedes realizar la acción para cargar nuevos posts
+                          // y luego llamar setState para mostrar nuevamente el botón
+                          // cuando haya nuevos posts disponibles.
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Icono de la flecha hacia arriba
+                            Container(
+                              margin: EdgeInsets.only(left: 2),
+                              child: Icon(
+                                Icons.arrow_upward,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                            // Agrega la imagen de comunicar que está en el assets .png
+                            Container(
+                              margin: EdgeInsets.only(left: 2),
+                              child: Image.asset(
+                                'assets/alertas/newPost.png',
+                                width: 40,
+                              ),
+                            ),
+                            Center(
+                              child: Text(
+                                'Ver posts nuevos',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },
@@ -136,6 +184,16 @@ class _ListNews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final circleMarkers = <CircleMarker>[
+      CircleMarker(
+          point: LatLng(publicaciones[0].latitud!, publicaciones[0].longitud!),
+          color: const Color(0xFF6165FA).withOpacity(0.3),
+          borderStrokeWidth: 2,
+          borderColor: const Color(0xFF6165FA),
+          useRadiusInMeter: true,
+          radius: 2000 // 2000 meters | 2 km
+          ),
+    ];
     return Column(
       children: [
         Expanded(
@@ -238,11 +296,13 @@ class _ListNews extends StatelessWidget {
                           padding: EdgeInsets.only(left: 62, right: 5),
                           child: Column(
                             children: [
+                              //TODO UBICAR FOTO
                               Container(
                                 alignment: Alignment.centerLeft,
                                 padding: EdgeInsets.only(bottom: 3),
                                 child: Text(publicaciones[i].contenido),
                               ),
+
                               publicaciones[i].imagenes != null &&
                                       publicaciones[i].imagenes!.isNotEmpty
                                   ? Container(
@@ -257,16 +317,48 @@ class _ListNews extends StatelessWidget {
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(9.0),
                                         ),
-                                        child: FadeInImage(
-                                          placeholder: AssetImage(
-                                              'assets/jar-loading.gif'),
-                                          image: NetworkImage(
-                                              "${Environment.apiUrl}/uploads/publicaciones/${publicaciones[i].uid!}?imagenIndex=${publicaciones[i].imagenes!.first}"),
-                                          fit: BoxFit.cover,
+                                        child: _buildCachedImage(
+                                          "${Environment.apiUrl}/uploads/publicaciones/${publicaciones[i].uid!}?imagenIndex=${publicaciones[i].imagenes!.first}",
+                                          double.infinity,
+                                          size.height * 0.35,
                                         ),
                                       ),
                                     )
                                   : SizedBox(),
+                              // : Container(
+                              //     width: double.infinity,
+                              //     height: size.height * 0.35,
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.all(
+                              //         Radius.circular(9.0),
+                              //       ),
+                              //     ),
+                              //     child: ClipRRect(
+                              //       borderRadius: BorderRadius.circular(
+                              //           16.0), // Misma cantidad que en el BoxDecoration
+                              //       child: FlutterMap(
+                              //         options: MapOptions(
+                              //           center: LatLng(
+                              //               publicaciones[i].latitud,
+                              //               publicaciones[i].longitud),
+                              //           zoom:
+                              //               10.0, // Reducir el nivel de zoom inicial
+                              //           maxZoom:
+                              //               18, // Limitar el zoom máximo
+                              //           interactiveFlags:
+                              //               InteractiveFlag.none,
+                              //         ),
+                              //         children: [
+                              //           TileLayer(
+                              //             // Usar teselas de Stamen Toner con resolución más baja
+                              //             urlTemplate:
+                              //                 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
+                              //             subdomains: ['a', 'b', 'c', 'd'],
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ),
 
                               //texto pegado a la izquierda
                               Container(
@@ -330,6 +422,19 @@ class _ListNews extends StatelessWidget {
             backgroundColor: Color(0xFF6165FA),
           ),
       ],
+    );
+  }
+
+  Widget _buildCachedImage(String imageUrl, double width, double height) {
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      placeholder: (context, url) => Image.asset(
+          'assets/jar-loading.gif'), // Placeholder mientras se carga la imagen
+      errorWidget: (context, url, error) =>
+          Icon(Icons.error), // Widget en caso de error de carga
+      width: width,
+      height: height,
+      fit: BoxFit.cover, // Ajusta la imagen al tamaño del contenedor
     );
   }
 }

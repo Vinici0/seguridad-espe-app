@@ -38,7 +38,7 @@ class RoomsScreen extends StatelessWidget {
           }
           if (state.salas.isEmpty) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
               child: Column(
                 children: [
                   //svg image de grupo
@@ -56,18 +56,21 @@ class RoomsScreen extends StatelessWidget {
                     height: 10,
                   ),
                   const Text(
-                      'Cree o únase a un grupo para que puedas estar informado de lo que reportan tus amigos y cuidarse entre mutuamente.',
+                      'Cree o únase a un grupo para que puedas estar informado de lo que reportan tus amigos y familiares.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black87,
                         fontSize: 16,
                       )),
-                  //Material boton para uniirse a un grupo
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                  ),
                   MaterialButton(
                     //todo el ancho posible
                     minWidth: MediaQuery.of(context).size.width * 0.95,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
                     onPressed: () {
                       Navigator.of(context).push(
                           CreateRoute.createRoute(CodigoAddGrupoScreen()));
@@ -75,6 +78,7 @@ class RoomsScreen extends StatelessWidget {
                     color: Colors.white,
                     textColor: Colors.black87,
                     child: const Text('Unirse a un grupo'),
+                    elevation: 5, // Aumenta la elevación del botón
                   ),
                   //Material boton para crear un grupo
                   MaterialButton(
@@ -90,6 +94,7 @@ class RoomsScreen extends StatelessWidget {
                     color: const Color(0xFF6165FA),
                     textColor: Colors.white,
                     child: const Text('Crear un grupo'),
+                    elevation: 5,
                   ),
                 ],
               ),

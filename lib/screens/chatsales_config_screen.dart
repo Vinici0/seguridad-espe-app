@@ -213,11 +213,14 @@ class DetalleSalaScreen extends StatelessWidget {
                                 onTap: () {
                                   _showDialogEliminar(context, chatProvider);
                                 },
-                                child: const Text(
-                                  'Salir y eliminar grupo',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 14,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Salir y eliminar grupo',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                               )
@@ -225,11 +228,14 @@ class DetalleSalaScreen extends StatelessWidget {
                                 onTap: () {
                                   _showDialog(context, chatProvider, auth);
                                 },
-                                child: const Text(
-                                  'Salir del grupo',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 14,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    'Salir del grupo',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                               ),

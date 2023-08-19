@@ -36,14 +36,14 @@ class PlacesScreen extends StatelessWidget {
         elevation: 0.5,
         actions: [
           //boton texto de siguiente
-          !navigatorBloc.state.isNumberFamilySelected
+          !navigatorBloc.state.isPlaceSelected
               ? const SizedBox()
               : TextButton(
                   onPressed: () {
-                    navigatorBloc.add(
-                        const NavigatorIsNumberFamilySelectedEvent(
-                            isNumberFamilySelected: false));
+                    navigatorBloc.add(const NavigatorIsPlaceSelectedEvent(
+                        isPlaceSelected: false));
 
+                    //que no se pueda regresar
                     Navigator.pushReplacementNamed(
                         context, HomeScreen.homeroute);
                   },

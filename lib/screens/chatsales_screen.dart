@@ -161,8 +161,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
           if (state.isLoading && !_isStateLoaded) {
             _isStateLoaded = true;
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF6165FA)),
+            return Container(
+              color: Colors.white,
+              child: const Center(
+                child: CircularProgressIndicator(color: Color(0xFF6165FA)),
+              ),
             );
           }
 

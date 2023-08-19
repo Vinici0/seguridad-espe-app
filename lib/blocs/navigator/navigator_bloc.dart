@@ -5,7 +5,7 @@ part 'navigator_event.dart';
 part 'navigator_state.dart';
 
 class NavigatorBloc extends Bloc<NavigatorEvent, NavigatorStateInit> {
-  NavigatorBloc() : super(const NavigatorStateInit(index: 0)) {
+  NavigatorBloc() : super(NavigatorStateInit(index: 0)) {
     on<NavigatorIndexEvent>((event, emit) {
       emit(state.copyWith(index: event.index));
     });
@@ -14,9 +14,12 @@ class NavigatorBloc extends Bloc<NavigatorEvent, NavigatorStateInit> {
       emit(state.copyWith(isNewSelected: event.isNewSelected));
     });
 
-    on<NavigatorIsNumberFamilySelectedEvent>((event, emit) {
-      emit(
-          state.copyWith(isNumberFamilySelected: event.isNumberFamilySelected));
+    on<NavigatorIsPlaceSelectedEvent>((event, emit) {
+      emit(state.copyWith(isNumberFamilySelected: event.isPlaceSelected));
+    });
+
+    on<NavigatorIsNumberFamilyEvent>((event, emit) {
+      emit(state.copyWith(isNumberFamily: event.isNumberFamily));
     });
   }
 }

@@ -36,7 +36,6 @@ class _MienbrosChatScreenState extends State<MienbrosChatScreen> {
 
   @override
   void dispose() {
-    membersBloc.state.usuariosAll.clear();
     super.dispose();
   }
 

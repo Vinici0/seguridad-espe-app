@@ -137,7 +137,8 @@ class IsPublicacionPendiente extends AuthEvent {
 
 //marcarPublicacionPendienteFalse
 class MarcarPublicacionPendienteFalse extends AuthEvent {
-  const MarcarPublicacionPendienteFalse();
+  final bool isPublicacionPendiente;
+  const MarcarPublicacionPendienteFalse(this.isPublicacionPendiente);
   @override
   List<Object> get props => [];
 }
@@ -158,4 +159,12 @@ class MarcarNotificacionesPendienteFalse extends AuthEvent {
   const MarcarNotificacionesPendienteFalse();
   @override
   List<Object> get props => [];
+}
+
+//isSalasPendiente
+class IsSalasPendiente extends AuthEvent {
+  final bool isSalasPendiente;
+  const IsSalasPendiente(this.isSalasPendiente);
+  @override
+  List<Object> get props => [isSalasPendiente];
 }

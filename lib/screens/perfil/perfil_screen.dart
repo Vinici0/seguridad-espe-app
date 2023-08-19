@@ -86,7 +86,7 @@ class PerfilScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 20, bottom: 10),
                     child: Text(
-                      'Ajutes',
+                      'Ajustes',
                       style: TextStyle(
                           color: Colors.black87,
                           fontSize: 18,

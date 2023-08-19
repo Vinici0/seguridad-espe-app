@@ -44,4 +44,41 @@ class NotificationService {
       return false;
     }
   }
+
+  //deleteAllNotifications
+  Future<bool> deleteAllNotifications() async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/notificacion');
+
+      final resp = await http.delete(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken() as String,
+        },
+      );
+      return true;
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteNotificationById(String id) async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/notificacion/$id');
+
+      final resp = await http.delete(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-token': await AuthService.getToken() as String,
+        },
+      );
+      return true;
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
 }

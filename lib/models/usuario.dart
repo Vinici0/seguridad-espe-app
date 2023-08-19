@@ -19,7 +19,7 @@ class Usuario {
   String createdAt;
   String email;
   String nombre;
-  String tokenApp;
+  String? tokenApp;
   String uid;
   String updatedAt;
   String? img;
@@ -31,7 +31,7 @@ class Usuario {
     required this.nombre,
     required this.email,
     this.telefono,
-    required this.tokenApp,
+    this.tokenApp,
     required this.ubicacion,
     required this.uid,
     required this.google,
@@ -46,8 +46,9 @@ class Usuario {
     required this.isSalasPendiente,
     required this.isNotificacionesPendiente,
   });
-
-  factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
+  factory Usuario.fromJson(Map<String, dynamic> json) {
+    try {
+      return Usuario(
         online: json["online"],
         google: json["google"],
         nombre: json["nombre"],
@@ -71,6 +72,31 @@ class Usuario {
             json["ubicaciones"].map((x) => Ubicacion.fromMap(x))),
         uid: json["uid"],
       );
+    } catch (e) {
+      print("Error al convertir JSON a Usuario: $e");
+
+      return Usuario(
+        online: false,
+        google: false,
+        nombre: '',
+        email: '',
+        telefono: '',
+        img: '',
+        createdAt: '',
+        isActivo: false,
+        updatedAt: '',
+        isNotificacionesPendiente: false,
+        isSalasPendiente: false,
+        salas: [],
+        isOpenRoom: false,
+        isPublicacionPendiente: false,
+        telefonos: [],
+        tokenApp: '',
+        ubicacion: [],
+        uid: '',
+      );
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "online": online ?? false,
@@ -94,12 +120,56 @@ class Usuario {
         "uid": uid,
         "isSalasPendiente": isSalasPendiente,
       };
+
+  Usuario copyWith({
+    bool? online,
+    bool? google,
+    String? nombre,
+    String? email,
+    String? telefono,
+    String? img,
+    String? createdAt,
+    bool? isActivo,
+    String? updatedAt,
+    bool? isNotificacionesPendiente,
+    bool? isSalasPendiente,
+    List<Salas>? salas,
+    bool? isOpenRoom,
+    bool? isPublicacionPendiente,
+    List<String>? telefonos,
+    String? tokenApp,
+    List<Ubicacion>? ubicacion,
+    String? uid,
+  }) {
+    return Usuario(
+      online: online ?? this.online,
+      google: google ?? this.google,
+      nombre: nombre ?? this.nombre,
+      email: email ?? this.email,
+      telefono: telefono ?? this.telefono,
+      img: img ?? this.img,
+      createdAt: createdAt ?? this.createdAt,
+      isActivo: isActivo ?? this.isActivo,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isNotificacionesPendiente:
+          isNotificacionesPendiente ?? this.isNotificacionesPendiente,
+      isSalasPendiente: isSalasPendiente ?? this.isSalasPendiente,
+      salas: salas ?? this.salas,
+      isOpenRoom: isOpenRoom ?? this.isOpenRoom,
+      isPublicacionPendiente:
+          isPublicacionPendiente ?? this.isPublicacionPendiente,
+      telefonos: telefonos ?? this.telefonos,
+      tokenApp: tokenApp ?? this.tokenApp,
+      ubicacion: ubicacion ?? this.ubicacion,
+      uid: uid ?? this.uid,
+    );
+  }
 }
 
 class Salas {
   String salaId;
   int mensajesNoLeidos;
-  dynamic ultimaVezActivo;
+  DateTime? ultimaVezActivo;
   bool isRoomOpen;
   String id;
 
@@ -114,7 +184,9 @@ class Salas {
   factory Salas.fromMap(Map<String, dynamic> json) => Salas(
         salaId: json["salaId"],
         mensajesNoLeidos: json["mensajesNoLeidos"],
-        ultimaVezActivo: json["ultimaVezActivo"],
+        ultimaVezActivo: json["ultimaVezActivo"] == null
+            ? null
+            : DateTime.parse(json["ultimaVezActivo"]),
         isRoomOpen: json["isRoomOpen"],
         id: json["_id"],
       );

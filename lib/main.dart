@@ -77,13 +77,36 @@ class _MyAppState extends State<MyApp> {
         return;
       }
 
-      if (dataNotification['type'] == 'publication') {
+      if (dataNotification['type'] == 'publication' &&
+          dataNotification['primerPlano'] == false) {
+        //eliminar la propiedad primer plano
+        dataNotification.remove('primerPlano');
         final newPublications = Publicacion.fromMap(dataNotification);
         BlocProvider.of<PublicationBloc>(context)
             .add(PublicacionSelectEvent(newPublications));
-
+        BlocProvider.of<AuthBloc>(context)
+            .add(const MarcarPublicacionPendienteFalse(true));
+        BlocProvider.of<PublicationBloc>(context)
+            .add(const ShowNewPostsButtonEvent(true));
         navigatorKey.currentState
-            ?.pushNamed('publicacion_notificacion', arguments: newPublications);
+            ?.pushNamed('detalle', arguments: newPublications);
+        return;
+      }
+
+      if (dataNotification['type'] == 'publication' &&
+          dataNotification['primerPlano'] == true) {
+        // ShowNewPostsButtonEvent
+        BlocProvider.of<AuthBloc>(context)
+            .add(const MarcarPublicacionPendienteFalse(true));
+        BlocProvider.of<PublicationBloc>(context)
+            .add(const ShowNewPostsButtonEvent(true));
+
+        return;
+      }
+
+      if (dataNotification['type'] == 'sala') {
+        BlocProvider.of<AuthBloc>(context).add(const IsSalasPendiente(true));
+        BlocProvider.of<RoomBloc>(context).salasInitEvent();
         return;
       }
 

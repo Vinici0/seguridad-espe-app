@@ -52,6 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<MarcarSalasPendienteTrue>(_onMarcarSalasPendienteTrue);
     on<MarcarNotificacionesPendienteFalse>(
         _onMarcarNotificacionesPendienteFalse);
+    on<IsSalasPendiente>(_onIsSalasPendiente);
   }
 
   void _onAuthRegisterEvent(AuthRegisterEvent event, Emitter<AuthState> emit) {
@@ -126,25 +127,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onMarcarPublicacionPendienteFalse(
       MarcarPublicacionPendienteFalse event, Emitter<AuthState> emit) async {
-    final usuario = Usuario(
-        online: state.usuario!.online,
-        nombre: state.usuario!.nombre,
-        email: state.usuario!.email,
-        telefono: state.usuario!.telefono,
-        tokenApp: state.usuario!.tokenApp,
-        isNotificacionesPendiente: false,
-        ubicacion: state.usuario!.ubicacion,
-        uid: state.usuario!.uid,
-        isActivo: state.usuario!.isActivo,
-        salas: state.usuario!.salas,
-        isOpenRoom: state.usuario!.isOpenRoom,
-        telefonos: state.usuario!.telefonos,
-        createdAt: state.usuario!.createdAt,
-        updatedAt: state.usuario!.updatedAt,
-        img: state.usuario!.img,
-        isPublicacionPendiente: false,
-        isSalasPendiente: state.usuario!.isSalasPendiente,
-        google: state.usuario!.google);
+    final usuario = state.usuario!.copyWith(
+      isNotificacionesPendiente: event.isPublicacionPendiente,
+      isPublicacionPendiente: event.isPublicacionPendiente,
+    );
 
     emit(state.copyWith(usuario: usuario));
 
@@ -198,6 +184,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         img: state.usuario!.img,
         isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
         isNotificacionesPendiente: state.usuario!.isNotificacionesPendiente,
+        google: state.usuario!.google);
+
+    emit(state.copyWith(usuario: usuario));
+  }
+
+  void _onIsSalasPendiente(
+      IsSalasPendiente event, Emitter<AuthState> emit) async {
+    final usuario = Usuario(
+        online: state.usuario!.online,
+        nombre: state.usuario!.nombre,
+        email: state.usuario!.email,
+        telefono: state.usuario!.telefono,
+        tokenApp: state.usuario!.tokenApp,
+        ubicacion: state.usuario!.ubicacion,
+        uid: state.usuario!.uid,
+        isActivo: state.usuario!.isActivo,
+        salas: state.usuario!.salas,
+        isOpenRoom: state.usuario!.isOpenRoom,
+        telefonos: state.usuario!.telefonos,
+        createdAt: state.usuario!.createdAt,
+        updatedAt: state.usuario!.updatedAt,
+        img: state.usuario!.img,
+        isNotificacionesPendiente: state.usuario!.isNotificacionesPendiente,
+        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
+        isSalasPendiente: event.isSalasPendiente,
         google: state.usuario!.google);
 
     emit(state.copyWith(usuario: usuario));

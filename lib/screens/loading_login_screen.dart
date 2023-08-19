@@ -6,6 +6,7 @@ import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
+import 'package:flutter_maps_adv/screens/information_family_screen.dart';
 import 'package:flutter_maps_adv/screens/information_screen.dart';
 import 'package:flutter_maps_adv/screens/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,12 +56,23 @@ class LoadingLoginScreen extends StatelessWidget {
       BlocProvider.of<NavigatorBloc>(context)
           .add(const NavigatorIndexEvent(index: 0));
       if (result) {
-        if (authService.getUsuario() != null &&
-            authService.getUsuario()!.telefono == null) {
+        if (authService.getUsuario()?.telefono == null ||
+            authService.getUsuario()?.telefonos == null) {
           await roomBloc.salasInitEvent();
           await publicationBloc.getAllPublicaciones();
           await notificationBloc.loadNotification();
-          navigateToReplacement(context, const InformationScreen());
+          if (authService.getUsuario()?.telefono == null) {
+            navigateToReplacement(context, const InformationScreen());
+          } else if (authService.getUsuario()?.telefonos == null) {
+            navigateToReplacement(context, const InformationFamily());
+          } else {
+            navigateToReplacement(context, const HomeScreen());
+          }
+
+          // await roomBloc.salasInitEvent();
+          // await publicationBloc.getAllPublicaciones();
+          // await notificationBloc.loadNotification();
+          // navigateToReplacement(context, const InformationScreen());
         } else {
           await roomBloc.salasInitEvent();
           await publicationBloc.getAllPublicaciones();

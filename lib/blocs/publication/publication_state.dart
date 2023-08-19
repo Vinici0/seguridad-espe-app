@@ -10,6 +10,8 @@ class PublicationState extends Equatable {
   final bool isLoading;
   final bool isError;
   final int conuntComentarios;
+  final bool firstController;
+  final bool showNewPostsButton;
 
   PublicationState({
     required this.publicaciones,
@@ -20,6 +22,8 @@ class PublicationState extends Equatable {
     required this.publicacionesUsuario,
     this.comentariosP = const [],
     this.conuntComentarios = 0,
+    this.firstController = false,
+    this.showNewPostsButton = false,
   });
 
   PublicationState copyWith({
@@ -27,6 +31,8 @@ class PublicationState extends Equatable {
     Publicacion? currentPublicacion,
     bool? isLoading,
     bool? isError,
+    bool? firstController,
+    bool? showNewPostsButton,
     List<Comentario>? comentarios,
     List<Publicacion>? publicacionesUsuario,
     List<CommentPublication>? comentariosP,
@@ -36,7 +42,9 @@ class PublicationState extends Equatable {
       publicaciones: publicaciones ?? this.publicaciones,
       currentPublicacion: currentPublicacion ?? this.currentPublicacion,
       isLoading: isLoading ?? this.isLoading,
+      firstController: firstController ?? this.firstController,
       isError: isError ?? this.isError,
+      showNewPostsButton: showNewPostsButton ?? this.showNewPostsButton,
       comentarios: comentarios ?? this.comentarios,
       comentariosP: comentariosP ?? this.comentariosP,
       publicacionesUsuario: publicacionesUsuario ?? this.publicacionesUsuario,
@@ -54,5 +62,7 @@ class PublicationState extends Equatable {
         publicacionesUsuario,
         conuntComentarios,
         comentariosP,
+        firstController,
+        showNewPostsButton,
       ];
 }

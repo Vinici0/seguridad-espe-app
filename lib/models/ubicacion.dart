@@ -40,6 +40,7 @@ class Ubicacion {
   String uid;
   String? referencia;
   String? parroquia;
+  int? v;
 
   Ubicacion({
     required this.latitud,
@@ -53,6 +54,7 @@ class Ubicacion {
     required this.uid,
     this.referencia,
     this.parroquia,
+    this.v,
   });
   factory Ubicacion.fromMap(Map<String, dynamic> json) {
     try {
@@ -75,6 +77,7 @@ class Ubicacion {
         pais: json["pais"],
         estado: json["estado"],
         createdAt: json["createdAt"],
+        v: json["__v"],
         updatedAt: json["updatedAt"],
         uid: json.containsKey("uid") ? json["uid"] : json["_id"],
         referencia: json["referencia"],
@@ -96,6 +99,7 @@ class Ubicacion {
         "estado": estado,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
+        "__v": v,
         "_id": uid,
         "referencia": referencia,
         "parroquia": parroquia,

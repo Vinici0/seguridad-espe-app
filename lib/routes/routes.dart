@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_maps_adv/helpers/notificacion_publicacion.dart';
+import 'package:flutter_maps_adv/screens/alert_edit_screen.dart';
 import 'package:flutter_maps_adv/screens/image_screen.dart';
 import 'package:flutter_maps_adv/screens/notification_screen.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
@@ -48,7 +48,6 @@ class Routes {
     SosNotificationScreen.sosroute: (_) => const SosNotificationScreen(),
     SosScreen.sosroute: (_) => const SosScreen(),
     PruductScreen.routeName: (_) => const PruductScreen(),
-    PublicacionNoticacionScreen.routeName: (_) =>
-        const PublicacionNoticacionScreen(),
+    AlerEdittScreen.routeName: (_) => const AlerEdittScreen(),
   };
 }

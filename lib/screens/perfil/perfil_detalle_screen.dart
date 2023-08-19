@@ -144,21 +144,22 @@ class _PerfilCicle extends StatelessWidget {
               width: 10,
             ),
             //un texto con el nombre
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  state.usuario!.nombre.length > 15
-                      ? '${state.usuario!.nombre.substring(0, 18)}...'
-                      : state.usuario!.nombre,
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  state.usuario!.email,
-                  style: const TextStyle(fontSize: 15),
-                ),
-              ],
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.50,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    state.usuario!.nombre,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    state.usuario!.email,
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                ],
+              ),
             ),
           ],
         );
@@ -221,10 +222,19 @@ class _ListNews extends StatelessWidget {
                                       "0xFF${publicaciones[i].color}")), //Color(0xffFDCF09
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
-                                    child: SvgPicture.asset(
-                                      'assets/alertas/${publicaciones[i].imgAlerta}',
-                                      color: Colors.white,
-                                    ),
+                                    child: publicaciones[i]
+                                            .imgAlerta
+                                            .endsWith('.png')
+                                        ? Image.asset(
+                                            'assets/alertas/${publicaciones[i].imgAlerta}',
+                                            // ignore: deprecated_member_use
+                                            color: Colors.white,
+                                          )
+                                        : SvgPicture.asset(
+                                            'assets/alertas/${publicaciones[i].imgAlerta}',
+                                            // ignore: deprecated_member_use
+                                            color: Colors.white,
+                                          ),
                                   ),
                                 ),
                               ),

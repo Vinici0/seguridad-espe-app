@@ -174,3 +174,46 @@ class UpdateLikesPublicationEvent extends PublicationEvent {
   @override
   List<Object> get props => [publicacion];
 }
+
+//Ir al inicio de la lista ScrollController
+class GoToStartListEvent extends PublicationEvent {
+  final bool firstController;
+  const GoToStartListEvent(this.firstController);
+
+  @override
+  List<Object> get props => [firstController];
+}
+
+//showNewPostsButton
+class ShowNewPostsButtonEvent extends PublicationEvent {
+  final bool showNewPostsButton;
+  const ShowNewPostsButtonEvent(this.showNewPostsButton);
+
+  @override
+  List<Object> get props => [showNewPostsButton];
+}
+
+//update publication
+class UpdatePublicationDescriptionEvent extends PublicationEvent {
+  final String uid;
+  final String description;
+  List<String>? imagePaths = [];
+  List<String>? imagePathsDelete = [];
+  UpdatePublicationDescriptionEvent(
+      {required this.description,
+      this.imagePaths,
+      required this.uid,
+      this.imagePathsDelete});
+
+  @override
+  List<Object> get props => [description];
+}
+
+//deletePublicacion
+class DeletePublicacionEvent extends PublicationEvent {
+  final String uid;
+  const DeletePublicacionEvent(this.uid);
+
+  @override
+  List<Object> get props => [uid];
+}

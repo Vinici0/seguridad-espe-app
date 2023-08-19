@@ -1,28 +1,32 @@
 part of 'navigator_bloc.dart';
 
 class NavigatorStateInit extends Equatable {
-  final int index;
+  int index;
   final bool isNewSelected;
-  final bool isNumberFamilySelected;
+  final bool isPlaceSelected;
+  final bool isNumberFamily;
 
-  const NavigatorStateInit(
-      {required this.index,
+  NavigatorStateInit(
+      {this.index = 0,
       this.isNewSelected = false,
-      this.isNumberFamilySelected = false});
+      this.isNumberFamily = false,
+      this.isPlaceSelected = false});
 
   NavigatorStateInit copyWith({
     int? index,
     bool? isNewSelected,
     bool? isNumberFamilySelected,
+    bool? isNumberFamily,
   }) {
     return NavigatorStateInit(
       index: index ?? this.index,
       isNewSelected: isNewSelected ?? this.isNewSelected,
-      isNumberFamilySelected:
-          isNumberFamilySelected ?? this.isNumberFamilySelected,
+      isPlaceSelected: isNumberFamilySelected ?? this.isPlaceSelected,
+      isNumberFamily: isNumberFamily ?? this.isNumberFamily,
     );
   }
 
   @override
-  List<Object> get props => [index, isNewSelected, isNumberFamilySelected];
+  List<Object> get props =>
+      [index, isNewSelected, isPlaceSelected, isNumberFamily];
 }
