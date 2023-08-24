@@ -352,6 +352,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     for (ChatMessage message in _messages) {
       message.animationController?.dispose();
     }
+    roomBloc.add(
+        ResetTotalMensajesNoLeidosEvent(roomBloc.state.salaSeleccionada.uid));
+    authService.add(const IsSalasPendiente(false));
     chatProvider.closeList();
     authService.socketService.socket.off('mensaje-grupal');
     _executeAsyncProcessOnExit();

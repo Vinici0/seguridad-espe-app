@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:flutter_maps_adv/screens/news_detalle.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

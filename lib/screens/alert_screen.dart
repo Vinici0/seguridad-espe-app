@@ -284,12 +284,12 @@ class _AlertScreenState extends State<AlertScreen> {
 
                         //Lista de imagenes selccinoadas de la galeria
 
-                        imagefiles != null && imagefiles!.isNotEmpty
+                        imagefiles != null && imagefiles.isNotEmpty
                             ? SizedBox(
                                 height: 80,
                                 child: ListView.builder(
                                   scrollDirection: Axis.horizontal,
-                                  itemCount: imagefiles!.length,
+                                  itemCount: imagefiles.length,
                                   itemBuilder: (context, index) {
                                     return Stack(children: [
                                       //Una x para eliminar la imagen
@@ -304,7 +304,7 @@ class _AlertScreenState extends State<AlertScreen> {
                                         width: 100,
                                         height: 100,
                                         child: Image.file(
-                                          File(imagefiles![index].path),
+                                          File(imagefiles[index].path),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -315,7 +315,8 @@ class _AlertScreenState extends State<AlertScreen> {
                                         child: GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              imagefiles!.removeAt(index);
+                                              imagefiles.removeAt(index);
+                                              imagePaths.removeAt(index);
                                             });
                                           },
                                           child: Container(
@@ -365,7 +366,7 @@ class _AlertScreenState extends State<AlertScreen> {
                                 });
                                 Fluttertoast.showToast(
                                   msg:
-                                      'Modo icónico ${isIconicActivated ? 'activado' : 'desactivado'}',
+                                      'Modo incógnito ${isIconicActivated ? 'activado' : 'desactivado'}',
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER,
                                   timeInSecForIosWeb: 2,
@@ -376,8 +377,8 @@ class _AlertScreenState extends State<AlertScreen> {
                               },
                               child: Tooltip(
                                 message: isIconicActivated
-                                    ? 'Modo icónico activado'
-                                    : 'Modo icónico desactivado',
+                                    ? 'Modo incógnito activado'
+                                    : 'Modo incógnito desactivado',
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(

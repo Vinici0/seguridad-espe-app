@@ -44,8 +44,13 @@ class PlacesScreen extends StatelessWidget {
                         isPlaceSelected: false));
 
                     //que no se pueda regresar
-                    Navigator.pushReplacementNamed(
-                        context, HomeScreen.homeroute);
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomeScreen()),
+                      (route) =>
+                          false, // Esto elimina todas las rutas anteriores
+                    );
                   },
                   child: const Text(
                     'Siguiente',

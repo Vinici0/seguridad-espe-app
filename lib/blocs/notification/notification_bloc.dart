@@ -11,8 +11,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
   NotificationBloc() : super(const NotificationState()) {
     on<LoadNotificationEvent>((event, emit) async {
-      emit(state.copyWith(loading: true));
-
       emit(
           state.copyWith(notificaciones: event.notificaciones, loading: false));
       print('notificaciones22222222222');
@@ -27,6 +25,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         }
       }).toList(); // Cast the List<dynamic> to List<Notificacione>
 
+      // await loadNotification();
       emit(state.copyWith(
           notificaciones: updatedNotificaciones.cast<Notificacione>()));
 
@@ -51,9 +50,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
       await _notificationService.deleteNotificationById(event.id);
     });
+
+    on<LoadingNotificationEvent>((event, emit) async {
+      emit(state.copyWith(loading: true));
+    });
   }
 
   loadNotification() async {
+    add(const LoadingNotificationEvent());
     final List<Notificacione> notificaciones =
         await _notificationService.getNotificaciones();
     add(LoadNotificationEvent(notificaciones));

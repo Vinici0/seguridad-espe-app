@@ -60,3 +60,10 @@ class DeleteNotificationByIdEvent extends NotificationEvent {
   @override
   List<Object> get props => [id];
 }
+
+class LoadingNotificationEvent extends NotificationEvent {
+  const LoadingNotificationEvent();
+
+  @override
+  List<Object> get props => [];
+}

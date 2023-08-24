@@ -23,7 +23,6 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   void initState() {
-    //Solo se ejcuta una vez y despues realiza una limpieza
     super.initState();
     // localtionBloc.getCurrentLocation();
     localtionBloc = BlocProvider.of<LocationBloc>(context);
@@ -45,8 +44,11 @@ class _MapScreenState extends State<MapScreen> {
       body: BlocBuilder<LocationBloc, LocaltionState>(
         builder: (context, localtionState) {
           if (localtionState.lastKnownLocation == null) {
-            return const Center(
-                child: Text("No se ha encontrado la ubicación"));
+            return Container(
+              color: Colors.white,
+              child:
+                  const Center(child: Text("No se ha encontrado la ubicación")),
+            );
           }
 
           return BlocBuilder<MapBloc, MapState>(

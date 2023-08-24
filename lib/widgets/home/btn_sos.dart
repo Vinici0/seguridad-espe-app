@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
+import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
+import 'package:flutter_maps_adv/screens/notification_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -102,6 +105,8 @@ class _SOSNotificationState extends State<_SOSNotification> {
   @override
   Widget build(BuildContext context) {
     final navigatorBloc = BlocProvider.of<NavigatorBloc>(context);
+    final notificationBloc =
+        BlocProvider.of<NotificationBloc>(context, listen: false);
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, stateauth) {
         return Positioned(
@@ -111,11 +116,13 @@ class _SOSNotificationState extends State<_SOSNotification> {
             children: [
               GestureDetector(
                 onTap: () {
+                  notificationBloc.loadNotification();
                   widget.authBloc
                       .add(const MarcarNotificacionesPendienteFalse());
                   navigatorBloc.add(
                       const NavigatorIsNewSelectedEvent(isNewSelected: true));
-                  Navigator.pushNamed(context, 'notifications_screen');
+                  Navigator.of(context).push(
+                      CreateRoute.createRoute(const NotificationsScreen()));
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 8.0, bottom: 18.0),

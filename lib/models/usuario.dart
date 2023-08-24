@@ -99,8 +99,8 @@ class Usuario {
   }
 
   Map<String, dynamic> toJson() => {
-        "online": online ?? false,
-        "google": google ?? false,
+        "online": online,
+        "google": google,
         "nombre": nombre,
         "email": email,
         "telefono": telefono,
@@ -111,9 +111,9 @@ class Usuario {
         "salas": salas == null
             ? []
             : List<dynamic>.from(salas!.map((x) => x.toMap())),
-        "isPublicacionPendiente": isPublicacionPendiente ?? false,
+        "isPublicacionPendiente": isPublicacionPendiente,
         "img": img,
-        "isActivo": isActivo ?? false,
+        "isActivo": isActivo,
         "telefonos": List<dynamic>.from(telefonos.map((x) => x)),
         "tokenApp": tokenApp,
         "ubicaciones": List<dynamic>.from(ubicacion.map((x) => x.toMap())),

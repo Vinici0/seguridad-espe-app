@@ -5,6 +5,7 @@ class ModalBottomSheet extends StatefulWidget {
 
   const ModalBottomSheet({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _ModalBottomSheetState createState() => _ModalBottomSheetState();
 }
 

@@ -106,57 +106,64 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   }
 
   Future drawRoutePolyline(RouteDestination destination) async {
-    final myRoute = Polyline(
-      polylineId: const PolylineId('route'),
-      color: Colors.black,
-      width: 5,
-      points: destination.points,
-      startCap: Cap.roundCap,
-      endCap: Cap.roundCap,
-    );
+    try {
+      final myRoute = Polyline(
+        polylineId: const PolylineId('route'),
+        color: Colors.black,
+        width: 5,
+        points: destination.points,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+      );
 
-    double kms = destination.distance / 1000;
-    kms = (kms * 100).floorToDouble();
-    kms /= 100;
+      double kms = destination.distance / 1000;
+      kms = (kms * 100).floorToDouble();
+      kms /= 100;
 
-    int tripDuration = (destination.duration / 60).floorToDouble().toInt();
+      int tripDuration = (destination.duration / 60).floorToDouble().toInt();
 
-    //custom marker
-    final startMakerImg = await getAssetImageMarker();
+      //custom marker
+      final startMakerImg = await getAssetImageMarker();
 
-    final startMarker = Marker(
+      final startMarker = Marker(
+          // anchor: const Offset(0.1, 1),
+          markerId: const MarkerId('start'),
+          position: destination.points.first,
+          infoWindow: InfoWindow(
+            title: 'Inicio',
+            snippet: 'Kms: $kms, duration: $tripDuration',
+          ));
+
+      final endMarker = Marker(
         // anchor: const Offset(0.1, 1),
-        markerId: const MarkerId('start'),
-        position: destination.points.first,
-        infoWindow: InfoWindow(
-          title: 'Inicio',
-          snippet: 'Kms: $kms, duration: $tripDuration',
-        ));
+        markerId: const MarkerId('end'),
+        position: destination.points.last,
+        // icon: startMaker,
+        // infoWindow: InfoWindow(
+        //   title: destination.destinationName,
+        //   snippet: 'Kms: $kms, duration: $tripDuration',
+        // )
+      );
 
-    final endMarker = Marker(
-      // anchor: const Offset(0.1, 1),
-      markerId: const MarkerId('end'),
-      position: destination.points.last,
-      // icon: startMaker,
-      // infoWindow: InfoWindow(
-      //   title: destination.destinationName,
-      //   snippet: 'Kms: $kms, duration: $tripDuration',
-      // )
-    );
+      final curretPolylines = Map<String, Polyline>.from(state.polylines);
+      curretPolylines['route'] = myRoute;
 
-    final curretPolylines = Map<String, Polyline>.from(state.polylines);
-    curretPolylines['route'] = myRoute;
+      final currentMarkers = Map<String, Marker>.from(state.markers);
+      currentMarkers['start'] = startMarker;
+      currentMarkers['end'] = endMarker;
 
-    final currentMarkers = Map<String, Marker>.from(state.markers);
-    currentMarkers['start'] = startMarker;
-    currentMarkers['end'] = endMarker;
+      add(DisplayPolylinesEvent(curretPolylines, currentMarkers));
 
-    add(DisplayPolylinesEvent(curretPolylines, currentMarkers));
-
-    await Future.delayed(const Duration(milliseconds: 300), () {
-      _mapController?.showMarkerInfoWindow(const MarkerId('start'));
-      _mapController?.showMarkerInfoWindow(const MarkerId('end'));
-    });
+      await Future.delayed(const Duration(milliseconds: 300), () {
+        _mapController?.showMarkerInfoWindow(const MarkerId('start'));
+        _mapController?.showMarkerInfoWindow(const MarkerId('end'));
+      });
+    } catch (e) {
+      // Manejar la excepción aquí
+      print('Error en drawRoutePolyline: $e');
+      // Puedes lanzar una excepción personalizada o tomar otra acción según tu lógica de manejo de errores.
+      // Por ejemplo, lanzar una excepción personalizada:
+    }
   }
 
   @override

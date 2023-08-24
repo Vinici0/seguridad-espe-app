@@ -99,6 +99,7 @@ class GroupContenido extends StatelessWidget {
             } else {
               final res = await chatProvider.joinSala(nomController.text);
               if (!res) {
+                blocRoom.add(CargandoEventFalse());
                 Fluttertoast.showToast(
                     msg: 'No existe el grupo ${nomController.text}',
                     toastLength: Toast.LENGTH_SHORT,
@@ -107,6 +108,7 @@ class GroupContenido extends StatelessWidget {
                     backgroundColor: const Color(0xff6165FA),
                     textColor: Colors.white,
                     fontSize: 16.0);
+                //CargandoEventFalse
               } else {
                 _focusNode.unfocus();
                 Fluttertoast.showToast(

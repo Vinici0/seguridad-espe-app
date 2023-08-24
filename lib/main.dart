@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:flutter_maps_adv/helpers/page_route.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:flutter_maps_adv/resources/services/push_notifications_service.dart';
 import 'package:flutter_maps_adv/resources/services/traffic_service.dart';
@@ -71,9 +72,14 @@ class _MyAppState extends State<MyApp> {
         if (isSosScreenOpen) {
           return;
         }
+        isSosScreenOpen = true;
 
         navigatorKey.currentState
-            ?.pushNamed('sos', arguments: dataNotification);
+            ?.pushNamed('sos', arguments: dataNotification)
+            .then((value) {
+          isSosScreenOpen = false;
+        });
+
         return;
       }
 
@@ -98,6 +104,8 @@ class _MyAppState extends State<MyApp> {
         // ShowNewPostsButtonEvent
         BlocProvider.of<AuthBloc>(context)
             .add(const MarcarPublicacionPendienteFalse(true));
+
+        // cargarComentarios
         BlocProvider.of<PublicationBloc>(context)
             .add(const ShowNewPostsButtonEvent(true));
 
@@ -111,8 +119,6 @@ class _MyAppState extends State<MyApp> {
       }
 
       // navigatorKey.currentState?.pushNamed('product', arguments: message);
-
-      isSosScreenOpen = true;
 
       super.initState();
     });

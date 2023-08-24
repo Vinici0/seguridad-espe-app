@@ -186,7 +186,7 @@ class _ListNews extends StatelessWidget {
   Widget build(BuildContext context) {
     final circleMarkers = <CircleMarker>[
       CircleMarker(
-          point: LatLng(publicaciones[0].latitud!, publicaciones[0].longitud!),
+          point: LatLng(publicaciones[0].latitud, publicaciones[0].longitud),
           color: const Color(0xFF6165FA).withOpacity(0.3),
           borderStrokeWidth: 2,
           borderColor: const Color(0xFF6165FA),

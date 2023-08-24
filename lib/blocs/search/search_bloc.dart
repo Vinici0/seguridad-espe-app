@@ -56,21 +56,26 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future<RouteDestination> getCoorsStartToEnd(LatLng start, LatLng end) async {
-    final trafficResponse = await trafficService.getCoorsStartToEnd(start, end);
+    try {
+      final trafficResponse =
+          await trafficService.getCoorsStartToEnd(start, end);
 
-    final geometry = trafficResponse.routes[0].geometry;
-    final distance = trafficResponse.routes[0].distance;
-    final duration = trafficResponse.routes[0].duration;
+      final geometry = trafficResponse.routes[0].geometry;
+      final distance = trafficResponse.routes[0].distance;
+      final duration = trafficResponse.routes[0].duration;
 
-    // Decodificar
-    final points = decodePolyline(geometry, accuracyExponent: 6);
+      // Decodificar
+      final points = decodePolyline(geometry, accuracyExponent: 6);
 
-    final latLngList = points
-        .map((coor) => LatLng(coor[0].toDouble(), coor[1].toDouble()))
-        .toList();
+      final latLngList = points
+          .map((coor) => LatLng(coor[0].toDouble(), coor[1].toDouble()))
+          .toList();
 
-    return RouteDestination(
-        points: latLngList, duration: duration, distance: distance);
+      return RouteDestination(
+          points: latLngList, duration: duration, distance: distance);
+    } catch (e) {
+      return RouteDestination(points: [], duration: 0, distance: 0);
+    }
   }
 
   Future<List<Ubicacion>> getResultsByQueryUbicacion(String query) async {

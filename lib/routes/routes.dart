@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_maps_adv/screens/alert_edit_screen.dart';
 import 'package:flutter_maps_adv/screens/image_screen.dart';
+import 'package:flutter_maps_adv/screens/information_family_auth_screen.dart';
 import 'package:flutter_maps_adv/screens/notification_screen.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_telefono.dart';
@@ -49,5 +50,7 @@ class Routes {
     SosScreen.sosroute: (_) => const SosScreen(),
     PruductScreen.routeName: (_) => const PruductScreen(),
     AlerEdittScreen.routeName: (_) => const AlerEdittScreen(),
+    InformationFamilyAuth.informationFamilyAuth: (_) =>
+        const InformationFamilyAuth(),
   };
 }

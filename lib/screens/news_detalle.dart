@@ -9,7 +9,6 @@ import 'package:flutter_maps_adv/helpers/show_loading_message.dart';
 import 'package:flutter_maps_adv/models/publication.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter_maps_adv/screens/alert_edit_screen.dart';
-import 'package:flutter_maps_adv/screens/alert_screen.dart';
 import 'package:flutter_maps_adv/screens/report_screen.dart';
 import 'package:flutter_maps_adv/widgets/comments.dart';
 import 'package:flutter_maps_adv/widgets/comment_pulbicacion.dart';
@@ -17,7 +16,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:intl/intl.dart';
 
 import 'package:timezone/timezone.dart';
@@ -101,28 +99,12 @@ class _DetalleScreenState extends State<DetalleScreen> {
       ...publicationBloc.state.currentPublicacion!.comentarios ?? [],
       comment.uid!
     ];
-    publicationBloc.add(UpdatePublicationEvent(Publicacion(
-      titulo: publicationBloc.state.currentPublicacion!.titulo,
-      contenido: publicationBloc.state.currentPublicacion!.contenido,
-      color: publicationBloc.state.currentPublicacion!.color,
-      ciudad: publicationBloc.state.currentPublicacion!.ciudad,
-      barrio: publicationBloc.state.currentPublicacion!.barrio,
-      isPublic: publicationBloc.state.currentPublicacion!.isPublic,
-      usuario: publicationBloc.state.currentPublicacion!.usuario,
-      latitud: publicationBloc.state.currentPublicacion!.latitud,
-      longitud: publicationBloc.state.currentPublicacion!.longitud,
-      imgAlerta: publicationBloc.state.currentPublicacion!.imgAlerta,
-      isLiked: publicationBloc.state.currentPublicacion!.isLiked,
-      isPublicacionPendiente:
-          publicationBloc.state.currentPublicacion!.isPublicacionPendiente,
-      uid: publicationBloc.state.currentPublicacion!.uid,
+
+    final newPublicacion = publicationBloc.state.currentPublicacion!.copyWith(
       comentarios: comentarios,
-      likes: publicationBloc.state.currentPublicacion!.likes,
-      imagenes: publicationBloc.state.currentPublicacion!.imagenes,
-      createdAt: publicationBloc.state.currentPublicacion!.createdAt,
-      updatedAt: publicationBloc.state.currentPublicacion!.updatedAt,
-      nombreUsuario: publicationBloc.state.currentPublicacion!.nombreUsuario,
-    )));
+    );
+
+    publicationBloc.add(UpdatePublicationEvent(newPublicacion));
 
     publicationBloc.add(CountCommentEvent(
         publicationBloc.state.conuntComentarios + 1)); //aumenta el contador
@@ -312,28 +294,11 @@ class _DetalleScreenState extends State<DetalleScreen> {
       newComment.uid!
     ]; //agrega el comentario a la lista de comentarios
 
-    publicationBloc.add(UpdatePublicationEvent(Publicacion(
-      titulo: publicationBloc.state.currentPublicacion!.titulo,
-      contenido: publicationBloc.state.currentPublicacion!.contenido,
-      color: publicationBloc.state.currentPublicacion!.color,
-      ciudad: publicationBloc.state.currentPublicacion!.ciudad,
-      barrio: publicationBloc.state.currentPublicacion!.barrio,
-      isPublic: publicationBloc.state.currentPublicacion!.isPublic,
-      usuario: publicationBloc.state.currentPublicacion!.usuario,
-      latitud: publicationBloc.state.currentPublicacion!.latitud,
-      longitud: publicationBloc.state.currentPublicacion!.longitud,
-      imgAlerta: publicationBloc.state.currentPublicacion!.imgAlerta,
-      isLiked: publicationBloc.state.currentPublicacion!.isLiked,
-      uid: publicationBloc.state.currentPublicacion!.uid,
-      isPublicacionPendiente:
-          publicationBloc.state.currentPublicacion!.isPublicacionPendiente,
+    final publicacion = publicationBloc.state.currentPublicacion!.copyWith(
       comentarios: comentarios,
-      likes: publicationBloc.state.currentPublicacion!.likes,
-      imagenes: publicationBloc.state.currentPublicacion!.imagenes,
-      createdAt: publicationBloc.state.currentPublicacion!.createdAt,
-      updatedAt: publicationBloc.state.currentPublicacion!.updatedAt,
-      nombreUsuario: publicationBloc.state.currentPublicacion!.nombreUsuario,
-    )));
+    );
+
+    publicationBloc.add(UpdatePublicationEvent(publicacion));
 
     publicationBloc.add(CountCommentEvent(
         publicationBloc.state.conuntComentarios + 1)); //aumenta el contador
@@ -824,8 +789,9 @@ class _CustonAppBarDetalle extends StatelessWidget {
                 ),
                 builder: (BuildContext context) {
                   return Container(
-                    height: authService.state.usuario!.uid ==
+                    height: authService.state.usuario!.uid.trim() ==
                             publicationBloc.state.currentPublicacion!.usuario
+                                .trim()
                         ? 170.0
                         : 60.0,
                     decoration: const BoxDecoration(
@@ -838,16 +804,17 @@ class _CustonAppBarDetalle extends StatelessWidget {
                     child: Center(
                       child: Column(
                         children: [
-                          authService.state.usuario!.uid ==
+                          authService.state.usuario!.uid.trim() ==
                                   publicationBloc
                                       .state.currentPublicacion!.usuario
+                                      .trim()
                               ? ListTile(
                                   leading: const Icon(
                                     //icono de editar
                                     Icons.edit,
                                     color: Colors.black,
                                   ),
-                                  title: const Text('Editar reporte'),
+                                  title: const Text('Editar'),
                                   onTap: () {
                                     Navigator.of(context).push(
                                         CreateRoute.createRoute(
@@ -865,7 +832,7 @@ class _CustonAppBarDetalle extends StatelessWidget {
                                     color: Colors.black,
                                     size: 18,
                                   ),
-                                  title: const Text('Eliminar reporte'),
+                                  title: const Text('Eliminar'),
                                   onTap: () {
                                     //DeletePublicacionEvent
                                     _showDeleteConfirmationDialog(
@@ -931,7 +898,11 @@ class _CustonAppBarDetalle extends StatelessWidget {
               ),
               builder: (BuildContext context) {
                 return Container(
-                  height: 170.0,
+                  height: authService.state.usuario!.uid.trim() ==
+                          publicationBloc.state.currentPublicacion!.usuario
+                              .trim()
+                      ? 170.0
+                      : 60.0,
                   decoration: const BoxDecoration(
                     // color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -942,30 +913,30 @@ class _CustonAppBarDetalle extends StatelessWidget {
                   child: Center(
                     child: Column(
                       children: [
-                        ListTile(
-                          leading: const Icon(
-                            //icono de editar
-                            Icons.edit,
-                            color: Colors.black,
-                          ),
-                          title: const Text('Editar reporte'),
-                          onTap: () {
-                            Navigator.of(context).push(CreateRoute.createRoute(
-                                const AlerEdittScreen()));
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            FontAwesomeIcons.trash,
-                            color: Colors.black,
-                            size: 18,
-                          ),
-                          title: const Text('Eliminar reporte'),
-                          onTap: () {
-                            _showDeleteConfirmationDialog(
-                                context, publicationBloc);
-                          },
-                        ),
+                        // ListTile(
+                        //   leading: const Icon(
+                        //     //icono de editar
+                        //     Icons.edit,
+                        //     color: Colors.black,
+                        //   ),
+                        //   title: const Text('Editar'),
+                        //   onTap: () {
+                        //     Navigator.of(context).push(CreateRoute.createRoute(
+                        //         const AlerEdittScreen()));
+                        //   },
+                        // ),
+                        // ListTile(
+                        //   leading: const Icon(
+                        //     FontAwesomeIcons.trash,
+                        //     color: Colors.black,
+                        //     size: 18,
+                        //   ),
+                        //   title: const Text('Eliminar'),
+                        //   onTap: () {
+                        //     _showDeleteConfirmationDialog(
+                        //         context, publicationBloc);
+                        //   },
+                        // ),
                         //Denumciar
                         ListTile(
                           leading: const Icon(
@@ -1002,35 +973,39 @@ class _CustonAppBarDetalle extends StatelessWidget {
             Swiper(
               pagination: const SwiperPagination(),
               itemCount: publicacion.imagenes!.length,
+              loop:
+                  false, // Desactivar el desplazamiento cuando solo haya una imagen
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, 'image-screen');
                   },
-                  child: Stack(children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Image.network(
-                        "${Environment.apiUrl}/uploads/publicaciones/${publicacion.uid!}?imagenIndex=${publicacion.imagenes![index]}",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withOpacity(0.7)
-                          ],
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Image.network(
+                          "${Environment.apiUrl}/uploads/publicaciones/${publicacion.uid!}?imagenIndex=${publicacion.imagenes![index]}",
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  ]),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.7),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               },
-            ),
+            )
           ],
         ),
       ),

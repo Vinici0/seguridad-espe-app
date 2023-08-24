@@ -16,7 +16,7 @@ class SosScreen extends StatelessWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final String nombre = args['nombre'];
-    final String img = args['img'];
+    final String img = args['img'] ?? '';
     final bool google = args['google'] == true ? true : false;
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final searchBloc = BlocProvider.of<SearchBloc>(context);

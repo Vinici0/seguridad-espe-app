@@ -116,7 +116,7 @@ class _EditPerfilScreenState extends State<EditPerfilScreen> {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(state.usuario!.nombre!,
+                    subtitle: Text(state.usuario!.nombre,
                         style: const TextStyle(fontSize: 16)),
                     //flecha para editar
                     trailing: const Icon(Icons.arrow_forward_ios),
@@ -135,7 +135,7 @@ class _EditPerfilScreenState extends State<EditPerfilScreen> {
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(state.usuario!.email!,
+                    subtitle: Text(state.usuario!.email,
                         style: const TextStyle(fontSize: 16)),
                     onTap: () {
                       // Navigator.pushNamed(context, 'editPerfil');

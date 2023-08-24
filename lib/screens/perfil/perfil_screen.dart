@@ -62,7 +62,7 @@ class PerfilScreen extends StatelessWidget {
                     _ListIconName(
                       icon: Icons.quick_contacts_dialer_rounded,
                       name: "Mis contactos",
-                      route: "information_family",
+                      route: "information_familyauth",
                     ),
                     Divider(
                       color: Colors.black45,

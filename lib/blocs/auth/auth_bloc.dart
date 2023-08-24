@@ -139,26 +139,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onMarcarSalasPendienteFalse(
       MarcarSalasPendienteFalse event, Emitter<AuthState> emit) async {
-    final usuario = Usuario(
-        online: state.usuario!.online,
-        nombre: state.usuario!.nombre,
-        email: state.usuario!.email,
-        telefono: state.usuario!.telefono,
-        tokenApp: state.usuario!.tokenApp,
-        ubicacion: state.usuario!.ubicacion,
-        uid: state.usuario!.uid,
-        isActivo: state.usuario!.isActivo,
-        salas: state.usuario!.salas,
-        isOpenRoom: state.usuario!.isOpenRoom,
-        telefonos: state.usuario!.telefonos,
-        createdAt: state.usuario!.createdAt,
-        updatedAt: state.usuario!.updatedAt,
-        img: state.usuario!.img,
-        isNotificacionesPendiente: state.usuario!.isNotificacionesPendiente,
-        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
-        isSalasPendiente: false,
-        google: state.usuario!.google);
-
+    final usuario = state.usuario!.copyWith(isSalasPendiente: false);
     emit(state.copyWith(usuario: usuario));
 
     await apiAuthRepository.marcarSalaPendienteFalse();
@@ -166,110 +147,40 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onAuthAddTelefonoEvent(
       AuthAddTelefonoEvent event, Emitter<AuthState> emit) {
-    final usuario = Usuario(
-        online: state.usuario!.online,
-        nombre: state.usuario!.nombre,
-        email: state.usuario!.email,
-        telefono: event.telefono,
-        tokenApp: state.usuario!.tokenApp,
-        ubicacion: state.usuario!.ubicacion,
-        uid: state.usuario!.uid,
-        isActivo: state.usuario!.isActivo,
-        salas: state.usuario!.salas,
-        isOpenRoom: state.usuario!.isOpenRoom,
-        telefonos: state.usuario!.telefonos,
-        createdAt: state.usuario!.createdAt,
-        updatedAt: state.usuario!.updatedAt,
-        isSalasPendiente: state.usuario!.isSalasPendiente,
-        img: state.usuario!.img,
-        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
-        isNotificacionesPendiente: state.usuario!.isNotificacionesPendiente,
-        google: state.usuario!.google);
+    final usuario = state.usuario!.copyWith(
+      telefono: event.telefono,
+    );
 
     emit(state.copyWith(usuario: usuario));
   }
 
   void _onIsSalasPendiente(
       IsSalasPendiente event, Emitter<AuthState> emit) async {
-    final usuario = Usuario(
-        online: state.usuario!.online,
-        nombre: state.usuario!.nombre,
-        email: state.usuario!.email,
-        telefono: state.usuario!.telefono,
-        tokenApp: state.usuario!.tokenApp,
-        ubicacion: state.usuario!.ubicacion,
-        uid: state.usuario!.uid,
-        isActivo: state.usuario!.isActivo,
-        salas: state.usuario!.salas,
-        isOpenRoom: state.usuario!.isOpenRoom,
-        telefonos: state.usuario!.telefonos,
-        createdAt: state.usuario!.createdAt,
-        updatedAt: state.usuario!.updatedAt,
-        img: state.usuario!.img,
-        isNotificacionesPendiente: state.usuario!.isNotificacionesPendiente,
-        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
-        isSalasPendiente: event.isSalasPendiente,
-        google: state.usuario!.google);
+    final usuario = state.usuario!.copyWith(
+      isSalasPendiente: event.isSalasPendiente,
+    );
 
     emit(state.copyWith(usuario: usuario));
   }
 
   void _onMarcarSalasPendienteTrue(
       MarcarSalasPendienteTrue event, Emitter<AuthState> emit) async {
-    final usuario = Usuario(
-        online: state.usuario!.online,
-        nombre: state.usuario!.nombre,
-        email: state.usuario!.email,
-        telefono: state.usuario!.telefono,
-        tokenApp: state.usuario!.tokenApp,
-        ubicacion: state.usuario!.ubicacion,
-        uid: state.usuario!.uid,
-        isActivo: state.usuario!.isActivo,
-        salas: state.usuario!.salas,
-        isOpenRoom: state.usuario!.isOpenRoom,
-        telefonos: state.usuario!.telefonos,
-        createdAt: state.usuario!.createdAt,
-        updatedAt: state.usuario!.updatedAt,
-        img: state.usuario!.img,
-        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
-        isNotificacionesPendiente: state.usuario!.isNotificacionesPendiente,
-        isSalasPendiente: true,
-        google: state.usuario!.google);
+    final usuario = state.usuario!.copyWith(isSalasPendiente: true);
 
     emit(state.copyWith(usuario: usuario));
-
-    // await apiAuthRepository.marcarSalasPendienteTrue();
   }
 
   void _aonAddTelefonoFamilyEvent(
       AuthAddTelefonFamilyEvent event, Emitter<AuthState> emit) {
     final telefono = event.telefono.trim();
 
-    final telefonos = state.usuario!.telefonos
-        .where((t) => t.isNotEmpty) // Eliminar los datos "" del arreglo
-        .toList();
+    final telefonos =
+        state.usuario!.telefonos.where((t) => t.isNotEmpty).toList();
 
     if (telefono.isNotEmpty && !telefonos.contains(telefono)) {
       telefonos.add(telefono);
 
-      final usuario = Usuario(
-        online: state.usuario!.online,
-        nombre: state.usuario!.nombre,
-        email: state.usuario!.email,
-        telefono: state.usuario!.telefono,
-        tokenApp: state.usuario!.tokenApp,
-        ubicacion: state.usuario!.ubicacion,
-        uid: state.usuario!.uid,
-        isSalasPendiente: state.usuario!.isSalasPendiente,
-        isActivo: state.usuario!.isActivo,
-        salas: state.usuario!.salas,
-        isOpenRoom: state.usuario!.isOpenRoom,
-        createdAt: state.usuario!.createdAt,
-        updatedAt: state.usuario!.updatedAt,
-        isNotificacionesPendiente: state.usuario!.isNotificacionesPendiente,
-        img: state.usuario!.img,
-        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
-        google: state.usuario!.google,
+      final usuario = state.usuario!.copyWith(
         telefonos: telefonos,
       );
 
@@ -283,24 +194,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final newTelefonos = state.usuario!.telefonos..remove(event.telefono);
 
-    final usuario = Usuario(
-      online: state.usuario!.online,
-      nombre: state.usuario!.nombre,
-      email: state.usuario!.email,
-      telefono: state.usuario!.telefono,
-      isSalasPendiente: state.usuario!.isSalasPendiente,
-      tokenApp: state.usuario!.tokenApp,
-      ubicacion: state.usuario!.ubicacion,
-      google: state.usuario!.google,
-      createdAt: state.usuario!.createdAt,
-      updatedAt: state.usuario!.updatedAt,
-      isActivo: state.usuario!.isActivo,
-      salas: state.usuario!.salas,
-      isNotificacionesPendiente: state.usuario!.isNotificacionesPendiente,
-      isOpenRoom: state.usuario!.isOpenRoom,
-      isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
-      uid: state.usuario!.uid,
-      img: state.usuario!.img,
+    final usuario = state.usuario!.copyWith(
       telefonos: newTelefonos,
     );
 
@@ -309,25 +203,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onMarcarNotificacionesPendienteFalse(
       MarcarNotificacionesPendienteFalse event, Emitter<AuthState> emit) async {
-    final usuario = Usuario(
-        online: state.usuario!.online,
-        nombre: state.usuario!.nombre,
-        email: state.usuario!.email,
-        telefono: state.usuario!.telefono,
-        tokenApp: state.usuario!.tokenApp,
-        ubicacion: state.usuario!.ubicacion,
-        uid: state.usuario!.uid,
-        isActivo: state.usuario!.isActivo,
-        salas: state.usuario!.salas,
-        isOpenRoom: state.usuario!.isOpenRoom,
-        telefonos: state.usuario!.telefonos,
-        createdAt: state.usuario!.createdAt,
-        updatedAt: state.usuario!.updatedAt,
-        img: state.usuario!.img,
-        isNotificacionesPendiente: false,
-        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
-        isSalasPendiente: state.usuario!.isSalasPendiente,
-        google: state.usuario!.google);
+    final usuario = state.usuario!.copyWith(isNotificacionesPendiente: false);
 
     emit(state.copyWith(usuario: usuario));
 
@@ -352,25 +228,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onUpdateUsuarioImageEvent(UpdateUsuarioNewTelefonoOrNombreEvent event,
       Emitter<AuthState> emit) async {
-    final usuario = Usuario(
-        online: state.usuario!.online,
-        nombre: event.nombre,
-        email: state.usuario!.email,
-        telefono: event.telefono,
-        tokenApp: state.usuario!.tokenApp,
-        ubicacion: state.usuario!.ubicacion,
-        uid: state.usuario!.uid,
-        telefonos: state.usuario!.telefonos,
-        createdAt: state.usuario!.createdAt,
-        updatedAt: state.usuario!.updatedAt,
-        isNotificacionesPendiente: state.usuario!.isNotificacionesPendiente,
-        isSalasPendiente: state.usuario!.isSalasPendiente,
-        isActivo: state.usuario!.isActivo,
-        salas: state.usuario!.salas,
-        isOpenRoom: state.usuario!.isOpenRoom,
-        isPublicacionPendiente: state.usuario!.isPublicacionPendiente,
-        google: state.usuario!.google,
-        img: state.usuario!.img);
+    final usuario = state.usuario!.copyWith(
+      nombre: event.nombre,
+      telefono: event.telefono,
+    );
 
     emit(state.copyWith(usuario: usuario));
   }
@@ -387,7 +248,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return isLoggedIn;
   }
 
-  //retorna el usuario del state
   Usuario? getUsuario() {
     if (state.usuario == null) {
       return null;
@@ -397,7 +257,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   login(String email, String password) async {
     if (email.isEmpty || password.isEmpty) {
-      // Campos vacíos, mostrar mensaje de error o realizar alguna acción adecuada
       return false;
     }
 
@@ -411,7 +270,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return false;
   }
 
-  //authGoogle - signInWithGoogle
   Future<bool> signInWithGoogle() async {
     final usuario = await apiAuthRepository.signInWithGoogle();
     if (usuario != null) {
@@ -460,7 +318,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   addTelefonoFamily(String telefono) async {
     await apiAuthRepository.addTelefonos(telefono);
-    //comprobar si el telefono personal esta en la lista de telefonos familiares
     add(AuthAddTelefonFamilyEvent(telefono));
   }
 

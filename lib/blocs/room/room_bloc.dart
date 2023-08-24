@@ -58,6 +58,10 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       // emit(state.copyWith(isLoading: true));
     });
 
+    on<CargandoEventFalse>((event, emit) {
+      emit(state.copyWith(isLoading: false));
+    });
+
     on<RoomLoadingEvent2>((event, emit) {
       emit(state.copyWith(isLoading: true));
     });

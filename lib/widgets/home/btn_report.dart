@@ -1,7 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
-import 'package:flutter_maps_adv/blocs/search/search_bloc.dart';
 import 'package:flutter_maps_adv/screens/alerts_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -68,13 +67,13 @@ class _BtnReport extends StatelessWidget {
   }
 }
 
+// ignore: unused_element
 class _BtnCancelar extends StatelessWidget {
-  const _BtnCancelar({super.key});
+  const _BtnCancelar();
 
   @override
   Widget build(BuildContext context) {
     MapBloc mapBloc = BlocProvider.of<MapBloc>(context);
-    double width = MediaQuery.of(context).size.width;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -99,6 +98,7 @@ class _BtnCancelar extends StatelessWidget {
                     .add(OnDeactivateManualMarkerEvent());
               },
               //icono de una campana de aleerta
+              // ignore: deprecated_member_use
               icon: const Icon(FontAwesomeIcons.times,
                   size: 16, color: Colors.white),
               label: const Text("CANCELAR",

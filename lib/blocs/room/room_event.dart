@@ -72,6 +72,8 @@ class ObtenerUsuariosSalaEvent extends RoomEvent {
 
 class CargandoEvent extends RoomEvent {}
 
+class CargandoEventFalse extends RoomEvent {}
+
 class DeleteSalaEvent extends RoomEvent {
   final String uid;
 
