@@ -7,6 +7,7 @@ import 'package:flutter_maps_adv/widgets/boton_login.dart';
 import 'package:flutter_maps_adv/widgets/custom_input.dart';
 import 'package:flutter_maps_adv/widgets/labels_login.dart';
 import 'package:flutter_maps_adv/widgets/logo_login.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class RegisterScreen extends StatelessWidget {
   static const String registerroute = 'register';
@@ -26,15 +27,20 @@ class RegisterScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.9,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Logo(text: "REGISTRO"),
-                    _From(),
-                    Labels(
+                  children: [
+                    SizedBox(
+                        width: 170,
+                        height: 170,
+                        child: SvgPicture.asset(
+                          'assets/iconvinculacion/login.svg',
+                        )),
+                    const _From(),
+                    const Labels(
                         ruta: 'login',
                         text: "¿Ya tienes cuenta?",
                         text2: "Ingresa"),
-                    SizedBox(height: 10),
-                    Text("Terminos y condiciones de uso",
+                    const SizedBox(height: 10),
+                    const Text("Terminos y condiciones de uso",
                         style: TextStyle(
                             fontWeight: FontWeight.w400,
                             color: Color.fromRGBO(0, 0, 0, 0.782)))
@@ -58,6 +64,7 @@ class __FromState extends State<_From> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nomController = TextEditingController();
+  String? unidadEducativa = '';
   @override
   Widget build(BuildContext context) {
     final authServiceBloc = BlocProvider.of<AuthBloc>(context);
@@ -82,6 +89,58 @@ class __FromState extends State<_From> {
         placeholder: "Password",
         textController: passwordController,
         isPassword: true,
+      ),
+      //Select para el tipo de usuario
+      Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black12,
+                  //offset: para mover la sobra
+                  offset: Offset(0, 5),
+                  blurRadius: 5)
+            ]),
+        child: DropdownButtonFormField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: const BorderSide(color: Color(0xFF7ab466)),
+              //cuando se selecciona el input sea de un color verde - border
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: Color(0xFF7ab466)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: Color(0xFF7ab466)),
+            ),
+            hintText: 'Unidad educativa afiliada',
+            labelText: 'Unidad educativa afiliada',
+            labelStyle: const TextStyle(color: Colors.black54),
+            prefixIcon: const Icon(Icons.person, color: Color(0xFF7ab466)),
+          ),
+          items: const [
+            DropdownMenuItem(
+              value: 'El Esfuerzo',
+              child:
+                  Text('El Esfuerzo', style: TextStyle(color: Colors.black54)),
+            ),
+            DropdownMenuItem(
+              value: 'Puerto Limón',
+              child:
+                  Text('Puerto Limón', style: TextStyle(color: Colors.black54)),
+            ),
+          ],
+          onChanged: (opt) {
+            setState(() {
+              unidadEducativa = opt;
+            });
+          },
+        ),
       ),
       BotonForm(
         text: "Crear cuenta",
@@ -129,8 +188,14 @@ class __FromState extends State<_From> {
                   return;
                 }
 
-                final resulta =
-                    await authServiceBloc.register(nombre, email, password);
+                if (unidadEducativa == '') {
+                  mostrarAlerta(context, 'Unidad no seleccionada',
+                      'Seleccione una unidad educativa afiliada');
+                  return;
+                }
+
+                final resulta = await authServiceBloc.register(
+                    nombre, email, password, unidadEducativa ?? '');
 
                 if (!resulta) {
                   // Mostrar alerta indicando que el correo electrónico ya está en uso
@@ -149,6 +214,8 @@ class __FromState extends State<_From> {
                   mostrarAlerta(context, 'Registro incorrecto',
                       'Revise sus credenciales nuevamente');
                 }
+
+                //Si no escogio ninguna unidad educativa afiliada no se registra
               },
       )
     ]);

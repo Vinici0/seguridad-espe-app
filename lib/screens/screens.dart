@@ -20,7 +20,6 @@ export 'package:flutter_maps_adv/screens/perfil/edit_perfil_screen.dart';
 export 'package:flutter_maps_adv/screens/perfil/perfil_detalle_screen.dart';
 export 'package:flutter_maps_adv/screens/perfil/perfil_screen.dart';
 export 'package:flutter_maps_adv/screens/place_details_screen.dart';
-export 'package:flutter_maps_adv/screens/places_screen.dart';
 export 'package:flutter_maps_adv/screens/register_screen.dart';
 export 'package:flutter_maps_adv/screens/rooms_screen.dart';
 export 'package:flutter_maps_adv/screens/sos_screen.dart';

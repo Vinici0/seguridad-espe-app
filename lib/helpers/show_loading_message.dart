@@ -23,7 +23,7 @@ void showLoadingMessage(BuildContext context) {
               SizedBox(height: 15),
               CircularProgressIndicator(
                 strokeWidth: 3,
-                color: Color(0xFF6165FA),
+                color: Color(0xFF7ab466),
               ),
             ],
           ),

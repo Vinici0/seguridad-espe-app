@@ -12,6 +12,7 @@ part 'members_state.dart';
 
 class MembersBloc extends Bloc<MembersEvent, MembersState> {
   final ChatProvider _chatProvider = ChatProvider();
+
   final List<MensajesSala> mensajesAll = [];
   MembersBloc() : super(const MembersState()) {
     on<MembersEvent>((event, emit) {});

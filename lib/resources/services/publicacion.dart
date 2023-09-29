@@ -91,6 +91,7 @@ class PublicacionService {
     String usuario,
     String nombreUsuario,
     List<String>? imagePaths,
+    String unidadEducativa,
   ) async {
     try {
       Position position = await Geolocator.getCurrentPosition();
@@ -120,6 +121,7 @@ class PublicacionService {
         latitud: position.latitude,
         longitud: position.longitude,
         nombreUsuario: nombreUsuario,
+        unidadEducativa: unidadEducativa,
       );
 
       final uri = Uri.parse('${Environment.apiUrl}/publicacion');

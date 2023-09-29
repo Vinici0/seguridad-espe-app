@@ -86,7 +86,7 @@ class _OptionNewsState extends State<OptionNews> {
                         //Icono del dedo pulgar hacia arriba Icons.thumb_up
                         ? const Icon(
                             FontAwesomeIcons.solidThumbsUp,
-                            color: Color(0xFF6165FA),
+                            color: Color(0xFF7ab466),
                             size: 19.5,
                           )
                         : const Icon(

@@ -58,21 +58,21 @@ class GroupContenido extends StatelessWidget {
               //ocultar el contador de caracteres
               counterText: '',
               disabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF6165FA)),
+                borderSide: BorderSide(color: Color(0xFF7ab466)),
               ),
               enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF6165FA)),
+                borderSide: BorderSide(color: Color(0xFF7ab466)),
               ),
               border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF6165FA)),
+                borderSide: BorderSide(color: Color(0xFF7ab466)),
               ),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF6165FA)),
+                borderSide: BorderSide(color: Color(0xFF7ab466)),
               ),
               hintText: textoHint,
               labelStyle: const TextStyle(color: Color(0x99999999)),
               hintStyle: const TextStyle(color: Color(0x99999999)),
-              focusColor: const Color(0xFF6165FA),
+              focusColor: const Color(0xFF7ab466),
               contentPadding: const EdgeInsets.all(10),
             ),
             controller: nomController,
@@ -105,7 +105,7 @@ class GroupContenido extends StatelessWidget {
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
-                    backgroundColor: const Color(0xff6165FA),
+                    backgroundColor: const Color(0xFF7ab466),
                     textColor: Colors.white,
                     fontSize: 16.0);
                 //CargandoEventFalse
@@ -116,7 +116,7 @@ class GroupContenido extends StatelessWidget {
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,
-                    backgroundColor: const Color(0xff6165FA),
+                    backgroundColor: const Color(0xFF7ab466),
                     textColor: Colors.white,
                     fontSize: 16.0);
                 Navigator.pop(context);
@@ -124,7 +124,7 @@ class GroupContenido extends StatelessWidget {
             }
           },
           child: Text(textoButton,
-              style: const TextStyle(color: Color(0xFF6165FA), fontSize: 14)),
+              style: const TextStyle(color: Color(0xFF7ab466), fontSize: 14)),
         ),
       ],
     );

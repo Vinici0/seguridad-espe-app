@@ -16,6 +16,7 @@ class RoomsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
     final roonBloc = BlocProvider.of<RoomBloc>(context);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -32,7 +33,7 @@ class RoomsScreen extends StatelessWidget {
           if (state.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                color: Color(0xFF6165FA),
+                color: Color(0xFF7ab466),
               ),
             );
           }
@@ -43,7 +44,7 @@ class RoomsScreen extends StatelessWidget {
                 children: [
                   //svg image de grupo
                   SvgPicture.asset(
-                    'assets/info/charicons.svg',
+                    'assets/info/charicons2.svg',
                     width: 200,
                     height: 250,
                   ),
@@ -81,21 +82,23 @@ class RoomsScreen extends StatelessWidget {
                     elevation: 5, // Aumenta la elevación del botón
                   ),
                   //Material boton para crear un grupo
-                  MaterialButton(
-                    //todo el ancho posible
-                    minWidth: MediaQuery.of(context).size.width * 0.95,
-                    //borde redondeado
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    onPressed: () {
-                      Navigator.of(context).push(CreateRoute.createRoute(
-                          const CodigoCreateGrupoScreen()));
-                    },
-                    color: const Color(0xFF6165FA),
-                    textColor: Colors.white,
-                    child: const Text('Crear un grupo'),
-                    elevation: 5,
-                  ),
+                  authBloc.state.usuario!.role == 'USER_ROLE'
+                      ? const SizedBox()
+                      : MaterialButton(
+                          //todo el ancho posible
+                          minWidth: MediaQuery.of(context).size.width * 0.95,
+                          //borde redondeado
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5)),
+                          onPressed: () {
+                            Navigator.of(context).push(CreateRoute.createRoute(
+                                const CodigoCreateGrupoScreen()));
+                          },
+                          color: const Color(0xFF7ab466),
+                          textColor: Colors.white,
+                          child: const Text('Crear un grupo'),
+                          elevation: 5,
+                        ),
                 ],
               ),
             );
@@ -107,7 +110,7 @@ class RoomsScreen extends StatelessWidget {
               onRefresh: () async {
                 roonBloc.salasInitEvent();
               },
-              color: const Color(0xFF6165FA),
+              color: const Color(0xFF7ab466),
               child: Column(
                 children: [
                   //Si esta cargando un pequeño circulo de carga
@@ -117,7 +120,7 @@ class RoomsScreen extends StatelessWidget {
                   //     child: SizedBox(
                   //       height: 3,
                   //       child: LinearProgressIndicator(
-                  //         color: Color(0xFF6165FA),
+                  //         color: Color(0xFF7ab466),
                   //       ),
                   //     ),
                   //   ),
@@ -127,32 +130,56 @@ class RoomsScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 13),
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onTap: () {
-                              Navigator.pushNamed(context,
-                                  CodigoCreateGrupoScreen.codigoGruporoute);
-                            },
-                            child: Row(
-                              children: const [
-                                //icon de add grupo
-                                Icon(
-                                  FontAwesomeIcons.plus,
-                                  color: Color(0xFF6165FA),
-                                  size: 20,
-                                ),
+                          child: authBloc.state.usuario!.role == 'USER_ROLE'
+                              ? Row(
+                                  children: const [
+                                    Icon(
+                                      // ignore: deprecated_member_use
+                                      FontAwesomeIcons.userFriends,
+                                      color: Color(0xFF7ab466),
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 30,
+                                    ),
+                                    Text(
+                                      'Grupos',
+                                      style: TextStyle(
+                                          color: Color(0xFF7ab466),
+                                          fontSize: 16),
+                                    ),
+                                  ],
+                                )
+                              : GestureDetector(
+                                  behavior: HitTestBehavior.translucent,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context,
+                                        CodigoCreateGrupoScreen
+                                            .codigoGruporoute);
+                                  },
+                                  child: Row(
+                                    children: const [
+                                      //icon de add grupo
+                                      Icon(
+                                        FontAwesomeIcons.plus,
+                                        color: Color(0xFF7ab466),
+                                        size: 20,
+                                      ),
 
-                                SizedBox(
-                                  width: 30,
+                                      SizedBox(
+                                        width: 30,
+                                      ),
+
+                                      Text(
+                                        'Crear un nuevo grupo',
+                                        style: TextStyle(
+                                            color: Color(0xFF7ab466),
+                                            fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  'Crear un nuevo grupo',
-                                  style: TextStyle(
-                                      color: Color(0xFF6165FA), fontSize: 16),
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
                         const SizedBox(
                           height: 10,
@@ -255,6 +282,7 @@ class IconModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = BlocProvider.of<AuthBloc>(context, listen: false);
     return IconButton(
       icon: const Icon(
         //boton de los tres puntos
@@ -272,7 +300,7 @@ class IconModal extends StatelessWidget {
           ),
           builder: (BuildContext context) {
             return Container(
-              height: 120.0,
+              height: authBloc.state.usuario!.role == 'USER_ROLE' ? 70 : 120,
               decoration: const BoxDecoration(
                 // color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -283,18 +311,20 @@ class IconModal extends StatelessWidget {
               child: Center(
                 child: Column(
                   children: [
-                    ListTile(
-                      leading: const Icon(
-                        FontAwesomeIcons.plus,
-                        color: Colors.black,
-                      ),
-                      title: const Text('Crear un nuevo grupo'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.pushNamed(
-                            context, CodigoCreateGrupoScreen.codigoGruporoute);
-                      },
-                    ),
+                    authBloc.state.usuario!.role == 'USER_ROLE'
+                        ? const SizedBox()
+                        : ListTile(
+                            leading: const Icon(
+                              FontAwesomeIcons.plus,
+                              color: Colors.black,
+                            ),
+                            title: const Text('Crear un nuevo grupo'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context,
+                                  CodigoCreateGrupoScreen.codigoGruporoute);
+                            },
+                          ),
                     ListTile(
                       leading: const Icon(
                         FontAwesomeIcons.userGroup,

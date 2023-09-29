@@ -55,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     // GruposScreen(),
                     const RoomsScreen(),
-                    const PlacesScreen(),
                     const PerfilScreen(),
                     // Center(
                     //     child: Column(

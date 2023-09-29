@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/blocs/notification/notification_bloc.dart';
 import 'package:flutter_maps_adv/blocs/room/room_bloc.dart';
+import 'package:flutter_maps_adv/screens/auth_screen.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/information_family_screen.dart';
 import 'package:flutter_maps_adv/screens/information_screen.dart';
@@ -38,7 +39,7 @@ class LoadingLoginScreen extends StatelessWidget {
 
     if (isFirstLaunch) {
       // Si es el primer lanzamiento, enviar al usuario a la pantalla de inicio de sesión
-      navigateToReplacement(context, const LoginScreen());
+      navigateToReplacement(context, const AuthScreen());
 
       // Actualizar el valor para indicar que la aplicación ya ha sido lanzada antes
       await sharedPreferences.setBool('isFirstLaunch', false);
@@ -82,7 +83,7 @@ class LoadingLoginScreen extends StatelessWidget {
         }
       } else {
         await authService.logout();
-        navigateToReplacement(context, const LoginScreen());
+        navigateToReplacement(context, const AuthScreen());
       }
     }
   }

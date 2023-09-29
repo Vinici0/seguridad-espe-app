@@ -168,7 +168,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
   Widget _inputComentario() {
     final publicationBloc = BlocProvider.of<PublicationBloc>(context);
     return Container(
-      color: Color.fromARGB(124, 193, 189, 189),
+      color: const Color.fromARGB(124, 193, 189, 189),
       child: Row(
         //spacebetween para que el icono de enviar quede a la derecha
 
@@ -203,7 +203,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
                       vertical: 10.0, horizontal: 20.0),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: const Color(0xFF6165FA).withOpacity(0.3),
+                      color: const Color(0xFF7ab466).withOpacity(0.3),
                     ),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
@@ -235,7 +235,7 @@ class _DetalleScreenState extends State<DetalleScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _estaEscribiendo
-                      ? const Color(0xFF6165FA)
+                      ? const Color(0xFF7ab466)
                       : Colors.grey.withOpacity(0.3),
                 ),
                 child: const Icon(
@@ -393,7 +393,7 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
     return Container(
       //aagregar un margen en el contenedor
       margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
-      // color: Color(0xFF6165FA),
+      // color: Color(0xFF7ab466),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -488,82 +488,82 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
                           },
                         )
                       : const SizedBox(),
-                  GestureDetector(
-                    child: Container(
-                      height: 50,
-                      margin: const EdgeInsets.only(right: 10),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black26,
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            //mapa icono
-                            // Icons.map_outlined,
-                            FontAwesomeIcons.mapMarkedAlt,
-                            size: 20,
-                            color: Color(int.parse('0xFF${publicacion.color}')),
-                          ),
-                          const Text(
-                            'Ver mapa',
-                            style: TextStyle(color: Colors.black, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                    onTap: () async {
-                      try {
-                        if (!gpsBloc.state.isGpsEnabled ||
-                            !gpsBloc.state.isGpsPermissionGranted) {
-                          Fluttertoast.showToast(
-                            msg: 'Activa el GPS para ver la ubicación',
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: const Color(0xff6165FA),
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-                          return;
-                        }
+                  // GestureDetector(
+                  //   child: Container(
+                  //     height: 50,
+                  //     margin: const EdgeInsets.only(right: 10),
+                  //     padding: const EdgeInsets.only(left: 10, right: 10),
+                  //     decoration: BoxDecoration(
+                  //       border: Border.all(
+                  //         color: Colors.black26,
+                  //         width: 1.0,
+                  //       ),
+                  //     ),
+                  //     child: Column(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         Icon(
+                  //           //mapa icono
+                  //           // Icons.map_outlined,
+                  //           FontAwesomeIcons.mapMarkedAlt,
+                  //           size: 20,
+                  //           color: Color(int.parse('0xFF${publicacion.color}')),
+                  //         ),
+                  //         const Text(
+                  //           'Ver mapa',
+                  //           style: TextStyle(color: Colors.black, fontSize: 12),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  //   onTap: () async {
+                  //     try {
+                  //       if (!gpsBloc.state.isGpsEnabled ||
+                  //           !gpsBloc.state.isGpsPermissionGranted) {
+                  //         Fluttertoast.showToast(
+                  //           msg: 'Activa el GPS para ver la ubicación',
+                  //           toastLength: Toast.LENGTH_SHORT,
+                  //           gravity: ToastGravity.CENTER,
+                  //           timeInSecForIosWeb: 1,
+                  //           backgroundColor: const Color(0xFF7ab466),
+                  //           textColor: Colors.white,
+                  //           fontSize: 16.0,
+                  //         );
+                  //         return;
+                  //       }
 
-                        final start = locationBloc.state.lastKnownLocation;
-                        if (start == null) return;
+                  //       final start = locationBloc.state.lastKnownLocation;
+                  //       if (start == null) return;
 
-                        end = LatLng(publicacion.latitud, publicacion.longitud);
-                        if (end == null) return;
+                  //       end = LatLng(publicacion.latitud, publicacion.longitud);
+                  //       if (end == null) return;
 
-                        searchBloc.add(OnActivateManualMarkerEvent());
-                        showLoadingMessage(context);
+                  //       searchBloc.add(OnActivateManualMarkerEvent());
+                  //       showLoadingMessage(context);
 
-                        final destination =
-                            await searchBloc.getCoorsStartToEnd(start, end!);
-                        await mapBloc.drawRoutePolyline(destination);
+                  //       final destination =
+                  //           await searchBloc.getCoorsStartToEnd(start, end!);
+                  //       await mapBloc.drawRoutePolyline(destination);
 
-                        if (navigatorBloc.state.isNewSelected) {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          navigatorBloc.add(const NavigatorIsNewSelectedEvent(
-                              isNewSelected: false));
-                          counterBloc.add(const NavigatorIndexEvent(index: 0));
-                        } else {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          counterBloc.add(const NavigatorIndexEvent(index: 0));
-                        }
-                      } catch (e) {
-                        // Manejo de excepciones
-                        print("Error al realizar la acción: $e");
-                        // Puedes mostrar un mensaje de error al usuario o realizar otras acciones de manejo de excepciones aquí.
-                      }
-                    },
-                  ),
+                  //       if (navigatorBloc.state.isNewSelected) {
+                  //         Navigator.pop(context);
+                  //         Navigator.pop(context);
+                  //         Navigator.pop(context);
+                  //         navigatorBloc.add(const NavigatorIsNewSelectedEvent(
+                  //             isNewSelected: false));
+                  //         counterBloc.add(const NavigatorIndexEvent(index: 0));
+                  //       } else {
+                  //         Navigator.pop(context);
+                  //         Navigator.pop(context);
+                  //         counterBloc.add(const NavigatorIndexEvent(index: 0));
+                  //       }
+                  //     } catch (e) {
+                  //       // Manejo de excepciones
+                  //       print("Error al realizar la acción: $e");
+                  //       // Puedes mostrar un mensaje de error al usuario o realizar otras acciones de manejo de excepciones aquí.
+                  //     }
+                  //   },
+                  // ),
                 ],
               )
             ],
@@ -614,12 +614,12 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
       'Noviembre',
       'Diciembre'
     ];
-    final String nombreMes = nombresMeses[int.parse(mesNumero)];
+    final String nombreMes = nombresMeses[int.parse(mesNumero) - 1];
     return '${data.day} de $nombreMes';
   }
 
   String getEcuadorianTimeOfDay(DateTime mongoTime) {
-    final ecuadorianOffset = Duration(hours: -5);
+    final ecuadorianOffset = const Duration(hours: -5);
     final deviceOffset = DateTime.now().timeZoneOffset;
     final diff = deviceOffset - ecuadorianOffset;
 
@@ -681,7 +681,7 @@ class _UbicacionDetalleState extends State<_UbicacionDetalle> {
                     child: const Text(
                       'Marcar como Atendida',
                       style: TextStyle(
-                        color: Color(0xFF6165FA), // Color de texto resaltado
+                        color: Color(0xFF7ab466), // Color de texto resaltado
                         fontWeight:
                             FontWeight.bold, // Texto en negrita para destacar
                       ),
@@ -793,7 +793,7 @@ class _CustonAppBarDetalle extends StatelessWidget {
                             publicationBloc.state.currentPublicacion!.usuario
                                 .trim()
                         ? 170.0
-                        : 60.0,
+                        : 70.0,
                     decoration: const BoxDecoration(
                       // color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -902,7 +902,7 @@ class _CustonAppBarDetalle extends StatelessWidget {
                           publicationBloc.state.currentPublicacion!.usuario
                               .trim()
                       ? 170.0
-                      : 60.0,
+                      : 70.0,
                   decoration: const BoxDecoration(
                     // color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -913,31 +913,44 @@ class _CustonAppBarDetalle extends StatelessWidget {
                   child: Center(
                     child: Column(
                       children: [
-                        // ListTile(
-                        //   leading: const Icon(
-                        //     //icono de editar
-                        //     Icons.edit,
-                        //     color: Colors.black,
-                        //   ),
-                        //   title: const Text('Editar'),
-                        //   onTap: () {
-                        //     Navigator.of(context).push(CreateRoute.createRoute(
-                        //         const AlerEdittScreen()));
-                        //   },
-                        // ),
-                        // ListTile(
-                        //   leading: const Icon(
-                        //     FontAwesomeIcons.trash,
-                        //     color: Colors.black,
-                        //     size: 18,
-                        //   ),
-                        //   title: const Text('Eliminar'),
-                        //   onTap: () {
-                        //     _showDeleteConfirmationDialog(
-                        //         context, publicationBloc);
-                        //   },
-                        // ),
+                        authService.state.usuario!.uid.trim() ==
+                                publicationBloc
+                                    .state.currentPublicacion!.usuario
+                                    .trim()
+                            ? ListTile(
+                                leading: const Icon(
+                                  //icono de editar
+                                  Icons.edit,
+                                  color: Colors.black,
+                                ),
+                                title: const Text('Editar'),
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                      CreateRoute.createRoute(
+                                          const AlerEdittScreen()));
+                                },
+                              )
+                            : const SizedBox(),
+
+                        //Si el usuario es el mismo que publico el reporte
+                        authService.state.usuario!.uid ==
+                                publicationBloc
+                                    .state.currentPublicacion!.usuario
+                            ? ListTile(
+                                leading: const Icon(
+                                  FontAwesomeIcons.trash,
+                                  color: Colors.black,
+                                  size: 18,
+                                ),
+                                title: const Text('Eliminar'),
+                                onTap: () {
+                                  _showDeleteConfirmationDialog(
+                                      context, publicationBloc);
+                                },
+                              )
+                            : const SizedBox(),
                         //Denumciar
+
                         ListTile(
                           leading: const Icon(
                             Icons.flag_rounded,

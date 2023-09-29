@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_maps_adv/screens/alerprueba.dart';
 import 'package:flutter_maps_adv/screens/alert_edit_screen.dart';
+import 'package:flutter_maps_adv/screens/auth_screen.dart';
 import 'package:flutter_maps_adv/screens/image_screen.dart';
 import 'package:flutter_maps_adv/screens/information_family_auth_screen.dart';
 import 'package:flutter_maps_adv/screens/notification_screen.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_telefono.dart';
+import 'package:flutter_maps_adv/screens/perfil/password_screen.dart';
 import 'package:flutter_maps_adv/screens/product.dart';
 import 'package:flutter_maps_adv/screens/report_detalle_screen.dart';
 import 'package:flutter_maps_adv/screens/report_finish_screen.dart';
@@ -40,7 +43,6 @@ class Routes {
     PerfilDetalleScreen.perfilDetalleroute: (_) => const PerfilDetalleScreen(),
     PerfilScreen.salesroute: (_) => const PerfilScreen(),
     PlaceDetailScreen.place: (_) => const PlaceDetailScreen(),
-    PlacesScreen.salesroute: (_) => const PlacesScreen(),
     RegisterScreen.registerroute: (_) => const RegisterScreen(),
     ReportDetalleScreen.reportDetalleRoute: (_) => const ReportDetalleScreen(),
     ReportFinishScreen.routeName: (_) => const ReportFinishScreen(),
@@ -50,7 +52,10 @@ class Routes {
     SosScreen.sosroute: (_) => const SosScreen(),
     PruductScreen.routeName: (_) => const PruductScreen(),
     AlerEdittScreen.routeName: (_) => const AlerEdittScreen(),
+    PasswordScreen.passwordroute: (_) => const PasswordScreen(),
+    AuthScreen.authroute: (_) => const AuthScreen(),
     InformationFamilyAuth.informationFamilyAuth: (_) =>
         const InformationFamilyAuth(),
+    AlertPruebaScreen.routName: (_) => const AlertPruebaScreen()
   };
 }

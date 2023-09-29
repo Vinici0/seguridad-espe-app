@@ -9,148 +9,125 @@ class TableAlertsSeguridad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Table(
-      children: [
-        TableRow(
-          children: [
-            GestureDetector(
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: Table(
+        children: [
+          TableRow(
+            children: [
+              GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: const PhysicalModelCircleContainer(
+                    icon: "robo.svg",
+                    text: "Robo",
+                    color: Color(0xFFeddbc4),
+                  ),
+                  onTap: () => {
+                        Navigator.pushNamed(context, 'reporte',
+                            arguments: Reporte(
+                                tipo: "Robo",
+                                icon: "robo.svg",
+                                color: "eddbc4"))
+                      }),
+              GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: const PhysicalModelCircleContainer(
+                    icon: "bullying1.svg",
+                    text: "Bullying",
+                    color: Color(0xFFa3c9a7),
+                  ),
+                  onTap: () => {
+                        Navigator.pushNamed(context, 'reporte',
+                            arguments: Reporte(
+                                tipo: "Bullying",
+                                icon: "bullying1.svg",
+                                color: "a3c9a7"))
+                      }),
+              GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: const PhysicalModelCircleContainer(
+                    icon: "violencia_entre_pares1.svg",
+                    text: "Violencia por pares",
+                    color: Color(0xFFffb353),
+                  ),
+                  onTap: () => {
+                        Navigator.pushNamed(context, 'reporte',
+                            arguments: Reporte(
+                                tipo: "Violencia por pares",
+                                icon: "violencia_entre_pares1.svg",
+                                color: "ffb353"))
+                      }),
+            ],
+          ),
+          TableRow(
+            children: [
+              GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: const PhysicalModelCircleContainer(
-                  icon: "robo-a-casa.svg",
-                  text: "Robo a casa",
-                  color: Color(0xFF58b368),
+                  icon: "acoso_sexual1.svg",
+                  text: "Acoso sexual",
+                  color: Color(0xFFff6e4a),
                 ),
                 onTap: () => {
-                      Navigator.pushNamed(context, 'reporte',
-                          arguments: Reporte(
-                              tipo: "Robo a casa",
-                              icon: "robo-a-casa.svg",
-                              color: "58b368"))
-                    }),
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: const PhysicalModelCircleContainer(
-                  icon: "robo-a-persona.svg",
-                  text: "Robo a persona",
-                  color: Color(0xFF2C3E50),
-                ),
-                onTap: () => {
-                      Navigator.pushNamed(context, 'reporte',
-                          arguments: Reporte(
-                              tipo: "Robo a persona",
-                              icon: "robo-a-persona.svg",
-                              color: "2C3E50"))
-                    }),
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: const PhysicalModelCircleContainer(
-                  icon: "robo-de-vehiculo.svg",
-                  text: "Robo de vehiculo",
-                  color: Color(0xFF9C27B0),
-                ),
-                onTap: () => {
-                      Navigator.pushNamed(context, 'reporte',
-                          arguments: Reporte(
-                              tipo: "Robo de vehiculo",
-                              icon: "robo-de-vehiculo.svg",
-                              color: "9C27B0"))
-                    }),
-          ],
-        ),
-        TableRow(
-          children: [
-            GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              child: const PhysicalModelCircleContainer(
-                icon: "accidente.svg",
-                text: "Accidente de tránsito ",
-                color: Color(0xFF3498DB),
+                  Navigator.pushNamed(context, 'reporte',
+                      arguments: Reporte(
+                          tipo: "Acoso sexual",
+                          icon: "acoso_sexual1.svg",
+                          color: "ff6e4a"))
+                },
               ),
-              onTap: () => {
-                Navigator.pushNamed(context, 'reporte',
-                    arguments: Reporte(
-                        tipo: "Accidente de tránsito",
-                        icon: "accidente.svg",
-                        color: "3498DB"))
-              },
-            ),
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: const PhysicalModelCircleContainer(
-                  icon: "emergencia-de-ambulancia.svg",
-                  text: "Emergencia de salud",
-                  color: Color(0xFFE74C3C),
-                ),
-                onTap: () => {
-                      Navigator.pushNamed(context, 'reporte',
-                          arguments: Reporte(
-                              tipo: "Emergencia de salud",
-                              icon: "emergencia-de-ambulancia.svg",
-                              color: "E74C3C"))
-                    }),
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: const PhysicalModelCircleContainer(
-                  icon: "emergencia-de-bomberos.svg",
-                  text: "Emergencia de bomberos",
-                  color: Color(0xFFFFBC3B),
-                ),
-                onTap: () => {
-                      Navigator.pushNamed(context, 'reporte',
-                          arguments: Reporte(
-                              tipo: "Emergencia de bomberos",
-                              icon: "emergencia-de-bomberos.svg",
-                              color: "FFBC3B"))
-                    }),
-          ],
-        ),
-        TableRow(
-          children: [
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: const PhysicalModelCircleContainer(
-                  icon: "drogas.svg",
-                  text: "Drogas",
-                  color: Color(0xFFE67F22),
-                ),
-                onTap: () => {
-                      Navigator.pushNamed(context, 'reporte',
-                          arguments: Reporte(
-                              tipo: "Drogas",
-                              icon: "drogas.svg",
-                              color: "E67F22"))
-                    }),
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: const PhysicalModelCircleContainer(
-                  icon: "actividad-sospechosa.svg",
-                  text: "Actividad sospechosa",
-                  color: Color(0xFF2980B9),
-                ),
-                onTap: () => {
-                      Navigator.pushNamed(context, 'reporte',
-                          arguments: Reporte(
-                              tipo: "Actividad sospechosa",
-                              icon: "actividad-sospechosa.svg",
-                              color: "2980B9"))
-                    }),
-            GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: const PhysicalModelCircleContainer(
-                  icon: "prueba.svg",
-                  text: "Prueba",
-                  color: Color(0xFF6D6D6D),
-                ),
-                onTap: () => {
-                      Navigator.pushNamed(context, 'reporte',
-                          arguments: Reporte(
-                              tipo: "Prueba",
-                              icon: "prueba.svg",
-                              color: "6D6D6D"))
-                    }),
-          ],
-        ),
-      ],
+              GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: const PhysicalModelCircleContainer(
+                    icon: "droga1.svg",
+                    text: "Alcohol y drogas",
+                    color: Color(0xFF5c5259),
+                  ),
+                  onTap: () => {
+                        Navigator.pushNamed(context, 'reporte',
+                            arguments: Reporte(
+                                tipo: "Alcohol y drogas",
+                                icon: "droga1.svg",
+                                color: "5c5259"))
+                      }),
+              GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: const PhysicalModelCircleContainer(
+                    icon: "maltrato1.svg",
+                    text: "Maltrato escolar",
+                    color: Color(0xFF8bb375),
+                  ),
+                  onTap: () => {
+                        Navigator.pushNamed(context, 'reporte',
+                            arguments: Reporte(
+                                tipo: "Maltrato escolar",
+                                icon: "maltrato1.svg",
+                                color: "8bb375"))
+                      }),
+            ],
+          ),
+          TableRow(
+            children: [
+              TableCell(child: Container()),
+              GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: const PhysicalModelCircleContainer(
+                    icon: "otros.svg",
+                    text: "Otros",
+                    color: Color(0xFFa68c69),
+                  ),
+                  onTap: () => {
+                        Navigator.pushNamed(context, 'reporte',
+                            arguments: Reporte(
+                                tipo: "Otros",
+                                icon: "otros.svg",
+                                color: "a68c69"))
+                      }),
+              TableCell(child: Container()),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -187,7 +164,7 @@ class PhysicalModelCircleContainer extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: SvgPicture.asset(
-                "assets/alertas/$icon",
+                "assets/iconvinculacion/$icon",
                 fit: BoxFit.cover,
                 width: 50,
                 colorFilter:

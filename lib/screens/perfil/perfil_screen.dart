@@ -46,15 +46,13 @@ class PerfilScreen extends StatelessWidget {
                       name: 'Mi perfil',
                       route: 'perfilDetalle',
                     ),
-                    Divider(
-                      color: Colors.black45,
-                    ),
-                    _ListIconName(
-                      //icnoo de direccion, lugares sin fonodo negro
-                      icon: Icons.house_sharp,
-                      name: 'Mis Direcciones',
-                      route: 'lugares',
-                    ),
+
+                    // _ListIconName(
+                    //   //icnoo de direccion, lugares sin fonodo negro
+                    //   icon: Icons.house_sharp,
+                    //   name: 'Mis Direcciones',
+                    //   route: 'lugares',
+                    // ),
                     Divider(
                       color: Colors.black45,
                     ),
@@ -71,7 +69,8 @@ class PerfilScreen extends StatelessWidget {
                       icon: Icons.group_add_rounded,
                       name: "Mis Grupos",
                       route: "salas",
-                    )
+                    ),
+                    // cambiar contrasena
                   ]),
             ),
             const SizedBox(

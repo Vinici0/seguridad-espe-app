@@ -18,7 +18,7 @@ void mostrarAlerta(BuildContext context, String titulo, String subtitulo) {
               },
               child: const Text(
                 'OK',
-                style: TextStyle(color: Color(0xFF6165FA)),
+                style: TextStyle(color: Color(0xFF7ab466)),
               ),
             ),
           ],

@@ -7,7 +7,6 @@ import 'package:flutter_maps_adv/blocs/blocs.dart';
 import 'package:flutter_maps_adv/helpers/page_route.dart';
 import 'package:flutter_maps_adv/screens/home_screen.dart';
 import 'package:flutter_maps_adv/screens/information_family_screen.dart';
-import 'package:flutter_maps_adv/screens/places_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class InformationScreen extends StatefulWidget {
@@ -130,12 +129,12 @@ class _InformationScreenState extends State<InformationScreen> {
                     decoration: const InputDecoration(
                       labelText: 'Teléfono',
                       labelStyle: TextStyle(
-                        color: Color(0xFF6165FA), // Color del texto del label
+                        color: Color(0xFF7ab466), // Color del texto del label
                       ),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
                           color: Color(
-                              0xFF6165FA), // Color de la línea de abajo del TextField
+                              0xFF7ab466), // Color de la línea de abajo del TextField
                         ),
                       ),
                     ),
@@ -172,7 +171,7 @@ class _InformationScreenState extends State<InformationScreen> {
                         //     context, HomeScreen.homeroute, (route) => false);
                       },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6165FA),
+                  backgroundColor: const Color(0xFF7ab466),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),

@@ -18,27 +18,10 @@ class AlertsScreen extends StatelessWidget {
           //color de la flcha de regreso blanco
           iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: const Color(0xFF111b21),
-          bottom: const TabBar(
-            tabs: [
-              Tab(
-                text: ("SEGURIDAD"),
-              ),
-              Tab(
-                text: ("COMUNIDAD"),
-              ),
-            ],
-          ),
         ),
         body: Container(
           color: const Color(0xFF111b21),
-          child: const TabBarView(
-            //color de fondo de la pantalla
-
-            children: [
-              TableAlertsSeguridad(),
-              TableAlertsCompunidad(),
-            ],
-          ),
+          child: TableAlertsSeguridad(),
         ),
       ),
     );

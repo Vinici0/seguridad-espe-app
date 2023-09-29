@@ -28,9 +28,9 @@ class PlaceDetailScreen extends StatelessWidget {
     final circleMarkers = <CircleMarker>[
       CircleMarker(
           point: LatLng(ubicacion.latitud, ubicacion.longitud),
-          color: const Color(0xFF6165FA).withOpacity(0.3),
+          color: const Color(0xFF7ab466).withOpacity(0.3),
           borderStrokeWidth: 2,
-          borderColor: const Color(0xFF6165FA),
+          borderColor: const Color(0xFF7ab466),
           useRadiusInMeter: true,
           radius: 2000 // 2000 meters | 2 km
           ),
@@ -48,7 +48,7 @@ class PlaceDetailScreen extends StatelessWidget {
       body: Column(
         children: [
           ListTile(
-            leading: const Icon(Icons.place, color: Color(0xFF6165FA)),
+            leading: const Icon(Icons.place, color: Color(0xFF7ab466)),
             title: Text(ubicacion.barrio),
             subtitle: Text(
               '${ubicacion.ciudad}, ${ubicacion.referencia ?? ''} ${ubicacion.pais}',
@@ -94,7 +94,7 @@ class PlaceDetailScreen extends StatelessWidget {
                           builder: (context) => const Icon(
                             Icons.location_on,
                             size: 40,
-                            color: Color(0xFF6165FA),
+                            color: Color(0xFF7ab466),
                           ),
                         ),
                       ],
@@ -132,7 +132,7 @@ class PlaceDetailScreen extends StatelessWidget {
                               )
                             : ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF6165FA),
+                                  backgroundColor: const Color(0xFF7ab466),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)),
                                 ),

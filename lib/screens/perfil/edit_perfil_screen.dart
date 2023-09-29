@@ -4,6 +4,7 @@ import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/global/environment.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_telefono.dart';
+import 'package:flutter_maps_adv/screens/perfil/password_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -167,17 +168,16 @@ class _EditPerfilScreenState extends State<EditPerfilScreen> {
                   //el
                   //agregar un direcion
                   ListTile(
-                    title: const Text('Direcciones', //direccion
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                    subtitle:
-                        const Text('Agregar una nueva direccion', //agregar
-                            style: TextStyle(fontSize: 16)),
-                    trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
                       Navigator.of(context)
-                          .push(_createRoute(const PlacesScreen()));
+                          .push(_createRoute(const PasswordScreen()));
                     },
+                    title: const Text('Contraseña',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
+                    subtitle: const Text('**********',
+                        style: TextStyle(fontSize: 16)),
+                    trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                   const Divider(
                     color: Colors.black26,

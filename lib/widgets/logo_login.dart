@@ -7,23 +7,15 @@ class Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 10, bottom: 10),
-      child: Column(
-        children: [
-          SizedBox(
-              width: 170,
-              height: 170,
-              child: SvgPicture.asset(
-                'assets/logo.svg',
-              )),
-          Text(text,
-              style: const TextStyle(
-                  color: Colors.indigo,
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold)),
-        ],
-      ),
+    return Column(
+      children: [
+        SizedBox(
+            width: 240,
+            height: 240,
+            child: SvgPicture.asset(
+              'assets/iconvinculacion/login.svg',
+            )),
+      ],
     );
   }
 }

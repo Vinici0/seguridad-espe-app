@@ -131,9 +131,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       isNotificacionesPendiente: event.isPublicacionPendiente,
       isPublicacionPendiente: event.isPublicacionPendiente,
     );
-
     emit(state.copyWith(usuario: usuario));
-
     await apiAuthRepository.marcarPublicacionPendienteFalse();
   }
 
@@ -281,8 +279,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return false;
   }
 
-  register(String nombre, String email, String password) async {
-    final register = await apiAuthRepository.register(nombre, email, password);
+  register(String nombre, String email, String password,
+      String unidadEducativa) async {
+    final register = await apiAuthRepository.register(
+        nombre, email, password, unidadEducativa);
     isLoggedInTrue = register;
     add(AuthRegisterEvent(nombre: nombre, email: email, password: password));
     add(const AuthConectEvent());
@@ -338,5 +338,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   actualizarIsOpenRoom(bool isOpenRoom) async {
     await apiAuthRepository.actualizarIsOpenRoom(isOpenRoom);
+  }
+
+  cambiarContrasena(
+      String email, String contrasenaActual, String nuevaContrasena) async {
+    return await apiAuthRepository.cambiarContrasena(
+        email, contrasenaActual, nuevaContrasena);
   }
 }

@@ -226,12 +226,12 @@ class _ListNews extends StatelessWidget {
                                             .imgAlerta
                                             .endsWith('.png')
                                         ? Image.asset(
-                                            'assets/alertas/${publicaciones[i].imgAlerta}',
+                                            'assets/iconvinculacion/${publicaciones[i].imgAlerta}',
                                             // ignore: deprecated_member_use
                                             color: Colors.white,
                                           )
                                         : SvgPicture.asset(
-                                            'assets/alertas/${publicaciones[i].imgAlerta}',
+                                            'assets/iconvinculacion/${publicaciones[i].imgAlerta}',
                                             // ignore: deprecated_member_use
                                             color: Colors.white,
                                           ),
@@ -369,7 +369,7 @@ class _ListNews extends StatelessWidget {
         ),
         if (state.isLoading)
           const LinearProgressIndicator(
-            backgroundColor: Color(0xFF6165FA),
+            backgroundColor: Color(0xFF7ab466),
           ),
       ],
     );

@@ -11,8 +11,10 @@ class ApiUserRepository {
     return await _authService.login(email, password);
   }
 
-  Future<bool> register(String nombre, String email, String password) async {
-    return await _authService.register(nombre, email, password);
+  Future<bool> register(String nombre, String email, String password,
+      String unidadEducativa) async {
+    return await _authService.register(
+        nombre, email, password, unidadEducativa);
   }
 
   Future<bool> addTelefono(String telefono) async {
@@ -77,6 +79,13 @@ class ApiUserRepository {
   //updateUsuario
   Future<bool?> updateUsuario(String nombre, String telefono) async {
     return await _authService.updateUsuario(nombre, telefono);
+  }
+
+  // cambiarContrasena
+  Future<bool?> cambiarContrasena(
+      String email, String contrasenaActual, String nuevaContrasena) async {
+    return await _authService.cambiarContrasena(
+        email, contrasenaActual, nuevaContrasena);
   }
 
   get usuario => _authService.usuario;

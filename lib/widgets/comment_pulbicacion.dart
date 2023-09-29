@@ -67,31 +67,51 @@ class _CommentPublicationState extends State<CommentPublication> {
             child: Row(
               children: [
                 widget.isGoogle == true
-                    ? CircleAvatar(
-                        radius: 15,
-                        backgroundImage: NetworkImage(widget.fotoPerfil!))
-                    : widget.fotoPerfil == null
+                    ? authBloc.state.usuario!.role == 'USER_ROLE'
+                        //icono de usuario incognito
                         ? const CircleAvatar(
                             radius: 15,
                             backgroundImage: AssetImage('assets/no-image.png'),
                           )
                         : CircleAvatar(
                             radius: 15,
-                            backgroundImage: NetworkImage(
-                                '${Environment.apiUrl}/uploads/usuario/usuarios/${widget.uidUsuario}'),
-                          ),
+                            backgroundImage: NetworkImage(widget.fotoPerfil!))
+                    : widget.fotoPerfil == null
+                        ? const CircleAvatar(
+                            radius: 15,
+                            backgroundImage: AssetImage('assets/no-image.png'),
+                          )
+                        : authBloc.state.usuario!.role == 'USER_ROLE'
+                            ? CircleAvatar(
+                                radius: 15,
+                                backgroundImage:
+                                    AssetImage('assets/no-image.png'))
+                            : CircleAvatar(
+                                radius: 15,
+                                backgroundImage: NetworkImage(
+                                    '${Environment.apiUrl}/uploads/usuario/usuarios/${widget.uidUsuario}'),
+                              ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.nombre,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      // TODO : nombre anonimo
+                      authBloc.state.usuario!.role == 'USER_ROLE'
+                          ? const Text(
+                              'Anónimo',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : Text(
+                              widget.nombre,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                       Text(
                         timeago.format(
                           DateTime.parse(widget.createdAt),
@@ -140,7 +160,7 @@ class _CommentPublicationState extends State<CommentPublication> {
                     children: [
                       widget.likes.contains(authBloc.state.usuario!.uid)
                           ? const Icon(FontAwesomeIcons.solidThumbsUp,
-                              color: Color(0xFF6165FA), size: 20)
+                              color: Color(0xFF7ab466), size: 20)
                           : const Icon(FontAwesomeIcons.thumbsUp,
                               color: Colors.black54, size: 20),
                       const SizedBox(width: 5),

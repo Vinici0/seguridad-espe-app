@@ -74,13 +74,37 @@ class _NewsScreenState extends State<NewsScreen> {
               duration: const Duration(milliseconds: 300),
             );
           }
+
+          //si no hay publicaciones muestra un mensaje
+          if (state.publicaciones.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/alertaIcon.png',
+                    width: size.width * 0.5,
+                  ),
+                  Text(
+                    'No hay publicaciones',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
           return RefreshIndicator(
             onRefresh: () async {
               await _publicationBloc.getAllPublicaciones();
             },
-            color: Color(0xFF6165FA),
+            color: Color(0xFF7ab466),
             child: Stack(
               children: [
+                //Si no hay publicaciones muestra un mensaje
+
                 Scrollbar(
                   thumbVisibility: true,
                   controller: _firstController,
@@ -103,7 +127,7 @@ class _NewsScreenState extends State<NewsScreen> {
                       width: 225,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF6165FA),
+                        color: const Color(0xFF7ab466),
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       child: GestureDetector(
@@ -187,9 +211,9 @@ class _ListNews extends StatelessWidget {
     final circleMarkers = <CircleMarker>[
       CircleMarker(
           point: LatLng(publicaciones[0].latitud, publicaciones[0].longitud),
-          color: const Color(0xFF6165FA).withOpacity(0.3),
+          color: const Color(0xFF7ab466).withOpacity(0.3),
           borderStrokeWidth: 2,
-          borderColor: const Color(0xFF6165FA),
+          borderColor: const Color(0xFF7ab466),
           useRadiusInMeter: true,
           radius: 2000 // 2000 meters | 2 km
           ),
@@ -241,7 +265,7 @@ class _ListNews extends StatelessWidget {
                                                 color: Colors.white,
                                               )
                                             : SvgPicture.asset(
-                                                'assets/alertas/${publicaciones[i].imgAlerta}',
+                                                'assets/iconvinculacion/${publicaciones[i].imgAlerta}',
                                                 // ignore: deprecated_member_use
                                                 color: Colors.white,
                                               ),
@@ -419,7 +443,7 @@ class _ListNews extends StatelessWidget {
         ),
         if (state.isLoading)
           const LinearProgressIndicator(
-            backgroundColor: Color(0xFF6165FA),
+            backgroundColor: Color(0xFF7ab466),
           ),
       ],
     );

@@ -114,72 +114,72 @@ class _SOSNotificationState extends State<_SOSNotification> {
           right: 5.0,
           child: Column(
             children: [
-              GestureDetector(
-                onTap: () {
-                  notificationBloc.loadNotification();
-                  widget.authBloc
-                      .add(const MarcarNotificacionesPendienteFalse());
-                  navigatorBloc.add(
-                      const NavigatorIsNewSelectedEvent(isNewSelected: true));
-                  Navigator.of(context).push(
-                      CreateRoute.createRoute(const NotificationsScreen()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0, bottom: 18.0),
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white, // Color de fondo
-                          borderRadius:
-                              BorderRadius.circular(20), // Bordes redondeados
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.grey.withOpacity(0.3), // Sombra suave
-                          //     spreadRadius: 2,
-                          //     blurRadius: 5,
-                          //     offset:
-                          //         const Offset(0, 5), // Desplazamiento de la sombra
-                          //   ),
-                          // ],
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: const Icon(
-                          Icons.notifications_none,
-                          color: Colors.black,
-                          size: 30,
-                        ),
-                      ),
-                      Positioned(
-                        top: 8,
-                        right: 15,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: stateauth.usuario!.isNotificacionesPendiente
-                                ? Colors.red
-                                : Colors.transparent,
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //     color: Colors.grey
-                            //         .withOpacity(0.5), // Sombra del punto
-                            //     spreadRadius: 1,
-                            //     blurRadius: 2,
-                            //     offset: const Offset(
-                            //         0, 1), // Desplazamiento de la sombra
-                            //   ),
-                            // ],
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 10,
-                            minHeight: 10,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     notificationBloc.loadNotification();
+              //     widget.authBloc
+              //         .add(const MarcarNotificacionesPendienteFalse());
+              //     navigatorBloc.add(
+              //         const NavigatorIsNewSelectedEvent(isNewSelected: true));
+              //     Navigator.of(context).push(
+              //         CreateRoute.createRoute(const NotificationsScreen()));
+              //   },
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(right: 8.0, bottom: 18.0),
+              //     child: Stack(
+              //       children: [
+              //         Container(
+              //           decoration: BoxDecoration(
+              //             color: Colors.white, // Color de fondo
+              //             borderRadius:
+              //                 BorderRadius.circular(20), // Bordes redondeados
+              //             // boxShadow: [
+              //             //   BoxShadow(
+              //             //     color: Colors.grey.withOpacity(0.3), // Sombra suave
+              //             //     spreadRadius: 2,
+              //             //     blurRadius: 5,
+              //             //     offset:
+              //             //         const Offset(0, 5), // Desplazamiento de la sombra
+              //             //   ),
+              //             // ],
+              //           ),
+              //           padding: const EdgeInsets.all(8),
+              //           child: const Icon(
+              //             Icons.notifications_none,
+              //             color: Colors.black,
+              //             size: 30,
+              //           ),
+              //         ),
+              //         Positioned(
+              //           top: 8,
+              //           right: 15,
+              //           child: Container(
+              //             decoration: BoxDecoration(
+              //               shape: BoxShape.circle,
+              //               color: stateauth.usuario!.isNotificacionesPendiente
+              //                   ? Colors.red
+              //                   : Colors.transparent,
+              //               // boxShadow: [
+              //               //   BoxShadow(
+              //               //     color: Colors.grey
+              //               //         .withOpacity(0.5), // Sombra del punto
+              //               //     spreadRadius: 1,
+              //               //     blurRadius: 2,
+              //               //     offset: const Offset(
+              //               //         0, 1), // Desplazamiento de la sombra
+              //               //   ),
+              //               // ],
+              //             ),
+              //             constraints: const BoxConstraints(
+              //               minWidth: 10,
+              //               minHeight: 10,
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: MaterialButton(
@@ -251,7 +251,7 @@ class _SOSNotificationState extends State<_SOSNotification> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
-              color: Color(0xFF6165FA),
+              color: Color(0xFF7ab466),
             ),
           ),
           content: Column(
@@ -274,7 +274,7 @@ class _SOSNotificationState extends State<_SOSNotification> {
                       context, InformationFamily.informationFamily);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF6165FA),
+                  backgroundColor: const Color(0xFF7ab466),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),
@@ -297,7 +297,7 @@ class _SOSNotificationState extends State<_SOSNotification> {
               child: const Text(
                 'Cerrar',
                 style: TextStyle(
-                  color: Color(0xFF6165FA),
+                  color: Color(0xFF7ab466),
                   fontSize: 16,
                 ),
               ),

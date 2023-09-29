@@ -8,6 +8,7 @@ String usuarioToJson(Usuario data) => json.encode(data.toJson());
 
 class Usuario {
   bool google;
+  String? role;
   bool isActivo;
   bool isPublicacionPendiente;
   bool isSalasPendiente;
@@ -24,6 +25,7 @@ class Usuario {
   String updatedAt;
   String? img;
   String? telefono;
+  String? unidadEducativa;
   bool isNotificacionesPendiente;
 
   Usuario({
@@ -40,8 +42,10 @@ class Usuario {
     this.salas,
     required this.isActivo,
     required this.telefonos,
+    this.unidadEducativa,
     required this.createdAt,
     required this.updatedAt,
+    this.role,
     required this.isPublicacionPendiente,
     required this.isSalasPendiente,
     required this.isNotificacionesPendiente,
@@ -52,6 +56,8 @@ class Usuario {
         online: json["online"],
         google: json["google"],
         nombre: json["nombre"],
+        role: json["role"],
+        unidadEducativa: json["unidadEducativa"],
         email: json["email"],
         telefono: json["telefono"],
         img: json["img"],
@@ -82,7 +88,9 @@ class Usuario {
         email: '',
         telefono: '',
         img: '',
+        role: '',
         createdAt: '',
+        unidadEducativa: '',
         isActivo: false,
         updatedAt: '',
         isNotificacionesPendiente: false,
@@ -104,6 +112,8 @@ class Usuario {
         "nombre": nombre,
         "email": email,
         "telefono": telefono,
+        "unidadEducativa": unidadEducativa ?? "",
+        "role": role,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "isOpenRoom": isOpenRoom ?? false,
@@ -134,11 +144,13 @@ class Usuario {
     bool? isNotificacionesPendiente,
     bool? isSalasPendiente,
     List<Salas>? salas,
+    String? role,
     bool? isOpenRoom,
     bool? isPublicacionPendiente,
     List<String>? telefonos,
     String? tokenApp,
     List<Ubicacion>? ubicacion,
+    String? unidadEducativa,
     String? uid,
   }) {
     return Usuario(
@@ -149,6 +161,7 @@ class Usuario {
       telefono: telefono ?? this.telefono,
       img: img ?? this.img,
       createdAt: createdAt ?? this.createdAt,
+      role: role ?? this.role,
       isActivo: isActivo ?? this.isActivo,
       updatedAt: updatedAt ?? this.updatedAt,
       isNotificacionesPendiente:
@@ -158,6 +171,7 @@ class Usuario {
       isOpenRoom: isOpenRoom ?? this.isOpenRoom,
       isPublicacionPendiente:
           isPublicacionPendiente ?? this.isPublicacionPendiente,
+      unidadEducativa: unidadEducativa ?? this.unidadEducativa,
       telefonos: telefonos ?? this.telefonos,
       tokenApp: tokenApp ?? this.tokenApp,
       ubicacion: ubicacion ?? this.ubicacion,

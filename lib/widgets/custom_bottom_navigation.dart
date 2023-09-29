@@ -23,7 +23,7 @@ class CustomBottomNavigation extends StatelessWidget {
         return BottomNavigationBar(
           showSelectedLabels: true,
           showUnselectedLabels: true,
-          selectedItemColor: const Color(0xFF6165FA),
+          selectedItemColor: const Color(0xFF7ab466),
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           elevation: 0.5,
@@ -133,10 +133,6 @@ class CustomBottomNavigation extends StatelessWidget {
                 },
               ),
               label: 'Grupos',
-            ),
-            const BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.locationDot),
-              label: 'Lugares',
             ),
             const BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.bars),

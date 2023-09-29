@@ -65,7 +65,7 @@ class ChatMessage extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             margin: const EdgeInsets.only(right: 5, bottom: 5, left: 50),
             decoration: BoxDecoration(
-              color: const Color(0xFF6165FA),
+              color: const Color(0xFF7ab466),
               borderRadius: BorderRadius.circular(20),
             ),
             //separador
@@ -105,24 +105,31 @@ class ChatMessage extends StatelessWidget {
                     ),
                   )
                 : isGoogle == true
-                    ? CircleAvatar(
+                    ? const CircleAvatar(
                         radius: 15,
-                        backgroundImage: NetworkImage(img!),
+                        backgroundImage: AssetImage('assets/no-image.png'),
+                        // NetworkImage(img!),
                       )
-                    : CircleAvatar(
+                    : const CircleAvatar(
                         radius: 15,
-                        backgroundImage: NetworkImage(
-                            '${Environment.apiUrl}/uploads/usuario/usuarios/$uid'),
+                        backgroundImage: AssetImage('assets/no-image.png'),
+                        // NetworkImage(img!),
                       ),
+            // CircleAvatar(
+            //     radius: 15,
+            //     backgroundImage: NetworkImage(
+            //         '${Environment.apiUrl}/uploads/usuario/usuarios/$uid'),
+            //   ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10.0),
                     child: Text(
-                      nombre,
-                      style: const TextStyle(
+                      // nombre,
+                      'Anónimo',
+                      style: TextStyle(
                         color: Colors.black87,
                         fontSize: 10,
                       ),

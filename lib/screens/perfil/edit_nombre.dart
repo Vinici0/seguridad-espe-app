@@ -72,11 +72,11 @@ class _EditNombreScreenState extends State<EditNombreScreen> {
               decoration: InputDecoration(
                 labelText: 'Nombres',
                 labelStyle: const TextStyle(
-                  color: Color(0xFF6165FA),
+                  color: Color(0xFF7ab466),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: _isEmpty ? Colors.red : const Color(0xFF6165FA),
+                    color: _isEmpty ? Colors.red : const Color(0xFF7ab466),
                   ),
                 ),
               ),

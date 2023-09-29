@@ -94,7 +94,7 @@ class _AlerEdittScreenState extends State<AlerEdittScreen> {
               //endsWith('.png')
               child: reporte.imgAlerta.endsWith('.svg')
                   ? SvgPicture.asset(
-                      'assets/alertas/${reporte.imgAlerta}',
+                      'assets/vinculacionalertas/${reporte.imgAlerta}',
                       width: 30,
                       color: Colors.white,
                     )
@@ -375,7 +375,7 @@ class _AlerEdittScreenState extends State<AlerEdittScreen> {
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER,
                                   timeInSecForIosWeb: 2,
-                                  backgroundColor: const Color(0xFF6165FA),
+                                  backgroundColor: const Color(0xFF7ab466),
                                   textColor: Colors.white,
                                   fontSize: 16.0,
                                 );
@@ -405,7 +405,7 @@ class _AlerEdittScreenState extends State<AlerEdittScreen> {
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: const Color(0xFF6165FA),
+                                color: const Color(0xFF7ab466),
                               ),
                               child: MaterialButton(
                                 onPressed: isButtonDisabled
@@ -425,7 +425,7 @@ class _AlerEdittScreenState extends State<AlerEdittScreen> {
                                                 title: const Text(
                                                   'Campo vacío',
                                                   style: TextStyle(
-                                                    color: Color(0xFF6165FA),
+                                                    color: Color(0xFF7ab466),
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -444,7 +444,7 @@ class _AlerEdittScreenState extends State<AlerEdittScreen> {
                                                       'Aceptar',
                                                       style: TextStyle(
                                                         color:
-                                                            Color(0xFF6165FA),
+                                                            Color(0xFF7ab466),
                                                         fontSize: 16,
                                                       ),
                                                     ),
@@ -603,7 +603,7 @@ class _AlerEdittScreenState extends State<AlerEdittScreen> {
               TextButton(
                 child: const Text(
                   'Aceptar',
-                  style: TextStyle(color: Color(0xFF6165FA)),
+                  style: TextStyle(color: Color(0xFF7ab466)),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();

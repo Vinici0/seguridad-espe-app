@@ -105,25 +105,23 @@ class __FromState extends State<_From> {
         },
       ),
       //----or----
-      const SizedBox(height: 10),
-      const Text("O continue con"),
-      const SizedBox(height: 10),
-      BotonForm(
-        text: "Google",
-        onPressed: () async {
-          try {
-            FocusScope.of(context).unfocus();
-            final result = await authBloc.signInWithGoogle();
-            if (result) {
-              // ignore: use_build_context_synchronously
-              Navigator.pushReplacementNamed(
-                  context, LoadingLoginScreen.loadingroute);
-            }
-          } catch (e) {
-            print(e);
-          }
-        },
-      ),
+
+      // BotonForm(
+      //   text: "Google",
+      //   onPressed: () async {
+      //     try {
+      //       FocusScope.of(context).unfocus();
+      //       final result = await authBloc.signInWithGoogle();
+      //       if (result) {
+      //         // ignore: use_build_context_synchronously
+      //         Navigator.pushReplacementNamed(
+      //             context, LoadingLoginScreen.loadingroute);
+      //       }
+      //     } catch (e) {
+      //       print(e);
+      //     }
+      //   },
+      // ),
       //cerrar sesion
     ]);
   }

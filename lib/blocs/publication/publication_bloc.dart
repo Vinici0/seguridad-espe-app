@@ -232,20 +232,21 @@ class PublicationBloc extends Bloc<PublicationEvent, PublicationState> {
     String uid,
     String nombreUsuario,
     List<String>? path,
+    String unidadEducativa,
   ) async {
     add(LoadingEvent());
     try {
       final newPublicacion = await _publicacionService.createPublicacion(
-        tipo,
-        descripcion,
-        color,
-        icon,
-        isPublic,
-        visible,
-        uid,
-        nombreUsuario,
-        path,
-      );
+          tipo,
+          descripcion,
+          color,
+          icon,
+          isPublic,
+          visible,
+          uid,
+          nombreUsuario,
+          path,
+          unidadEducativa);
       if (newPublicacion.uid != '' && newPublicacion.uid != null) {
         final newPublicaciones = [newPublicacion, ...state.publicaciones];
         add(PublicacionesCreateEvent(newPublicaciones));

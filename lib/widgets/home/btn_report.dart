@@ -41,7 +41,7 @@ class _BtnReport extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 //largor del boton
 
-                backgroundColor: const Color(0xFF6165FA),
+                backgroundColor: const Color(0xFF7ab466),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 // padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),

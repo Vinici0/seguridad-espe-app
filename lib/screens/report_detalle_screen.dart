@@ -71,7 +71,7 @@ class ReportDetalleScreen extends StatelessWidget {
                               children: [
                                 const Icon(
                                   Icons.check_circle,
-                                  color: Color(0xFF6165FA),
+                                  color: Color(0xFF7ab466),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -135,13 +135,13 @@ class __BtnReportState extends State<_BtnReport> {
               height: 40,
               child: _isLoading
                   ? const SpinKitFadingCircle(
-                      color: Color(0xFF6165FA),
+                      color: Color(0xFF7ab466),
                       size: 24.0,
                     )
                   : MaterialButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
-                      color: const Color(0xFF6165FA),
+                      color: const Color(0xFF7ab466),
                       onPressed: () async {
                         setState(() {
                           _isLoading = true;

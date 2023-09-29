@@ -57,7 +57,7 @@ class _MienbrosChatScreenState extends State<MienbrosChatScreen> {
           if (state.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                color: Color(0xFF6165FA),
+                color: Color(0xFF7ab466),
               ),
             );
           }
@@ -166,7 +166,7 @@ class _MienbrosChatScreenState extends State<MienbrosChatScreen> {
               CupertinoDialogAction(
                 child: const Text(
                   'Cancelar',
-                  style: TextStyle(color: Color(0xFF6165FA)),
+                  style: TextStyle(color: Color(0xFF7ab466)),
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
@@ -195,7 +195,7 @@ class _MienbrosChatScreenState extends State<MienbrosChatScreen> {
               TextButton(
                 child: const Text(
                   'Cancelar',
-                  style: TextStyle(color: Color(0xFF6165FA)),
+                  style: TextStyle(color: Color(0xFF7ab466)),
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),

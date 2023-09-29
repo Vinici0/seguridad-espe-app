@@ -186,7 +186,7 @@ class NotificationsScreen extends StatelessWidget {
                               child: Center(
                                 child: Icon(
                                   FontAwesomeIcons.solidCommentDots,
-                                  color: Color(0xFF6165FA),
+                                  color: Color(0xFF7ab466),
                                   size: 18,
                                 ),
                               ),
@@ -234,7 +234,7 @@ class NotificationsScreen extends StatelessWidget {
                             ? const SizedBox()
                             : const CircleAvatar(
                                 radius: 10,
-                                backgroundColor: Color(0xFF6165FA),
+                                backgroundColor: Color(0xFF7ab466),
                               ),
                       ],
                     ),

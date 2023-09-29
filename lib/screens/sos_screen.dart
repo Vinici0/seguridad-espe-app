@@ -47,7 +47,7 @@ class SosScreen extends StatelessWidget {
                       "assets/info/advertencia.svg",
                       fit: BoxFit.cover,
                       width: MediaQuery.of(context).size.width * 0.30,
-                      color: const Color(0xFF6165FA),
+                      color: const Color(0xFF7ab466),
                     ),
                   ),
                   const SizedBox(
@@ -108,7 +108,7 @@ class SosScreen extends StatelessWidget {
                         counterBloc.add(const NavigatorIndexEvent(index: 0));
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFF6165FA),
+                        primary: const Color(0xFF7ab466),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),

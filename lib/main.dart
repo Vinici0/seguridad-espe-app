@@ -108,7 +108,6 @@ class _MyAppState extends State<MyApp> {
         // cargarComentarios
         BlocProvider.of<PublicationBloc>(context)
             .add(const ShowNewPostsButtonEvent(true));
-
         return;
       }
 
@@ -131,7 +130,7 @@ class _MyAppState extends State<MyApp> {
       DeviceOrientation.portraitDown, // Solo vertical hacia abajo
     ]);
 
-    Color myPurpleColor = const Color(0xFF6165FA);
+    Color myPurpleColor = const Color(0xFF7ab466);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MapApp',

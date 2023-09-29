@@ -54,6 +54,7 @@ class Publicacion {
   bool isPublicacionPendiente;
   int? countComentarios;
   int? countLikes;
+  String? unidadEducativa;
 
   Publicacion({
     required this.titulo,
@@ -77,6 +78,7 @@ class Publicacion {
     this.countLikes,
     required this.isPublicacionPendiente,
     required this.nombreUsuario,
+    this.unidadEducativa,
   });
 
   factory Publicacion.fromMap(Map<String, dynamic> json) => Publicacion(
@@ -109,6 +111,7 @@ class Publicacion {
         // json.containsKey("uid") ? json["uid"] : json["_id"],
         uid: json.containsKey("uid") ? json["uid"] : json["_id"],
         nombreUsuario: json["nombreUsuario"],
+        unidadEducativa: json["unidadEducativa"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -134,6 +137,7 @@ class Publicacion {
         "isPublicacionPendiente": isPublicacionPendiente,
         "uid": uid,
         "nombreUsuario": nombreUsuario,
+        "unidadEducativa": unidadEducativa,
       };
 
   Publicacion copyWith({
@@ -158,6 +162,7 @@ class Publicacion {
     int? countLikes,
     int? countComentarios,
     String? usuarioNombre,
+    String? unidadEducativa,
   }) {
     return Publicacion(
       uid: uid ?? this.uid,
@@ -180,6 +185,7 @@ class Publicacion {
       createdAt: createdAt ?? this.createdAt,
       countComentarios: countComentarios ?? this.countComentarios,
       countLikes: countLikes ?? this.countLikes,
+      unidadEducativa: unidadEducativa ?? this.unidadEducativa,
       updatedAt: updatedAt ?? this.updatedAt,
       nombreUsuario: usuarioNombre ?? this.nombreUsuario,
     );

@@ -67,7 +67,7 @@ class _BtnReport extends StatelessWidget {
             child: MaterialButton(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
-              color: const Color(0xFF6165FA),
+              color: const Color(0xFF7ab466),
               onPressed: () {
                 Navigator.pop(context);
                 Navigator.pop(context);

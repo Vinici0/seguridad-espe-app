@@ -90,12 +90,12 @@ class _AlertScreenState extends State<AlertScreen> {
               backgroundColor: Color(int.parse('0xFF${reporte.color}')),
               child: reporte.isSvg == true
                   ? SvgPicture.asset(
-                      'assets/alertas/${reporte.icon}',
+                      'assets/iconvinculacion/${reporte.icon}',
                       width: 30,
                       color: Colors.white,
                     )
                   : Image.asset(
-                      'assets/alertas/${reporte.icon}',
+                      'assets/iconvinculacion/${reporte.icon}',
                       width: 30,
                       color: Colors.white,
                     ),
@@ -359,50 +359,19 @@ class _AlertScreenState extends State<AlertScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            MaterialButton(
-                              onPressed: () {
-                                setState(() {
-                                  isIconicActivated = !isIconicActivated;
-                                });
-                                Fluttertoast.showToast(
-                                  msg:
-                                      'Modo incógnito ${isIconicActivated ? 'activado' : 'desactivado'}',
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 2,
-                                  backgroundColor: const Color(0xFF6165FA),
-                                  textColor: Colors.white,
-                                  fontSize: 16.0,
-                                );
-                              },
-                              child: Tooltip(
-                                message: isIconicActivated
-                                    ? 'Modo incógnito activado'
-                                    : 'Modo incógnito desactivado',
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: isIconicActivated
-                                        ? const Color.fromARGB(
-                                            255, 243, 149, 33)
-                                        : Colors.grey,
-                                  ),
-                                  child: const Icon(
-                                    FontAwesomeIcons.userSecret,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
                             Container(
                               height: 43,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              //center para centrar el texto
+                              alignment: Alignment.center,
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: const Color(0xFF6165FA),
+                                color: const Color(0xFF7ab466),
                               ),
                               child: MaterialButton(
+                                //center para centrar el texto
+                                // alignment: Alignment.center,
                                 onPressed: isButtonDisabled
                                     ? null
                                     : () async {
@@ -420,7 +389,7 @@ class _AlertScreenState extends State<AlertScreen> {
                                                 title: const Text(
                                                   'Campo vacío',
                                                   style: TextStyle(
-                                                    color: Color(0xFF6165FA),
+                                                    color: Color(0xFF7ab466),
                                                     fontSize: 20,
                                                     fontWeight: FontWeight.bold,
                                                   ),
@@ -439,7 +408,7 @@ class _AlertScreenState extends State<AlertScreen> {
                                                       'Aceptar',
                                                       style: TextStyle(
                                                         color:
-                                                            Color(0xFF6165FA),
+                                                            Color(0xFF7ab466),
                                                         fontSize: 16,
                                                       ),
                                                     ),
@@ -471,6 +440,8 @@ class _AlertScreenState extends State<AlertScreen> {
                                               authService.state.usuario!.uid,
                                               authService.state.usuario!.nombre,
                                               imagePaths ?? [],
+                                              authService.state.usuario!
+                                                  .unidadEducativa!,
                                             );
                                             Fluttertoast.showToast(
                                               msg:
@@ -479,7 +450,7 @@ class _AlertScreenState extends State<AlertScreen> {
                                               gravity: ToastGravity.CENTER,
                                               timeInSecForIosWeb: 2,
                                               backgroundColor:
-                                                  const Color(0xFF6165FA),
+                                                  const Color(0xFF7ab466),
                                               textColor: Colors.white,
                                               fontSize: 16.0,
                                             );
@@ -501,6 +472,9 @@ class _AlertScreenState extends State<AlertScreen> {
                                         }
                                       },
                                 child: Row(
+                                  //center para centrar el texto
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: const [
                                     Icon(
                                       FontAwesomeIcons.bullhorn,
@@ -551,7 +525,7 @@ class _AlertScreenState extends State<AlertScreen> {
 
   openImages() async {
     try {
-      var pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 5);
+      var pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 50);
 
       if (pickedFiles != null) {
         if (pickedFiles.length <= 3 && imagefiles.length <= 3) {
@@ -615,7 +589,7 @@ class _AlertScreenState extends State<AlertScreen> {
               TextButton(
                 child: const Text(
                   'Aceptar',
-                  style: TextStyle(color: Color(0xFF6165FA)),
+                  style: TextStyle(color: Color(0xFF7ab466)),
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();

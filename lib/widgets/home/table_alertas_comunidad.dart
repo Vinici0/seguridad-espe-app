@@ -151,9 +151,22 @@ class TableAlertsCompunidad extends StatelessWidget {
                             isSvg: false))
                   }),
           //agrega un espacio vacio
-          const TableCell(
-            child: SizedBox(),
-          ),
+          GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              child: const PhysicalModelCircleContainer(
+                icon: "mascotas.png",
+                text: "Alertas",
+                color: Color.fromARGB(255, 49, 135, 181),
+                isSvg: false,
+              ),
+              onTap: () => {
+                    Navigator.pushNamed(context, 'AlertaPrueba',
+                        arguments: Reporte(
+                            tipo: "Mascota perdida",
+                            icon: "mascotas.png",
+                            color: "FC9032",
+                            isSvg: false))
+                  }),
         ]),
         // vacio
       ],

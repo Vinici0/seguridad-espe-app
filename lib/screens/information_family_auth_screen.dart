@@ -143,7 +143,7 @@ class _InformationFamilyAuthState extends State<InformationFamilyAuth> {
                                 telefonoController.clear();
                               },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF6165FA),
+                          backgroundColor: const Color(0xFF7ab466),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
@@ -175,7 +175,7 @@ class _InformationFamilyAuthState extends State<InformationFamilyAuth> {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF6165FA), // Un color atractivo
+              color: Color(0xFF7ab466), // Un color atractivo
             ),
           ),
           content: Text(
@@ -189,7 +189,7 @@ class _InformationFamilyAuthState extends State<InformationFamilyAuth> {
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(
-                      0xFF6165FA), // Mismo color que el título para coherencia
+                      0xFF7ab466), // Mismo color que el título para coherencia
                 ),
               ),
               onPressed: () {
@@ -259,12 +259,12 @@ class _TextFieldAddTelefono extends StatelessWidget {
             decoration: const InputDecoration(
               labelText: 'Teléfono',
               labelStyle: TextStyle(
-                color: Color(0xFF6165FA), // Color del texto del label
+                color: Color(0xFF7ab466), // Color del texto del label
               ),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: Color(
-                      0xFF6165FA), // Color de la línea de abajo del TextField
+                      0xFF7ab466), // Color de la línea de abajo del TextField
                 ),
               ),
             ),
@@ -315,7 +315,7 @@ class _ListContact extends StatelessWidget {
           child: ListTile(
             leading: const Icon(
               Icons.person,
-              color: Color(0xFF6165FA),
+              color: Color(0xFF7ab466),
             ),
             title: Text(
               state.usuario?.telefonos[index] ?? '',
@@ -383,7 +383,7 @@ class _ListContact extends StatelessWidget {
                 Navigator.pop(context); // Cerrar el diálogo después de eliminar
               },
               style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFF6165FA),
+                foregroundColor: const Color(0xFF7ab466),
               ),
               child: const Text(
                 'Eliminar',

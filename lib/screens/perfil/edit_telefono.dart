@@ -76,12 +76,12 @@ class _EditTelefonoScreenState extends State<EditTelefonoScreen> {
               decoration: InputDecoration(
                 labelText: 'Telefono',
                 labelStyle: const TextStyle(
-                  color: Color(0xFF6165FA),
+                  color: Color(0xFF7ab466),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: _isPhoneNumberValid
-                        ? const Color(0xFF6165FA)
+                        ? const Color(0xFF7ab466)
                         : Colors.red,
                   ),
                 ),

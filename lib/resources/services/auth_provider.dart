@@ -125,13 +125,15 @@ class AuthService {
     }
   }
 
-  Future<bool> register(String nombre, String email, String password) async {
+  Future<bool> register(String nombre, String email, String password,
+      String unidadEducativa) async {
     autenticando = true;
 
     final data = {
       'nombre': nombre,
       'email': email,
       'password': password,
+      'unidadEducativa': unidadEducativa,
       'tokenApp': PushNotificationService.token
     };
 
@@ -437,6 +439,35 @@ class AuthService {
       }
     } catch (e) {
       print('Error en eliminarTokenApp: $e');
+      return false;
+    }
+  }
+
+  // router.put("/cambiar-contrasena", validarJWT, cambiarContrasena);
+  Future<bool> cambiarContrasena(
+      String email, String contrasenaActual, String nuevaContrasena) async {
+    try {
+      final data = {
+        'email': email,
+        'contrasenaActual': contrasenaActual,
+        'nuevaContrasena': nuevaContrasena,
+      };
+      final uri =
+          Uri.parse('${Environment.apiUrl}/usuarios/cambiar-contrasena');
+      final resp = await http.put(uri, body: jsonEncode(data), headers: {
+        'Content-Type': 'application/json',
+        'x-token': await getToken() as String,
+      });
+
+      print('resp.statusCode: ${resp.statusCode}');
+
+      if (resp.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en cambiarContrasena: $e');
       return false;
     }
   }

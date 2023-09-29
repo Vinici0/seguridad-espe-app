@@ -57,7 +57,9 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
                   const SizedBox(width: 5),
                   Text(
                     widget.publicacion.isPublic
-                        ? widget.publicacion.nombreUsuario
+                        ? authBloc.state.usuario!.role == 'USER_ROLE'
+                            ? 'Anónimo'
+                            : widget.publicacion.nombreUsuario
                         : 'Anónimo',
                   ),
                 ],
@@ -103,7 +105,7 @@ class _LikesCommentsDetailsState extends State<LikesCommentsDetails> {
                     icon: isLiked
                         ? const Icon(
                             FontAwesomeIcons.solidThumbsUp,
-                            color: Color(0xFF6165FA),
+                            color: Color(0xFF7ab466),
                           )
                         : const Icon(
                             FontAwesomeIcons.thumbsUp,

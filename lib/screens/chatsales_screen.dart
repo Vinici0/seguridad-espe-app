@@ -164,7 +164,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             return Container(
               color: Colors.white,
               child: const Center(
-                child: CircularProgressIndicator(color: Color(0xFF6165FA)),
+                child: CircularProgressIndicator(color: Color(0xFF7ab466)),
               ),
             );
           }
@@ -254,8 +254,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 : Container(
                     margin: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: IconTheme(
-                      //0xFF6165FA
-                      data: const IconThemeData(color: Color(0xFF6165FA)),
+                      //0xFF7ab466
+                      data: const IconThemeData(color: Color(0xFF7ab466)),
                       child: IconButton(
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,

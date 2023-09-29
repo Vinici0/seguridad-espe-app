@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
+import 'package:flutter_maps_adv/screens/auth_screen.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 
 class ConfigScreen extends StatelessWidget {
@@ -26,7 +27,7 @@ class ConfigScreen extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => const LoadingLoginScreen(),
+                      pageBuilder: (_, __, ___) => const AuthScreen(),
                       transitionDuration: const Duration(milliseconds: 0)));
             },
           );

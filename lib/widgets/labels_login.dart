@@ -19,7 +19,7 @@ class Labels extends StatelessWidget {
             Navigator.pushReplacementNamed(context, ruta);
           },
           child: Text(text2,
-              style: const TextStyle(color: Colors.indigo, fontSize: 18)),
+              style: const TextStyle(color: Color(0xFF7ab466), fontSize: 18)),
         ),
       ],
     );
