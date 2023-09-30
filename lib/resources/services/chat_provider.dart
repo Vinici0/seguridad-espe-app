@@ -191,3 +191,5 @@ class ChatProvider {
     }
   }
 }
+
+// http://localhost:3000/api/instituciones

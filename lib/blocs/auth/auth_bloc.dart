@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_maps_adv/models/institucionmodel.dart';
 import 'package:flutter_maps_adv/models/ubicacion.dart';
 import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter_maps_adv/resources/repository/auth_repository.dart';
@@ -11,6 +12,8 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final ApiUserRepository apiAuthRepository = ApiUserRepository();
   final SocketService socketService = SocketService();
+
+  final List<Institucione> instituciones = [];
 
   bool isLoggedInTrue = false;
   Usuario usuario = Usuario(
@@ -50,6 +53,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<MarcarPublicacionPendienteFalse>(_onMarcarPublicacionPendienteFalse);
     on<MarcarSalasPendienteFalse>(_onMarcarSalasPendienteFalse);
     on<MarcarSalasPendienteTrue>(_onMarcarSalasPendienteTrue);
+
+    on<EventListInstituciones>((event, emit) async {
+      final instituciones =
+          await apiAuthRepository.obtenerTodasLasInstituciones();
+      for (final institucion in instituciones) {
+        this.instituciones.add(institucion);
+      }
+    });
     on<MarcarNotificacionesPendienteFalse>(
         _onMarcarNotificacionesPendienteFalse);
     on<IsSalasPendiente>(_onIsSalasPendiente);
@@ -345,4 +356,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return await apiAuthRepository.cambiarContrasena(
         email, contrasenaActual, nuevaContrasena);
   }
+
+  // obtenerTodasLasInstituciones
 }

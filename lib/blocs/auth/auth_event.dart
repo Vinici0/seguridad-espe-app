@@ -168,3 +168,9 @@ class IsSalasPendiente extends AuthEvent {
   @override
   List<Object> get props => [isSalasPendiente];
 }
+
+class EventListInstituciones extends AuthEvent {
+  const EventListInstituciones();
+  @override
+  List<Object> get props => [];
+}

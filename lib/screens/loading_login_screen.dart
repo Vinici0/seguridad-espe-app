@@ -47,6 +47,7 @@ class LoadingLoginScreen extends StatelessWidget {
       // Si no es el primer lanzamiento, continuar con la lógica original
       print("LoadingLoginScreen");
       final authService = BlocProvider.of<AuthBloc>(context, listen: false);
+      authService.add(const EventListInstituciones());
       final roomBloc = BlocProvider.of<RoomBloc>(context, listen: false);
       final publicationBloc =
           BlocProvider.of<PublicationBloc>(context, listen: false);

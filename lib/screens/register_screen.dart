@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_maps_adv/blocs/auth/auth_bloc.dart';
 import 'package:flutter_maps_adv/helpers/mostrar_alerta.dart';
+import 'package:flutter_maps_adv/models/institucionmodel.dart';
 import 'package:flutter_maps_adv/screens/screens.dart';
 import 'package:flutter_maps_adv/widgets/boton_login.dart';
 import 'package:flutter_maps_adv/widgets/custom_input.dart';
@@ -65,10 +66,23 @@ class __FromState extends State<_From> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nomController = TextEditingController();
   String? unidadEducativa = '';
+// Definición de la lista de DropdownMenuItem
+  List<DropdownMenuItem<String>> dropdownItems = [];
+
   @override
   Widget build(BuildContext context) {
-    final authServiceBloc = BlocProvider.of<AuthBloc>(context);
+    final authServiceBloc = BlocProvider.of<AuthBloc>(context, listen: false);
 
+    for (Institucione institucion in authServiceBloc.instituciones) {
+      dropdownItems.add(
+        DropdownMenuItem(
+          value: institucion
+              .id, // Puedes utilizar cualquier propiedad de Institucione aquí
+          child:
+              Text(institucion.nombre, style: TextStyle(color: Colors.black54)),
+        ),
+      );
+    }
     return Column(children: [
       //Nombre
       CustonInput(
@@ -123,18 +137,7 @@ class __FromState extends State<_From> {
             labelStyle: const TextStyle(color: Colors.black54),
             prefixIcon: const Icon(Icons.person, color: Color(0xFF7ab466)),
           ),
-          items: const [
-            DropdownMenuItem(
-              value: 'El Esfuerzo',
-              child:
-                  Text('El Esfuerzo', style: TextStyle(color: Colors.black54)),
-            ),
-            DropdownMenuItem(
-              value: 'Puerto Limón',
-              child:
-                  Text('Puerto Limón', style: TextStyle(color: Colors.black54)),
-            ),
-          ],
+          items: dropdownItems, // Utiliza la lista de elementos aquí
           onChanged: (opt) {
             setState(() {
               unidadEducativa = opt;

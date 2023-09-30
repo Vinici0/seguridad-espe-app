@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_maps_adv/models/institucionmodel.dart';
 import 'package:flutter_maps_adv/models/ubicacion.dart';
 import 'package:flutter_maps_adv/models/usuarios_response.dart';
 import 'package:flutter_maps_adv/resources/services/push_notifications_service.dart';
@@ -469,6 +470,22 @@ class AuthService {
     } catch (e) {
       print('Error en cambiarContrasena: $e');
       return false;
+    }
+  }
+
+  Future<List<Institucione>> obtenerTodasLasInstituciones() async {
+    try {
+      final uri = Uri.parse('${Environment.apiUrl}/instituciones');
+      final resp = await http.get(uri, headers: {
+        'Content-Type': 'application/json',
+        'x-token': await AuthService.getToken() as String,
+      });
+      final decodedData = json.decode(resp.body);
+      final institucionResp = InstitucionReponse.fromJson(decodedData);
+      return institucionResp.instituciones;
+    } catch (e) {
+      print('Error en obtenerTodasLasInstituciones: $e');
+      return [];
     }
   }
 }

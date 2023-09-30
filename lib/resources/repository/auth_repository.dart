@@ -1,3 +1,4 @@
+import 'package:flutter_maps_adv/models/institucionmodel.dart';
 import 'package:flutter_maps_adv/models/ubicacion.dart';
 import 'package:flutter_maps_adv/models/usuario.dart';
 import 'package:flutter_maps_adv/resources/services/auth_provider.dart';
@@ -104,5 +105,10 @@ class ApiUserRepository {
 
   Future<void> logout() async {
     await AuthService().logout();
+  }
+
+  //obtenerTodasLasInstituciones
+  Future<List<Institucione>> obtenerTodasLasInstituciones() async {
+    return await _authService.obtenerTodasLasInstituciones();
   }
 }

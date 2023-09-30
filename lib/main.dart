@@ -72,14 +72,13 @@ class _MyAppState extends State<MyApp> {
         if (isSosScreenOpen) {
           return;
         }
-        isSosScreenOpen = true;
 
+        isSosScreenOpen = true;
         navigatorKey.currentState
             ?.pushNamed('sos', arguments: dataNotification)
             .then((value) {
           isSosScreenOpen = false;
         });
-
         return;
       }
 
@@ -104,7 +103,6 @@ class _MyAppState extends State<MyApp> {
         // ShowNewPostsButtonEvent
         BlocProvider.of<AuthBloc>(context)
             .add(const MarcarPublicacionPendienteFalse(true));
-
         // cargarComentarios
         BlocProvider.of<PublicationBloc>(context)
             .add(const ShowNewPostsButtonEvent(true));
@@ -116,9 +114,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider.of<RoomBloc>(context).salasInitEvent();
         return;
       }
-
       // navigatorKey.currentState?.pushNamed('product', arguments: message);
-
       super.initState();
     });
   }
