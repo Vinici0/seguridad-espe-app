@@ -21,7 +21,7 @@ class AuthScreen extends StatelessWidget {
                     width: 290,
                     height: 290,
                     child: SvgPicture.asset(
-                      'assets/iconvinculacion/logo_con_nombre.svg',
+                      'assets/iconvinculacion/logo_movil.svg',
                     )),
               ],
             ),
