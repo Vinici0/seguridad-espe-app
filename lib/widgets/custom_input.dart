@@ -20,7 +20,7 @@ class CustonInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       Container(
-        margin: const EdgeInsets.only(bottom: 20),
+        margin: const EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(30),

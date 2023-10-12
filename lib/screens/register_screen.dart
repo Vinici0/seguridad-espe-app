@@ -69,20 +69,31 @@ class __FromState extends State<_From> {
 // Definición de la lista de DropdownMenuItem
   List<DropdownMenuItem<String>> dropdownItems = [];
 
+  AuthBloc authServiceBloc = AuthBloc();
   @override
-  Widget build(BuildContext context) {
-    final authServiceBloc = BlocProvider.of<AuthBloc>(context, listen: false);
+  void initState() {
+    authServiceBloc = BlocProvider.of<AuthBloc>(context, listen: false);
 
+    // authServiceBloc.add(const EventListInstituciones());
     for (Institucione institucion in authServiceBloc.instituciones) {
       dropdownItems.add(
         DropdownMenuItem(
-          value: institucion
-              .id, // Puedes utilizar cualquier propiedad de Institucione aquí
-          child:
-              Text(institucion.nombre, style: TextStyle(color: Colors.black54)),
+          value: institucion.nombre,
+          child: Text(institucion.nombre,
+              style: const TextStyle(color: Colors.black54)),
         ),
       );
     }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(children: [
       //Nombre
       CustonInput(

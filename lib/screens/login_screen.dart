@@ -79,6 +79,22 @@ class __FromState extends State<_From> {
         textController: passwordController,
         isPassword: true,
       ),
+      Container(
+        alignment: Alignment.centerLeft,
+        margin: const EdgeInsets.only(left: 10),
+        height: 40,
+        child: TextButton(
+          //quitar el margin para que se vea bien
+          style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 0)),
+
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, 'recert');
+          },
+          child: const Text("¿Olvidaste tu contraseña?",
+              style: TextStyle(color: Colors.black54)),
+        ),
+      ),
       BotonForm(
         text: "Ingrese",
         onPressed: () async {
@@ -104,25 +120,6 @@ class __FromState extends State<_From> {
           }
         },
       ),
-      //----or----
-
-      // BotonForm(
-      //   text: "Google",
-      //   onPressed: () async {
-      //     try {
-      //       FocusScope.of(context).unfocus();
-      //       final result = await authBloc.signInWithGoogle();
-      //       if (result) {
-      //         // ignore: use_build_context_synchronously
-      //         Navigator.pushReplacementNamed(
-      //             context, LoadingLoginScreen.loadingroute);
-      //       }
-      //     } catch (e) {
-      //       print(e);
-      //     }
-      //   },
-      // ),
-      //cerrar sesion
     ]);
   }
 }

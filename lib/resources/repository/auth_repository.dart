@@ -89,6 +89,10 @@ class ApiUserRepository {
         email, contrasenaActual, nuevaContrasena);
   }
 
+  Future<bool> recoverPassword(String email) async {
+    return await _authService.recoverPassword(email);
+  }
+
   get usuario => _authService.usuario;
 
   bool get autenticando => _authService.autenticando;

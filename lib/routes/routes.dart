@@ -9,6 +9,7 @@ import 'package:flutter_maps_adv/screens/perfil/edit_nombre.dart';
 import 'package:flutter_maps_adv/screens/perfil/edit_telefono.dart';
 import 'package:flutter_maps_adv/screens/perfil/password_screen.dart';
 import 'package:flutter_maps_adv/screens/product.dart';
+import 'package:flutter_maps_adv/screens/recert_screen.dart';
 import 'package:flutter_maps_adv/screens/report_detalle_screen.dart';
 import 'package:flutter_maps_adv/screens/report_finish_screen.dart';
 import 'package:flutter_maps_adv/screens/report_screen.dart';
@@ -56,6 +57,7 @@ class Routes {
     AuthScreen.authroute: (_) => const AuthScreen(),
     InformationFamilyAuth.informationFamilyAuth: (_) =>
         const InformationFamilyAuth(),
-    AlertPruebaScreen.routName: (_) => const AlertPruebaScreen()
+    AlertPruebaScreen.routName: (_) => const AlertPruebaScreen(),
+    RecertScreen.recertroute: (_) => const RecertScreen(),
   };
 }

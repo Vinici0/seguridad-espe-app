@@ -54,7 +54,9 @@ class Institucione {
     required this.v,
   });
 
-  factory Institucione.fromJson(Map<String, dynamic> json) => Institucione(
+  factory Institucione.fromJson(Map<String, dynamic> json) {
+    try {
+      return Institucione(
         id: json["_id"],
         nombre: json["nombre"],
         direccion: json["direccion"],
@@ -62,6 +64,24 @@ class Institucione {
         descripcion: json["descripcion"],
         v: json["__v"],
       );
+    } catch (e) {
+      // Manejar errores aquí
+      print("Error al analizar el JSON en Institucione.fromJson: $e");
+
+      // Identificar el campo problemático
+      if (e is FormatException) {
+        final fieldWithError = e.source;
+        print("Campo problemático: $fieldWithError");
+      }
+
+      return Institucione(
+          id: "",
+          nombre: "",
+          direccion: "",
+          tipo: "",
+          v: 1); // Devolver un objeto vacío o null en caso de error, o lanzar una excepción si es necesario.
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "_id": id,

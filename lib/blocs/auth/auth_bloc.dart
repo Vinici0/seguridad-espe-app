@@ -54,17 +54,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<MarcarSalasPendienteFalse>(_onMarcarSalasPendienteFalse);
     on<MarcarSalasPendienteTrue>(_onMarcarSalasPendienteTrue);
 
-    on<EventListInstituciones>((event, emit) async {
-      final instituciones =
-          await apiAuthRepository.obtenerTodasLasInstituciones();
-      for (final institucion in instituciones) {
-        this.instituciones.add(institucion);
-      }
-    });
+    on<EventListInstituciones>(_onEventListInstituciones);
     on<MarcarNotificacionesPendienteFalse>(
         _onMarcarNotificacionesPendienteFalse);
     on<IsSalasPendiente>(_onIsSalasPendiente);
   }
+
+  // void _cargarUnidadesEducativas() async {
+  //   final instituciones =
+  //       await apiAuthRepository.obtenerTodasLasInstituciones();
+  //   for (final institucion in instituciones) {
+  //     this.instituciones.add(institucion);
+  //   }
+  // }
+
+  _onEventListInstituciones(
+      EventListInstituciones event, Emitter<AuthState> emit) async {}
 
   void _onAuthRegisterEvent(AuthRegisterEvent event, Emitter<AuthState> emit) {
     emit(state.copyWith(
@@ -279,6 +284,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return false;
   }
 
+  //obtenerTodasLasInstituciones
+  Future<List<Institucione>> obtenerTodasLasInstituciones() async {
+    try {
+      final institucionesR =
+          await apiAuthRepository.obtenerTodasLasInstituciones();
+      for (final institucion in institucionesR) {
+        instituciones.add(institucion);
+      }
+      return institucionesR;
+    } catch (e) {
+      return [];
+    }
+  }
+
   Future<bool> signInWithGoogle() async {
     final usuario = await apiAuthRepository.signInWithGoogle();
     if (usuario != null) {
@@ -355,6 +374,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       String email, String contrasenaActual, String nuevaContrasena) async {
     return await apiAuthRepository.cambiarContrasena(
         email, contrasenaActual, nuevaContrasena);
+  }
+
+  recoverPassword(String email) async {
+    return await apiAuthRepository.recoverPassword(email);
   }
 
   // obtenerTodasLasInstituciones

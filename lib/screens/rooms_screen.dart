@@ -48,7 +48,7 @@ class RoomsScreen extends StatelessWidget {
                     width: 200,
                     height: 250,
                   ),
-                  const Text('!Más seguro en grupo!',
+                  const Text('¡Más seguro en grupo!',
                       style: TextStyle(
                           color: Colors.black87,
                           fontSize: 20,
@@ -57,7 +57,7 @@ class RoomsScreen extends StatelessWidget {
                     height: 10,
                   ),
                   const Text(
-                      'Cree o únase a un grupo para que puedas estar informado de lo que reportan tus amigos y familiares.',
+                      'Cree o únase a un grupo para que pueda estar informado de lo que reportan sus amigos y familiares',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black87,

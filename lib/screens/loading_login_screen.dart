@@ -33,11 +33,13 @@ class LoadingLoginScreen extends StatelessWidget {
 
   Future<void> checkLoginState(BuildContext context) async {
     final sharedPreferences = await SharedPreferences.getInstance();
+    final authService = BlocProvider.of<AuthBloc>(context, listen: false);
 
     // Verificar si es el primer lanzamiento almacenando un valor en SharedPreferences
     bool isFirstLaunch = sharedPreferences.getBool('isFirstLaunch') ?? true;
 
     if (isFirstLaunch) {
+      await authService.obtenerTodasLasInstituciones();
       // Si es el primer lanzamiento, enviar al usuario a la pantalla de inicio de sesión
       navigateToReplacement(context, const AuthScreen());
 
@@ -46,8 +48,7 @@ class LoadingLoginScreen extends StatelessWidget {
     } else {
       // Si no es el primer lanzamiento, continuar con la lógica original
       print("LoadingLoginScreen");
-      final authService = BlocProvider.of<AuthBloc>(context, listen: false);
-      authService.add(const EventListInstituciones());
+
       final roomBloc = BlocProvider.of<RoomBloc>(context, listen: false);
       final publicationBloc =
           BlocProvider.of<PublicationBloc>(context, listen: false);
@@ -63,6 +64,7 @@ class LoadingLoginScreen extends StatelessWidget {
           await roomBloc.salasInitEvent();
           await publicationBloc.getAllPublicaciones();
           await notificationBloc.loadNotification();
+
           if (authService.getUsuario()?.telefono == null) {
             navigateToReplacement(context, const InformationScreen());
           } else if (authService.getUsuario()?.telefonos == null) {
@@ -83,6 +85,7 @@ class LoadingLoginScreen extends StatelessWidget {
           navigateToReplacement(context, const HomeScreen());
         }
       } else {
+        await authService.obtenerTodasLasInstituciones();
         await authService.logout();
         navigateToReplacement(context, const AuthScreen());
       }

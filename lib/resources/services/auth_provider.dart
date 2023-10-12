@@ -476,16 +476,39 @@ class AuthService {
   Future<List<Institucione>> obtenerTodasLasInstituciones() async {
     try {
       final uri = Uri.parse('${Environment.apiUrl}/instituciones');
-      final resp = await http.get(uri, headers: {
-        'Content-Type': 'application/json',
-        'x-token': await AuthService.getToken() as String,
-      });
+      final resp =
+          await http.get(uri, headers: {'Content-Type': 'application/json'});
       final decodedData = json.decode(resp.body);
+      print('decodedData: $decodedData');
       final institucionResp = InstitucionReponse.fromJson(decodedData);
+
       return institucionResp.instituciones;
     } catch (e) {
       print('Error en obtenerTodasLasInstituciones: $e');
       return [];
+    }
+  }
+
+  Future<bool> recoverPassword(String email) async {
+    try {
+      final data = {
+        'email': email,
+      };
+      final uri = Uri.parse('${Environment.apiUrl}/email/recover-password');
+      final resp = await http.post(uri, body: jsonEncode(data), headers: {
+        'Content-Type': 'application/json',
+      });
+
+      print('resp.statusCode: ${resp.statusCode}');
+
+      if (resp.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error en recoverPassword: $e');
+      return false;
     }
   }
 }
