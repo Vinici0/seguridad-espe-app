@@ -525,7 +525,7 @@ class _AlertScreenState extends State<AlertScreen> {
 
   openImages() async {
     try {
-      var pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 50);
+      var pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 60);
 
       if (pickedFiles != null) {
         if (pickedFiles.length <= 3 && imagefiles.length <= 3) {

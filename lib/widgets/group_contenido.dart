@@ -101,7 +101,7 @@ class GroupContenido extends StatelessWidget {
               if (!res) {
                 blocRoom.add(CargandoEventFalse());
                 Fluttertoast.showToast(
-                    msg: 'No existe el grupo ${nomController.text}',
+                    msg: 'Este código pertenece a otra Unidad Educativa',
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.CENTER,
                     timeInSecForIosWeb: 1,

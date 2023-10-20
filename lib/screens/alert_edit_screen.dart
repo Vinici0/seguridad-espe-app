@@ -380,25 +380,25 @@ class _AlerEdittScreenState extends State<AlerEdittScreen> {
                                   fontSize: 16.0,
                                 );
                               },
-                              child: Tooltip(
-                                message: isIconicActivated
-                                    ? 'Modo icónico activado'
-                                    : 'Modo icónico desactivado',
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: isIconicActivated
-                                        ? const Color.fromARGB(
-                                            255, 243, 149, 33)
-                                        : Colors.grey,
-                                  ),
-                                  child: const Icon(
-                                    FontAwesomeIcons.userSecret,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
+                              // child: Tooltip(
+                              //   message: isIconicActivated
+                              //       ? 'Modo icónico activado'
+                              //       : 'Modo icónico desactivado',
+                              //   child: Container(
+                              //     padding: const EdgeInsets.all(10),
+                              //     decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(10),
+                              //       color: isIconicActivated
+                              //           ? const Color.fromARGB(
+                              //               255, 243, 149, 33)
+                              //           : Colors.grey,
+                              //     ),
+                              //     child: const Icon(
+                              //       FontAwesomeIcons.userSecret,
+                              //       color: Colors.white,
+                              //     ),
+                              //   ),
+                              // ),
                             ),
                             Container(
                               height: 43,
@@ -539,7 +539,7 @@ class _AlerEdittScreenState extends State<AlerEdittScreen> {
 
   openImages() async {
     try {
-      var pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 5);
+      var pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 60);
 
       if (pickedFiles != null) {
         if (pickedFiles.length <= 3 && imagefiles.length <= 3) {
