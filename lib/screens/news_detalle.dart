@@ -776,91 +776,101 @@ class _CustonAppBarDetalle extends StatelessWidget {
         pinned: true,
         //acciones del appbar
         actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                  ),
-                ),
-                builder: (BuildContext context) {
-                  return Container(
-                    height: authService.state.usuario!.uid.trim() ==
-                            publicationBloc.state.currentPublicacion!.usuario
-                                .trim()
-                        ? 170.0
-                        : 70.0,
-                    decoration: const BoxDecoration(
-                      // color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
+          //TODO:
+          authService.state.usuario!.uid.trim() ==
+                  publicationBloc.state.currentPublicacion!.usuario.trim()
+              ? IconButton(
+                  icon: const Icon(Icons.more_vert),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(16),
+                        ),
                       ),
-                    ),
-                    child: Center(
-                      child: Column(
-                        children: [
-                          authService.state.usuario!.uid.trim() ==
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: authService.state.usuario!.uid.trim() ==
                                   publicationBloc
                                       .state.currentPublicacion!.usuario
                                       .trim()
-                              ? ListTile(
-                                  leading: const Icon(
-                                    //icono de editar
-                                    Icons.edit,
-                                    color: Colors.black,
-                                  ),
-                                  title: const Text('Editar'),
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        CreateRoute.createRoute(
-                                            const AlerEdittScreen()));
-                                  },
-                                )
-                              : const SizedBox(),
-                          //Si el usuario es el mismo que publico el reporte
-                          authService.state.usuario!.uid ==
-                                  publicationBloc
-                                      .state.currentPublicacion!.usuario
-                              ? ListTile(
-                                  leading: const Icon(
-                                    FontAwesomeIcons.trash,
-                                    color: Colors.black,
-                                    size: 18,
-                                  ),
-                                  title: const Text('Eliminar'),
-                                  onTap: () {
-                                    //DeletePublicacionEvent
-                                    _showDeleteConfirmationDialog(
-                                        context, publicationBloc);
-                                  },
-                                )
-                              : const SizedBox(),
-                          //Denumciar
-                          ListTile(
-                            leading: const Icon(
-                              Icons.flag_rounded,
-                              color: Colors.black,
+                              ? 170.0
+                              : 70.0,
+                          decoration: const BoxDecoration(
+                            // color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(16),
+                              topRight: Radius.circular(16),
                             ),
-                            title: const Text('Denunciar'),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                  CreateRoute.createRoute(
-                                      const ReportScreen()));
-                            },
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                authService.state.usuario!.uid.trim() ==
+                                        publicationBloc
+                                            .state.currentPublicacion!.usuario
+                                            .trim()
+                                    ? ListTile(
+                                        leading: const Icon(
+                                          //icono de editar
+                                          Icons.edit,
+                                          color: Colors.black,
+                                        ),
+                                        title: const Text('Editar'),
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              CreateRoute.createRoute(
+                                                  const AlerEdittScreen()));
+                                        },
+                                      )
+                                    : const SizedBox(),
+                                //Si el usuario es el mismo que publico el reporte
+                                authService.state.usuario!.uid ==
+                                        publicationBloc
+                                            .state.currentPublicacion!.usuario
+                                    ? ListTile(
+                                        leading: const Icon(
+                                          FontAwesomeIcons.trash,
+                                          color: Colors.black,
+                                          size: 18,
+                                        ),
+                                        title: const Text('Eliminar'),
+                                        onTap: () {
+                                          //DeletePublicacionEvent
+                                          _showDeleteConfirmationDialog(
+                                              context, publicationBloc);
+                                        },
+                                      )
+                                    : const SizedBox(),
+                                //Denumciar
+                                authService.state.usuario!.uid.trim() ==
+                                        publicationBloc
+                                            .state.currentPublicacion!.usuario
+                                            .trim()
+                                    ? ListTile(
+                                        leading: const Icon(
+                                          Icons.flag_rounded,
+                                          color: Colors.black,
+                                        ),
+                                        title: const Text('Denunciar'),
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              CreateRoute.createRoute(
+                                                  const ReportScreen()));
+                                        },
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                )
+              : const SizedBox()
         ],
         flexibleSpace: FlexibleSpaceBar(
           // centerTitle: false,
@@ -885,91 +895,90 @@ class _CustonAppBarDetalle extends StatelessWidget {
       ),
       elevation: 2,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
-              builder: (BuildContext context) {
-                return Container(
-                  height: authService.state.usuario!.uid.trim() ==
-                          publicationBloc.state.currentPublicacion!.usuario
-                              .trim()
-                      ? 170.0
-                      : 70.0,
-                  decoration: const BoxDecoration(
-                    // color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                    ),
-                  ),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        authService.state.usuario!.uid.trim() ==
-                                publicationBloc
-                                    .state.currentPublicacion!.usuario
-                                    .trim()
-                            ? ListTile(
-                                leading: const Icon(
-                                  //icono de editar
-                                  Icons.edit,
-                                  color: Colors.black,
-                                ),
-                                title: const Text('Editar'),
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                      CreateRoute.createRoute(
-                                          const AlerEdittScreen()));
-                                },
-                              )
-                            : const SizedBox(),
+        IconButton(icon: const Icon(Icons.more_vert), onPressed: () {}
+            // onPressed: () {
+            //   showModalBottomSheet(
+            //     context: context,
+            //     shape: const RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.only(
+            //         topLeft: Radius.circular(16),
+            //         topRight: Radius.circular(16),
+            //       ),
+            //     ),
+            //     builder: (BuildContext context) {
+            //       return Container(
+            //         height: authService.state.usuario!.uid.trim() ==
+            //                 publicationBloc.state.currentPublicacion!.usuario
+            //                     .trim()
+            //             ? 170.0
+            //             : 70.0,
+            //         decoration: const BoxDecoration(
+            //           // color: Colors.white,
+            //           borderRadius: BorderRadius.only(
+            //             topLeft: Radius.circular(16),
+            //             topRight: Radius.circular(16),
+            //           ),
+            //         ),
+            //         child: Center(
+            //           child: Column(
+            //             children: [
+            //               authService.state.usuario!.uid.trim() ==
+            //                       publicationBloc
+            //                           .state.currentPublicacion!.usuario
+            //                           .trim()
+            //                   ? ListTile(
+            //                       leading: const Icon(
+            //                         //icono de editar
+            //                         Icons.edit,
+            //                         color: Colors.black,
+            //                       ),
+            //                       title: const Text('Editar'),
+            //                       onTap: () {
+            //                         Navigator.of(context).push(
+            //                             CreateRoute.createRoute(
+            //                                 const AlerEdittScreen()));
+            //                       },
+            //                     )
+            //                   : const SizedBox(),
 
-                        //Si el usuario es el mismo que publico el reporte
-                        authService.state.usuario!.uid ==
-                                publicationBloc
-                                    .state.currentPublicacion!.usuario
-                            ? ListTile(
-                                leading: const Icon(
-                                  FontAwesomeIcons.trash,
-                                  color: Colors.black,
-                                  size: 18,
-                                ),
-                                title: const Text('Eliminar'),
-                                onTap: () {
-                                  _showDeleteConfirmationDialog(
-                                      context, publicationBloc);
-                                },
-                              )
-                            : const SizedBox(),
-                        //Denumciar
+            //               //Si el usuario es el mismo que publico el reporte
+            //               authService.state.usuario!.uid ==
+            //                       publicationBloc
+            //                           .state.currentPublicacion!.usuario
+            //                   ? ListTile(
+            //                       leading: const Icon(
+            //                         FontAwesomeIcons.trash,
+            //                         color: Colors.black,
+            //                         size: 18,
+            //                       ),
+            //                       title: const Text('Eliminar'),
+            //                       onTap: () {
+            //                         _showDeleteConfirmationDialog(
+            //                             context, publicationBloc);
+            //                       },
+            //                     )
+            //                   : const SizedBox(),
+            //               //Denumciar
 
-                        ListTile(
-                          leading: const Icon(
-                            Icons.flag_rounded,
-                            color: Colors.black,
-                          ),
-                          title: const Text('Denunciar'),
-                          onTap: () {
-                            Navigator.of(context).push(
-                                CreateRoute.createRoute(const ReportScreen()));
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        ),
+            //               ListTile(
+            //                 leading: const Icon(
+            //                   Icons.flag_rounded,
+            //                   color: Colors.black,
+            //                 ),
+            //                 title: const Text('Denunciar'),
+            //                 onTap: () {
+            //                   Navigator.of(context).push(
+            //                       CreateRoute.createRoute(const ReportScreen()));
+            //                 },
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   );
+            // },
+            ),
       ],
       backgroundColor: Color(int.parse('0xFF${publicacion.color}')),
       expandedHeight: size.height * 0.40,
