@@ -59,7 +59,6 @@ class AuthConectEvent extends AuthEvent {
   List<Object> get props => [];
 }
 
-//disconnect socket
 class AuthDisconnectEvent extends AuthEvent {
   const AuthDisconnectEvent();
 
@@ -112,7 +111,6 @@ class AuthNotificacionEvent extends AuthEvent {
   List<Object> get props => [lat, lng];
 }
 
-//updateUsuarioImage
 class AuthUpdateUsuarioImageNewUserEvent extends AuthEvent {
   final Usuario usuario;
   const AuthUpdateUsuarioImageNewUserEvent(this.usuario);
@@ -161,7 +159,6 @@ class MarcarNotificacionesPendienteFalse extends AuthEvent {
   List<Object> get props => [];
 }
 
-//isSalasPendiente
 class IsSalasPendiente extends AuthEvent {
   final bool isSalasPendiente;
   const IsSalasPendiente(this.isSalasPendiente);
