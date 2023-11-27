@@ -60,14 +60,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<IsSalasPendiente>(_onIsSalasPendiente);
   }
 
-  // void _cargarUnidadesEducativas() async {
-  //   final instituciones =
-  //       await apiAuthRepository.obtenerTodasLasInstituciones();
-  //   for (final institucion in instituciones) {
-  //     this.instituciones.add(institucion);
-  //   }
-  // }
-
   _onEventListInstituciones(
       EventListInstituciones event, Emitter<AuthState> emit) async {}
 
@@ -380,5 +372,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return await apiAuthRepository.recoverPassword(email);
   }
 
-  // obtenerTodasLasInstituciones
 }
