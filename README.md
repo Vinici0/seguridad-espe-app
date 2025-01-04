@@ -1,9 +1,5 @@
 # ESPE Security: Aplicación Móvil y Web para la Gestión de Alertas Comunitarias
 
-![ESPE Security](https://user-images.githubusercontent.com/123456789/insert-your-image-here.png)
-
----
-
 ## Índice
 
 - [Descripción General](#descripción-general)
