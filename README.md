@@ -34,6 +34,13 @@ El objetivo principal es **facilitar y agilizar la notificación de eventos crí
 
 ---
 
+
+## Impacto de la Aplicación
+Para conocer más sobre el impacto que esta iniciativa ha tenido en diversas comunidades, te invitamos a revisar el siguiente artículo publicado por el GAD Municipal de Puerto Limón:
+Proyecto Community Safe
+
+---
+
 ## Tecnologías
 
 La solución se compone de dos aplicaciones principales (móvil y web) que comparten la misma **base de datos** y la **API**:
